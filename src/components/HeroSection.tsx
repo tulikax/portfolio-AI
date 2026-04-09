@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight, ChevronRight, ChevronsDown } from 'lucide-react'
-import ParticleCanvas from './ParticleCanvas'
 import ParticleTitle from './ParticleTitle'
 import GradientBlobs from './GradientBlobs'
 import HeroWireframe from './HeroWireframe'
@@ -52,7 +51,6 @@ export default function HeroSection() {
       <HeroWireframe cursorRef={cursorRef} />
 
       {/* Background floating particles — cursor-aware */}
-      <ParticleCanvas cursorRef={cursorRef} />
 
       {/* Subtle interactive zone border — top glow line */}
       <div

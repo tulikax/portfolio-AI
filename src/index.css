@@ -204,6 +204,41 @@ a, button, [role="button"], input, select, textarea, label {
   }
 }
 
+/* ─── Work section role-card hover images ────────────────────── */
+
+.role-image {
+  opacity: 0;
+  transition:
+    opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+    transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.role-image-left {
+  transform: translateY(calc(-50% + 48px)) translateX(-12px);
+}
+
+.role-image-right {
+  transform: translateY(calc(-50% - 48px)) translateX(12px);
+}
+
+.role-card:hover .role-image {
+  opacity: 1;
+}
+
+.role-card:hover .role-image-left {
+  transform: translateY(calc(-50% + 48px)) translateX(0);
+}
+
+.role-card:hover .role-image-right {
+  transform: translateY(calc(-50% - 48px)) translateX(0);
+}
+
+@media (hover: none), (max-width: 1100px) {
+  .role-image {
+    display: none;
+  }
+}
+
 /* Floating cards: show desktop set by default, hide mobile set */
 .floating-cards-mobile { display: none; }
 .floating-cards-desktop { display: contents; }
