@@ -1,9 +1,25 @@
 /**
  * Animated pastel gradient blobs — replaces video backgrounds.
  * All blobs are absolutely positioned, pointer-events none.
- * Opacity 30-40% per spec.
+ * `fast` prop makes the process section blobs move with dramatic cubic easing.
  */
-export default function GradientBlobs({ variant = 'default' }: { variant?: 'default' | 'process' }) {
+export default function GradientBlobs({
+  variant = 'default',
+  fast = false,
+}: {
+  variant?: 'default' | 'process'
+  fast?: boolean
+}) {
+  // Slow dreamy movement vs fast cubic snapping
+  const d1 = fast ? '3.2s' : '20s'
+  const d2 = fast ? '2.8s' : '24s'
+  const d3 = fast ? '4.0s' : '28s'
+  const d4 = fast ? '3.6s' : '22s'
+  const d5 = fast ? '2.4s' : '26s'
+  const d6 = fast ? '5.0s' : '30s'
+  const ease = fast ? 'cubic-bezier(0.76, 0, 0.24, 1)' : 'ease-in-out'
+  const dir = fast ? 'alternate' : 'normal'
+
   return (
     <div
       style={{
@@ -27,7 +43,7 @@ export default function GradientBlobs({ variant = 'default' }: { variant?: 'defa
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(180,160,230,0.38) 0%, transparent 70%)',
           filter: 'blur(72px)',
-          animation: 'drift 20s ease-in-out infinite',
+          animation: `drift ${d1} ${ease} ${dir} infinite`,
         }}
       />
 
@@ -44,7 +60,7 @@ export default function GradientBlobs({ variant = 'default' }: { variant?: 'defa
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(240,180,190,0.32) 0%, transparent 70%)',
           filter: 'blur(80px)',
-          animation: 'drift2 24s ease-in-out infinite',
+          animation: `drift2 ${d2} ${ease} ${dir} infinite`,
         }}
       />
 
@@ -61,7 +77,7 @@ export default function GradientBlobs({ variant = 'default' }: { variant?: 'defa
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(160,210,185,0.28) 0%, transparent 68%)',
           filter: 'blur(90px)',
-          animation: 'drift 28s ease-in-out infinite reverse',
+          animation: `drift ${d3} ${ease} ${dir} infinite reverse`,
         }}
       />
 
@@ -78,7 +94,7 @@ export default function GradientBlobs({ variant = 'default' }: { variant?: 'defa
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(160,200,240,0.35) 0%, transparent 70%)',
           filter: 'blur(76px)',
-          animation: 'drift2 22s ease-in-out infinite reverse',
+          animation: `drift2 ${d4} ${ease} ${dir} infinite reverse`,
         }}
       />
 
@@ -95,12 +111,11 @@ export default function GradientBlobs({ variant = 'default' }: { variant?: 'defa
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(245,200,170,0.30) 0%, transparent 70%)',
           filter: 'blur(84px)',
-          animation: 'drift 26s ease-in-out infinite',
-          animationDelay: '-8s',
+          animation: `drift ${d5} ${fast ? '-1s' : '-8s'} ${ease} ${dir} infinite`,
         }}
       />
 
-      {/* Soft lilac — mid left, extra depth */}
+      {/* Soft lilac — mid left */}
       <div
         style={{
           position: 'absolute',
@@ -113,8 +128,7 @@ export default function GradientBlobs({ variant = 'default' }: { variant?: 'defa
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(210,185,245,0.25) 0%, transparent 70%)',
           filter: 'blur(88px)',
-          animation: 'drift2 30s ease-in-out infinite',
-          animationDelay: '-14s',
+          animation: `drift2 ${d6} ${fast ? '-2s' : '-14s'} ${ease} ${dir} infinite`,
         }}
       />
     </div>
