@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Drawer } from 'vaul'
+import { Link } from 'react-router-dom'
 
 // DoorFeed
 import df1 from '../assets/DoorFeed/DF:comparables map.png'
@@ -31,6 +30,7 @@ interface Role {
   skills: string[]
   expandedContent: string
   images: string[]
+  caseStudySlug?: string
 }
 
 const ROLES: Role[] = [
@@ -46,6 +46,7 @@ const ROLES: Role[] = [
     skills: ['Research', 'Strategy', 'Prototyping', 'Systems Design'],
     expandedContent: 'The granularity of the data they were working with — and the design challenge of making it accurate, complete, and still beautiful to look at.',
     images: [df1, df2],
+    caseStudySlug: 'doorfeed',
   },
   {
     number: '02',
@@ -58,6 +59,7 @@ const ROLES: Role[] = [
     skills: ['UX Research', 'Interaction Design', 'AI Workflows', 'Figma'],
     expandedContent: 'Learning to design agentic AI tools for workflows that were still being imagined — and getting deep into developer experience and quantitative finance along the way.',
     images: [st1, st2],
+    caseStudySlug: 'sigtech',
   },
   {
     number: '03',
@@ -69,6 +71,7 @@ const ROLES: Role[] = [
     skills: ['Product Thinking', 'Design Systems', 'Stakeholder Alignment', 'User Testing'],
     expandedContent: 'Systems thinking, design frameworks, and how to collaborate at scale. Running sprints that brought engineering, SMEs, and business stakeholders into the same room.',
     images: [dl1, dl2],
+    caseStudySlug: 'deloitte-nlg',
   },
 ]
 
@@ -92,8 +95,6 @@ function MediaCard({ src }: { src: string }) {
 }
 
 function RoleCard({ role, index }: { role: Role; index: number }) {
-  const [drawerOpen, setDrawerOpen] = useState(false)
-
   const subsections = [
     role.drewMeIn ? { label: 'What drew me in', content: role.drewMeIn } : null,
     { label: 'Where I thrived', content: role.thrived },
@@ -101,8 +102,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
   ].filter(Boolean) as { label: string; content: string }[]
 
   return (
-    <>
-      <motion.div
+    <motion.div
         initial={{ opacity: 0, y: 28 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
@@ -180,17 +180,39 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
               color: 'rgba(255,255,255,0.30)', fontSize: '0.75rem',
               letterSpacing: '0.12em', textTransform: 'uppercase',
             }}>{role.skills.join(' · ')}</p>
-            <button
-              onClick={() => setDrawerOpen(true)}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-                color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem', padding: 0,
-                transition: 'color 200ms ease',
-              }}
-              onMouseEnter={e => { (e.target as HTMLButtonElement).style.color = 'rgba(255,255,255,0.7)' }}
-              onMouseLeave={e => { (e.target as HTMLButtonElement).style.color = 'rgba(255,255,255,0.35)' }}
-            >Read more ↗</button>
+
+            {role.caseStudySlug && (
+              <Link
+                to={`/work/${role.caseStudySlug}`}
+                className="btn-press role-cta"
+                style={{
+                  fontFamily: "'Barlow', sans-serif", fontWeight: 500,
+                  fontSize: '0.78rem', letterSpacing: '0.06em',
+                  textDecoration: 'none',
+                  display: 'inline-flex', alignItems: 'center', gap: '0.375rem',
+                  padding: '0.45rem 1rem',
+                  borderRadius: '9999px',
+                  border: '1px solid rgba(180,160,230,0.45)',
+                  color: 'rgba(200,185,245,0.90)',
+                  background: 'rgba(160,130,220,0.08)',
+                  transition: 'background 200ms ease, border-color 200ms ease, color 200ms ease',
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = 'rgba(160,130,220,0.18)'
+                  el.style.borderColor = 'rgba(180,160,230,0.75)'
+                  el.style.color = 'rgba(220,205,255,1)'
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = 'rgba(160,130,220,0.08)'
+                  el.style.borderColor = 'rgba(180,160,230,0.45)'
+                  el.style.color = 'rgba(200,185,245,0.90)'
+                }}
+              >
+                View case study ↗
+              </Link>
+            )}
           </div>
 
           {/* Left image — CSS hover via .role-card:hover .role-image */}
@@ -221,40 +243,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
             <MediaCard src={role.images[1]} />
           </div>
         </div>
-      </motion.div>
-
-      <Drawer.Root open={drawerOpen} onOpenChange={setDrawerOpen} shouldScaleBackground>
-        <Drawer.Portal>
-          <Drawer.Overlay style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200 }} />
-          <Drawer.Content style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 201, outline: 'none' }}>
-            <div className="liquid-glass-strong" style={{
-              maxWidth: '42rem', margin: '0 auto', padding: '2rem',
-              borderRadius: '1.5rem 1.5rem 0 0', maxHeight: '80vh', overflowY: 'auto',
-            }}>
-              <div style={{
-                width: '3rem', height: '0.375rem', borderRadius: '9999px',
-                background: 'rgba(255,255,255,0.20)', margin: '0 auto 1.5rem',
-              }} />
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h3 style={{
-                  fontFamily: "'Instrument Serif', serif", fontStyle: 'italic',
-                  fontSize: '1.75rem', color: 'white', margin: '0 0 0.25rem', fontWeight: 400,
-                }}>{role.title} @ {role.company}</h3>
-                <p style={{
-                  fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-                  color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem',
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                }}>{role.duration}</p>
-              </div>
-              <p style={{
-                fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-                color: 'rgba(255,255,255,0.70)', fontSize: '1rem', lineHeight: 1.75,
-              }}>{role.expandedContent}</p>
-            </div>
-          </Drawer.Content>
-        </Drawer.Portal>
-      </Drawer.Root>
-    </>
+    </motion.div>
   )
 }
 

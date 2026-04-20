@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+import { useLocation, Link } from 'react-router-dom'
 
 const NAV_LINKS = [
   { label: 'Work', href: '#work' },
@@ -12,6 +13,8 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const location = useLocation()
+  const isCaseStudy = location.pathname.startsWith('/work/')
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
@@ -69,7 +72,7 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Center — Nav links */}
+        {/* Center — Nav links / Back button */}
         <nav
           style={{
             display: 'flex',
@@ -78,27 +81,52 @@ export default function Navbar() {
           }}
           className="hidden md:flex"
         >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
+          {isCaseStudy ? (
+            <Link
+              to="/#work"
               style={{
                 fontSize: '0.875rem',
-                color: 'rgba(255,255,255,0.75)',
+                color: 'rgba(255,255,255,0.65)',
                 textDecoration: 'none',
                 fontWeight: 400,
+                fontFamily: "'Barlow', sans-serif",
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
                 transition: 'color 200ms ease',
               }}
               onMouseEnter={(e) => {
-                ;(e.target as HTMLAnchorElement).style.color = 'white'
+                ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
               }}
               onMouseLeave={(e) => {
-                ;(e.target as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.75)'
+                ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.65)'
               }}
             >
-              {link.label}
-            </a>
-          ))}
+              ← Back to Work
+            </Link>
+          ) : (
+            NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                style={{
+                  fontSize: '0.875rem',
+                  color: 'rgba(255,255,255,0.75)',
+                  textDecoration: 'none',
+                  fontWeight: 400,
+                  transition: 'color 200ms ease',
+                }}
+                onMouseEnter={(e) => {
+                  ;(e.target as HTMLAnchorElement).style.color = 'white'
+                }}
+                onMouseLeave={(e) => {
+                  ;(e.target as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.75)'
+                }}
+              >
+                {link.label}
+              </a>
+            ))
+          )}
         </nav>
 
         {/* Right — CTA */}
