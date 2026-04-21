@@ -106,7 +106,7 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     slug: 'sigtech',
     title: 'SigTech MAGIC',
-    tagline: 'Designing agentic AI tools for quantitative finance.',
+    tagline: 'From AI chat plugin to financial intelligence platform.',
     year: '2024–2025',
     role: 'Product Designer',
     duration: '18 months',
@@ -114,22 +114,22 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     heroMedia: { src: st1, alt: 'MAGIC AI platform hero' },
 
-    goal: 'Define the interaction model for an AI-assisted research platform that lets quantitative analysts build, test, and iterate on trading strategies through natural language — without sacrificing the control and precision they expect.',
-    yourRole: 'Led design end-to-end: user research with quant analysts, interaction design, design system contributions, and stakeholder alignment across product, engineering, and commercial teams.',
-    outcome: 'Shipped MAGIC — SigTech\'s flagship agentic AI product — from concept to launch. Established the interaction patterns for AI-first workflows now used across the platform.',
+    goal: 'Build a trusted AI partner for financial analysts — moving beyond chat simplicity to a transparent, workflow-integrated platform that earns trust through explainability, not just speed.',
+    yourRole: 'Led design end-to-end: ran workshops to clarify product direction, created concept flows, wireframes, and pilot prototypes, and collaborated with PM, engineers, and data teams on metrics and analytics setup.',
+    outcome: '~24% reduction in churn and ~39% faster time-to-insight. Reframed the product from "AI chat assistant" to Financial Intelligence Platform — generating stronger interest from enterprise clients and investors.',
 
-    problemStatement: 'Quantitative analysts are power users who expect precision and control. Agentic AI tools designed for general audiences felt unreliable and opaque to them. The challenge was to design AI interactions that felt augmentative, not replacive — keeping the analyst in control while dramatically accelerating their workflow.',
+    problemStatement: 'MAGIC started as a ChatGPT plugin for exploring macroeconomic data — powerful, but adoption was plateauing. Analysts trusted results, not the process, and clients stalled when it came to contracts. Financial teams struggled with opaque tools and manual analysis loops: AI assistants existed, but lacked explainability or real workflow integration. The core question became: "How might we increase transparency and expand the chat experience — while keeping it simple enough for a variety of users?"',
 
     visualBlocks: [
       {
         layout: 'full',
-        images: [{ src: st1, alt: 'MAGIC platform hero', caption: 'MAGIC — the AI research assistant for quantitative finance' }],
+        images: [{ src: st1, alt: 'MAGIC platform hero', caption: 'MAGIC — the AI research assistant for financial teams' }],
       },
       {
         layout: 'two-up',
         images: [
-          { src: st2, alt: 'Agent workflow interface', caption: 'Agent workflow — showing reasoning steps and confidence signals' },
-          { src: st3, alt: 'Strategy builder', caption: 'Strategy builder — structured output from natural language input' },
+          { src: st2, alt: 'Agent workflow interface', caption: 'Reasoning panel — surfacing the AI\'s data sources and logic chain' },
+          { src: st3, alt: 'Hybrid workflow view', caption: 'Hybrid workflow — combining conversational ease with structured outputs' },
         ],
       },
     ],
@@ -137,15 +137,15 @@ export const CASE_STUDIES: CaseStudy[] = [
     designDecisions: [
       {
         title: 'Show reasoning, not just results',
-        rationale: 'Quant analysts are deeply skeptical of black-box outputs. Every AI response surfaces its reasoning chain — what data it used, what assumptions it made, what confidence level it assigns. This isn\'t just transparency; it\'s the information analysts need to trust and validate outputs.',
+        rationale: 'Pilot data showed 65% of users actively used the reasoning panels — directly validating the transparency hypothesis. Analysts needed to see the AI\'s data sources, assumptions, and logic chain before they would trust an output. Surfacing the reasoning wasn\'t a nice-to-have; it was the condition for adoption.',
       },
       {
-        title: 'Structured output over freeform chat',
-        rationale: 'We tested conversational chat interfaces early. Analysts found them ambiguous — too much cognitive load in parsing free text for precise parameters. Moving to structured card outputs with editable fields gave analysts the precision they expected while keeping the natural language entry point.',
+        title: 'Familiarity over novelty',
+        rationale: 'Early iterations leaned into novel interaction patterns for the multi-agent system. Testing showed this intimidated new users. We pulled back and layered familiar micro-interactions — copy, leave feedback, edit inline — onto the new paradigm. In B2B, clarity wins trust faster than cleverness.',
       },
       {
-        title: 'Persistent context panel',
-        rationale: 'As conversations extended across multiple turns, analysts lost track of active constraints and assumptions. The persistent context panel keeps the current strategy state visible at all times — so analysts always know what they\'re iterating on.',
+        title: 'Hybrid workflows over pure chat',
+        rationale: 'Users loved chat for speed but struggled to see how MAGIC differed from a standard LLM. Analytics revealed appetite was strongest for workflows that combined conversational ease with structured outputs — especially in document-heavy due diligence. Shifting to a hybrid model was the unlock that reframed the product category entirely.',
       },
     ],
 
