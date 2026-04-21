@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
@@ -8,13 +9,11 @@ import PlaygroundSection from './components/PlaygroundSection'
 import CTASection from './components/CTASection'
 import StackSection from './components/StackSection'
 import Footer from './components/Footer'
+import CaseStudyPage from './components/case-study/CaseStudyPage'
 
-export default function App() {
+function HomePage() {
   return (
     <div style={{ background: 'black', minHeight: '100vh' }}>
-      <div className="grain-overlay" />
-      <CustomCursor />
-      <Navbar />
       <main>
         <HeroSection />
         <AboutSection />
@@ -25,6 +24,20 @@ export default function App() {
         <CTASection />
       </main>
       <Footer />
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <div style={{ background: 'black', minHeight: '100vh' }}>
+      <div className="grain-overlay" />
+      <CustomCursor />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/work/:slug" element={<CaseStudyPage />} />
+      </Routes>
     </div>
   )
 }

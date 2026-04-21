@@ -1,4 +1,9 @@
 import { motion } from 'framer-motion'
+import photo1 from '../assets/section 2/PHOTO-2024-10-07-20-19-47.jpg'
+import photo2 from '../assets/section 2/PHOTO-2024-10-16-22-50-46.jpg'
+import screen1 from '../assets/section 2/Screenshot 2025-06-21 at 15.19.54.png'
+import screen2 from '../assets/section 2/Screenshot 2025-06-21 at 15.20.35.png'
+import artwork from '../assets/section 2/Untitled_Artwork.png'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -14,29 +19,26 @@ const fadeUp = {
 // Floating cards — portrait-oriented, scattered around section edges
 // Positions are percentages. Cards at z-index 1 sit between blob bg (0) and text (2).
 const FLOATING_CARDS = [
-  { top: '6%',  left: '3%',  w: 90,  h: 130, rotate: -6,  dur: 7,  delay: 0 },
-  { top: '15%', left: '85%', w: 80,  h: 115, rotate: 8,   dur: 9,  delay: 0.5 },
-  { top: '45%', left: '1%',  w: 85,  h: 120, rotate: 4,   dur: 8,  delay: 1.2 },
-  { top: '55%', left: '88%', w: 95,  h: 135, rotate: -5,  dur: 10, delay: 0.8 },
-  { top: '78%', left: '6%',  w: 75,  h: 110, rotate: 7,   dur: 7.5, delay: 1.5 },
-  { top: '72%', left: '82%', w: 88,  h: 125, rotate: -8,  dur: 8.5, delay: 0.3 },
-  { top: '32%', left: '90%', w: 70,  h: 100, rotate: 3,   dur: 11, delay: 2.0 },
+  { top: '6%',  left: '3%',  w: 90,  rotate: -6,  dur: 7,   delay: 0,   img: photo1 },
+  { top: '15%', left: '85%', w: 80,  rotate: 8,   dur: 9,   delay: 0.5, img: photo2 },
+  { top: '45%', left: '1%',  w: 85,  rotate: 4,   dur: 8,   delay: 1.2, img: screen1 },
+  { top: '55%', left: '88%', w: 95,  rotate: -5,  dur: 10,  delay: 0.8, img: screen2 },
+  { top: '78%', left: '6%',  w: 75,  rotate: 7,   dur: 7.5, delay: 1.5, img: artwork },
+  { top: '72%', left: '82%', w: 88,  rotate: -8,  dur: 8.5, delay: 0.3, img: photo1 },
+  { top: '32%', left: '90%', w: 70,  rotate: 3,   dur: 11,  delay: 2.0, img: photo2 },
 ]
 
 // On mobile, only show a subset and smaller
 const MOBILE_CARDS = [
-  { top: '5%',  left: '2%',  w: 60,  h: 85,  rotate: -5,  dur: 7,   delay: 0 },
-  { top: '18%', left: '80%', w: 55,  h: 80,  rotate: 7,   dur: 9,   delay: 0.5 },
-  { top: '60%', left: '0%',  w: 58,  h: 82,  rotate: 4,   dur: 8,   delay: 1.0 },
-  { top: '70%', left: '82%', w: 62,  h: 88,  rotate: -6,  dur: 8.5, delay: 0.3 },
+  { top: '5%',  left: '2%',  w: 60,  rotate: -5,  dur: 7,   delay: 0,   img: photo1 },
+  { top: '18%', left: '80%', w: 55,  rotate: 7,   dur: 9,   delay: 0.5, img: screen2 },
+  { top: '60%', left: '0%',  w: 58,  rotate: 4,   dur: 8,   delay: 1.0, img: artwork },
+  { top: '70%', left: '82%', w: 62,  rotate: -6,  dur: 8.5, delay: 0.3, img: photo2 },
 ]
 
 function FloatingCard({ card }: {
   card: typeof FLOATING_CARDS[number]
 }) {
-  const w = card.w
-  const h = card.h
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.85 }}
@@ -56,36 +58,31 @@ function FloatingCard({ card }: {
         position: 'absolute',
         top: card.top,
         left: card.left,
-        width: w,
-        height: h,
+        width: card.w,
         borderRadius: '10px',
-        background: 'linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))',
-        border: '1px solid rgba(255,255,255,0.07)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.06) inset',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,0.10)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.08) inset',
         overflow: 'hidden',
         zIndex: 1,
         pointerEvents: 'none',
       }}
     >
-      {/* Top shimmer */}
-      <div
+      <img
+        src={card.img}
+        alt=""
         style={{
-          position: 'absolute',
-          top: 0,
-          left: '8px',
-          right: '8px',
-          height: '1px',
-          background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.10), transparent)',
+          width: '100%',
+          height: 'auto',
+          display: 'block',
+          opacity: 0.82,
         }}
       />
-      {/* Placeholder content — faint lines mimicking a photo */}
-      <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%' }}>
-        <div style={{ flex: 1, borderRadius: '6px', background: 'rgba(255,255,255,0.04)' }} />
-        <div style={{ height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', width: '60%' }} />
-        <div style={{ height: '4px', borderRadius: '3px', background: 'rgba(255,255,255,0.04)', width: '40%' }} />
-      </div>
+      {/* Subtle overlay to blend with dark bg */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(145deg, rgba(0,0,0,0.08), rgba(0,0,0,0.22))',
+      }} />
     </motion.div>
   )
 }
