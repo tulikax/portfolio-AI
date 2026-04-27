@@ -1,6 +1,6 @@
-@import "tailwindcss";
-
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Barlow:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
 
 @theme inline {
   --font-heading: 'Instrument Serif', serif;
@@ -250,6 +250,24 @@ a, button, [role="button"], input, select, textarea, label {
   .role-image {
     display: none;
   }
+}
+
+/* ─── Streaming text cursor ──────────────────────────────────── */
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.stream-cursor {
+  display: inline-block;
+  width: 1.5px;
+  height: 1em;
+  background: rgba(255, 255, 255, 0.55);
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  animation: blink 0.65s step-end infinite;
 }
 
 /* Floating cards: show desktop set by default, hide mobile set */

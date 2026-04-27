@@ -2,12 +2,12 @@ import { useEffect, useRef, type MutableRefObject } from 'react'
 
 const REPEL_RADIUS = 110
 const REPEL_STRENGTH = 8
-const SPRING = 0.055
-const FRICTION = 0.82
+const SPRING = 0.025
+const FRICTION = 0.88
 
 // Desktop vs mobile line breaks
-const LINES_DESKTOP = ['HI, welcome to my corner', 'of the internet :)']
-const LINES_MOBILE  = ['HI, welcome to', 'my corner of', 'the internet :)']
+const LINES_DESKTOP = ['Hi, welcome to my corner', 'of the internet :)']
+const LINES_MOBILE  = ['Hi, welcome to', 'my corner of', 'the internet :)']
 
 interface TitleParticle {
   x: number
@@ -19,6 +19,7 @@ interface TitleParticle {
   r: number
   opacity: number
   phase: number
+  delay: number
 }
 
 interface Props {
@@ -39,14 +40,26 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
     let particles: TitleParticle[] = []
     let animId: number
 
+    // Hoisted so draw() can access them for solid-text rendering
+    let drawFont = ''
+    let drawLines: string[] = []
+    let drawStartY = 0
+    let drawLineH = 0
+    let drawW = 0
+    let drawH = 0
+    let solidOpacity = 0
+    let settledFrames = 0
+
     async function init() {
       if (!canvas || !ctx) return
 
       await document.fonts.load("italic 80px 'Instrument Serif'")
 
       const W = canvas.offsetWidth
+      drawW = W
       // Pick line set based on viewport width
       const lines = W < 500 ? LINES_MOBILE : LINES_DESKTOP
+      drawLines = lines
 
       // Choose font size so the widest line fits with padding
       const testCtx = document.createElement('canvas').getContext('2d')!
@@ -58,9 +71,20 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       }
 
       const lineH = fontSize * 1.15
+      drawLineH = lineH
       const H = Math.ceil(lines.length * lineH + fontSize * 0.8)
-      canvas.width = W
-      canvas.height = H
+      drawH = H
+
+      // Match canvas CSS size exactly to eliminate stretch distortion,
+      // and apply devicePixelRatio for crisp rendering on retina displays
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = Math.round(W * dpr)
+      canvas.height = Math.round(H * dpr)
+      canvas.style.width = W + 'px'
+      canvas.style.height = H + 'px'
+      ctx.scale(dpr, dpr)
+
+      drawFont = `italic ${fontSize}px 'Instrument Serif'`
 
       // Render all lines to offscreen canvas
       const off = document.createElement('canvas')
@@ -68,11 +92,12 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       off.height = H
       const offCtx = off.getContext('2d')!
       offCtx.fillStyle = 'white'
-      offCtx.font = `italic ${fontSize}px 'Instrument Serif'`
+      offCtx.font = drawFont
       offCtx.textAlign = 'center'
       offCtx.textBaseline = 'alphabetic'
 
       const startY = fontSize * 0.5
+      drawStartY = startY
       lines.forEach((line, i) => {
         offCtx.fillText(line, W / 2, startY + i * lineH + fontSize)
       })
@@ -91,15 +116,16 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       }
 
       particles = targets.map((t) => ({
-        x: Math.random() * W,
-        y: Math.random() < 0.5 ? -Math.random() * H : H + Math.random() * H,
+        x: t.x + (Math.random() - 0.5) * 60,
+        y: -(Math.random() * 40 + 5),
         tx: t.x,
         ty: t.y,
-        vx: 0,
+        vx: (Math.random() - 0.5) * 0.3,
         vy: 0,
         r: W < 500 ? Math.random() * 0.6 + 0.5 : Math.random() * 0.9 + 0.4,
         opacity: 0,
         phase: Math.random() * Math.PI * 2,
+        delay: Math.floor(Math.random() * 120),
       }))
 
       draw()
@@ -107,7 +133,7 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
 
     function draw() {
       if (!canvas || !ctx) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, drawW, drawH)
 
       const canvasRect = canvas.getBoundingClientRect()
       const vx = activeCursorRef.current.x
@@ -115,7 +141,39 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       const cx = vx === -9999 ? -9999 : vx - canvasRect.left
       const cy = vy === -9999 ? -9999 : vy - canvasRect.top
 
+      // Cursor within canvas bounds triggers break-apart
+      const cursorOnCanvas = cx >= 0 && cx <= canvas.width && cy >= 0 && cy <= canvas.height
+
+      // Sample 30 particles to check settlement (cheaper than checking all)
+      let settledCount = 0
+      const sample = Math.min(30, particles.length)
+      for (let i = 0; i < sample; i++) {
+        const p = particles[Math.floor(i * particles.length / sample)]
+        if (p.delay === 0) {
+          const dx = p.x - p.tx, dy = p.y - p.ty
+          if (Math.sqrt(dx*dx + dy*dy) < 3) settledCount++
+        }
+      }
+      const isSettled = settledCount >= sample * 0.9
+
+      if (isSettled && !cursorOnCanvas) {
+        settledFrames = Math.min(settledFrames + 1, 80)
+      } else {
+        settledFrames = Math.max(settledFrames - 3, 0)
+      }
+
+      // solidOpacity: 0 = all particles, 1 = solid text
+      if (settledFrames > 50 && !cursorOnCanvas) {
+        solidOpacity = Math.min(1, solidOpacity + 0.025)
+      } else {
+        solidOpacity = Math.max(0, solidOpacity - 0.05)
+      }
+
+      const particleAlpha = 1 - solidOpacity
+
       for (const p of particles) {
+        if (p.delay > 0) { p.delay--; continue }
+
         const dx = p.x - p.tx
         const dy = p.y - p.ty
 
@@ -144,13 +202,18 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
         p.x += p.vx
         p.y += p.vy
 
-        if (p.opacity < 1) p.opacity = Math.min(1, p.opacity + 0.02)
+        if (p.opacity < 1) p.opacity = Math.min(1, p.opacity + 0.012)
+
+        // Skip rendering particles when fully solid and cursor away
+        if (particleAlpha <= 0) continue
+
+        const drawOpacity = p.opacity * particleAlpha
 
         // Near-cursor glow
         const nearFactor = cdist < REPEL_RADIUS ? Math.max(0, 1 - cdist / REPEL_RADIUS) : 0
         if (nearFactor > 0) {
           const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5)
-          glow.addColorStop(0, `rgba(255,255,255,${nearFactor * 0.7 * p.opacity})`)
+          glow.addColorStop(0, `rgba(255,255,255,${nearFactor * 0.7 * drawOpacity})`)
           glow.addColorStop(1, 'rgba(255,255,255,0)')
           ctx.beginPath()
           ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2)
@@ -160,8 +223,21 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${p.opacity})`
+        ctx.fillStyle = `rgba(255,255,255,${drawOpacity})`
         ctx.fill()
+      }
+
+      // Solid text layer — fades in over particles once settled
+      if (solidOpacity > 0 && drawFont) {
+        ctx.save()
+        ctx.font = drawFont
+        ctx.fillStyle = `rgba(255,255,255,${solidOpacity})`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'alphabetic'
+        drawLines.forEach((line, i) => {
+          ctx.fillText(line, drawW / 2, drawStartY + i * drawLineH + drawLineH / 1.15)
+        })
+        ctx.restore()
       }
 
       animId = requestAnimationFrame(draw)
@@ -176,10 +252,10 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       ref={canvasRef}
       style={{
         width: '100%',
-        height: '380px',
         background: 'transparent',
         display: 'block',
-        pointerEvents: 'none',
+        pointerEvents: 'auto',
+        cursor: 'default',
       }}
     />
   )

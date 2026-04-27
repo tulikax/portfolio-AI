@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight, ChevronRight, ChevronsDown } from 'lucide-react'
 import ParticleTitle from './ParticleTitle'
@@ -7,10 +7,46 @@ import HeroWireframe from './HeroWireframe'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
+const SUBTITLE = "Designer, tinkerer, always with a side project.      I find the joy in complex flows, and make sure the person using them does too."
+const SUBTITLE_WORDS = SUBTITLE.split(' ')
+const STREAM_START_MS = 1000   // brief pause, then stream alongside particles
+const WORD_INTERVAL_MS = 150  // ms between each word
+const SENTENCE_PAUSE_MS = 550 // extra pause after the first sentence ends
+// Index of the last word in the first sentence (ends with '.')
+const SENTENCE_BREAK_IDX = SUBTITLE_WORDS.findIndex(w => w.endsWith('.'))
+
 export default function HeroSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   // Shared cursor position — passed to both particle layers
   const cursorRef = useRef({ x: -9999, y: -9999 })
+
+  const [streamedText, setStreamedText] = useState('')
+  const [streamDone, setStreamDone] = useState(false)
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>
+    let cancelled = false
+
+    function revealNext(wordIdx: number) {
+      if (cancelled) return
+      const next = wordIdx + 1
+      setStreamedText(SUBTITLE_WORDS.slice(0, next).join(' '))
+      if (next >= SUBTITLE_WORDS.length) {
+        setStreamDone(true)
+        return
+      }
+      // Use a longer pause after the sentence break word
+      const delay = next === SENTENCE_BREAK_IDX + 1 ? SENTENCE_PAUSE_MS : WORD_INTERVAL_MS
+      timeoutId = setTimeout(() => revealNext(next), delay)
+    }
+
+    timeoutId = setTimeout(() => revealNext(0), STREAM_START_MS)
+
+    return () => {
+      cancelled = true
+      clearTimeout(timeoutId)
+    }
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -87,12 +123,12 @@ export default function HeroSection() {
           opacity: contentOpacity,
           position: 'relative',
           zIndex: 10,
-          paddingTop: '100px',
+          paddingTop: '80px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           textAlign: 'center',
-          gap: '1rem',
+          gap: '0',
           paddingLeft: '1.5rem',
           paddingRight: '1.5rem',
         }}
@@ -102,11 +138,27 @@ export default function HeroSection() {
           <ParticleTitle cursorRef={cursorRef} />
         </div>
 
-        {/* Subtext — blur-in */}
-        <motion.p
-          initial={{ opacity: 0, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 0.9, delay: 0.8, ease: EASE_OUT }}
+        {/* Cursor hint — fades in just after particles settle */}
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 1.8, ease: EASE_OUT }}
+          style={{
+            fontFamily: "'Barlow', sans-serif",
+            fontWeight: 300,
+            fontSize: '0.65rem',
+            color: 'rgba(255,255,255,0.15)',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            marginTop: '0.25rem',
+            marginBottom: '2.5rem',
+          }}
+        >
+          move cursor ✦ over the title to play :)
+        </motion.span>
+
+        {/* Subtext — streams in alongside particles */}
+        <p
           style={{
             fontFamily: "'Barlow', sans-serif",
             fontWeight: 300,
@@ -115,19 +167,22 @@ export default function HeroSection() {
             maxWidth: '560px',
             lineHeight: 1.65,
             fontStyle: 'italic',
-            marginTop: '-0.5rem',
+            margin: '0 0 2.25rem',
+            minHeight: '4rem',
           }}
         >
-          I shape the moments people move through every day — making complex systems feel
-          effortless, and digital interactions feel alive.
-        </motion.p>
+          {streamedText}
+          {!streamDone && streamedText.length > 0 && (
+            <span className="stream-cursor" />
+          )}
+        </p>
 
-        {/* CTAs */}
+        {/* CTAs — appear after streaming finishes */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.1, ease: EASE_OUT }}
-          style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: streamDone ? 1 : 0, y: streamDone ? 0 : 12 }}
+          transition={{ duration: 0.6, delay: streamDone ? 0.15 : 0, ease: EASE_OUT }}
+          style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', justifyContent: 'center' }}
         >
           <a
             href="#work"
@@ -200,8 +255,8 @@ export default function HeroSection() {
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
           }}
-        >
-          Move cursor · Scroll to explore
+        > 
+        Scroll to explore
         </span>
         <motion.div
           animate={{ y: [0, 5, 0] }}

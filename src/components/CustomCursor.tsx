@@ -32,7 +32,6 @@ export default function CustomCursor() {
         color: 'white',
         lineHeight: 1,
         userSelect: 'none',
-        mixBlendMode: 'difference',
       }}
       aria-hidden
     >

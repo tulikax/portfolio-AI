@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
-import photo1 from '../assets/section 2/PHOTO-2024-10-07-20-19-47.jpg'
-import photo2 from '../assets/section 2/PHOTO-2024-10-16-22-50-46.jpg'
-import screen1 from '../assets/section 2/Screenshot 2025-06-21 at 15.19.54.png'
-import screen2 from '../assets/section 2/Screenshot 2025-06-21 at 15.20.35.png'
-import artwork from '../assets/section 2/Untitled_Artwork.png'
+import photo1 from '../assets/section 2/maybe/PHOTO-2024-10-07-20-19-47.jpg'
+import photo2 from '../assets/section 2/maybe/PHOTO-2024-10-16-22-50-46.jpg'
+import clst from '../assets/section 2/maybe/CLST.png'
+import deloittePhone from '../assets/section 2/maybe/Deloitte phone.png'
+import screenshot from '../assets/section 2/maybe/Screenshot 2026-04-21 at 02.31.27.png'
+
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -16,38 +17,35 @@ const fadeUp = {
   transition: { duration: 0.7, ease: EASE_OUT },
 }
 
-// Floating cards — portrait-oriented, scattered around section edges
-// Positions are percentages. Cards at z-index 1 sit between blob bg (0) and text (2).
+// Floating cards — 6 unique images, no repeats
 const FLOATING_CARDS = [
-  { top: '6%',  left: '3%',  w: 90,  rotate: -6,  dur: 7,   delay: 0,   img: photo1 },
-  { top: '15%', left: '85%', w: 80,  rotate: 8,   dur: 9,   delay: 0.5, img: photo2 },
-  { top: '45%', left: '1%',  w: 85,  rotate: 4,   dur: 8,   delay: 1.2, img: screen1 },
-  { top: '55%', left: '88%', w: 95,  rotate: -5,  dur: 10,  delay: 0.8, img: screen2 },
-  { top: '78%', left: '6%',  w: 75,  rotate: 7,   dur: 7.5, delay: 1.5, img: artwork },
-  { top: '72%', left: '82%', w: 88,  rotate: -8,  dur: 8.5, delay: 0.3, img: photo1 },
-  { top: '32%', left: '90%', w: 70,  rotate: 3,   dur: 11,  delay: 2.0, img: photo2 },
+  { top: '6%',  left: '2%',  w: 180, rotate: -6,  dur: 7,   delay: 0,   img: photo1 },
+  { top: '12%', left: '83%', w: 168, rotate: 8,   dur: 9,   delay: 0.5, img: photo2, opacity: 1 },
+  { top: '42%', left: '0%',  w: 174, rotate: 4,   dur: 8,   delay: 1.2, img: deloittePhone, zoom: 1.1 },
+  { top: '42%', left: '86%', w: 186, rotate: -5,  dur: 10,  delay: 0.8, img: screenshot },
+  { top: '79%', left: '80%', w: 178, rotate: -8,  dur: 8.5, delay: 0.3, img: clst },
 ]
 
 // On mobile, only show a subset and smaller
 const MOBILE_CARDS = [
-  { top: '5%',  left: '2%',  w: 60,  rotate: -5,  dur: 7,   delay: 0,   img: photo1 },
-  { top: '18%', left: '80%', w: 55,  rotate: 7,   dur: 9,   delay: 0.5, img: screen2 },
-  { top: '60%', left: '0%',  w: 58,  rotate: 4,   dur: 8,   delay: 1.0, img: artwork },
-  { top: '70%', left: '82%', w: 62,  rotate: -6,  dur: 8.5, delay: 0.3, img: photo2 },
+  { top: '5%',  left: '2%',  w: 108, rotate: -5,  dur: 7,   delay: 0,   img: photo1 },
+  { top: '18%', left: '78%', w: 102, rotate: 7,   dur: 9,   delay: 0.5, img: screenshot },
+  { top: '70%', left: '80%', w: 108, rotate: -6,  dur: 8.5, delay: 0.3, img: photo2 },
 ]
 
 function FloatingCard({ card }: {
-  card: typeof FLOATING_CARDS[number]
+  card: typeof FLOATING_CARDS[number] & { zoom?: number }
 }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.85 }}
-      animate={{
+      whileInView={{
         opacity: 1,
         scale: 1,
         y: [0, -8, 0],
         rotate: [card.rotate, card.rotate + 1.5, card.rotate],
       }}
+      viewport={{ once: false, margin: '-60px' }}
       transition={{
         opacity: { duration: 1.2, delay: card.delay + 0.3, ease: EASE_OUT },
         scale: { duration: 1.2, delay: card.delay + 0.3, ease: EASE_OUT },
@@ -56,7 +54,7 @@ function FloatingCard({ card }: {
       }}
       style={{
         position: 'absolute',
-        top: card.top,
+        top: `calc(${card.top} - 40px)`,
         left: card.left,
         width: card.w,
         borderRadius: '10px',
@@ -74,7 +72,9 @@ function FloatingCard({ card }: {
           width: '100%',
           height: 'auto',
           display: 'block',
-          opacity: 0.82,
+          opacity: card.opacity ?? 0.82,
+          transform: card.zoom ? `scale(${card.zoom})` : undefined,
+          transformOrigin: 'center center',
         }}
       />
       {/* Subtle overlay to blend with dark bg */}
@@ -184,9 +184,9 @@ export default function AboutSection() {
             fontWeight: 400,
           }}
         >
-          Designing the everyday.
+          Curious about automation.
           <br />
-          Curious about everything.
+          Ended up inside it.
         </motion.h2>
 
         <motion.p
@@ -201,7 +201,7 @@ export default function AboutSection() {
             maxWidth: '640px',
           }}
         >
-          I'm a product designer who finds joy in simplifying complex systems — turning tangled flows into interactions that feel obvious in hindsight. I'm drawn to the texture of daily life: the small decisions, the friction points, the moments where design either earns trust or quietly loses it.
+          From consulting to start-ups, I've been on the front lines of understanding where people working with data and heavy workflows get stuck — the repetitive, cumbersome tasks that slow everything down, and that are prime candidates for automation. I'm drawn to the texture of that daily friction: the small decisions, the moments where a system either earns trust or quietly loses it.
         </motion.p>
 
         <motion.p
@@ -216,22 +216,7 @@ export default function AboutSection() {
             maxWidth: '640px',
           }}
         >
-          When I'm not in Figma, I'm usually travelling somewhere unhurried, photographing the unremarkable — parking lots, laundromats, stairwells. Or deep in a playlist rabbit hole, building sonic worlds for moods that don't have names yet.
-        </motion.p>
-
-        <motion.p
-          {...fadeUp}
-          transition={{ duration: 0.7, delay: 0.32, ease: EASE_OUT }}
-          style={{
-            fontFamily: "'Barlow', sans-serif",
-            fontWeight: 300,
-            fontSize: '1.05rem',
-            color: 'rgba(255,255,255,0.70)',
-            lineHeight: 1.7,
-            maxWidth: '640px',
-          }}
-        >
-          Museums and buildings are my fieldwork. I study how space, rhythm, and materiality guide people without a single instruction. That sensibility lives in everything I design.
+          In the age of AI, that curiosity has found its shape — not just in what I design, but in what I build and ship. I use AI daily, and have long before it became the industry's favourite talking point. Keeping up with every new tool was never the goal. Understanding what these things are actually for — and designing products around that — is.
         </motion.p>
 
         {/* Interest tags */}

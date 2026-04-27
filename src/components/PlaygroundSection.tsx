@@ -363,6 +363,23 @@ export default function PlaygroundSection() {
         >
           A sandbox of creative micro-projects — interactive, exploratory, unfinished-on-purpose.
         </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, delay: 0.24, ease: EASE_OUT }}
+          style={{
+            fontFamily: "'Barlow', sans-serif",
+            fontWeight: 300,
+            color: 'rgba(255,255,255,0.38)',
+            fontSize: '0.9rem',
+            maxWidth: '36rem',
+            margin: '0.75rem auto 0',
+            lineHeight: 1.65,
+          }}
+        >
+          When I'm not in Figma, I'm usually travelling somewhere unhurried, photographing the unremarkable — parking lots, laundromats, stairwells. Or deep in a playlist rabbit hole, building sonic worlds for moods that don't have names yet.
+        </motion.p>
       </div>
 
       {/* Project grid */}
