@@ -2,8 +2,8 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 // DoorFeed
-import df1 from '../assets/DoorFeed/DF:comparables map.png'
-import df2 from '../assets/DoorFeed/DF:comps summary.png'
+import df1 from '../assets/DoorFeed/homepage glow.mov'
+import df2 from '../assets/DoorFeed/download from dataroom.mov'
 import df3 from '../assets/DoorFeed/DF:generation.png'
 // SigTech
 import st1 from '../assets/SigTech/chat-flow.mp4'
