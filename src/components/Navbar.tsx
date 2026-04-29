@@ -5,10 +5,10 @@ import { useLocation, Link } from 'react-router-dom'
 
 const NAV_LINKS = [
   { label: 'Work', href: '#work' },
-  { label: 'Process', href: '#process' },
-  { label: 'Playground', href: '#playground' },
   { label: 'About', href: '#about' },
-  { label: 'Say Hello', href: '#contact' },
+  { label: 'Playground', href: '#playground' },
+  { label: 'Process', href: '#process' },
+  { label: 'Stack', href: '#stack' },
 ]
 
 export default function Navbar() {
@@ -146,6 +146,7 @@ export default function Navbar() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.25rem',
+              whiteSpace: 'nowrap',
             }}
           >
             Let's Talk

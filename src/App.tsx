@@ -16,11 +16,11 @@ function HomePage() {
     <div style={{ background: 'black', minHeight: '100vh' }}>
       <main>
         <HeroSection />
-        <AboutSection />
         <WorkSection />
+        <AboutSection />
+        <PlaygroundSection />
         <ProcessSection />
         <StackSection />
-        <PlaygroundSection />
         <CTASection />
       </main>
       <Footer />
