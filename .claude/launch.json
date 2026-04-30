@@ -4,7 +4,7 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "/bin/sh",
-      "runtimeArgs": ["/Users/tulika/portfolio-AI/.claude/worktrees/charming-lumiere-cf0291/.claude/run-dev.sh"],
+      "runtimeArgs": ["/Users/tulika/portfolio-AI/.claude/worktrees/inspiring-lederberg-e7fda7/.claude/run-dev.sh"],
       "port": 5173,
       "autoPort": true
     }
