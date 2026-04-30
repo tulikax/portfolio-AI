@@ -480,15 +480,9 @@ export default function AboutSection() {
             fontWeight: 400,
           }}
         >
-<<<<<<< HEAD
-          Curious about automation.
-          <br />
-          Ended up inside it.
-=======
           Complex by choice,
           <br />
           simple by design.
->>>>>>> a577465 (feat(about+nav): rewrite about copy, obsessions reveal, section reorder)
         </motion.h2>
 
         <motion.p
@@ -503,11 +497,7 @@ export default function AboutSection() {
             maxWidth: '640px',
           }}
         >
-<<<<<<< HEAD
-          From consulting to start-ups, I've been on the front lines of understanding where people working with data and heavy workflows get stuck — the repetitive, cumbersome tasks that slow everything down, and that are prime candidates for automation. I'm drawn to the texture of that daily friction: the small decisions, the moments where a system either earns trust or quietly loses it.
-=======
           My experience spans enterprise platforms and AI-driven tools — the kind of products where structure and speed matter as much as craft. From consulting to startups, I've been close to where people working with data and heavy workflows get stuck: the repetitive friction, the small decisions, the moments where a system either earns trust or quietly loses it.
->>>>>>> a577465 (feat(about+nav): rewrite about copy, obsessions reveal, section reorder)
         </motion.p>
 
         <motion.p
@@ -522,9 +512,6 @@ export default function AboutSection() {
             maxWidth: '640px',
           }}
         >
-<<<<<<< HEAD
-          In the age of AI, that curiosity has found its shape — not just in what I design, but in what I build and ship. I use AI daily, and have long before it became the industry's favourite talking point. Keeping up with every new tool was never the goal. Understanding what these things are actually for — and designing products around that — is.
-=======
           I'm drawn to those problems. The flows that overwhelm, the interfaces nobody thought could feel good — that's where I do my best work.
         </motion.p>
 
@@ -541,7 +528,6 @@ export default function AboutSection() {
           }}
         >
           Figma was a constant, but I'm moving towards building prototypes directly with AI. Less static, more real: something stakeholders can click through, developers can react to, and teams can test before anyone's committed. To me, good experience doesn't stop at the user; it extends to everyone in the room who has to build, approve, and ship the thing.
->>>>>>> a577465 (feat(about+nav): rewrite about copy, obsessions reveal, section reorder)
         </motion.p>
 
         {/* Bento dashboard — toggle with SHOW_BENTO in AboutSection.tsx */}
