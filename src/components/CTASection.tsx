@@ -73,7 +73,7 @@ export default function CTASection() {
           style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}
         >
           <a
-            href="mailto:hello@tulika.design"
+            href={`mailto:${'hello'}@${'tulika.design'}`}
             className="liquid-glass-strong btn-press"
             style={{
               borderRadius: '9999px',
