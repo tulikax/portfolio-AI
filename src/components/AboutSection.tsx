@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import photo1 from '../assets/section 2/maybe/PHOTO-2024-10-07-20-19-47.jpg'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
