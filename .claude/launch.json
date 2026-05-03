@@ -4,8 +4,8 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "/bin/sh",
-      "runtimeArgs": ["/Users/tulika/portfolio-AI/.claude/worktrees/add-project-content/.claude/run-dev.sh"],
-      "port": 5173,
+"runtimeArgs": [".claude/run-dev.sh"],
+"port": 5173
       "autoPort": true
     }
   ]

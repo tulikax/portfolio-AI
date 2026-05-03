@@ -132,7 +132,7 @@ export default function Navbar() {
         {/* Right — CTA */}
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           <a
-            href="mailto:hello@tulika.design"
+            href={`mailto:${'hello'}@${'tulika.design'}`}
             className="btn-press"
             style={{
               background: 'white',
