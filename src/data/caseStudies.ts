@@ -1,11 +1,11 @@
 import type { CaseStudy } from '../types/caseStudy'
 
 // DoorFeed assets
-import df1 from '../assets/DoorFeed/DF:comparables map.png'
-import df2 from '../assets/DoorFeed/DF:comps summary.png'
-import df3 from '../assets/DoorFeed/DF:generation.png'
-import dfHero from '../assets/DoorFeed/Bar menu.png'
-import dfDropdown from '../assets/DoorFeed/DF:dropdown.png'
+import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
+import df2 from '../assets/DoorFeed/case study /New comps summary page.png'
+import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
+import dfHero from '../assets/DoorFeed/case study /Doorfeed Hero.png'
+import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
 
 // SigTech assets
 import st1 from '../assets/SigTech/MAGIC Hero.png'
