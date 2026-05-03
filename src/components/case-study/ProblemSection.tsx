@@ -36,41 +36,45 @@ export default function ProblemSection({ data }: Props) {
         }}
       >
         {/* Text column */}
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.7, ease: EASE_OUT }}
-          style={{ maxWidth: hasSideImage ? 'none' : '44rem' }}
-        >
-          <span
-            style={{
-              display: 'inline-block',
-              fontSize: '0.68rem',
-              fontWeight: 500,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.40)',
-              fontFamily: "'Barlow', sans-serif",
-              marginBottom: '1.25rem',
-            }}
+        <div style={{ maxWidth: hasSideImage ? 'none' : '44rem' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.9, ease: EASE_OUT }}
           >
-            The Problem
-          </span>
+            <p
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontSize: 'clamp(1.5rem, 3.75vw, 2.625rem)',
+                fontWeight: 400,
+                letterSpacing: '-0.02em',
+                color: 'rgba(255,255,255,0.92)',
+                margin: '0 0 1.5rem 0',
+                lineHeight: 1.1,
+              }}
+            >
+              The Problem
+            </p>
+          </motion.div>
 
-          <p
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.7, delay: 0.15, ease: EASE_OUT }}
             style={{
-              fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
+              fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
               fontWeight: 300,
-              lineHeight: 1.75,
-              color: 'rgba(255,255,255,0.75)',
+              lineHeight: 1.8,
+              color: 'rgba(255,255,255,0.65)',
               fontFamily: "'Barlow', sans-serif",
               margin: 0,
             }}
           >
             {data.problemStatement}
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         {/* Optional side image */}
         {data.problemImage && (

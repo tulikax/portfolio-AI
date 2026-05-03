@@ -2,19 +2,18 @@ import { useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { getCaseStudy } from '../../data/caseStudies'
 import CaseStudyHero from './CaseStudyHero'
-import OverviewStrip from './OverviewStrip'
 import ProblemSection from './ProblemSection'
 import VisualShowcase from './VisualShowcase'
 import PlatformBlock from './PlatformBlock'
 import DesignDecisions from './DesignDecisions'
 import PrototypeEmbed from './PrototypeEmbed'
 import NextProject from './NextProject'
+import ProjectTabs from './ProjectTabs'
 
 export default function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>()
   const data = getCaseStudy(slug ?? '')
 
-  // Scroll to top when slug changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
   }, [slug])
@@ -23,19 +22,21 @@ export default function CaseStudyPage() {
     return <Navigate to="/" replace />
   }
 
+  const hasProjectTabs = data.projectTabs && data.projectTabs.length > 0
+
   return (
     <div style={{ background: 'black', minHeight: '100vh' }}>
       {/* 1 — Full-viewport hero */}
       <CaseStudyHero data={data} />
 
-      {/* 2 — Goal | Role | Outcome strip */}
-      <OverviewStrip data={data} />
+      {/* 2 — Problem / Context (only when no projectTabs — otherwise lives inside Overview tab) */}
+      {!hasProjectTabs && <ProblemSection data={data} />}
 
-      {/* 3 — Problem / Context */}
-      <ProblemSection data={data} />
+      {/* 3a — Project tabs (DoorFeed-style, replaces everything below) */}
+      {hasProjectTabs && <ProjectTabs data={data} />}
 
-      {/* 4 — Visual blocks (optional) */}
-      {data.visualBlocks && data.visualBlocks.length > 0 && (
+      {/* 3b — Visual blocks (only when no projectTabs) */}
+      {!hasProjectTabs && data.visualBlocks && data.visualBlocks.length > 0 && (
         <section style={{ padding: '0 0 2rem' }}>
           <div
             style={{
@@ -51,8 +52,8 @@ export default function CaseStudyPage() {
         </section>
       )}
 
-      {/* 5 — Platform sections (optional, complex only) */}
-      {data.platformSections && data.platformSections.length > 0 && (
+      {/* 4 — Platform sections (only when no projectTabs) */}
+      {!hasProjectTabs && data.platformSections && data.platformSections.length > 0 && (
         <section>
           {data.platformSections.map((section, i) => (
             <PlatformBlock key={section.platform} section={section} index={i} />
@@ -60,17 +61,17 @@ export default function CaseStudyPage() {
         </section>
       )}
 
-      {/* 6 — Design decisions (optional) */}
-      {data.designDecisions && data.designDecisions.length > 0 && (
+      {/* 5 — Design decisions (only when no projectTabs) */}
+      {!hasProjectTabs && data.designDecisions && data.designDecisions.length > 0 && (
         <DesignDecisions decisions={data.designDecisions} />
       )}
 
-      {/* 7 — Prototype / video embed (optional) */}
+      {/* 6 — Prototype / video embed (optional) */}
       {data.prototypeEmbed && (
         <PrototypeEmbed embed={data.prototypeEmbed} />
       )}
 
-      {/* 8 — Next project or back link — always */}
+      {/* 7 — Next project — always */}
       <NextProject nextProject={data.nextProject} />
     </div>
   )
