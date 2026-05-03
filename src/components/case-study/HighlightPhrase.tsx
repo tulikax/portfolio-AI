@@ -1,65 +1,52 @@
 import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
-import { SplitText } from 'gsap/SplitText'
-
-gsap.registerPlugin(SplitText)
 
 interface Props {
   children: string
   color?: string
+  textColor?: string
 }
 
+/** Convert `rgba(r, g, b, a)` → `rgba(r, g, b, 0)` */
+function toTransparent(color: string): string {
+  return color.replace(/,\s*[\d.]+\)$/, ', 0)')
+}
+
+/**
+ * Wraps its text in a single continuous highlight that wipes in
+ * left-to-right when scrolled into view and reverses on scroll-out.
+ *
+ * Uses `box-decoration-break: clone` so the background repaints cleanly
+ * on each line when the phrase wraps. No per-word DOM splitting.
+ */
 export default function HighlightPhrase({
   children,
-  color = 'rgba(200, 168, 75, 0.55)',
+  color = 'rgba(180, 140, 60, 0.35)',
+  textColor,
 }: Props) {
-  const ref = useRef<HTMLSpanElement>(null)
+  const spanRef = useRef<HTMLSpanElement>(null)
+  const transparentColor = toTransparent(color)
 
   useEffect(() => {
-    const el = ref.current
+    const el = spanRef.current
     if (!el) return
 
-    const split = new SplitText(el, { type: 'words' })
-    const words = split.words as HTMLElement[]
-    const marks: HTMLSpanElement[] = []
-
-    words.forEach((word) => {
-      word.style.position = 'relative'
-      word.style.display = 'inline-block'
-
-      const mark = document.createElement('span')
-      mark.style.cssText = `
-        position: absolute;
-        inset: 1px -3px;
-        background: ${color};
-        border-radius: 3px;
-        z-index: -1;
-        display: block;
-        pointer-events: none;
-      `
-      word.appendChild(mark)
-      gsap.set(mark, { scaleX: 0, transformOrigin: 'left center' })
-      marks.push(mark)
-    })
+    // Start with transparent background
+    gsap.set(el, { backgroundColor: transparentColor })
+    if (textColor) gsap.set(el, { color: 'inherit' })
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const tl = gsap.timeline()
-          marks.forEach((mark, i) => {
-            tl.to(mark, {
-              scaleX: 1,
-              duration: 0.4,
-              ease: 'power3.out',
-            }, i * 0.08)
-          })
+          gsap.to(el, { backgroundColor: color, duration: 0.5, ease: 'power2.out' })
+          if (textColor) {
+            gsap.to(el, { color: textColor, duration: 0.4, delay: 0.15, ease: 'power2.out' })
+          }
         } else {
-          gsap.to(marks, {
-            scaleX: 0,
-            duration: 0.3,
-            ease: 'power2.in',
-            stagger: { each: 0.05, from: 'end' },
-          })
+          gsap.to(el, { backgroundColor: transparentColor, duration: 0.3, ease: 'power2.in' })
+          if (textColor) {
+            gsap.to(el, { color: 'inherit', duration: 0.2, ease: 'power2.in' })
+          }
         }
       },
       { threshold: 0.3 },
@@ -69,13 +56,21 @@ export default function HighlightPhrase({
 
     return () => {
       observer.disconnect()
-      gsap.killTweensOf(marks)
-      split.revert()
+      gsap.killTweensOf(el)
     }
-  }, [color])
+  }, [color, textColor, transparentColor])
 
   return (
-    <span ref={ref} style={{ position: 'relative', display: 'inline' }}>
+    <span
+      ref={spanRef}
+      style={{
+        borderRadius: '3px',
+        padding: '1px 4px',
+        // Each line gets its own background box on wrap
+        WebkitBoxDecorationBreak: 'clone',
+        boxDecorationBreak: 'clone',
+      } as React.CSSProperties}
+    >
       {children}
     </span>
   )
