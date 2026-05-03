@@ -1,3 +1,25 @@
+// ─── Project Tab types ─────────────────────────────────────────
+
+export interface OutcomeStat {
+  label: string
+  value: string
+  description: string
+}
+
+export interface ProjectTab {
+  label: string
+  goal: { heading: string; body: string }
+  process: { heading: string; body: string }
+  decisionsHeading?: string
+  decisions: Array<{ title: string; rationale: string }>
+  outcome: {
+    heading: string
+    stats: OutcomeStat[]
+    footnote?: string
+  }
+  visualBlocks?: VisualBlock[]
+}
+
 // ─── Primitives ────────────────────────────────────────────────
 
 export type ImageLayout = 'full' | 'two-up' | 'three-up'
@@ -46,6 +68,11 @@ export interface CaseStudy {
   // Hero — required
   heroMedia: CaseStudyImage  // .mp4/.webm → video; anything else → img
   heroAccentColor?: string   // optional CSS color for gradient overlay tint
+  heroEyebrow?: string
+  heroHeadline?: string
+  heroSubheadline?: string
+  heroMeta?: Array<{ label: string; value: string }>
+  heroTools?: Array<{ name: string; slug: string; ext?: string }>
 
   // Overview strip — always shown, required
   goal: string
@@ -57,6 +84,9 @@ export interface CaseStudy {
   problemImage?: CaseStudyImage
 
   // Optional deeper content — presence drives rendering
+  overviewBody?: string        // paragraph text for Overview tab (split on \n\n)
+  overviewHighlights?: Array<{ phrase: string; color: string; textColor?: string }>
+  projectTabs?: ProjectTab[]   // if present, replaces platformSections + designDecisions
   visualBlocks?: VisualBlock[]
   platformSections?: PlatformSection[]
   designDecisions?: DesignDecision[]

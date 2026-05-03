@@ -22,11 +22,24 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     slug: 'doorfeed',
     title: 'DoorFeed',
-    tagline: 'Making property data accurate, complete, and beautiful.',
+    tagline: 'From fragmented navigation to an AI-native workspace for institutional investors operating across UK and French markets.',
     year: '2026',
     role: 'Product Designer',
     duration: '6 months',
     company: 'DoorFeed',
+    heroEyebrow: '',
+    heroHeadline: 'DoorFeed',
+    heroSubheadline: 'From fragmented navigation to an AI-native workspace for institutional investors operating across UK and French markets.',
+    heroMeta: [
+      { label: 'Role', value: 'Product Designer (solo)' },
+      { label: 'Markets', value: 'UK · France' },
+    ],
+    heroTools: [
+      { name: 'Figma',   slug: 'figma' },
+      { name: 'Cursor',  slug: 'cursor',  ext: 'png' },
+      { name: 'Claude',  slug: 'claude' },
+      { name: 'PostHog', slug: 'posthog', ext: 'png' },
+    ],
 
     heroMedia: { src: dfHero, alt: 'DoorFeed interface overview' },
 
@@ -34,64 +47,127 @@ export const CASE_STUDIES: CaseStudy[] = [
     yourRole: 'Solo product designer working end-to-end: research, strategy, interaction design, and direct collaboration with engineering through 20+ pull requests.',
     outcome: 'Shipped a redesigned comparables map and comps summary view, reducing time-to-insight for analysts and establishing a design system used across the platform.',
 
-    problemStatement: 'Property analysts were drowning in spreadsheets and switching between five different tools to get a complete picture of a market. The existing interface surfaced data, but didn\'t help users understand it — density without clarity. The challenge was to make complex, multi-dimensional data feel actionable without oversimplifying it.',
-    problemImage: { src: df1, alt: 'Comparables map showing property data', caption: 'The comparables map — a key surface for understanding market context.' },
+    problemStatement: 'Users were treating DoorFeed as a data extraction layer — pulling comparables, then leaving to do analysis elsewhere. The platform had depth but no intelligence layer; no way to stay inside it for the work that mattered. Two connected design problems emerged: a fragmented navigation UX causing early exits, and a missing workspace layer that meant the platform never became essential.',
 
-    visualBlocks: [
+    overviewBody: '4 months at DoorFeed\n\nI joined DoorFeed right after their first public release of AI intelligence in their B2B platform for institutional real estate investors in the UK and French markets. The product worked, but it was showing the seams of a first version: navigation that overwhelmed more than it guided, a map that existed but wasn\'t usable, and users exporting data to work externally rather than staying on the platform.\n\nI owned design across two connected workstreams. The first was a focused UX fix — cleaning up navigation, and making the core comparable-finding workflow usable. The second grew out of what we found: the problem wasn\'t just the interface. Users were context-switching constantly, exporting whole datasets when they only needed a component, and running analysis in external tools.\n\nWorking closely with the founder and CTO, I am currently helping shape the strategic case for a second, transitionary product — an agentic, chat-based layer that would bring the intelligence inside the platform without abandoning the data infrastructure users already relied on.\n\nBoth workstreams ran in parallel with a live product and real enterprise clients. I worked as the sole designer throughout.',
+
+    overviewHighlights: [
       {
-        label: 'Core interface',
-        layout: 'two-up',
-        images: [
-          { src: df1, alt: 'Comparables map view', caption: 'Comparable properties mapped by location and price bracket' },
-          { src: df2, alt: 'Comps summary panel', caption: 'Comps summary — distilling 40+ data points into a readable brief' },
-        ],
+        phrase: 'navigation that overwhelmed more than it guided',
+        color: 'rgba(180, 140, 60, 0.45)',
+        textColor: '#f5c842',
       },
       {
-        label: 'Detail interactions',
-        layout: 'two-up',
-        images: [
-          { src: df3, alt: 'Generation view', caption: 'AI-assisted generation flow for property reports' },
-          { src: dfDropdown, alt: 'Dropdown filter UI', caption: 'Contextual filtering — surfacing the right data at the right time' },
-        ],
+        phrase: "a map that existed but wasn't usable",
+        color: 'rgba(70, 120, 150, 0.45)',
+        textColor: '#f5c842',
+      },
+      {
+        phrase: 'users exporting data to work externally rather than staying on the platform',
+        color: 'rgba(110, 75, 130, 0.45)',
+        textColor: '#f5c842',
       },
     ],
 
-    platformSections: [
-      {
-        platform: 'Data Layer',
-        heading: 'Making comparables feel like a superpower',
-        description: 'The comparables map needed to communicate density, proximity, and price variance at a glance. We redesigned the map markers to encode multiple data dimensions through size, colour, and opacity — removing the need to click into each property to understand its relevance.',
-        images: [
-          { src: df1, alt: 'Comparables map', caption: 'Redesigned comparables map with layered data encoding' },
-        ],
-        layout: 'full',
-      },
-      {
-        platform: 'Summary Views',
-        heading: 'From data to decision',
-        description: 'The comps summary panel aggregates 40+ data points into a structured brief that analysts can actually use. The hierarchy was designed around the mental model of a valuation report — not the shape of the underlying database.',
-        images: [
-          { src: df2, alt: 'Comps summary', caption: 'Summary view designed around analyst mental models' },
-          { src: df3, alt: 'Generation view', caption: 'AI generation — turning structured data into narrative insights' },
-        ],
-        layout: 'two-up',
-      },
-    ],
 
-    designDecisions: [
+    projectTabs: [
       {
-        title: 'Map markers encode multiple dimensions',
-        rationale: 'Early prototypes used uniform markers with colour alone to signal price. Testing showed analysts scanning the map quickly — we needed to encode proximity relevance, price bracket, and data confidence simultaneously without adding a legend they\'d ignore.',
+        label: 'Navigation UX',
+        goal: {
+          heading: 'Fixing a fragmented comparables experience',
+          body: "DoorFeed's asset page surfaces comparable properties to help institutional investors build valuation models and investment strategies. The comparables section had grown fragmented — multiple disconnected navigation patterns, an undersized map buried inside a filters sidebar, and no clear relationship between the list view and the map.\n\nFor a data-heavy B2B platform serving analysts working at speed, this created real cognitive load and was causing users to exit the section before finding what they needed. The fix had to work within an existing design system with real constraints, and be validated across both UK and French markets.",
+        },
+        process: {
+          heading: 'Research before redesign',
+          body: 'I started with PostHog session recordings — identifying where users were rage-clicking and abandoning. The filter area and map interaction were the clearest pain points. I reviewed event trigger data segmented by market, since UK and French users were navigating differently. From there I wireframed in Figma, used Claude for design audits, and worked with the CTO and engineers on what was feasible within the existing component library.',
+        },
+        decisionsHeading: 'What shaped the outcome',
+        decisions: [
+          {
+            title: 'Collapsible tabbed navigation over a flat layout',
+            rationale: "PostHog confirmed users weren't lost — they were overwhelmed. I consolidated everything into a collapsible dropdown with tabbed navigation, kept in the same location deliberately so existing users didn't have to re-learn. This freed up significant screen real estate for the data itself.",
+          },
+          {
+            title: 'Filters before results, not alongside them',
+            rationale: 'Users were landing on 400–500 results and then trying to filter down, which drove exits. Moving filters ahead of results meant users arrived at a manageable set. This had the most direct impact on the metrics we saw post-launch.',
+          },
+          {
+            title: 'Staying within design system constraints',
+            rationale: "Some UX patterns I wanted weren't possible without breaking the existing component library. I made a deliberate call to stay within constraints for this phase, noting the debt to address in the agentic platform work, rather than creating inconsistency for a fix that didn't warrant it.",
+          },
+          {
+            title: 'Skipping onboarding copy — and what that cost',
+            rationale: "We didn't add helper text when the navigation changed. Session data showed a short spike in confusion before drop-off rates improved. The learning: even low-disruption structural changes need a lightweight transition moment for existing users.",
+          },
+        ],
+        outcome: {
+          heading: 'Results',
+          stats: [
+            { label: 'Exit rate', value: '↓', description: 'Comparables section exits reduced post-launch' },
+            { label: 'Time to results', value: '↓', description: 'Faster due to upfront filters removing noise' },
+            { label: 'Markets tested', value: '2', description: 'UK and France throughout' },
+          ],
+          footnote: 'The French market continued to surface data availability edge cases — empty states on asset pages where UK data was rich — which directly shaped the approach taken in the agentic platform phase.',
+        },
+        visualBlocks: [
+          {
+            layout: 'two-up' as const,
+            images: [
+              { src: df1, alt: 'Comparables map view', caption: 'Redesigned comparables map — expanded out of the filters sidebar' },
+              { src: df2, alt: 'Comps summary panel', caption: 'Comps summary view — structured data in a scannable layout' },
+            ],
+          },
+          {
+            layout: 'two-up' as const,
+            images: [
+              { src: df3, alt: 'AI-assisted generation flow', caption: 'AI generation flow — surfacing intelligence inline' },
+              { src: dfDropdown, alt: 'Collapsible dropdown navigation', caption: 'Collapsible tabbed navigation — consolidated and reachable' },
+            ],
+          },
+        ],
       },
       {
-        title: 'Summary panel uses a report hierarchy, not a data hierarchy',
-        rationale: 'The original panel mirrored the database schema. We restructured it around the questions analysts actually ask: "What\'s comparable? How recent? How confident?" — a sequence that mirrors the mental model of a valuation, not a data export.',
-      },
-      {
-        title: 'Progressive disclosure for dense fields',
-        rationale: 'The dropdown filtering had 40+ options visible by default. We grouped them by decision type (proximity, price, timing) and used progressive disclosure so analysts see the 8 most-used filters first, with full access one step away.',
-        before: { src: dfDropdown, alt: 'Before: flat filter list' },
-        after: { src: dfDropdown, alt: 'After: grouped progressive disclosure' },
+        label: 'AI Platform',
+        goal: {
+          heading: 'Shifting DoorFeed from a data source to a workspace',
+          body: 'Institutional investors were using DoorFeed primarily to pull comparables, then exporting to Excel and running analysis externally — often feeding data through internal AI tools to filter noise. The platform was a data source, not a workspace.\n\nThe business goal: bring the intelligence layer inside DoorFeed, reduce dependency on external tools, increase time on platform, and reduce churn. I owned the full strategy, phasing, and design of the agentic version — including a net-new design system for the chat-based interface.',
+        },
+        process: {
+          heading: 'Structured audit, then phased change',
+          body: 'I ran a structured audit of the existing platform using PostHog — session recordings, rage click mapping, and event trigger analytics split by UK and French markets — to understand which features users actually engaged with and where they gave up. I worked directly with the CEO, CTO, sales team, and engineers throughout. I used Figma for wireframing and asset creation, Figma Make and Cursor for implementation, and Claude for design audits and pattern research — essential for moving fast as a solo designer.',
+        },
+        decisionsHeading: 'What shaped the outcome',
+        decisions: [
+          {
+            title: 'Phased rollout with shell continuity',
+            rationale: "Session data showed existing users had built muscle memory around the platform's structure — even when it was imperfect. I kept the shell recognisable and introduced the agentic layer as an additive beta, not a replacement. This reduced the risk of alienating active users while the new system was validated.",
+          },
+          {
+            title: 'Building a new design system for data-heavy chat UI',
+            rationale: "The existing component library wasn't built for conversational interfaces. I designed a new system from scratch — message components, input states, and response patterns for different output types: tables, charts, maps, and embedded Excel and PPT previews. I researched how leading AI tools handle multi-modal outputs and adapted those patterns for a data-dense, professional context. Every error state was designed explicitly — empty states, failed queries, knowledge base gaps.",
+          },
+          {
+            title: 'Knowledge base UX as a first-class problem',
+            rationale: 'The agentic platform required admins to set up and maintain a knowledge base — defining data and defaults the AI reasons against — at a regular cadence. I treated this as its own design problem: readable at a glance, editable without specialist knowledge. Poorly designed, it would have become a blocker to adoption before users ever saw the chat interface.',
+          },
+          {
+            title: 'Designing for data asymmetry across markets',
+            rationale: "French real estate data is significantly less rich than UK data. During testing, French asset pages were returning partially empty states — not errors, just absence. We nearly built two completely separate UI states per market. Instead, I designed a flexible empty-state system that degrades gracefully and signals clearly what's unavailable and why. This will scale as DoorFeed expands into more European markets.",
+          },
+          {
+            title: 'In-platform output viewing before download',
+            rationale: "Consistent client feedback: users wanted to review and refine reports before downloading, not after. I prioritised in-platform Excel and PPT preview and editing as a core feature of the beta. This directly addressed the behaviour we were seeing — users exporting too early, editing externally, and not returning.",
+          },
+        ],
+        outcome: {
+          heading: 'Early beta results',
+          stats: [
+            { label: 'Report exports', value: '+10%', description: 'First month of beta' },
+            { label: 'Standout stat', value: '14', description: 'Reports in 2 weeks by clients with 120/yr quota' },
+            { label: 'Logins', value: '↑', description: 'More frequent logins among beta users' },
+          ],
+          footnote: 'The features most positively received: in-platform playbook checking against organisational defaults, and embedded report viewing — which removed the major friction point of the download-first workflow.',
+        },
       },
     ],
 
