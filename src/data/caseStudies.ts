@@ -9,7 +9,7 @@ import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - clean
 
 // SigTech assets
 import st1 from '../assets/SigTech/MAGIC Hero.png'
-import st2 from '../assets/SigTech/Screenshot 2025-11-11 at 14.24.19.png'
+import st2 from '../assets/SigTech/Case Study/Task list.png'
 import st3 from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
 
 // Deloitte assets
