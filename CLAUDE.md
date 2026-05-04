@@ -2,6 +2,106 @@
 
 ---
 
+## Allowed Commands (Claude Code Allowlist)
+
+Claude Code is permitted to run the following commands **without asking for confirmation**. Any command **not** on this list must be explicitly approved by the user before execution.
+
+### Git
+```
+git status
+git diff
+git diff --staged
+git log
+git fetch origin
+git pull
+git push
+git push -u origin <branch>
+git checkout <branch>
+git checkout -b <branch>
+git branch
+git branch -a
+git merge --no-ff <branch>
+git rebase origin/<branch>
+git worktree list
+git worktree add
+git worktree remove
+git add <specific-file(s)>
+git commit -m "..."
+git restore --staged <file>
+git stash
+git stash pop
+```
+
+### Package Management & Build
+```
+npm install
+npm run dev
+npm run build
+npm run lint
+npm run preview
+npx tsc --noEmit
+```
+
+### File System (read-only)
+```
+ls
+ls -la
+cat <file>
+grep
+find . -name "..."
+```
+
+### Explicitly FORBIDDEN (never run without user confirmation)
+- `git push --force` / `git push -f`
+- `git reset --hard`
+- `git clean -f` / `git clean -fd`
+- `git branch -D`
+- `rm -rf`
+- Any command modifying `.env`, `.env.local`, `.env.development`
+- Any deployment command (`vercel deploy`, `vercel --prod`, etc.)
+
+---
+
+## Pre-Deployment Checklist
+
+Before **any** merge to `base` or `main`, or before triggering a production deploy, run through this checklist in order. Do **not** proceed if any item fails.
+
+### 1. Code Quality
+- [ ] `npm run lint` passes with zero errors
+- [ ] `npx tsc --noEmit` passes with zero type errors
+- [ ] No `console.log`, `console.warn`, or `debugger` statements left in production code
+- [ ] No commented-out code blocks left behind
+
+### 2. Build
+- [ ] `npm run build` completes successfully with no errors or warnings
+- [ ] Build output in `dist/` is present and non-empty
+
+### 3. Secrets & Environment
+- [ ] No `.env`, `.env.local`, or `.env.development` files are staged or committed
+- [ ] No API keys, tokens, or secrets are hardcoded in source files
+- [ ] `git diff HEAD` shows no sensitive values
+
+### 4. Branch Hygiene
+- [ ] Feature branch is up to date with `origin/base` (run `git fetch origin && git rebase origin/base`)
+- [ ] No merge conflicts outstanding
+- [ ] `.claude/launch.json` and `.claude/run-dev.sh` are **not** staged
+
+### 5. Protected Files
+- [ ] `vercel.json` has not been unintentionally modified
+- [ ] `.gitignore` still covers all dev environment files
+
+### 6. PR / Review
+- [ ] PR title follows conventional commit format (`feat:`, `fix:`, `chore:`, etc.)
+- [ ] PR description summarises **what** changed and **why**
+- [ ] At least one review approval before merging to `base`
+- [ ] All CI checks are green
+
+### 7. Final Smoke Test
+- [ ] `npm run preview` (or equivalent) loads without console errors in the browser
+- [ ] Key routes / pages render correctly
+
+---
+
 ## Branch Structure
 
 This project uses a **2-layer branch hierarchy** before `main`:
