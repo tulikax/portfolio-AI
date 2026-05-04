@@ -51,6 +51,7 @@ export default function PrototypeEmbed({ embed }: Props) {
           overflow: 'hidden',
           aspectRatio,
           position: 'relative',
+          width: '70%',
         }}
       >
         {embed.type === 'video' ? (

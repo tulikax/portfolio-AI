@@ -35,22 +35,22 @@ export default function CaseStudyPage() {
 
       {/* 2a — Body paragraphs layout (replaces problem section, reorders prototype before decisions) */}
       {!hasProjectTabs && hasBodyParagraphs && (
-        <section style={{ padding: '5rem 2rem 0', maxWidth: '72rem', margin: '0 auto' }}>
+        <section style={{ padding: '0.5rem 2rem 4rem', maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '1.5rem 0 3rem' }} />
           {data.bodyParagraphs!.map((para, i) => (
             <motion.p
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, delay: i * 0.1, ease: EASE_OUT }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.7, delay: i * 0.15, ease: EASE_OUT }}
               style={{
                 fontFamily: "'Barlow', sans-serif",
-                fontSize: 'clamp(1rem, 1.5vw, 1.2rem)',
+                fontSize: '1rem',
                 fontWeight: 300,
-                color: 'rgba(255,255,255,0.7)',
-                lineHeight: 1.75,
-                margin: '0 0 1.75rem 0',
-                maxWidth: '64ch',
+                color: 'rgba(255,255,255,0.72)',
+                lineHeight: 1.8,
+                margin: '0 0 1rem 0',
               }}
             >
               {para}
@@ -65,9 +65,33 @@ export default function CaseStudyPage() {
       {/* 3a — Project tabs */}
       {hasProjectTabs && <ProjectTabs data={data} />}
 
-      {/* 3b — Prototype early (when bodyParagraphs present — sits between text and decisions) */}
-      {!hasProjectTabs && hasBodyParagraphs && data.prototypeEmbed && (
-        <PrototypeEmbed embed={data.prototypeEmbed} />
+      {/* 3b — Video + decisions side-by-side (when bodyParagraphs present) */}
+      {!hasProjectTabs && hasBodyParagraphs && (data.prototypeEmbed || (data.designDecisions && data.designDecisions.length > 0)) && (
+        <section style={{ padding: '0 2rem 4rem', maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'stretch' }}>
+            {/* Left — video */}
+            {data.prototypeEmbed && (
+              <motion.div
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.8, ease: EASE_OUT }}
+                className="liquid-glass"
+                style={{ borderRadius: '1.5rem', overflow: 'hidden', position: 'relative', minHeight: 0 }}
+              >
+                <video
+                  src={data.prototypeEmbed.url}
+                  autoPlay loop muted playsInline
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </motion.div>
+            )}
+            {/* Right — stacked decision cards */}
+            {data.designDecisions && data.designDecisions.length > 0 && (
+              <DesignDecisions decisions={data.designDecisions} inline />
+            )}
+          </div>
+        </section>
       )}
 
       {/* 3c — Visual blocks (only when no projectTabs and no bodyParagraphs) */}
@@ -96,32 +120,33 @@ export default function CaseStudyPage() {
         </section>
       )}
 
-      {/* 5 — Design decisions */}
-      {!hasProjectTabs && data.designDecisions && data.designDecisions.length > 0 && (
+      {/* 5 — Design decisions (standard layout only — bodyParagraphs layout renders these inline above) */}
+      {!hasProjectTabs && !hasBodyParagraphs && data.designDecisions && data.designDecisions.length > 0 && (
         <DesignDecisions decisions={data.designDecisions} />
       )}
 
-      {/* 6a — Post-decision body + image (when bodyParagraphs layout) */}
-      {!hasProjectTabs && hasBodyParagraphs && (data.postDecisionBody || data.postDecisionImage) && (
+      {/* 6a — Post-decision body + image + body below (when bodyParagraphs layout) */}
+      {!hasProjectTabs && hasBodyParagraphs && (data.postDecisionBody || data.postDecisionImage || data.postDecisionBodyBelow) && (
         <section style={{ padding: '0 2rem 4rem', maxWidth: '72rem', margin: '0 auto' }}>
           {data.postDecisionBody && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: EASE_OUT }}
-              style={{
-                fontFamily: "'Barlow', sans-serif",
-                fontSize: 'clamp(1rem, 1.5vw, 1.2rem)',
-                fontWeight: 300,
-                color: 'rgba(255,255,255,0.7)',
-                lineHeight: 1.75,
-                margin: '0 0 2.5rem 0',
-                maxWidth: '64ch',
-              }}
-            >
-              {data.postDecisionBody}
-            </motion.p>
+            <div style={{ marginBottom: '2.5rem' }}>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.7, ease: EASE_OUT }}
+                style={{
+                  fontFamily: "'Barlow', sans-serif",
+                  fontSize: '1rem',
+                  fontWeight: 300,
+                  color: 'rgba(255,255,255,0.72)',
+                  lineHeight: 1.8,
+                  margin: 0,
+                }}
+              >
+                {data.postDecisionBody}
+              </motion.p>
+            </div>
           )}
           {data.postDecisionImage && (
             <motion.div
@@ -129,7 +154,7 @@ export default function CaseStudyPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.8, delay: 0.1, ease: EASE_OUT }}
-              style={{ borderRadius: '1.25rem', overflow: 'hidden' }}
+              style={{ borderRadius: '1.25rem', overflow: 'hidden', marginBottom: data.postDecisionBodyBelow ? '2.5rem' : 0 }}
             >
               <img
                 src={data.postDecisionImage.src}
@@ -137,6 +162,24 @@ export default function CaseStudyPage() {
                 style={{ width: '100%', display: 'block' }}
               />
             </motion.div>
+          )}
+          {data.postDecisionBodyBelow && (
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.7, ease: EASE_OUT }}
+              style={{
+                fontFamily: "'Barlow', sans-serif",
+                fontSize: '1rem',
+                fontWeight: 300,
+                color: 'rgba(255,255,255,0.72)',
+                lineHeight: 1.8,
+                margin: 0,
+              }}
+            >
+              {data.postDecisionBodyBelow}
+            </motion.p>
           )}
         </section>
       )}
