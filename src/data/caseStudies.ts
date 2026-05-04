@@ -5,32 +5,12 @@ import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
 import df2 from '../assets/DoorFeed/case study /New comps summary page.png'
 import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 import dfHero from '../assets/DoorFeed/case study /new dropdown hhorizontal tab.png'
-import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
 import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
 
-// SigTech assets — root
-import st1         from '../assets/SigTech/MAGIC Hero.png'
-import stChatFlow  from '../assets/SigTech/chat-flow.mp4'
-import stFull      from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
-// SigTech assets — Case Study folder
-import stOverview1    from '../assets/SigTech/Case Study/overview 1.png'
-import stIDE          from '../assets/SigTech/Case Study/SigTech IDE.png'
-import stOriginalIDE  from '../assets/SigTech/Case Study/original IDE.png'
-import stTaskList     from '../assets/SigTech/Case Study/Task list.png'
-import stTrust        from '../assets/SigTech/Case Study/building trust in AI responses.png'
-import stWireframes   from '../assets/SigTech/Case Study/copilot wireframes.webp'
-import stWireframes2  from '../assets/SigTech/Case Study/copilot wireframes 1.webp'
-import stImage72      from '../assets/SigTech/Case Study/image 72.png'
-import stMetabase     from '../assets/SigTech/Case Study/metabase tracking.webp'
-import stDeployment   from '../assets/SigTech/Case Study/more sigtech deployment.png'
-import stInfoArch     from '../assets/SigTech/Case Study/pivot 2 info arch.png'
-import stEarlyWires   from '../assets/SigTech/Case Study/wireframes early.png'
-import stPlugin       from '../assets/SigTech/Case Study/plugin.mov'
-import stBBTerminal1  from '../assets/SigTech/Case Study/BB terminal inspo idea1.png'
-import stBBTerminal2  from '../assets/SigTech/Case Study/BB terminal inspo idea2.png'
-
-void stFull   // available for future use
-void dfHero   // available for future use
+// SigTech assets
+import st1 from '../assets/SigTech/MAGIC Hero.png'
+import st2 from '../assets/SigTech/Case Study/Task list.png'
+import st3 from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
 
 // Deloitte assets
 import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
