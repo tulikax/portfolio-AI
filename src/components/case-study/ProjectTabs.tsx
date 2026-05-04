@@ -267,16 +267,15 @@ function DecisionsBlock({
 // ─── Outcome stats ─────────────────────────────────────────────
 
 function OutcomeBlock({
-  heading,
-  stats,
-  footnote,
+  outcome,
   delay = 0,
 }: {
-  heading: string
-  stats: NonNullable<ProjectTab['outcome']>['stats']
-  footnote?: string
+  outcome: NonNullable<ProjectTab['outcome']>
   delay?: number
 }) {
+  const { heading, stats, footnote, variant, outcomeMedia, footnoteVariant } = outcome
+  const isTealLabels = variant === 'teal-labels'
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -323,7 +322,7 @@ function OutcomeBlock({
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
           gap: '1rem',
-          marginBottom: footnote ? '1.5rem' : 0,
+          marginBottom: outcomeMedia || footnote ? '1.5rem' : 0,
         }}
       >
         {stats.map((s, i) => (
@@ -344,25 +343,27 @@ function OutcomeBlock({
                 fontWeight: 500,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.38)',
-                marginBottom: '0.5rem',
+                color: isTealLabels ? 'rgba(45, 212, 191, 0.4)' : 'rgba(255,255,255,0.38)',
+                marginBottom: isTealLabels ? '0.75rem' : '0.5rem',
               }}
             >
               {s.label}
             </span>
-            <span
-              style={{
-                display: 'block',
-                fontFamily: "'Instrument Serif', serif",
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
-                fontWeight: 400,
-                color: 'white',
-                lineHeight: 1,
-                marginBottom: '0.5rem',
-              }}
-            >
-              {s.value}
-            </span>
+            {!isTealLabels && (
+              <span
+                style={{
+                  display: 'block',
+                  fontFamily: "'Instrument Serif', serif",
+                  fontSize: 'clamp(2rem, 4vw, 3rem)',
+                  fontWeight: 400,
+                  color: 'white',
+                  lineHeight: 1,
+                  marginBottom: '0.5rem',
+                }}
+              >
+                {s.value}
+              </span>
+            )}
             <span
               style={{
                 display: 'block',
@@ -378,21 +379,51 @@ function OutcomeBlock({
           </div>
         ))}
       </div>
+      {outcomeMedia && (
+        <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: footnote ? '1.5rem' : 0, boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+          {/\.(mp4|webm|mov)$/i.test(outcomeMedia.src) ? (
+            <video src={outcomeMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
+          ) : (
+            <img src={outcomeMedia.src} alt={outcomeMedia.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+          )}
+        </div>
+      )}
       {footnote && (
-        <p
-          style={{
-            fontFamily: "'Barlow', sans-serif",
-            fontSize: '0.88rem',
-            fontWeight: 300,
-            color: 'rgba(255,255,255,0.42)',
-            lineHeight: 1.7,
-            margin: 0,
-            borderLeft: '2px solid rgba(255,255,255,0.12)',
-            paddingLeft: '1rem',
-          }}
-        >
-          {footnote}
-        </p>
+        footnoteVariant === 'problem-callout' ? (
+          <div style={{
+            background: 'rgba(180, 140, 60, 0.10)',
+            border: '1px solid rgba(200, 160, 60, 0.25)',
+            borderLeft: '3px solid rgba(245, 200, 66, 0.5)',
+            borderRadius: '0.5rem',
+            padding: '1rem 1.25rem',
+          }}>
+            <p style={{
+              fontFamily: "'Barlow', sans-serif",
+              fontSize: '0.88rem',
+              fontWeight: 300,
+              color: 'rgba(245, 200, 66, 0.80)',
+              lineHeight: 1.7,
+              margin: 0,
+            }}>
+              {footnote}
+            </p>
+          </div>
+        ) : (
+          <p
+            style={{
+              fontFamily: "'Barlow', sans-serif",
+              fontSize: '0.88rem',
+              fontWeight: 300,
+              color: 'rgba(255,255,255,0.42)',
+              lineHeight: 1.7,
+              margin: 0,
+              borderLeft: '2px solid rgba(255,255,255,0.12)',
+              paddingLeft: '1rem',
+            }}
+          >
+            {footnote}
+          </p>
+        )
       )}
     </motion.div>
   )
@@ -403,6 +434,29 @@ function OutcomeBlock({
 function OverviewContent({ data }: { data: CaseStudy }) {
   const paragraphs = (data.overviewBody ?? '').split('\n\n').filter(Boolean)
   const hasSideMedia = !!(data.overviewSideMedia && data.overviewSideMedia.length > 0)
+
+  function inlineMediaAfter(i: number) {
+    const items = (data.overviewInlineMedia ?? []).filter((m) => m.afterParagraph === i)
+    if (items.length === 0) return null
+    return items.map((m, j) => {
+      const isVid = /\.(mp4|webm|mov)$/i.test(m.src)
+      const w = m.scale ? `${m.scale}%` : '100%'
+      return (
+        <div key={j} style={{ margin: '1.5rem 0', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ width: w, borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+            {isVid ? (
+              <video src={m.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
+            ) : (
+              <img src={m.src} alt={m.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+            )}
+          </div>
+          {m.caption && (
+            <p style={{ fontSize: '0.78rem', fontWeight: 300, color: 'rgba(255,255,255,0.38)', fontFamily: "'Barlow', sans-serif", marginTop: '0.75rem' }}>{m.caption}</p>
+          )}
+        </div>
+      )
+    })
+  }
 
   return (
     <motion.div
@@ -430,7 +484,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
               {data.overviewSubtitle}
             </p>
           )}
-          {/* Paragraphs — inline media injected after paragraph 0 */}
+          {/* Paragraphs — inline media injected after each paragraph index */}
           {paragraphs.map((p, i) => (
             <div key={i}>
               <p
@@ -445,7 +499,9 @@ function OverviewContent({ data }: { data: CaseStudy }) {
               >
                 {applyHighlights(p, data.overviewHighlights)}
               </p>
-              {/* Inline media: IDE wider (2fr), video narrower (1fr), equal height */}
+              {/* overviewInlineMedia: injected after each paragraph */}
+              {inlineMediaAfter(i)}
+              {/* Legacy overviewSideMedia: injected as a 2-col grid after paragraph 0 */}
               {i === 0 && hasSideMedia && (
                 <div style={{
                   display: 'grid',
@@ -466,11 +522,9 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                       }}
                     >
                       {/\.(mp4|webm|mov)$/i.test(img.src) ? (
-                        // Video: contain so full frame is visible, no cropping
                         <video src={img.src} autoPlay loop muted playsInline
                           style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.05)', transformOrigin: 'center center' }} />
                       ) : (
-                        // Image: contain so full height is visible, no top/bottom crop
                         <img src={img.src} alt={img.alt}
                           style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.05)', transformOrigin: 'center center' }} />
                       )}
@@ -483,8 +537,8 @@ function OverviewContent({ data }: { data: CaseStudy }) {
         </div>
       )}
 
-      {/* Problem statement + optional media below it */}
-      {data.problemStatement && (
+      {/* Problem statement + optional media below it — hidden when overviewHideProblem is set */}
+      {data.problemStatement && !data.overviewHideProblem && (
         <div style={{ marginTop: '2rem' }}>
           <p
             style={{
@@ -542,9 +596,39 @@ function OverviewContent({ data }: { data: CaseStudy }) {
   )
 }
 
+// ─── WIP info box ──────────────────────────────────────────────
+
+function WIPBox({ message }: { message: string }) {
+  return (
+    <div style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '0.6rem',
+      padding: '0.75rem 1.25rem',
+      background: 'rgba(255, 200, 60, 0.07)',
+      border: '1px solid rgba(255, 200, 60, 0.22)',
+      borderRadius: '0.75rem',
+      marginBottom: '2rem',
+    }}>
+      <span style={{
+        fontSize: '0.75rem',
+        fontWeight: 500,
+        letterSpacing: '0.08em',
+        textTransform: 'uppercase',
+        color: 'rgba(255, 200, 60, 0.7)',
+        fontFamily: "'Barlow', sans-serif",
+      }}>
+        {message}
+      </span>
+    </div>
+  )
+}
+
 // ─── Project tab content ───────────────────────────────────────
 
 function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemStatement?: string }) {
+  const isVid = (src: string) => /\.(mp4|webm|mov)$/i.test(src)
+
   return (
     <motion.div
       key={tab.label}
@@ -553,62 +637,116 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.4, ease: EASE_OUT }}
     >
-      {tab.showProblemStatement ? (
+      {/* ── problemFirst: problem section + image, then goal + process as stacked blocks ── */}
+      {tab.problemFirst ? (
+        <>
+          {problemStatement && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: EASE_OUT }}
+              style={{ marginBottom: '2rem' }}
+            >
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>The Problem</span>
+              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '1rem', fontWeight: 300, lineHeight: 1.8, color: 'rgba(255,255,255,0.65)', margin: 0 }}>{problemStatement}</p>
+            </motion.div>
+          )}
+          {tab.problemImage && (
+            <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '3rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+              {isVid(tab.problemImage.src) ? (
+                <video src={tab.problemImage.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
+              ) : (
+                <img src={tab.problemImage.src} alt={tab.problemImage.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+              )}
+            </div>
+          )}
+          <SectionBlock label="Project Goal" heading={tab.goal.heading} body={tab.goal.body} delay={0} />
+          {tab.process && <SectionBlock label="Process" heading={tab.process.heading} body={tab.process.body} delay={0.06} />}
+        </>
+      ) : tab.showProblemStatement ? (
+        /* ── 3-card grid: problem + goal + process ── */
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
-          {/* Problem card */}
           {problemStatement && (
             <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
               <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>The Problem</span>
               <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
             </div>
           )}
-          {/* Goal card */}
           <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
             <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>Project Goal</span>
             <h3 style={{ fontFamily: "'Barlow', sans-serif", fontSize: '1rem', fontWeight: 600, color: 'rgba(255,255,255,0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
             <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.60)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
           </div>
-          {/* Process card */}
-          <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>Process</span>
-            <h3 style={{ fontFamily: "'Barlow', sans-serif", fontSize: '1rem', fontWeight: 600, color: 'rgba(255,255,255,0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.60)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
-          </div>
+          {tab.process && (
+            <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>Process</span>
+              <h3 style={{ fontFamily: "'Barlow', sans-serif", fontSize: '1rem', fontWeight: 600, color: 'rgba(255,255,255,0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
+              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.60)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
+            </div>
+          )}
         </div>
       ) : (
+        /* ── Default: stacked goal + process sections ── */
         <>
           <SectionBlock label="Project Goal" heading={tab.goal.heading} body={tab.goal.body} delay={0} />
-          <SectionBlock label="Process" heading={tab.process.heading} body={tab.process.body} delay={0.06} />
+          {tab.process && <SectionBlock label="Process" heading={tab.process.heading} body={tab.process.body} delay={0.06} />}
         </>
       )}
-      {/* Visuals slotted between Process and Decisions */}
-      {tab.preDecisionVisuals && tab.preDecisionVisuals.length > 0 && (
-        <div style={{ margin: '0 -2rem', marginBottom: '1rem' }}>
-          {tab.preDecisionVisuals.map((block, i) => (
-            <VisualShowcase key={i} block={block} />
-          ))}
+
+      {/* goalMedia: shown directly below project goal (used when wip hides the rest) */}
+      {tab.goalMedia && (
+        <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+          {isVid(tab.goalMedia.src) ? (
+            <video src={tab.goalMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
+          ) : (
+            <img src={tab.goalMedia.src} alt={tab.goalMedia.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+          )}
+          {tab.goalMedia.caption && (
+            <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.78rem', fontWeight: 300, color: 'rgba(255,255,255,0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
+          )}
         </div>
       )}
-      <DecisionsBlock
-        heading={tab.decisionsHeading ?? 'What shaped the outcome'}
-        decisions={tab.decisions}
-        decisionsLayout={tab.decisionsLayout}
-        delay={0.12}
-      />
-      {tab.outcome && (
-        <OutcomeBlock
-          heading={tab.outcome.heading}
-          stats={tab.outcome.stats}
-          footnote={tab.outcome.footnote}
-          delay={0.18}
-        />
-      )}
-      {tab.visualBlocks && tab.visualBlocks.length > 0 && (
-        <div style={{ margin: '0 -2rem' }}>
-          {tab.visualBlocks.map((block, i) => (
-            <VisualShowcase key={i} block={block} />
-          ))}
-        </div>
+
+      {/* WIP box — skips process/decisions/outcome when set */}
+      {tab.wip ? (
+        <WIPBox message={tab.wip.message} />
+      ) : (
+        <>
+          {/* Visuals between Process and Decisions */}
+          {tab.preDecisionVisuals && tab.preDecisionVisuals.length > 0 && (
+            <div style={{ margin: '0 -2rem', marginBottom: '1rem' }}>
+              {tab.preDecisionVisuals.map((block, i) => (
+                <VisualShowcase key={i} block={block} />
+              ))}
+            </div>
+          )}
+          {tab.decisions.length > 0 && (
+            <DecisionsBlock
+              heading={tab.decisionsHeading ?? 'What shaped the outcome'}
+              decisions={tab.decisions}
+              decisionsLayout={tab.decisionsLayout}
+              delay={0.12}
+            />
+          )}
+          {/* Visuals between Decisions and Outcome */}
+          {tab.postDecisionVisuals && tab.postDecisionVisuals.length > 0 && (
+            <div style={{ margin: '0 -2rem', marginBottom: '1rem' }}>
+              {tab.postDecisionVisuals.map((block, i) => (
+                <VisualShowcase key={i} block={block} />
+              ))}
+            </div>
+          )}
+          {tab.outcome && (
+            <OutcomeBlock outcome={tab.outcome} delay={0.18} />
+          )}
+          {tab.visualBlocks && tab.visualBlocks.length > 0 && (
+            <div style={{ margin: '0 -2rem' }}>
+              {tab.visualBlocks.map((block, i) => (
+                <VisualShowcase key={i} block={block} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </motion.div>
   )
