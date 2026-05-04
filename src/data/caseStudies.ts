@@ -5,17 +5,31 @@ import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
 import df2 from '../assets/DoorFeed/case study /New comps summary page.png'
 import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 import dfHero from '../assets/DoorFeed/case study /new dropdown hhorizontal tab.png'
+import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
 import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
 
 // SigTech assets
 import st1 from '../assets/SigTech/MAGIC Hero.png'
 import st2 from '../assets/SigTech/Case Study/Task list.png'
 import st3 from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
+import stChatFlow    from '../assets/SigTech/chat-flow.mp4'
+import stIDE         from '../assets/SigTech/Case Study/SigTech IDE.png'
+import stOriginalIDE from '../assets/SigTech/Case Study/original IDE.png'
+import stTaskList    from '../assets/SigTech/Case Study/Task list.png'
+import stTrust       from '../assets/SigTech/Case Study/building trust in AI responses.png'
+import stWireframes  from '../assets/SigTech/Case Study/copilot wireframes.webp'
+import stMetabase    from '../assets/SigTech/Case Study/metabase tracking.webp'
+import stDeployment  from '../assets/SigTech/Case Study/more sigtech deployment.png'
+import stInfoArch    from '../assets/SigTech/Case Study/pivot 2 info arch.png'
+import stPlugin      from '../assets/SigTech/Case Study/plugin.mov'
+import stOverview1   from '../assets/SigTech/Case Study/overview 1.png'
+import stBBTerminal1 from '../assets/SigTech/Case Study/BB terminal inspo idea1.png'
+import stBBTerminal2 from '../assets/SigTech/Case Study/BB terminal inspo idea2.png'
 
 // Deloitte assets
-import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
-import dl2 from '../assets/Deloitte SS/Deloitte:sketches.png'
-import dl3 from '../assets/Deloitte SS/Frame 302.png'
+import dlHeroVideo  from '../assets/Deloitte SS/Case study/nlg2.mov'
+import dlProtoVideo from '../assets/Deloitte SS/Case study/nlg.mov'
+import dlBento      from '../assets/Deloitte SS/Case study/deloitte bento.png'
 
 export const CASE_STUDIES: CaseStudy[] = [
   // ── Complex case study ────────────────────────────────────────
@@ -389,22 +403,16 @@ export const CASE_STUDIES: CaseStudy[] = [
     duration: '9 months',
     company: 'Deloitte',
 
-    heroMedia: { src: dl3, alt: 'NLG tool interface overview' },
+    heroMedia: { src: dlHeroVideo, alt: 'NLG tool interface overview' },
 
-    goal: 'Design an interface for an ML-powered natural language generation tool that lets audit teams produce client reports faster, with less manual drafting.',
-    yourRole: 'UX designer embedded in Deloitte\'s innovations team — leading user research, interaction design, and cross-functional sprint facilitation.',
-    outcome: 'The tool reduced reporting manhours by 40% in pilot. Shipped to three client audit teams and later expanded to the wider reporting practice.',
+    goal: '',
+    yourRole: '',
+    outcome: '',
+    problemStatement: '',
 
-    problemStatement: 'Audit reporting is time-intensive and formulaic — senior staff were spending hours drafting sections that followed consistent patterns. The innovations team had built an ML backend that could generate first-draft narratives from structured data. The design challenge was to make the human-in-the-loop editing experience feel trustworthy, not threatening.',
-
-    visualBlocks: [
-      {
-        layout: 'two-up',
-        images: [
-          { src: dl1, alt: 'Mobile reporting interface', caption: 'Mobile companion — reviewing and approving generated sections on the go' },
-          { src: dl2, alt: 'Early sketches and concepts', caption: 'Early ideation — mapping the human-AI collaboration model' },
-        ],
-      },
+    bodyParagraphs: [
+      'My work spanned multiple distinct projects, with mostly Tax and Audit teams.',
+      'My favorite project being there was an NLG reporting tool built during a Covid-era innovation sprint where I helped conceptualise a five-step wizard that used extractive NLP to reduce analyst drafting time from around 45 minutes to a guided ten-minute flow, with per-team templates across four service lines and a track-changes editorial interface designed to meet compliance requirements.',
     ],
 
     designDecisions: [
@@ -419,10 +427,13 @@ export const CASE_STUDIES: CaseStudy[] = [
     ],
 
     prototypeEmbed: {
-      type: 'figma',
-      url: 'https://www.figma.com/proto/placeholder',
-      caption: 'Interactive prototype — NLG report editing flow',
+      type: 'video',
+      url: dlProtoVideo,
+      caption: 'NLG report editing flow — in product',
     },
+
+    postDecisionBody: 'Besides that, I worked on a knowledge base UX refresh for Deloitte Think, where I learnt just how a large internal knowledge system was structured and surfaced for the people who relied on it daily. The third was an HR conversational assistant for a major bank\'s internal teams — combining leave management, policy lookup, and a company knowledge base into a single chat interface, with accessibility treated as a core design constraint rather than an afterthought.',
+    postDecisionImage: { src: dlBento, alt: 'Deloitte project overview' },
   },
 ]
 

@@ -107,11 +107,16 @@ export interface CaseStudy {
   platformSections?: PlatformSection[]
   designDecisions?: DesignDecision[]
   prototypeEmbed?: {
-    type: 'figma' | 'loom' | 'youtube' | 'iframe'
+    type: 'figma' | 'loom' | 'youtube' | 'iframe' | 'video'
     url: string
     aspectRatio?: string  // e.g. "16/9", defaults to "16/9"
     caption?: string
   }
+  // Replaces ProblemSection when present; prototype is inserted after these, before designDecisions
+  bodyParagraphs?: string[]
+  // Rendered after designDecisions
+  postDecisionBody?: string
+  postDecisionImage?: CaseStudyImage
 
   // Navigation
   nextProject?: {
