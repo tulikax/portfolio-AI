@@ -112,6 +112,12 @@ export interface CaseStudy {
     aspectRatio?: string  // e.g. "16/9", defaults to "16/9"
     caption?: string
   }
+  // Replaces ProblemSection when present; prototype is inserted after these, before designDecisions
+  bodyParagraphs?: string[]
+  // Rendered after designDecisions
+  postDecisionBody?: string
+  postDecisionImage?: CaseStudyImage
+  postDecisionBodyBelow?: string
 
   // Navigation
   nextProject?: {

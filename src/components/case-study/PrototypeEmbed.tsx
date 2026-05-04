@@ -39,44 +39,6 @@ export default function PrototypeEmbed({ embed }: Props) {
         }}
       />
 
-      {/* Heading */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.7, ease: EASE_OUT }}
-        style={{ marginBottom: '2rem' }}
-      >
-        <span
-          style={{
-            display: 'block',
-            fontSize: '0.68rem',
-            fontWeight: 500,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.38)',
-            fontFamily: "'Barlow', sans-serif",
-            marginBottom: '0.75rem',
-          }}
-        >
-          Interactive Prototype
-        </span>
-        <h2
-          style={{
-            fontFamily: "'Instrument Serif', serif",
-            fontStyle: 'italic',
-            fontSize: 'clamp(1.8rem, 4vw, 3rem)',
-            fontWeight: 400,
-            letterSpacing: '-0.03em',
-            color: 'white',
-            margin: 0,
-            lineHeight: 1.1,
-          }}
-        >
-          Try it yourself.
-        </h2>
-      </motion.div>
-
       {/* Embed */}
       <motion.div
         initial={{ opacity: 0, y: 28 }}
@@ -89,6 +51,7 @@ export default function PrototypeEmbed({ embed }: Props) {
           overflow: 'hidden',
           aspectRatio,
           position: 'relative',
+          width: '70%',
         }}
       >
         {embed.type === 'video' ? (

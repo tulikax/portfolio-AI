@@ -29,10 +29,9 @@ import stBBTerminal2  from '../assets/SigTech/Case Study/BB terminal inspo idea2
 void stFull  // available for future use
 
 // Deloitte assets
-import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
-import dl2 from '../assets/Deloitte SS/Deloitte:sketches.png'
-import dlHeroVideo from '../assets/Deloitte SS/Case study/nlg.mov'
-import dlProtoVideo from '../assets/Deloitte SS/Case study/nlg2.mov'
+import dlHeroVideo  from '../assets/Deloitte SS/Case study/nlg2final.mov'
+import dlProtoVideo from '../assets/Deloitte SS/Case study/nlg.mov'
+import dlBento      from '../assets/Deloitte SS/Case study/final bento.png'
 
 export const CASE_STUDIES: CaseStudy[] = [
   // ── Complex case study ────────────────────────────────────────
@@ -400,7 +399,7 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     slug: 'deloitte-nlg',
     title: 'NLG Reporting Tool',
-    tagline: 'Cutting reporting manhours through ML-powered narrative generation.',
+    tagline: 'and other selected highlights',
     year: '2020',
     role: 'UX Designer',
     duration: '9 months',
@@ -408,26 +407,26 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     heroMedia: { src: dlHeroVideo, alt: 'NLG tool interface overview' },
 
-    goal: 'Design an interface for an ML-powered natural language generation tool that lets audit teams produce client reports faster, with less manual drafting.',
-    yourRole: 'UX designer embedded in Deloitte\'s innovations team — leading user research, interaction design, and cross-functional sprint facilitation.',
-    outcome: 'The tool reduced reporting manhours by 40% in pilot. Shipped to three client audit teams and later expanded to the wider reporting practice.',
+    heroTools: [
+      { name: 'Figma',  slug: 'figma' },
+      { name: 'Sketch', slug: 'Sketch', ext: 'png' },
+      { name: 'Axure',  slug: 'axure',  ext: 'png' },
+    ],
 
-    problemStatement: 'Audit reporting is time-intensive and formulaic — senior staff were spending hours drafting sections that followed consistent patterns. The innovations team had built an ML backend that could generate first-draft narratives from structured data. The design challenge was to make the human-in-the-loop editing experience feel trustworthy, not threatening.',
+    goal: '',
+    yourRole: '',
+    outcome: '',
+    problemStatement: '',
 
-    visualBlocks: [
-      {
-        layout: 'two-up',
-        images: [
-          { src: dl1, alt: 'Mobile reporting interface', caption: 'Mobile companion — reviewing and approving generated sections on the go' },
-          { src: dl2, alt: 'Early sketches and concepts', caption: 'Early ideation — mapping the human-AI collaboration model' },
-        ],
-      },
+    bodyParagraphs: [
+      'I was one of three designers on the Innovations team, splitting time between internal R&D and client engagements. Most of the work landed in enterprise contexts where the stakes were high but design maturity was low. I helped organisations that were ready to adopt new technology but without the defined patterns to do it well.',
+      'My favorite project being there was an NLG reporting tool built during a Covid-era innovation sprint where I helped conceptualise a five-step wizard that used extractive NLP to reduce analyst drafting time from around 45 minutes to a guided ten-minute flow, with per-team templates across four service lines and a track-changes editorial interface designed to meet compliance requirements.',
     ],
 
     designDecisions: [
       {
         title: 'Track changes UI for AI-generated content',
-        rationale: 'Auditors needed to clearly distinguish generated content from human edits for compliance. We adapted a familiar track-changes metaphor — ML output shown in a distinct colour, human edits in the standard style — so the provenance of every sentence was always visible.',
+        rationale: 'Analysts needed to clearly distinguish final generated content from human edits for compliance and visibility. We adapted a familiar track-changes metaphor from MS Word: any generated numerical output (specifically numbers) were highlighted to draw user to verify, general words and phrases from the tool in the standard style so the origin of every sentence was always clear.',
       },
       {
         title: 'Confidence scoring as editorial signal',
@@ -440,6 +439,10 @@ export const CASE_STUDIES: CaseStudy[] = [
       url: dlProtoVideo,
       caption: 'NLG report editing flow — in product',
     },
+
+    postDecisionBody: 'Besides that, I worked on an HR conversational assistant for a major bank\'s internal teams — combining leave management, policy lookup, and a company knowledge base into a single chat interface, with accessibility treated as a core design constraint rather than an afterthought.',
+    postDecisionImage: { src: dlBento, alt: 'Deloitte project overview' },
+    postDecisionBodyBelow: 'The third was a knowledge base UX refresh for Deloitte Think, where I learnt just how a large internal knowledge system was structured and surfaced for the people who relied on it daily.',
   },
 ]
 
