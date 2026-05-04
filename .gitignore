@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Claude Code local dev config (changes per worktree)
+.claude/launch.json
+.claude/run-dev.sh
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
