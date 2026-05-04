@@ -117,6 +117,7 @@ export interface CaseStudy {
   // Rendered after designDecisions
   postDecisionBody?: string
   postDecisionImage?: CaseStudyImage
+  postDecisionBodyBelow?: string
 
   // Navigation
   nextProject?: {
