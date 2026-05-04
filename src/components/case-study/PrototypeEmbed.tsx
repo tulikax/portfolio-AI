@@ -91,19 +91,37 @@ export default function PrototypeEmbed({ embed }: Props) {
           position: 'relative',
         }}
       >
-        <iframe
-          src={embedUrl}
-          title="Interactive Prototype"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            border: 'none',
-            display: 'block',
-          }}
-          allowFullScreen
-        />
+        {embed.type === 'video' ? (
+          <video
+            src={embed.url}
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        ) : (
+          <iframe
+            src={embedUrl}
+            title="Interactive Prototype"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block',
+            }}
+            allowFullScreen
+          />
+        )}
       </motion.div>
 
       {embed.caption && (

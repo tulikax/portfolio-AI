@@ -31,7 +31,8 @@ void stFull  // available for future use
 // Deloitte assets
 import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
 import dl2 from '../assets/Deloitte SS/Deloitte:sketches.png'
-import dl3 from '../assets/Deloitte SS/Frame 302.png'
+import dlHeroVideo from '../assets/Deloitte SS/Case study/nlg.mov'
+import dlProtoVideo from '../assets/Deloitte SS/Case study/nlg2.mov'
 
 export const CASE_STUDIES: CaseStudy[] = [
   // ── Complex case study ────────────────────────────────────────
@@ -405,7 +406,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     duration: '9 months',
     company: 'Deloitte',
 
-    heroMedia: { src: dl3, alt: 'NLG tool interface overview' },
+    heroMedia: { src: dlHeroVideo, alt: 'NLG tool interface overview' },
 
     goal: 'Design an interface for an ML-powered natural language generation tool that lets audit teams produce client reports faster, with less manual drafting.',
     yourRole: 'UX designer embedded in Deloitte\'s innovations team — leading user research, interaction design, and cross-functional sprint facilitation.',
@@ -435,9 +436,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     ],
 
     prototypeEmbed: {
-      type: 'figma',
-      url: 'https://www.figma.com/proto/placeholder',
-      caption: 'Interactive prototype — NLG report editing flow',
+      type: 'video',
+      url: dlProtoVideo,
+      caption: 'NLG report editing flow — in product',
     },
   },
 ]
