@@ -1,29 +1,36 @@
 import type { CaseStudy } from '../types/caseStudy'
 
 // DoorFeed assets
-import df1 from '../assets/DoorFeed/case study /DF:comparables map.png'
-import df2 from '../assets/DoorFeed/case study /DF:comps summary.png'
-import df3 from '../assets/DoorFeed/case study /DF:generation.png'
-import dfHero from '../assets/DoorFeed/case study /Bar menu.png'
-import dfDropdown from '../assets/DoorFeed/case study /DF:dropdown.png'
+import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
+import df2 from '../assets/DoorFeed/case study /New comps summary page.png'
+import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
+import dfHero from '../assets/DoorFeed/case study /new dropdown hhorizontal tab.png'
+import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
+import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
 
 // SigTech assets — root
-import st1    from '../assets/SigTech/MAGIC Hero.png'
-import stFull from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
+import st1         from '../assets/SigTech/MAGIC Hero.png'
+import stChatFlow  from '../assets/SigTech/chat-flow.mp4'
+import stFull      from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
 // SigTech assets — Case Study folder
-import stDesktop    from '../assets/SigTech/Case Study/Desktop 2.png'
-import stIDE        from '../assets/SigTech/Case Study/SigTech IDE.png'
-import stTaskList   from '../assets/SigTech/Case Study/Task list.png'
-import stTrust      from '../assets/SigTech/Case Study/building trust in AI responses.png'
-import stWireframes from '../assets/SigTech/Case Study/copilot wireframes.webp'
-import stWireframes2 from '../assets/SigTech/Case Study/copilot wireframes 1.webp'
-import stHorizScreens from '../assets/SigTech/Case Study/horizontal screens - right to left with scroll.png'
-import stImage72    from '../assets/SigTech/Case Study/image 72.png'
-import stMetabase   from '../assets/SigTech/Case Study/metabase tracking.webp'
-import stDeployment from '../assets/SigTech/Case Study/more sigtech deployment.png'
-import stInfoArch   from '../assets/SigTech/Case Study/pivot 2 info arch.png'
-import stEarlyWires from '../assets/SigTech/Case Study/wireframes early.png'
-import stPlugin     from '../assets/SigTech/Case Study/plugin.mov'
+import stOverview1    from '../assets/SigTech/Case Study/overview 1.png'
+import stIDE          from '../assets/SigTech/Case Study/SigTech IDE.png'
+import stOriginalIDE  from '../assets/SigTech/Case Study/original IDE.png'
+import stTaskList     from '../assets/SigTech/Case Study/Task list.png'
+import stTrust        from '../assets/SigTech/Case Study/building trust in AI responses.png'
+import stWireframes   from '../assets/SigTech/Case Study/copilot wireframes.webp'
+import stWireframes2  from '../assets/SigTech/Case Study/copilot wireframes 1.webp'
+import stImage72      from '../assets/SigTech/Case Study/image 72.png'
+import stMetabase     from '../assets/SigTech/Case Study/metabase tracking.webp'
+import stDeployment   from '../assets/SigTech/Case Study/more sigtech deployment.png'
+import stInfoArch     from '../assets/SigTech/Case Study/pivot 2 info arch.png'
+import stEarlyWires   from '../assets/SigTech/Case Study/wireframes early.png'
+import stPlugin       from '../assets/SigTech/Case Study/plugin.mov'
+import stBBTerminal1  from '../assets/SigTech/Case Study/BB terminal inspo idea1.png'
+import stBBTerminal2  from '../assets/SigTech/Case Study/BB terminal inspo idea2.png'
+
+void stFull   // available for future use
+void dfHero   // available for future use
 
 // Deloitte assets
 import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
@@ -54,7 +61,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       { name: 'PostHog', slug: 'posthog', ext: 'png' },
     ],
 
-    heroMedia: { src: dfHero, alt: 'DoorFeed interface overview' },
+    heroMedia: { src: dfHeroVideo, alt: 'DoorFeed interface overview' },
 
     goal: 'Design a property data platform that surfaces granular, comparable market data in a way that feels as refined as it is accurate — turning dense datasets into clear, trustworthy decision surfaces.',
     yourRole: 'Solo product designer working end-to-end: research, strategy, interaction design, and direct collaboration with engineering through 20+ pull requests.',
@@ -62,7 +69,8 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     problemStatement: 'Users were treating DoorFeed as a data extraction layer — pulling comparables, then leaving to do analysis elsewhere. The platform had depth but no intelligence layer; no way to stay inside it for the work that mattered. Two connected design problems emerged: a fragmented navigation UX causing early exits, and a missing workspace layer that meant the platform never became essential.',
 
-    overviewBody: '4 months at DoorFeed\n\nI joined DoorFeed right after their first public release of AI intelligence in their B2B platform for institutional real estate investors in the UK and French markets. The product worked, but it was showing the seams of a first version: navigation that overwhelmed more than it guided, a map that existed but wasn\'t usable, and users exporting data to work externally rather than staying on the platform.\n\nI owned design across two connected workstreams. The first was a focused UX fix — cleaning up navigation, and making the core comparable-finding workflow usable. The second grew out of what we found: the problem wasn\'t just the interface. Users were context-switching constantly, exporting whole datasets when they only needed a component, and running analysis in external tools.\n\nWorking closely with the founder and CTO, I am currently helping shape the strategic case for a second, transitionary product — an agentic, chat-based layer that would bring the intelligence inside the platform without abandoning the data infrastructure users already relied on.\n\nBoth workstreams ran in parallel with a live product and real enterprise clients. I worked as the sole designer throughout.',
+    overviewSubtitle: '4 months at DoorFeed',
+    overviewBody: 'I joined DoorFeed right after their first public release of AI intelligence in their B2B platform for institutional real estate investors in the UK and French markets. The product worked, but it was showing the seams of a first version: navigation that overwhelmed more than it guided, a map that existed but wasn\'t usable, and users exporting data to work externally rather than staying on the platform.\n\nI owned design across two connected workstreams. The first was a focused UX fix — cleaning up navigation, and making the core comparable-finding workflow usable. The second grew out of what we found: the problem wasn\'t just the interface. Users were context-switching constantly, exporting whole datasets when they only needed a component, and running analysis in external tools.\n\nWorking closely with the founder and CTO, I am currently helping shape the strategic case for a second, transitionary product — an agentic, chat-based layer that would bring the intelligence inside the platform without abandoning the data infrastructure users already relied on.\n\nBoth workstreams ran in parallel with a live product and real enterprise clients. I worked as the sole designer throughout.',
 
     overviewHighlights: [
       {
@@ -198,10 +206,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     tagline: 'From AI chat plugin to financial intelligence platform.',
     year: '2024–2025',
     role: 'Product Designer',
-    duration: '18 months',
+    duration: '11 months',
     company: 'SigTech',
 
-    heroMedia: { src: st1, alt: 'MAGIC AI platform hero' },
+    heroMedia: { src: stChatFlow, alt: 'MAGIC AI platform — chat flow demo' },
 
     heroTools: [
       { name: 'Figma',   slug: 'figma' },
@@ -216,7 +224,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     problemStatement: 'MAGIC started as an internal ChatGPT-style plugin for macroeconomic data at SigTech. Usage was reasonable — but churn was high, and enterprise contracts were stalling. When I joined sales feedback sessions and cross-referenced session data, the signal was consistent: users weren\'t rejecting the AI. They were rejecting the opacity. They couldn\'t see how conclusions were reached, which sources were used, or why one output differed from the last. In mid-2024, ChatGPT responses didn\'t include citations — adding verifiable sources was genuinely novel. But without them, analysts had no reason to trust outputs enough to act on them, and no reason to switch from ChatGPT at all.',
 
-    overviewBody: '18 months at SigTech\n\nI was brought in to improve SigTech\'s Quant IDE platform. The team had a separate internal experiment running — a ChatGPT plugin, originally built to enhance the IDE, now showing enough promise to become a standalone product. My first instinct was to build a copilot directly into the existing platform. Users in early demo calls were excited. But excitement and conviction aren\'t the same thing. Nobody was quite sure they\'d actually use it. We killed that direction fast, and started asking the real question: what would make someone trust an AI enough to stake a financial decision on it?\n\nThe path wasn\'t linear. We went through three distinct directions before landing on what MAGIC needed to be — each abandoned faster than the last, but each teaching us something the final design couldn\'t have done without.\n\nThe demos were going well. But without trust, there was no stickiness. Without stickiness, enterprise contracts didn\'t close. Leadership knew the tool needed to evolve — and that\'s where I came in. How do we make the AI\'s reasoning visible enough to build trust, distinct enough to justify switching, and structured enough to replace the manual workflows analysts were doing around it — without making any of it feel more complex to use?',
+    overviewBody: 'I was brought in to improve SigTech\'s Quant IDE platform. The team had a separate internal experiment running — a ChatGPT plugin, originally built to enhance the IDE, now showing enough promise to become a standalone product. My first instinct was to build a copilot directly into the existing platform. Users in early demo calls were excited. But excitement and conviction aren\'t the same thing. Nobody was quite sure they\'d actually use it. We killed that direction fast, and started asking the real question: what would make someone trust an AI enough to stake a financial decision on it?\n\nThe path wasn\'t linear. We went through three distinct directions before landing on what MAGIC needed to be — each abandoned faster than the last, but each teaching us something the final design couldn\'t have done without.\n\nThe demos were going well. But without trust, there was no stickiness. Without stickiness, enterprise contracts didn\'t close. Leadership knew the tool needed to evolve — and that\'s where I came in. How do we make the AI\'s reasoning visible enough to build trust, distinct enough to justify switching, and structured enough to replace the manual workflows analysts were doing around it — without making any of it feel more complex to use?',
 
     overviewHighlights: [
       {
@@ -236,20 +244,17 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
     ],
 
-    // Overview tab images — hero + platform overview
-    visualBlocks: [
-      {
-        layout: 'full' as const,
-        images: [{ src: st1, alt: 'MAGIC platform hero', caption: 'MAGIC — the AI research assistant for financial teams' }],
-      },
-      {
-        layout: 'two-up' as const,
-        images: [
-          { src: stDesktop, alt: 'MAGIC desktop interface', caption: 'Desktop — full reasoning panel alongside chat workspace' },
-          { src: stFull, alt: 'Full platform view', caption: 'Platform overview — multi-agent workspace' },
-        ],
-      },
+    overviewSideMedia: [
+      { src: stIDE, alt: 'SigTech IDE' },
+      { src: stOriginalIDE, alt: 'Original SigTech IDE' },
     ],
+
+    problemMedia: { src: stPlugin, alt: 'The original ChatGPT plugin that became MAGIC' },
+
+    showOverviewCards: true,
+
+    // Overview tab has no visualBlocks — overview1 lives in Outcomes tab
+    visualBlocks: [],
 
     projectTabs: [
       // ── Tab 1: Three Pivots ──────────────────────────────────
@@ -264,67 +269,29 @@ export const CASE_STUDIES: CaseStudy[] = [
           body: 'I joined sales feedback sessions, reviewed session data, and ran workshops with the PM and engineers. The signal from every direction was consistent: users weren\'t rejecting the AI — they were rejecting the opacity.\n\nWe used rapid prototyping with select users to kill bad directions fast, before significant design investment. What changed with each pivot wasn\'t just the interface — it was our understanding of what the product actually needed to be.',
         },
         decisionsHeading: 'The three pivots',
+        decisionsLayout: 'side-by-side' as const,
         decisions: [
           {
             title: '01 — Build a copilot inside the SigTech ecosystem.',
             rationale: 'The initial direction was to embed an AI coding assistant directly into SigTech\'s existing platform — a Copilot for quants. Rapid prototyping with select users killed this quickly. The value proposition immediately ran into Cursor and GitHub Copilot on one side, and SigTech\'s own developer tooling on the other. We were building into a crowded lane we couldn\'t win. Abandoned early, before significant design investment.',
+            image: { src: stWireframes, alt: 'Copilot wireframes — initial direction' },
           },
           {
             title: '02 — Focus on simplifying high-value recurring tasks.',
             rationale: 'Research surfaced what users actually needed: not a smarter coding assistant, but a way to eliminate manual overhead around decisions — writing summary reports, running underwriting checks, synthesising data from multiple sources. Analysts were spending cognitive energy on preparation when their real value was in judgement. This direction shaped the transparency features and multi-agent architecture. But a problem remained: the experience still felt like a better ChatGPT. Not different enough.',
+            image: { src: stInfoArch, alt: 'Information architecture — pivot 2 restructure' },
           },
           {
             title: '03 — From "talk to AI" to "delegate to AI."',
             rationale: 'Pilot data showed analysts repeating the same complex prompts session after session. Chat was flexible, but flexibility was the wrong value for structured, recurring workflows. The insight: the product didn\'t need to be a better chat interface — it needed to let users create jobs, not conversations. Pre-configured, schedulable, executable workflows. Chat for exploration; Jobs for execution. This reframe separated MAGIC from every general-purpose LLM on the market.',
-          },
-        ],
-        outcome: {
-          heading: 'From AI chat assistant to Financial Intelligence Platform',
-          stats: [
-            { label: 'Churn reduction', value: '~24%', description: 'After repositioning around transparency and structured workflows' },
-            { label: 'Time-to-insight', value: '~39%', description: 'Faster across pilot cohort' },
-            { label: 'Pivots', value: '3', description: 'Each killed before significant sunk cost' },
-          ],
-          footnote: 'The third pivot — from chat to jobs — repositioned MAGIC as a Financial Intelligence Platform, not just a better chatbot. It drove renewed enterprise interest and changed how leadership framed the product to investors.',
-        },
-        visualBlocks: [
-          {
-            label: 'Dead end — initial copilot direction',
-            layout: 'full' as const,
-            images: [
-              { src: stPlugin, alt: 'Original ChatGPT plugin', caption: 'The original plugin — where MAGIC started, before it became a standalone product' },
-            ],
-          },
-          {
-            label: 'Copilot wireframes — killed before significant investment',
-            layout: 'two-up' as const,
-            images: [
-              { src: stWireframes, alt: 'Copilot wireframes', caption: 'Initial copilot concept — AI coding assistant embedded in the IDE' },
-              { src: stWireframes2, alt: 'Copilot wireframes iteration', caption: 'Wireframe iteration — before we killed the copilot direction' },
-            ],
-          },
-          {
-            label: 'Pivot 2 — task simplification direction',
-            layout: 'two-up' as const,
-            images: [
-              { src: stInfoArch, alt: 'Pivot 2 information architecture', caption: 'Information architecture — restructuring around analyst workflows' },
-              { src: stEarlyWires, alt: 'Early wireframes', caption: 'Early wireframes — exploring the recurring-task direction' },
-            ],
-          },
-          {
-            label: 'Pivot 3 — jobs system',
-            layout: 'two-up' as const,
-            images: [
-              { src: stTaskList, alt: 'Task list', caption: 'Jobs system — pre-configured, schedulable, executable workflows' },
-              { src: stHorizScreens, alt: 'Horizontal screen flow', caption: 'End-to-end flow — from exploration query to delegated job' },
-            ],
+            image: { src: stTaskList, alt: 'Jobs system — task list view' },
           },
         ],
       },
 
-      // ── Tab 2: Design Decisions ──────────────────────────────
+      // ── Tab 2: Process ──────────────────────────────────────
       {
-        label: 'Design Decisions',
+        label: 'Process',
         goal: {
           heading: 'Four tensions. Four choices.',
           body: 'The design challenges on MAGIC weren\'t about aesthetics — they were about trust. Every decision had a tension at its core: surfacing reasoning without overwhelming users, making the product distinct without making it unfamiliar, building a system that felt simple even as it did something genuinely novel.\n\nThe persona spectrum — from basic user to power user — drove every layering decision. In B2B, clarity earns trust faster than cleverness.',
@@ -334,22 +301,27 @@ export const CASE_STUDIES: CaseStudy[] = [
           body: 'My ownership spanned the full design lifecycle: competitive analysis (FinChat, Perplexity, OpenAI\'s GPT editor), user journey mapping, design workshops with the PM and engineers, three major interface versions, and the design system and component library through to production. I also collaborated with the data team to instrument the pilot metrics used to validate each direction.\n\nMidway through the project, I began using Cursor to make direct code pushes for spacing, copy, and component state tweaks — reducing back-and-forth on changes engineers often deprioritised. When an FE engineer became unavailable during a critical build phase, I used a Figma-to-code workflow to build new components directly into the internal UI library, with states integrated into Storybook. What started as a workaround became the standard: by mid-2025 the handoff process had moved to a Figma MCP setup, significantly tightening the design-to-production loop. This was the project where I moved from designing systems to shipping them.',
         },
         decisionsHeading: 'Key decisions',
+        decisionsLayout: 'side-by-side' as const,
         decisions: [
           {
             title: 'Show reasoning, not just results.',
             rationale: 'Stakeholders wanted to surface all reasoning. Engineering favoured raw JSON logs. Both would overwhelm users and bury the signal in noise. I chose a collapsible side panel: scannable summary by default, full JSON and cited sources on demand. Progressive disclosure as a trust mechanism — not just a UI pattern. Pilot data showed 65% of users actively used the reasoning panels.',
+            image: { src: stTrust, alt: 'Building trust in AI responses — reasoning panel' },
           },
           {
             title: 'Chat for exploration. Jobs for delegation.',
             rationale: 'Chat was flexible but indistinguishable from general LLMs. Pilot logs showed the same complex prompts repeated session after session — friction disguised as flexibility. I introduced a Jobs system: pre-configured, schedulable, executable workflows alongside chat. Two modes, one platform. The shift that repositioned MAGIC as a Financial Intelligence Platform.',
+            image: { src: stTaskList, alt: 'Jobs system — task list view' },
           },
           {
             title: 'Familiarity over novelty in interaction patterns.',
             rationale: 'A differentiated product invites differentiated UI. But novel patterns that delighted power users confused analysts new to LLMs — and confusion erodes the trust we were trying to build. I used established conventions (copy, feedback, sidebar) as the foundation, with progressive disclosure for advanced features.',
+            image: { src: stBBTerminal1, alt: 'BB terminal — familiar interaction patterns reference' },
           },
           {
             title: 'Inline source verification at the point of doubt.',
             rationale: 'Session data showed users weren\'t opening the side panel proactively. Doubt surfaced at a specific claim in the response — navigating away broke the reading flow. I introduced "highlight text → verify source" directly within the response, meeting analysts at the exact moment doubt arises rather than asking them to go looking for it.',
+            image: { src: stBBTerminal2, alt: 'BB terminal — inline verification reference' },
           },
         ],
         outcome: {
@@ -361,22 +333,52 @@ export const CASE_STUDIES: CaseStudy[] = [
           ],
           footnote: 'Knowing the full range of your audience matters as much as knowing the cutting edge of the space. In B2B, clarity earns trust faster than cleverness.',
         },
-        visualBlocks: [
+      },
+
+      // ── Tab 3: Outcomes and Learning ─────────────────────────
+      {
+        label: 'Outcomes and Learning',
+        goal: {
+          heading: 'What we shipped.',
+          body: 'Three pivots. Eleven months. The product went from a ChatGPT plugin to a Financial Intelligence Platform. ~24% reduction in churn. ~39% faster time-to-insight. Enterprise interest that had stalled started moving again.',
+        },
+        process: {
+          heading: 'What I carried forward.',
+          body: 'This was the project where I moved from designing systems to shipping them. I started making direct code pushes via Cursor midway through — reducing back-and-forth on small changes engineers deprioritised. By mid-2025 the handoff process had moved to a Figma MCP setup. The lesson that stuck: in B2B, clarity earns trust faster than cleverness. Know the full range of your audience, not just the cutting edge.',
+        },
+        decisionsHeading: 'Key numbers',
+        decisions: [
           {
-            label: 'Transparency & trust',
-            layout: 'two-up' as const,
-            images: [
-              { src: stTrust, alt: 'Building trust in AI responses', caption: 'Reasoning panel — sources and confidence surfaced by default' },
-              { src: stTaskList, alt: 'Task list', caption: 'Task list — multi-step agent reasoning made legible in real time' },
-            ],
+            title: '~24% churn reduction',
+            rationale: 'After repositioning around transparency and structured workflows. The shift from "AI chat" to "Financial Intelligence Platform" changed how enterprise buyers evaluated the product.',
           },
           {
-            label: 'Platform',
-            layout: 'two-up' as const,
-            images: [
-              { src: stImage72, alt: 'Platform detail', caption: 'Data output with inline citations — trust at the point of reading' },
-              { src: stIDE, alt: 'SigTech IDE view', caption: 'IDE integration — bringing MAGIC into developer workflows' },
-            ],
+            title: '~39% faster time-to-insight',
+            rationale: 'Measured across the pilot cohort. The Jobs system and structured reasoning panels meant analysts spent less time wrestling with the tool and more time on judgement.',
+          },
+          {
+            title: '65% reasoning panel usage',
+            rationale: 'Pilot users actively opened the reasoning panel — validating the bet on transparency over simplicity. Trust was the right problem to solve.',
+          },
+          {
+            title: '3 interface versions',
+            rationale: 'Each killed before significant sunk cost. Rapid prototyping with select users to validate or discard directions fast was the process discipline that made the final version possible.',
+          },
+        ],
+        outcome: {
+          heading: 'Impact',
+          stats: [
+            { label: 'Churn', value: '↓24%', description: 'After pivot to transparency-first design' },
+            { label: 'Time-to-insight', value: '↓39%', description: 'Faster across pilot cohort' },
+            { label: 'Reasoning panel', value: '65%', description: 'Pilot users actively used it' },
+          ],
+          footnote: 'The third pivot — from chat to jobs — drove renewed enterprise interest and changed how leadership framed the product to investors.',
+        },
+        visualBlocks: [
+          {
+            label: 'Platform overview',
+            layout: 'scroll-horizontal' as const,
+            images: [{ src: stOverview1, alt: 'MAGIC platform overview', caption: 'MAGIC — full platform view' }],
           },
           {
             label: 'Process & production',
