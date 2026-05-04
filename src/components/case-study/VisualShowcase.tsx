@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import type { VisualBlock, CaseStudyImage } from '../../types/caseStudy'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
@@ -7,6 +8,29 @@ const GRID_COLS: Record<string, string> = {
   full: '1fr',
   'two-up': 'repeat(2, 1fr)',
   'three-up': 'repeat(3, 1fr)',
+}
+
+function isVideo(src: string) {
+  return /\.(mp4|webm|mov)$/i.test(src)
+}
+
+function MediaInner({ img, style }: { img: CaseStudyImage; style?: React.CSSProperties }) {
+  return isVideo(img.src) ? (
+    <video
+      src={img.src}
+      autoPlay
+      loop
+      muted
+      playsInline
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', ...style }}
+    />
+  ) : (
+    <img
+      src={img.src}
+      alt={img.alt}
+      style={{ width: '100%', height: 'auto', display: 'block', ...style }}
+    />
+  )
 }
 
 function ImageCard({ img, delay }: { img: CaseStudyImage; delay: number }) {
@@ -21,17 +45,65 @@ function ImageCard({ img, delay }: { img: CaseStudyImage; delay: number }) {
         style={{
           borderRadius: '1.25rem',
           overflow: 'hidden',
-          border: '1px solid rgba(255,255,255,0.10)',
+          border: 'none',
           boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
           background: 'rgba(255,255,255,0.03)',
           lineHeight: 0,
         }}
       >
-        <img
-          src={img.src}
-          alt={img.alt}
-          style={{ width: '100%', height: 'auto', display: 'block' }}
-        />
+        <MediaInner img={img} />
+      </div>
+      {img.caption && (
+        <p
+          style={{
+            fontSize: '0.78rem',
+            fontWeight: 300,
+            color: 'rgba(255,255,255,0.38)',
+            fontFamily: "'Barlow', sans-serif",
+            marginTop: '0.75rem',
+            lineHeight: 1.5,
+          }}
+        >
+          {img.caption}
+        </p>
+      )}
+    </motion.div>
+  )
+}
+
+/** Image pans right→left as you scroll past it */
+function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    // Start when image is 20% in view, end when 80% has passed through
+    offset: ['start 80%', 'end 20%'],
+  })
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-20%'])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.7, ease: EASE_OUT }}
+    >
+      <div
+        ref={ref}
+        style={{
+          borderRadius: '1.25rem',
+          overflow: 'hidden',
+          border: 'none',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
+          background: 'rgba(255,255,255,0.03)',
+          lineHeight: 0,
+          // Fixed viewport height so overflow crops cleanly
+          height: 'clamp(320px, 48vw, 680px)',
+        }}
+      >
+        <motion.div style={{ x, height: '100%', width: '140%' }}>
+          <MediaInner img={img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </motion.div>
       </div>
       {img.caption && (
         <p
@@ -56,6 +128,7 @@ interface Props {
 }
 
 export default function VisualShowcase({ block }: Props) {
+  const isHorizontalScroll = block.layout === 'scroll-horizontal'
   const cols = GRID_COLS[block.layout] ?? '1fr'
 
   return (
@@ -81,17 +154,26 @@ export default function VisualShowcase({ block }: Props) {
         </motion.span>
       )}
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: cols,
-          gap: '1rem',
-        }}
-      >
-        {block.images.map((img, i) => (
-          <ImageCard key={img.src + i} img={img} delay={i * 0.08} />
-        ))}
-      </div>
+      {isHorizontalScroll ? (
+        // Each image gets the parallax pan treatment
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {block.images.map((img, i) => (
+            <HorizontalScrollCard key={img.src + i} img={img} />
+          ))}
+        </div>
+      ) : (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: cols,
+            gap: '1rem',
+          }}
+        >
+          {block.images.map((img, i) => (
+            <ImageCard key={img.src + i} img={img} delay={i * 0.08} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

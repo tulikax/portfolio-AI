@@ -4,17 +4,15 @@ import { Link } from 'react-router-dom'
 // DoorFeed
 import df1 from '../assets/DoorFeed/homepage glow.mov'
 import df2 from '../assets/DoorFeed/download from dataroom.mov'
-import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 // SigTech
 import st1 from '../assets/SigTech/chat-flow.mp4'
 import st2 from '../assets/SigTech/agents-in-action.mp4'
-import st3 from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
 // Deloitte
 import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
 import dl2 from '../assets/Deloitte SS/Deloitte:sketches.png'
 import dl3 from '../assets/Deloitte SS/Frame 302.png'
 
-void df3; void st3; void dl3
+void dl3
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
