@@ -5,6 +5,7 @@ import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
 import df2 from '../assets/DoorFeed/case study /New comps summary page.png'
 import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 import dfHero from '../assets/DoorFeed/case study /new dropdown hhorizontal tab.png'
+import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
 import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
 
 // SigTech assets
