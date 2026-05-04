@@ -78,7 +78,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
             style={{
               borderRadius: '0.75rem',
               overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.10)',
+              border: 'none',
               lineHeight: 0,
             }}
           >
@@ -103,7 +103,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
             style={{
               borderRadius: '0.75rem',
               overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.10)',
+              border: 'none',
               lineHeight: 0,
             }}
           >

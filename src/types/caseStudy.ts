@@ -11,8 +11,18 @@ export interface ProjectTab {
   goal: { heading: string; body: string }
   process: { heading: string; body: string }
   decisionsHeading?: string
-  decisions: Array<{ title: string; rationale: string }>
-  outcome: {
+  decisionsLayout?: 'grid' | 'side-by-side'
+  /** When true, renders problem + goal + process as a horizontal 3-card intro instead of stacked sections */
+  showProblemStatement?: boolean
+  /** Visuals rendered between the Process section and the Decisions block */
+  preDecisionVisuals?: VisualBlock[]
+  decisions: Array<{
+    title: string
+    rationale: string
+    /** Optional image rendered inline below this decision card */
+    image?: CaseStudyImage
+  }>
+  outcome?: {
     heading: string
     stats: OutcomeStat[]
     footnote?: string
@@ -22,7 +32,7 @@ export interface ProjectTab {
 
 // ─── Primitives ────────────────────────────────────────────────
 
-export type ImageLayout = 'full' | 'two-up' | 'three-up'
+export type ImageLayout = 'full' | 'two-up' | 'three-up' | 'scroll-horizontal'
 
 export interface CaseStudyImage {
   src: string
@@ -82,10 +92,16 @@ export interface CaseStudy {
   // Problem/Context — always shown, required
   problemStatement: string
   problemImage?: CaseStudyImage
+  /** Media shown directly below the problem statement in the Overview tab */
+  problemMedia?: CaseStudyImage
 
   // Optional deeper content — presence drives rendering
+  overviewSubtitle?: string    // small-caps label above the body text (e.g. "4 months at DoorFeed")
   overviewBody?: string        // paragraph text for Overview tab (split on \n\n)
   overviewHighlights?: Array<{ phrase: string; color: string; textColor?: string }>
+  showOverviewCards?: boolean
+  /** Images shown to the right of the overview body text, stacked vertically */
+  overviewSideMedia?: CaseStudyImage[]
   projectTabs?: ProjectTab[]   // if present, replaces platformSections + designDecisions
   visualBlocks?: VisualBlock[]
   platformSections?: PlatformSection[]
