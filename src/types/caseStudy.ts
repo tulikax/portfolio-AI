@@ -9,13 +9,21 @@ export interface OutcomeStat {
 export interface ProjectTab {
   label: string
   goal: { heading: string; body: string }
-  process: { heading: string; body: string }
+  process?: { heading: string; body: string }
   decisionsHeading?: string
   decisionsLayout?: 'grid' | 'side-by-side'
   /** When true, renders problem + goal + process as a horizontal 3-card intro instead of stacked sections */
   showProblemStatement?: boolean
+  /** When true, renders problem as a full-width section (with optional problemImage), then goal + process as regular section blocks */
+  problemFirst?: boolean
+  /** Image shown below the problem statement when problemFirst is true */
+  problemImage?: CaseStudyImage
+  /** Media shown directly below the project goal section */
+  goalMedia?: CaseStudyImage
   /** Visuals rendered between the Process section and the Decisions block */
   preDecisionVisuals?: VisualBlock[]
+  /** Visuals rendered between the Decisions block and the Outcome block */
+  postDecisionVisuals?: VisualBlock[]
   decisions: Array<{
     title: string
     rationale: string
@@ -26,8 +34,16 @@ export interface ProjectTab {
     heading: string
     stats: OutcomeStat[]
     footnote?: string
+    /** 'teal-labels' hides the large value and renders the label in teal at 40% opacity */
+    variant?: 'teal-labels'
+    /** Image shown below the stats grid */
+    outcomeMedia?: CaseStudyImage
+    /** 'problem-callout' renders the footnote as an amber highlighted problem block */
+    footnoteVariant?: 'problem-callout'
   }
   visualBlocks?: VisualBlock[]
+  /** If set, renders a WIP info box and skips process/decisions/outcome */
+  wip?: { message: string }
 }
 
 // ─── Primitives ────────────────────────────────────────────────
@@ -59,6 +75,7 @@ export interface VisualBlock {
   images: CaseStudyImage[]
   layout: ImageLayout
   label?: string         // optional section label above block
+  height?: string        // fixed card height — makes all items same height (image uses objectFit: cover)
 }
 
 // ─── Main CaseStudy interface ──────────────────────────────────
@@ -102,6 +119,10 @@ export interface CaseStudy {
   showOverviewCards?: boolean
   /** Images shown to the right of the overview body text, stacked vertically */
   overviewSideMedia?: CaseStudyImage[]
+  /** Media injected inline after specific paragraphs in the overview body */
+  overviewInlineMedia?: Array<{ afterParagraph: number; src: string; alt: string; caption?: string; scale?: number }>
+  /** If true, hides the problem statement block in the Overview tab */
+  overviewHideProblem?: boolean
   projectTabs?: ProjectTab[]   // if present, replaces platformSections + designDecisions
   visualBlocks?: VisualBlock[]
   platformSections?: PlatformSection[]

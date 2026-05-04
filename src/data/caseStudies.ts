@@ -7,6 +7,15 @@ import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 import dfHero from '../assets/DoorFeed/case study /new dropdown hhorizontal tab.png'
 import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
 import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
+import dfBeforeMapsNav from '../assets/DoorFeed/case study /before - maps and navigation.png'
+import dfMapsAnalysisPins from '../assets/DoorFeed/case study /maps location analysis pins.mov'
+import dfGenerateResultsComps from '../assets/DoorFeed/case study /generate results-comps.mov'
+import dfIssuesNav from '../assets/DoorFeed/case study /issues with navigation.png'
+import dfPosthog from '../assets/DoorFeed/case study /posthog review.png'
+import dfNewfrenchTabs from '../assets/DoorFeed/case study /newfrench dropdown tabs.mov'
+import dfMapsExploration from '../assets/DoorFeed/case study /maps exploration.png'
+import dfViewComparable from '../assets/DoorFeed/case study /view comparable.mov'
+import dfMRHomepage from '../assets/DoorFeed/case study /MR homepage.mov'
 
 // SigTech assets — root
 import st1         from '../assets/SigTech/MAGIC Hero.png'
@@ -26,7 +35,10 @@ import stPlugin       from '../assets/SigTech/Case Study/plugin.mov'
 import stBBTerminal1  from '../assets/SigTech/Case Study/BB terminal inspo idea1.png'
 import stBBTerminal2  from '../assets/SigTech/Case Study/BB terminal inspo idea2.png'
 
-void stFull  // available for future use
+void stFull   // available for future use
+void df2      // available for future use
+void df3      // available for future use
+void dfDropdown // available for future use
 
 // Deloitte assets
 import dlHeroVideo  from '../assets/Deloitte SS/Case study/nlg2final.mov'
@@ -63,7 +75,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     yourRole: 'Solo product designer working end-to-end: research, strategy, interaction design, and direct collaboration with engineering through 20+ pull requests.',
     outcome: 'Shipped a redesigned comparables map and comps summary view, reducing time-to-insight for analysts and establishing a design system used across the platform.',
 
-    problemStatement: 'Users were treating DoorFeed as a data extraction layer — pulling comparables, then leaving to do analysis elsewhere. The platform had depth but no intelligence layer; no way to stay inside it for the work that mattered. Two connected design problems emerged: a fragmented navigation UX causing early exits, and a missing workspace layer that meant the platform never became essential.',
+    problemStatement: 'Users were treating DoorFeed as a data extraction layer — pulling comparables, then leaving to do analysis elsewhere. Two connected design problems emerged: a fragmented navigation UX causing early exits, and a missing workspace layer that meant the platform never became essential.',
 
     overviewSubtitle: '4 months at DoorFeed',
     overviewBody: 'I joined DoorFeed right after their first public release of AI intelligence in their B2B platform for institutional real estate investors in the UK and French markets. The product worked, but it was showing the seams of a first version: navigation that overwhelmed more than it guided, a map that existed but wasn\'t usable, and users exporting data to work externally rather than staying on the platform.\n\nI owned design across two connected workstreams. The first was a focused UX fix — cleaning up navigation, and making the core comparable-finding workflow usable. The second grew out of what we found: the problem wasn\'t just the interface. Users were context-switching constantly, exporting whole datasets when they only needed a component, and running analysis in external tools.\n\nWorking closely with the founder and CTO, I am currently helping shape the strategic case for a second, transitionary product — an agentic, chat-based layer that would bring the intelligence inside the platform without abandoning the data infrastructure users already relied on.\n\nBoth workstreams ran in parallel with a live product and real enterprise clients. I worked as the sole designer throughout.',
@@ -86,10 +98,18 @@ export const CASE_STUDIES: CaseStudy[] = [
       },
     ],
 
+    overviewHideProblem: true,
+    overviewInlineMedia: [
+      { afterParagraph: 0, src: dfBeforeMapsNav, alt: 'Before — maps and navigation', scale: 60 },
+      { afterParagraph: 1, src: dfMapsAnalysisPins, alt: 'Maps location analysis — pins', scale: 60 },
+      { afterParagraph: 2, src: dfGenerateResultsComps, alt: 'Generate results comps' },
+    ],
 
     projectTabs: [
       {
-        label: 'Navigation UX',
+        label: 'Navigation',
+        problemFirst: true,
+        problemImage: { src: dfIssuesNav, alt: 'Issues with navigation' },
         goal: {
           heading: 'Fixing a fragmented comparables experience',
           body: "DoorFeed's asset page surfaces comparable properties to help institutional investors build valuation models and investment strategies. The comparables section had grown fragmented — multiple disconnected navigation patterns, an undersized map buried inside a filters sidebar, and no clear relationship between the list view and the map.\n\nFor a data-heavy B2B platform serving analysts working at speed, this created real cognitive load and was causing users to exit the section before finding what they needed. The fix had to work within an existing design system with real constraints, and be validated across both UK and French markets.",
@@ -98,6 +118,12 @@ export const CASE_STUDIES: CaseStudy[] = [
           heading: 'Research before redesign',
           body: 'I started with PostHog session recordings — identifying where users were rage-clicking and abandoning. The filter area and map interaction were the clearest pain points. I reviewed event trigger data segmented by market, since UK and French users were navigating differently. From there I wireframed in Figma, used Claude for design audits, and worked with the CTO and engineers on what was feasible within the existing component library.',
         },
+        preDecisionVisuals: [
+          {
+            layout: 'full' as const,
+            images: [{ src: dfPosthog, alt: 'PostHog session review', caption: 'PostHog session recording review — identifying rage clicks and abandonment patterns' }],
+          },
+        ],
         decisionsHeading: 'What shaped the outcome',
         decisions: [
           {
@@ -117,6 +143,17 @@ export const CASE_STUDIES: CaseStudy[] = [
             rationale: "We didn't add helper text when the navigation changed. Session data showed a short spike in confusion before drop-off rates improved. The learning: even low-disruption structural changes need a lightweight transition moment for existing users.",
           },
         ],
+        postDecisionVisuals: [
+          {
+            layout: 'two-up' as const,
+            height: '320px',
+            // NOTE: 'Doorfeed Final outcome.png' is missing from assets — second slot pending
+            images: [
+              { src: dfNewfrenchTabs, alt: 'New French dropdown tabs', caption: 'New dropdown navigation — tabbed layout for French and UK markets' },
+              { src: df1, alt: 'New comparables with map', caption: 'New comparables with map — redesigned comparables layout' },
+            ],
+          },
+        ],
         outcome: {
           heading: 'Results',
           stats: [
@@ -124,21 +161,17 @@ export const CASE_STUDIES: CaseStudy[] = [
             { label: 'Time to results', value: '↓', description: 'Faster due to upfront filters removing noise' },
             { label: 'Markets tested', value: '2', description: 'UK and France throughout' },
           ],
-          footnote: 'The French market continued to surface data availability edge cases — empty states on asset pages where UK data was rich — which directly shaped the approach taken in the agentic platform phase.',
+          variant: 'teal-labels' as const,
+          footnote: 'The French market remains a live constraint in the product. Where UK data is rich, French asset pages surface sparse or empty states — not errors, just absence. The approach: surface what\'s unavailable clearly, never filling gaps with false accuracy, while actively working to strengthen data coverage. Trust is earned by being honest about limitations, not by hiding them.',
+          footnoteVariant: 'problem-callout' as const,
         },
         visualBlocks: [
           {
             layout: 'two-up' as const,
+            height: '320px',
             images: [
-              { src: df1, alt: 'Comparables map view', caption: 'Redesigned comparables map — expanded out of the filters sidebar' },
-              { src: df2, alt: 'Comps summary panel', caption: 'Comps summary view — structured data in a scannable layout' },
-            ],
-          },
-          {
-            layout: 'two-up' as const,
-            images: [
-              { src: df3, alt: 'AI-assisted generation flow', caption: 'AI generation flow — surfacing intelligence inline' },
-              { src: dfDropdown, alt: 'Collapsible dropdown navigation', caption: 'Collapsible tabbed navigation — consolidated and reachable' },
+              { src: dfMapsExploration, alt: 'Maps exploration' },
+              { src: dfViewComparable, alt: 'View comparable', caption: 'View comparable — in-platform comparable review' },
             ],
           },
         ],
@@ -149,32 +182,20 @@ export const CASE_STUDIES: CaseStudy[] = [
           heading: 'Shifting DoorFeed from a data source to a workspace',
           body: 'Institutional investors were using DoorFeed primarily to pull comparables, then exporting to Excel and running analysis externally — often feeding data through internal AI tools to filter noise. The platform was a data source, not a workspace.\n\nThe business goal: bring the intelligence layer inside DoorFeed, reduce dependency on external tools, increase time on platform, and reduce churn. I owned the full strategy, phasing, and design of the agentic version — including a net-new design system for the chat-based interface.',
         },
+        goalMedia: { src: dfMRHomepage, alt: 'MR homepage — AI workspace interface' },
+        wip: { message: 'work in progress — last updated 29th April 2026' },
+        /* Remaining content commented out pending further updates:
         process: {
           heading: 'Structured audit, then phased change',
           body: 'I ran a structured audit of the existing platform using PostHog — session recordings, rage click mapping, and event trigger analytics split by UK and French markets — to understand which features users actually engaged with and where they gave up. I worked directly with the CEO, CTO, sales team, and engineers throughout. I used Figma for wireframing and asset creation, Figma Make and Cursor for implementation, and Claude for design audits and pattern research — essential for moving fast as a solo designer.',
         },
         decisionsHeading: 'What shaped the outcome',
         decisions: [
-          {
-            title: 'Phased rollout with shell continuity',
-            rationale: "Session data showed existing users had built muscle memory around the platform's structure — even when it was imperfect. I kept the shell recognisable and introduced the agentic layer as an additive beta, not a replacement. This reduced the risk of alienating active users while the new system was validated.",
-          },
-          {
-            title: 'Building a new design system for data-heavy chat UI',
-            rationale: "The existing component library wasn't built for conversational interfaces. I designed a new system from scratch — message components, input states, and response patterns for different output types: tables, charts, maps, and embedded Excel and PPT previews. I researched how leading AI tools handle multi-modal outputs and adapted those patterns for a data-dense, professional context. Every error state was designed explicitly — empty states, failed queries, knowledge base gaps.",
-          },
-          {
-            title: 'Knowledge base UX as a first-class problem',
-            rationale: 'The agentic platform required admins to set up and maintain a knowledge base — defining data and defaults the AI reasons against — at a regular cadence. I treated this as its own design problem: readable at a glance, editable without specialist knowledge. Poorly designed, it would have become a blocker to adoption before users ever saw the chat interface.',
-          },
-          {
-            title: 'Designing for data asymmetry across markets',
-            rationale: "French real estate data is significantly less rich than UK data. During testing, French asset pages were returning partially empty states — not errors, just absence. We nearly built two completely separate UI states per market. Instead, I designed a flexible empty-state system that degrades gracefully and signals clearly what's unavailable and why. This will scale as DoorFeed expands into more European markets.",
-          },
-          {
-            title: 'In-platform output viewing before download',
-            rationale: "Consistent client feedback: users wanted to review and refine reports before downloading, not after. I prioritised in-platform Excel and PPT preview and editing as a core feature of the beta. This directly addressed the behaviour we were seeing — users exporting too early, editing externally, and not returning.",
-          },
+          { title: 'Phased rollout with shell continuity', rationale: "..." },
+          { title: 'Building a new design system for data-heavy chat UI', rationale: "..." },
+          { title: 'Knowledge base UX as a first-class problem', rationale: '...' },
+          { title: 'Designing for data asymmetry across markets', rationale: "..." },
+          { title: 'In-platform output viewing before download', rationale: "..." },
         ],
         outcome: {
           heading: 'Early beta results',
@@ -185,6 +206,8 @@ export const CASE_STUDIES: CaseStudy[] = [
           ],
           footnote: 'The features most positively received: in-platform playbook checking against organisational defaults, and embedded report viewing — which removed the major friction point of the download-first workflow.',
         },
+        */
+        decisions: [],
       },
     ],
 

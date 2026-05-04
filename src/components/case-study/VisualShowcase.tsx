@@ -14,7 +14,7 @@ function isVideo(src: string) {
   return /\.(mp4|webm|mov)$/i.test(src)
 }
 
-function MediaInner({ img, style }: { img: CaseStudyImage; style?: React.CSSProperties }) {
+function MediaInner({ img, fixedHeight, style }: { img: CaseStudyImage; fixedHeight?: boolean; style?: React.CSSProperties }) {
   return isVideo(img.src) ? (
     <video
       src={img.src}
@@ -28,12 +28,12 @@ function MediaInner({ img, style }: { img: CaseStudyImage; style?: React.CSSProp
     <img
       src={img.src}
       alt={img.alt}
-      style={{ width: '100%', height: 'auto', display: 'block', ...style }}
+      style={{ width: '100%', height: fixedHeight ? '100%' : 'auto', objectFit: fixedHeight ? 'cover' : undefined, display: 'block', ...style }}
     />
   )
 }
 
-function ImageCard({ img, delay }: { img: CaseStudyImage; delay: number }) {
+function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: number; cardHeight?: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }}
@@ -49,9 +49,10 @@ function ImageCard({ img, delay }: { img: CaseStudyImage; delay: number }) {
           boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
           background: 'rgba(255,255,255,0.03)',
           lineHeight: 0,
+          height: cardHeight,
         }}
       >
-        <MediaInner img={img} />
+        <MediaInner img={img} fixedHeight={!!cardHeight} />
       </div>
       {img.caption && (
         <p
@@ -170,7 +171,7 @@ export default function VisualShowcase({ block }: Props) {
           }}
         >
           {block.images.map((img, i) => (
-            <ImageCard key={img.src + i} img={img} delay={i * 0.08} />
+            <ImageCard key={img.src + i} img={img} delay={i * 0.08} cardHeight={block.height} />
           ))}
         </div>
       )}
