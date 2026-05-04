@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "WorktreeCreate": [
+      { "command": "bash scripts/worktree-create.sh" }
+    ],
+    "WorktreeRemove": [
+      { "command": "bash scripts/worktree-remove.sh" }
+    ]
+  }
+}
