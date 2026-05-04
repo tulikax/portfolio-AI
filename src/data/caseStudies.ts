@@ -100,7 +100,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     overviewHideProblem: true,
     overviewInlineMedia: [
-      { afterParagraph: 0, src: dfBeforeMapsNav, alt: 'Before — maps and navigation' },
+      { afterParagraph: 0, src: dfBeforeMapsNav, alt: 'Before — maps and navigation', scale: 60 },
       { afterParagraph: 1, src: dfMapsAnalysisPins, alt: 'Maps location analysis — pins', scale: 60 },
       { afterParagraph: 2, src: dfGenerateResultsComps, alt: 'Generate results comps' },
     ],
@@ -145,13 +145,13 @@ export const CASE_STUDIES: CaseStudy[] = [
         ],
         postDecisionVisuals: [
           {
-            layout: 'full' as const,
-            images: [{ src: dfNewfrenchTabs, alt: 'New French dropdown tabs', caption: 'New dropdown navigation — tabbed layout for French and UK markets' }],
-          },
-          {
-            layout: 'full' as const,
-            // NOTE: 'Doorfeed Final outcome.png' is missing from assets — showing single image until file is added
-            images: [{ src: df1, alt: 'New comparables with map', caption: 'New comparables with map — redesigned comparables layout' }],
+            layout: 'two-up' as const,
+            height: '320px',
+            // NOTE: 'Doorfeed Final outcome.png' is missing from assets — second slot pending
+            images: [
+              { src: dfNewfrenchTabs, alt: 'New French dropdown tabs', caption: 'New dropdown navigation — tabbed layout for French and UK markets' },
+              { src: df1, alt: 'New comparables with map', caption: 'New comparables with map — redesigned comparables layout' },
+            ],
           },
         ],
         outcome: {
@@ -162,14 +162,17 @@ export const CASE_STUDIES: CaseStudy[] = [
             { label: 'Markets tested', value: '2', description: 'UK and France throughout' },
           ],
           variant: 'teal-labels' as const,
-          outcomeMedia: { src: dfMapsExploration, alt: 'Maps exploration' },
           footnote: 'The French market remains a live constraint in the product. Where UK data is rich, French asset pages surface sparse or empty states — not errors, just absence. The approach: surface what\'s unavailable clearly, never filling gaps with false accuracy, while actively working to strengthen data coverage. Trust is earned by being honest about limitations, not by hiding them.',
           footnoteVariant: 'problem-callout' as const,
         },
         visualBlocks: [
           {
-            layout: 'full' as const,
-            images: [{ src: dfViewComparable, alt: 'View comparable', caption: 'View comparable — in-platform comparable review' }],
+            layout: 'two-up' as const,
+            height: '320px',
+            images: [
+              { src: dfMapsExploration, alt: 'Maps exploration' },
+              { src: dfViewComparable, alt: 'View comparable', caption: 'View comparable — in-platform comparable review' },
+            ],
           },
         ],
       },

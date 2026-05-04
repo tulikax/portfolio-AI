@@ -75,6 +75,7 @@ export interface VisualBlock {
   images: CaseStudyImage[]
   layout: ImageLayout
   label?: string         // optional section label above block
+  height?: string        // fixed card height — makes all items same height (image uses objectFit: cover)
 }
 
 // ─── Main CaseStudy interface ──────────────────────────────────
