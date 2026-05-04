@@ -592,14 +592,17 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
       <DecisionsBlock
         heading={tab.decisionsHeading ?? 'What shaped the outcome'}
         decisions={tab.decisions}
+        decisionsLayout={tab.decisionsLayout}
         delay={0.12}
       />
-      <OutcomeBlock
-        heading={tab.outcome.heading}
-        stats={tab.outcome.stats}
-        footnote={tab.outcome.footnote}
-        delay={0.18}
-      />
+      {tab.outcome && (
+        <OutcomeBlock
+          heading={tab.outcome.heading}
+          stats={tab.outcome.stats}
+          footnote={tab.outcome.footnote}
+          delay={0.18}
+        />
+      )}
       {tab.visualBlocks && tab.visualBlocks.length > 0 && (
         <div style={{ margin: '0 -2rem' }}>
           {tab.visualBlocks.map((block, i) => (
