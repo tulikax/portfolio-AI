@@ -5,7 +5,7 @@ import HeroSection from './components/HeroSection'
 import AboutSection from './components/AboutSection'
 import WorkSection from './components/WorkSection'
 import ProcessSection from './components/ProcessSection'
-import PlaygroundSection from './components/PlaygroundSection'
+// import PlaygroundSection from './components/PlaygroundSection'
 import CTASection from './components/CTASection'
 import StackSection from './components/StackSection'
 import Footer from './components/Footer'
@@ -19,7 +19,7 @@ function HomePage() {
         <HeroSection />
         <WorkSection />
         <AboutSection />
-        <PlaygroundSection />
+        {/* <PlaygroundSection /> */}
         <ProcessSection />
         <StackSection />
         <CTASection />

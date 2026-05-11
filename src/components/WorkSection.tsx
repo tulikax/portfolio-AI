@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // DoorFeed
 import df1 from '../assets/DoorFeed/homepage glow.mov'
@@ -10,9 +10,6 @@ import st2 from '../assets/SigTech/agents-in-action.mp4'
 // Deloitte
 import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
 import dl2 from '../assets/Deloitte SS/Deloitte:sketches.png'
-import dl3 from '../assets/Deloitte SS/Frame 302.png'
-
-void dl3
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -93,6 +90,7 @@ function MediaCard({ src }: { src: string }) {
 }
 
 function RoleCard({ role, index }: { role: Role; index: number }) {
+  const navigate = useNavigate()
   const subsections = [
     role.drewMeIn ? { label: 'What drew me in', content: role.drewMeIn } : null,
     { label: 'Where I thrived', content: role.thrived },
@@ -110,6 +108,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
         {/* Centre role card — fixed width, positioning parent for images */}
         <div
           className="role-card"
+          onClick={() => role.caseStudySlug && navigate(`/work/${role.caseStudySlug}`)}
           style={{
           position: 'relative',
           width: '600px',
@@ -121,7 +120,22 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgba(255,255,255,0.09)',
           boxShadow: '0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
-        }}>
+          cursor: role.caseStudySlug ? 'pointer' : 'default',
+          transition: 'box-shadow 250ms ease, border-color 250ms ease',
+        }}
+          onMouseEnter={e => {
+            if (!role.caseStudySlug) return
+            const el = e.currentTarget as HTMLDivElement
+            el.style.boxShadow = '0 1px 0 rgba(255,255,255,0.10) inset, 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.12)'
+            el.style.borderColor = 'rgba(255,255,255,0.16)'
+          }}
+          onMouseLeave={e => {
+            if (!role.caseStudySlug) return
+            const el = e.currentTarget as HTMLDivElement
+            el.style.boxShadow = '0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.5)'
+            el.style.borderColor = 'rgba(255,255,255,0.09)'
+          }}
+        >
           {/* Shimmer */}
           <div style={{
             position: 'absolute', top: 0, left: '1.5rem', right: '1.5rem', height: '1px',
@@ -183,6 +197,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
               <Link
                 to={`/work/${role.caseStudySlug}`}
                 className="btn-press role-cta"
+                onClick={e => e.stopPropagation()}
                 style={{
                   fontFamily: "'Barlow', sans-serif", fontWeight: 500,
                   fontSize: '0.78rem', letterSpacing: '0.06em',
