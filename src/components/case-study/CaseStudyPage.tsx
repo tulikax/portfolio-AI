@@ -135,7 +135,7 @@ export default function CaseStudyPage() {
       {/* 3b — Video + decisions side-by-side (when bodyParagraphs present) */}
       {!hasProjectTabs && hasBodyParagraphs && (data.prototypeEmbed || (data.designDecisions && data.designDecisions.length > 0)) && (
         <section style={{ padding: '0 2rem 4rem', maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'stretch' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', alignItems: 'stretch' }}>
             {/* Left — video */}
             {data.prototypeEmbed && (
               <motion.div

@@ -4,10 +4,11 @@ import type { VisualBlock, CaseStudyImage } from '../../types/caseStudy'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
+// min column widths ensure grids collapse to 1-col on small screens automatically
 const GRID_COLS: Record<string, string> = {
   full: '1fr',
-  'two-up': 'repeat(2, 1fr)',
-  'three-up': 'repeat(3, 1fr)',
+  'two-up': 'repeat(auto-fit, minmax(260px, 1fr))',
+  'three-up': 'repeat(auto-fit, minmax(200px, 1fr))',
 }
 
 function isVideo(src: string) {
