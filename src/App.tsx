@@ -5,11 +5,12 @@ import HeroSection from './components/HeroSection'
 import AboutSection from './components/AboutSection'
 import WorkSection from './components/WorkSection'
 import ProcessSection from './components/ProcessSection'
-import PlaygroundSection from './components/PlaygroundSection'
+// import PlaygroundSection from './components/PlaygroundSection'
 import CTASection from './components/CTASection'
 import StackSection from './components/StackSection'
 import Footer from './components/Footer'
 import CaseStudyPage from './components/case-study/CaseStudyPage'
+import ProjectLoadingScreenDemo from './components/ProjectLoadingScreenDemo'
 
 function HomePage() {
   return (
@@ -18,7 +19,7 @@ function HomePage() {
         <HeroSection />
         <WorkSection />
         <AboutSection />
-        <PlaygroundSection />
+        {/* <PlaygroundSection /> */}
         <ProcessSection />
         <StackSection />
         <CTASection />
@@ -37,6 +38,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/work/:slug" element={<CaseStudyPage />} />
+        <Route path="/demo/loading" element={<ProjectLoadingScreenDemo />} />
       </Routes>
     </div>
   )
