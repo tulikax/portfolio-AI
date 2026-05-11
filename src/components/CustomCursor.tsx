@@ -6,8 +6,8 @@ export default function CustomCursor() {
   const my = useMotionValue(-200)
 
   // Emil Kowalski spring — feels natural, has momentum
-  const springX = useSpring(mx, { stiffness: 140, damping: 16, mass: 0.6 })
-  const springY = useSpring(my, { stiffness: 140, damping: 16, mass: 0.6 })
+  const springX = useSpring(mx, { stiffness: 400, damping: 28, mass: 0.3 })
+  const springY = useSpring(my, { stiffness: 400, damping: 28, mass: 0.3 })
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
