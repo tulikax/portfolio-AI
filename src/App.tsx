@@ -10,6 +10,7 @@ import CTASection from './components/CTASection'
 import StackSection from './components/StackSection'
 import Footer from './components/Footer'
 import CaseStudyPage from './components/case-study/CaseStudyPage'
+import ProjectLoadingScreenDemo from './components/ProjectLoadingScreenDemo'
 
 function HomePage() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/work/:slug" element={<CaseStudyPage />} />
+        <Route path="/demo/loading" element={<ProjectLoadingScreenDemo />} />
       </Routes>
     </div>
   )

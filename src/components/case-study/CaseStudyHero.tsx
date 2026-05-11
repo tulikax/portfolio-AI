@@ -7,9 +7,11 @@ const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
 interface Props {
   data: CaseStudy
+  onVideoReady?: () => void
+  onVideoProgress?: (pct: number) => void
 }
 
-export default function CaseStudyHero({ data }: Props) {
+export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
@@ -47,12 +49,22 @@ export default function CaseStudyHero({ data }: Props) {
             muted
             playsInline
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onCanPlay={onVideoReady}
+            onProgress={(e) => {
+              if (!onVideoProgress) return
+              const v = e.currentTarget
+              if (v.buffered.length > 0 && v.duration > 0) {
+                const pct = (v.buffered.end(v.buffered.length - 1) / v.duration) * 100
+                onVideoProgress(Math.min(90, pct))
+              }
+            }}
           />
         ) : (
           <img
             src={data.heroMedia.src}
             alt={data.heroMedia.alt}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onLoad={onVideoReady}
           />
         )}
       </motion.div>
