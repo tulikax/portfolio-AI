@@ -74,7 +74,7 @@ function MediaCard({ src }: { src: string }) {
   const isVideo = /\.(mp4|webm|mov)$/i.test(src)
   return (
     <div style={{
-      borderRadius: '1.25rem',
+      borderRadius: '1rem',
       overflow: 'hidden',
       background: 'linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
       border: '1px solid rgba(255,255,255,0.10)',
@@ -83,8 +83,8 @@ function MediaCard({ src }: { src: string }) {
       flexShrink: 0,
     }}>
       {isVideo
-        ? <video src={src} autoPlay loop muted playsInline style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />
-        : <img src={src} alt="" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />}
+        ? <video src={src} autoPlay loop muted playsInline className="role-media-item" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />
+        : <img src={src} alt="" className="role-media-item" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />}
     </div>
   )
 }
@@ -106,13 +106,13 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
         style={{ display: 'flex', justifyContent: 'center' }}
       >
         {/* Centre role card — fixed width, positioning parent for images */}
-        <div
-          className="role-card"
+          <div
+          className="role-card role-card-shell"
           onClick={() => role.caseStudySlug && navigate(`/work/${role.caseStudySlug}`)}
           style={{
           position: 'relative',
-          width: '600px',
-          flexShrink: 0,
+          width: '100%',
+          maxWidth: '600px',
           borderRadius: '1.5rem',
           padding: '1.75rem',
           background: 'linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))',
@@ -150,23 +150,23 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
           }}>{role.number}</span>
 
           <div style={{ marginBottom: '0.25rem' }}>
-            <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 500, color: 'white', fontSize: '1.125rem' }}>
+            <span className="role-card-title" style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 500, color: 'white', fontSize: '1.125rem' }}>
               {role.title}
             </span>
             {' '}
-            <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, color: 'rgba(255,255,255,0.55)', fontSize: '1.125rem' }}>
+            <span className="role-card-title" style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, color: 'rgba(255,255,255,0.55)', fontSize: '1.125rem' }}>
               @ {role.company}
             </span>
           </div>
 
-          <p style={{
+          <p className="role-card-duration" style={{
             fontFamily: "'Barlow', sans-serif", fontWeight: 300,
             color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem',
             letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1.25rem',
           }}>{role.duration}</p>
 
           {subsections.map((sub, i) => (
-            <div key={sub.label} style={{
+            <div key={sub.label} className="role-card-sub" style={{
               paddingBottom: i < subsections.length - 1 ? '1rem' : 0,
               marginBottom: i < subsections.length - 1 ? '1rem' : 0,
               borderBottom: i < subsections.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
@@ -176,12 +176,19 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
                 color: 'rgba(255,255,255,0.40)', fontSize: '0.7rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.25rem',
               }}>{sub.label}</p>
-              <p style={{
+              <p className="role-card-body" style={{
                 fontFamily: "'Barlow', sans-serif", fontWeight: 300,
                 color: 'rgba(255,255,255,0.65)', fontSize: '0.875rem', lineHeight: 1.65,
               }}>{sub.content}</p>
             </div>
           ))}
+
+          {/* Mobile media strip — visible only on small screens, hidden on desktop */}
+          <div className="role-media-strip">
+            {role.images.map((src, idx) => (
+              <MediaCard key={idx} src={src} />
+            ))}
+          </div>
 
           <div style={{
             marginTop: '1.25rem', display: 'flex', alignItems: 'center',

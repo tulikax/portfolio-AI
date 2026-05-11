@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
+const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
+
 export default function CustomCursor() {
   const mx = useMotionValue(-200)
   const my = useMotionValue(-200)
@@ -10,6 +12,7 @@ export default function CustomCursor() {
   const springY = useSpring(my, { stiffness: 400, damping: 28, mass: 0.3 })
 
   useEffect(() => {
+    if (isTouch) return
     const move = (e: MouseEvent) => {
       mx.set(e.clientX)
       my.set(e.clientY)
@@ -17,6 +20,8 @@ export default function CustomCursor() {
     window.addEventListener('mousemove', move)
     return () => window.removeEventListener('mousemove', move)
   }, [mx, my])
+
+  if (isTouch) return null
 
   return (
     <motion.div
