@@ -11,6 +11,7 @@ import DesignDecisions from './DesignDecisions'
 import PrototypeEmbed from './PrototypeEmbed'
 import NextProject from './NextProject'
 import ProjectTabs from './ProjectTabs'
+import CaseSideNav from './CaseSideNav'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -72,8 +73,21 @@ export default function CaseStudyPage() {
   const hasProjectTabs = data.projectTabs && data.projectTabs.length > 0
   const hasBodyParagraphs = data.bodyParagraphs && data.bodyParagraphs.length > 0
 
+  const sideNavSections = hasProjectTabs
+    ? [
+        { id: 'section-overview', label: 'Overview' },
+        ...(data.projectTabs ?? []).map((t) => ({
+          id: 'section-' + t.label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+          label: t.label,
+        })),
+      ]
+    : []
+
   return (
     <div style={{ background: 'black', minHeight: '100vh' }}>
+      {/* Sticky left side nav — only for case studies with project tabs */}
+      {hasProjectTabs && !loaderVisible && <CaseSideNav sections={sideNavSections} />}
+
       {/* Loading screen overlay — instantly opaque, sits on top while hero buffers */}
       <AnimatePresence>
         {loaderVisible && (
