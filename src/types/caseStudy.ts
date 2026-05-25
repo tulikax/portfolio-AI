@@ -11,7 +11,7 @@ export interface ProjectTab {
   goal: { heading: string; body: string }
   process?: { heading: string; body: string }
   decisionsHeading?: string
-  decisionsLayout?: 'grid' | 'side-by-side'
+  decisionsLayout?: 'grid' | 'side-by-side' | 'caption'
   /** When true, renders problem + goal + process as a horizontal 3-card intro instead of stacked sections */
   showProblemStatement?: boolean
   /** When true, renders problem as a full-width section (with optional problemImage), then goal + process as regular section blocks */
@@ -20,6 +20,15 @@ export interface ProjectTab {
   problemImage?: CaseStudyImage
   /** Media shown directly below the project goal section */
   goalMedia?: CaseStudyImage
+  /** Media shown directly below the process section */
+  processMedia?: CaseStudyImage
+  /** Secondary decisions block rendered after the main decisions (e.g. key design decisions in Pivots tab) */
+  keyDecisions?: Array<{ title: string; rationale: string; image?: CaseStudyImage & { scale?: number } }>
+  keyDecisionsHeading?: string
+  /** Replaces outcome block — rendered as a plain section (heading + body, no stat cards) */
+  learnings?: { heading: string; body: string }
+  /** Visuals rendered after the Goal section but before the Process section */
+  postGoalVisuals?: VisualBlock[]
   /** Visuals rendered between the Process section and the Decisions block */
   preDecisionVisuals?: VisualBlock[]
   /** Visuals rendered between the Decisions block and the Outcome block */
@@ -27,12 +36,18 @@ export interface ProjectTab {
   decisions: Array<{
     title: string
     rationale: string
-    /** Optional image rendered inline below this decision card */
-    image?: CaseStudyImage
+    /** Optional single image rendered inline below this decision card */
+    image?: CaseStudyImage & { scale?: number }
+    /** Multiple images — renders a responsive grid instead of single image (caption layout only) */
+    images?: Array<CaseStudyImage & { scale?: number }>
+    /** Layout for the images array: 'grid' (default) or 'column' (stacked vertically, respects scale per image) */
+    imagesLayout?: 'grid' | 'column'
   }>
+  /** Image shown at the very top of the tab section, before the goal block (default layout only) */
+  introMedia?: CaseStudyImage
   outcome?: {
     heading: string
-    stats: OutcomeStat[]
+    stats?: OutcomeStat[]
     footnote?: string
     /** 'teal-labels' hides the large value and renders the label in teal at 40% opacity */
     variant?: 'teal-labels'
@@ -76,6 +91,7 @@ export interface VisualBlock {
   layout: ImageLayout
   label?: string         // optional section label above block
   height?: string        // fixed card height — makes all items same height (image uses objectFit: cover)
+  columns?: string       // override grid-template-columns (e.g. '7fr 3fr' for asymmetric splits)
 }
 
 // ─── Main CaseStudy interface ──────────────────────────────────
@@ -119,6 +135,8 @@ export interface CaseStudy {
   showOverviewCards?: boolean
   /** Images shown to the right of the overview body text, stacked vertically */
   overviewSideMedia?: CaseStudyImage[]
+  /** Wide image shown below problem media; auto-scrolls right-to-left on loop */
+  overviewScrollMedia?: { src: string; alt: string; startX?: number }
   /** Media injected inline after specific paragraphs in the overview body */
   overviewInlineMedia?: Array<{ afterParagraph: number; src: string; alt: string; caption?: string; scale?: number }>
   /** If true, hides the problem statement block in the Overview tab */
