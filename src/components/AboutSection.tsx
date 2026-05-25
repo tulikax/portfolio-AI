@@ -475,7 +475,7 @@ export default function AboutSection() {
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Instrument Serif', serif",
+            fontFamily: "'Source Serif 4', serif",
             fontStyle: 'italic',
             fontSize: 'clamp(1.75rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',

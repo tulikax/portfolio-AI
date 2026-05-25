@@ -136,7 +136,7 @@ export default function StackSection() {
         >
           <h2
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Source Serif 4', serif",
               fontStyle: 'italic',
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               letterSpacing: '-0.04em',

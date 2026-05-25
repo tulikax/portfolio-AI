@@ -54,7 +54,7 @@ export default function NextProject({ nextProject }: Props) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <h2
                   style={{
-                    fontFamily: "'Instrument Serif', serif",
+                    fontFamily: "'Source Serif 4', serif",
                     fontStyle: 'italic',
                     fontSize: 'clamp(2rem, 5vw, 3.75rem)',
                     fontWeight: 400,
