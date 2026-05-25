@@ -30,11 +30,8 @@ import stResearchCompetition from '../assets/SigTech/Case Study/Approach/researc
 // SigTech — Finding Direction
 import stPivot1            from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/starting point or pivot 1 - Multiple GPTs within existing IDE.png'
 import stPivot2ChatBased   from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2 fully chat based.png'
-import stPivot2InfoArch    from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2 info arch.png'
 import stPivot2Agent       from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2.2 - thikning about agent use in real life.png'
 import stPivot3Exploration from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 3 explorations - beyond chats exploration - making the use case generic but scalable or adaptable.png'
-import stPivot3Workflows   from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 3 workflows and jobs as an idea.png'
-import stBloomberg         from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/process - bloomberg.png'
 // SigTech — What finally shipped
 import stDay1         from '../assets/SigTech/Case Study/What finally shipped/Day 1 - chat only.png'
 import stFinalOutcome from '../assets/SigTech/Case Study/What finally shipped/Final outcome - Jobs as a concept.png'
@@ -85,18 +82,18 @@ export const CASE_STUDIES: CaseStudy[] = [
     overviewHighlights: [
       {
         phrase: 'navigation that overwhelmed more than it guided',
-        color: 'rgba(180, 140, 60, 0.35)',
-        textColor: '#f5c842',
+        color: 'rgba(255, 255, 255, 0.92)',
+        textColor: '#000000',
       },
       {
         phrase: "a map that existed but wasn't usable",
-        color: 'rgba(180, 140, 60, 0.35)',
-        textColor: '#f5c842',
+        color: 'rgba(255, 255, 255, 0.92)',
+        textColor: '#000000',
       },
       {
         phrase: 'users exporting data to work externally rather than staying on the platform',
-        color: 'rgba(180, 140, 60, 0.35)',
-        textColor: '#f5c842',
+        color: 'rgba(255, 255, 255, 0.92)',
+        textColor: '#000000',
       },
     ],
 
@@ -230,6 +227,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     duration: '11 months',
     company: 'SigTech',
 
+    heroHeadline: 'MAGIC',
     heroMedia: { src: stChatFlow, alt: 'MAGIC AI platform — chat flow demo' },
 
     heroTools: [
@@ -243,25 +241,25 @@ export const CASE_STUDIES: CaseStudy[] = [
     yourRole: 'Led design end-to-end: competitive analysis, user journey mapping, design workshops, three major interface versions, design system and component library through to production. Collaborated with the data team to instrument pilot metrics used to validate each direction.',
     outcome: '~24% reduction in churn and ~39% faster time-to-insight. Reframed the product from "AI chat assistant" to Financial Intelligence Platform — generating stronger interest from enterprise clients and investors.',
 
-    problemStatement: 'MAGIC started as an internal ChatGPT-style plugin for macroeconomic data at SigTech. Usage was reasonable — but churn was high, and enterprise contracts were stalling. When I joined sales feedback sessions and cross-referenced session data, the signal was consistent: users weren\'t rejecting the AI. They were rejecting the opacity. They couldn\'t see how conclusions were reached, which sources were used, or why one output differed from the last. In mid-2024, ChatGPT responses didn\'t include citations — adding verifiable sources was genuinely novel. But without them, analysts had no reason to trust outputs enough to act on them, and no reason to switch from ChatGPT at all.',
+    problemStatement: 'MAGIC started as an internal ChatGPT-style plugin for macroeconomic data at SigTech. Usage was reasonable — but churn was high, and enterprise contracts were stalling. When I joined sales feedback sessions and cross-referenced session data, the signal was consistent: users weren\'t rejecting the AI.\n\nThey were rejecting the opacity. They couldn\'t see how conclusions were reached, which sources were used, or why one output differed from the last. In mid-2024, ChatGPT responses didn\'t include citations — adding verifiable sources was genuinely novel. But without them, analysts had no reason to trust outputs enough to act on them, and no reason to switch from ChatGPT at all.',
 
     overviewBody: 'I was brought in to improve SigTech\'s Quant IDE platform. The team had a separate internal experiment running — a ChatGPT plugin, originally built to enhance the IDE, now showing enough promise to become a standalone product. My first instinct was to build a copilot directly into the existing platform. Users in early demo calls were excited. But excitement and conviction aren\'t the same thing. Nobody was quite sure they\'d actually use it. We killed that direction fast, and started asking the real question: what would make someone trust an AI enough to stake a financial decision on it?\n\nThe path wasn\'t linear. We went through three distinct directions before landing on what MAGIC needed to be — each abandoned faster than the last, but each teaching us something the final design couldn\'t have done without.\n\nThe demos were going well. But without trust, there was no stickiness. Without stickiness, enterprise contracts didn\'t close. Leadership knew the tool needed to evolve — and that\'s where I came in. How do we make the AI\'s reasoning visible enough to build trust, distinct enough to justify switching, and structured enough to replace the manual workflows analysts were doing around it — without making any of it feel more complex to use?',
 
     overviewHighlights: [
       {
         phrase: 'what would make someone trust an AI enough to stake a financial decision on it',
-        color: 'rgba(180, 140, 60, 0.35)',
-        textColor: '#f5c842',
+        color: 'rgba(255, 255, 255, 0.92)',
+        textColor: '#000000',
       },
       {
         phrase: 'three distinct directions',
-        color: 'rgba(180, 140, 60, 0.35)',
-        textColor: '#f5c842',
+        color: 'rgba(255, 255, 255, 0.92)',
+        textColor: '#000000',
       },
       {
         phrase: 'without making any of it feel more complex to use',
-        color: 'rgba(180, 140, 60, 0.35)',
-        textColor: '#f5c842',
+        color: 'rgba(255, 255, 255, 0.92)',
+        textColor: '#000000',
       },
     ],
 
@@ -301,10 +299,6 @@ export const CASE_STUDIES: CaseStudy[] = [
           },
         ],
         decisions: [],
-        learnings: {
-          heading: 'What I learnt',
-          body: 'This was the project where I moved from designing systems to shipping them. What started as a workaround — making direct code pushes via Cursor — became the standard. By mid-2025 the handoff process had moved to a Figma MCP setup, significantly tightening the design-to-production loop.\n\nKnowing the full range of your audience matters as much as knowing the cutting edge of the space. In B2B, clarity earns trust faster than cleverness.',
-        },
       },
 
       // ── Tab 2: Three Pivots ──────────────────────────────────
@@ -329,21 +323,16 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: '02 · Focus on transparency and error detection',
             rationale: 'We started to build an enriched chat architecture with an added transparency layer — users could see tasks assigned to each agent, queries sent, and responses returned. For mid-2024, before any mainstream LLM surfaced this kind of reasoning visibility, it was new. But the core experience still felt like a better ChatGPT. Seeing the work behind the answer wasn\'t enough of a reason to switch.',
+            imagesLayout: 'side-column' as const,
             images: [
               { src: stPivot2ChatBased, alt: 'Pivot 2 — fully chat based' },
-              { src: stPivot2InfoArch,  alt: 'Pivot 2 — information architecture exploration' },
               { src: stPivot2Agent,     alt: 'Pivot 2 — thinking about agent use in real life' },
             ],
           },
           {
             title: '03 — From "talk to AI" to "delegate to AI."',
             rationale: 'Pilot data showed analysts repeating the same complex prompts session after session. Chat was flexible, but flexibility was the wrong value for structured, recurring workflows. The insight: the product didn\'t need to be a better chat interface — it needed to let users create jobs, not conversations. Pre-configured, schedulable, executable workflows. Chat for exploration; Jobs for execution. This reframe separated MAGIC from every general-purpose LLM on the market. Exploration in Figma Make + Cursor gave me the freedom to rapidly prototype ideas to very high fidelity, while some were half baked and dropped early at the wireframing stage.',
-            imagesLayout: 'column' as const,
-            images: [
-              { src: stPivot3Workflows,   alt: 'Pivot 3 — workflows and jobs as an idea',      scale: 0.75 },
-              { src: stPivot3Exploration, alt: 'Pivot 3 — beyond chat explorations',            scale: 1.0 },
-              { src: stBloomberg,         alt: 'Bloomberg terminal — familiar patterns reference', scale: 0.75 },
-            ],
+            image: { src: stPivot3Exploration, alt: 'Pivot 3 — beyond chat explorations' },
           },
         ],
         keyDecisionsHeading: 'Key decisions',
@@ -376,66 +365,37 @@ export const CASE_STUDIES: CaseStudy[] = [
         label: 'What Shipped',
         goal: {
           heading: 'What we shipped.',
-          body: 'Three pivots. Eleven months. The product went from a ChatGPT plugin to a Financial Intelligence Platform. ~24% reduction in churn. ~39% faster time-to-insight. Enterprise interest that had stalled started moving again.',
+          body: '',
         },
         process: {
           heading: 'What I carried forward.',
           body: 'This was the project where I moved from designing systems to shipping them. I started making direct code pushes via Cursor midway through — reducing back-and-forth on small changes engineers deprioritised. By mid-2025 the handoff process had moved to a Figma MCP setup. The lesson that stuck: in B2B, clarity earns trust faster than cleverness. Know the full range of your audience, not just the cutting edge.',
         },
-        decisionsHeading: 'Key numbers',
-        decisions: [
-          {
-            title: '~24% churn reduction',
-            rationale: 'After repositioning around transparency and structured workflows. The shift from "AI chat" to "Financial Intelligence Platform" changed how enterprise buyers evaluated the product.',
-          },
-          {
-            title: '~39% faster time-to-insight',
-            rationale: 'Measured across the pilot cohort. The Jobs system and structured reasoning panels meant analysts spent less time wrestling with the tool and more time on judgement.',
-          },
-          {
-            title: '65% reasoning panel usage',
-            rationale: 'Pilot users actively opened the reasoning panel — validating the bet on transparency over simplicity. Trust was the right problem to solve.',
-          },
-          {
-            title: '3 interface versions',
-            rationale: 'Each killed before significant sunk cost. Rapid prototyping with select users to validate or discard directions fast was the process discipline that made the final version possible.',
-          },
-        ],
+        decisions: [],
         outcome: {
           heading: 'Impact',
           stats: [
-            { label: 'Churn', value: '↓24%', description: 'After pivot to transparency-first design' },
-            { label: 'Time-to-insight', value: '↓39%', description: 'Faster across pilot cohort' },
-            { label: 'Reasoning panel', value: '65%', description: 'Pilot users actively used it' },
-            { label: 'Interface versions', value: '3', description: 'Major iterations before final shipping' },
-            { label: 'Reasoning panel usage', value: '65%', description: 'Pilot users actively opened it — validating the transparency bet' },
-            { label: 'Design-to-prod', value: 'Figma MCP', description: 'Loop tightened significantly by mid-2025' },
+            { label: 'Churn', value: '↓24%', description: 'After repositioning around transparency and structured workflows. The shift from "AI chat" to "Financial Intelligence Platform" changed how enterprise buyers evaluated the product.' },
+            { label: 'Time-to-insight', value: '↓39%', description: 'Measured across the pilot cohort. The Jobs system and structured reasoning panels meant analysts spent less time wrestling with the tool and more time on judgement.' },
+            { label: 'Reasoning panel', value: '65%', description: 'Pilot users actively opened the reasoning panel — validating the bet on transparency over simplicity. Trust was the right problem to solve.' },
+            { label: 'Interface versions', value: '3', description: 'Each killed before significant sunk cost. Rapid prototyping with select users to validate or discard directions fast was the process discipline that made the final version possible.' },
           ],
           footnote: 'The third pivot — from chat to jobs — drove renewed enterprise interest and changed how leadership framed the product to investors.',
         },
+        learnings: {
+          heading: 'What I learnt',
+          body: 'This was the project where I moved from designing systems to shipping them. What started as a workaround — making direct code pushes via Cursor — became the standard. By mid-2025 the handoff process had moved to a Figma MCP setup, significantly tightening the design-to-production loop.\n\nKnowing the full range of your audience matters as much as knowing the cutting edge of the space. In B2B, clarity earns trust faster than cleverness.',
+        },
         postGoalVisuals: [
           {
-            label: 'What we shipped',
-            layout: 'two-up' as const,
-            columns: '7fr 3fr',
+            layout: 'carousel' as const,
+            height: '440px',
             images: [
-              { src: stDay1,       alt: 'Day 1 — chat only interface',               caption: 'Day 1 — chat only' },
-              { src: stTaskTransp, alt: 'Task list as an idea for transparency',      caption: 'Task list — transparency concept' },
-            ],
-          },
-          {
-            layout: 'full' as const,
-            height: '460px',
-            images: [
-              { src: stFinalDraft, alt: 'Final draft — verify source, view related, copy with attribution', caption: 'Final design — verify source, view related, copy' },
-            ],
-          },
-          {
-            layout: 'two-up' as const,
-            height: '340px',
-            images: [
-              { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept',  caption: 'Final outcome — Jobs' },
-              { src: stMetabase,     alt: 'Metabase pilot analytics',            caption: 'Pilot analytics' },
+              { src: stDay1,         alt: 'Day 1 — chat only interface',                                caption: 'Day 1 — chat only' },
+              { src: stTaskTransp,   alt: 'Task list as an idea for transparency',                      caption: 'Task list — transparency concept' },
+              { src: stFinalDraft,   alt: 'Final draft — verify source, view related, copy',            caption: 'Final design — verify source, view related, copy' },
+              { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept',                          caption: 'Final outcome — Jobs' },
+              { src: stMetabase,     alt: 'Metabase pilot analytics',                                   caption: 'Pilot analytics' },
             ],
           },
         ],
