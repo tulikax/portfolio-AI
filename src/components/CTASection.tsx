@@ -92,7 +92,9 @@ export default function CTASection() {
             <ArrowUpRight style={{ width: '1rem', height: '1rem' }} />
           </a>
           <a
-            href="#"
+            href="/Tulika CV folio.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="liquid-glass btn-press"
             style={{
               borderRadius: '9999px',

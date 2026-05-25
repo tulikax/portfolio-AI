@@ -1,7 +1,6 @@
 const SOCIAL_LINKS = [
-  { label: 'Dribbble', href: '#' },
-  { label: 'LinkedIn', href: '#' },
-  { label: 'Read.cv', href: '#' },
+  { label: 'Behance', href: 'https://www.behance.net/tulika-' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/tulika-' },
 ]
 
 export default function Footer() {
