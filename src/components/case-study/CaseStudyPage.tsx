@@ -76,10 +76,17 @@ export default function CaseStudyPage() {
   const sideNavSections = hasProjectTabs
     ? [
         { id: 'section-overview', label: 'Overview' },
-        ...(data.projectTabs ?? []).map((t) => ({
-          id: 'section-' + t.label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-          label: t.label,
-        })),
+        ...(data.projectTabs ?? []).flatMap((t) => {
+          const tabEntry = {
+            id: 'section-' + t.label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+            label: t.label,
+          }
+          const keyDecisionsEntry =
+            t.keyDecisions && t.keyDecisions.length > 0
+              ? [{ id: 'section-key-decisions', label: t.keyDecisionsHeading ?? 'Key decisions' }]
+              : []
+          return [tabEntry, ...keyDecisionsEntry]
+        }),
       ]
     : []
 
