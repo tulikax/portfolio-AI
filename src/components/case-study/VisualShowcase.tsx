@@ -37,10 +37,10 @@ function MediaInner({ img, fixedHeight, style }: { img: CaseStudyImage; fixedHei
 function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: number; cardHeight?: string }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.7, delay, ease: EASE_OUT }}
+      initial={{ opacity: 0, y: 16, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.45, delay, ease: EASE_OUT }}
     >
       <div
         style={{
@@ -131,7 +131,8 @@ interface Props {
 
 export default function VisualShowcase({ block }: Props) {
   const isHorizontalScroll = block.layout === 'scroll-horizontal'
-  const cols = GRID_COLS[block.layout] ?? '1fr'
+  // block.columns overrides the default grid columns for asymmetric splits
+  const cols = block.columns ?? GRID_COLS[block.layout] ?? '1fr'
 
   return (
     <div style={{ padding: '0 2rem 3.5rem', maxWidth: '72rem', margin: '0 auto' }}>
