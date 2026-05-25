@@ -73,6 +73,42 @@ function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: num
   )
 }
 
+/** Snap-scrollable carousel card — uniform height, shows peek of next */
+function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.45, delay: i * 0.06, ease: EASE_OUT }}
+      style={{
+        flexShrink: 0,
+        width: 'calc(78% - 0.5rem)',
+        scrollSnapAlign: 'start',
+        borderRadius: '1.25rem',
+        overflow: 'hidden',
+        height: '100%',
+        boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
+      }}
+    >
+      <MediaInner img={img} fixedHeight style={{ height: '100%', objectFit: 'cover' }} />
+      {img.caption && (
+        <p style={{
+          fontSize: '0.78rem',
+          fontWeight: 300,
+          color: 'rgba(255,255,255,0.38)',
+          fontFamily: "'Barlow', sans-serif",
+          marginTop: '0.75rem',
+          lineHeight: 1.5,
+          padding: '0 0.25rem',
+        }}>
+          {img.caption}
+        </p>
+      )}
+    </motion.div>
+  )
+}
+
 /** Image pans right→left as you scroll past it */
 function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -157,7 +193,23 @@ export default function VisualShowcase({ block }: Props) {
         </motion.span>
       )}
 
-      {isHorizontalScroll ? (
+      {block.layout === 'carousel' ? (
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          overflowX: 'auto',
+          scrollSnapType: 'x mandatory',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none',
+          height: block.height ?? '420px',
+          cursor: 'grab',
+          paddingRight: '2rem', // allow last card to snap cleanly
+        }}>
+          {block.images.map((img, i) => (
+            <CarouselCard key={img.src + i} img={img} i={i} />
+          ))}
+        </div>
+      ) : isHorizontalScroll ? (
         // Each image gets the parallax pan treatment
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {block.images.map((img, i) => (
