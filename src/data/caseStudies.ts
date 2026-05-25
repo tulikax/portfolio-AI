@@ -2,11 +2,8 @@ import type { CaseStudy } from '../types/caseStudy'
 
 // DoorFeed assets
 import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
-import df2 from '../assets/DoorFeed/case study /New comps summary page.png'
-import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 import dfHero from '../assets/DoorFeed/case study /new dropdown hhorizontal tab.png'
 import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
-import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
 import dfBeforeMapsNav from '../assets/DoorFeed/case study /before - maps and navigation.png'
 import dfMapsAnalysisPins from '../assets/DoorFeed/case study /maps location analysis pins.mov'
 import dfGenerateResultsComps from '../assets/DoorFeed/case study /generate results-comps.mov'
@@ -18,27 +15,32 @@ import dfViewComparable from '../assets/DoorFeed/case study /view comparable.mov
 import dfMRHomepage from '../assets/DoorFeed/case study /MR homepage.mov'
 
 // SigTech assets — root
-import st1         from '../assets/SigTech/MAGIC Hero.png'
-import stChatFlow  from '../assets/SigTech/chat-flow.mp4'
-import stFull      from '../assets/SigTech/Screenshot 2026-04-03 at 01.55.12.png'
-// SigTech assets — Case Study folder
-import stOverview1    from '../assets/SigTech/Case Study/overview 1.png'
-import stIDE          from '../assets/SigTech/Case Study/SigTech IDE.png'
-import stOriginalIDE  from '../assets/SigTech/Case Study/original IDE.png'
-import stTaskList     from '../assets/SigTech/Case Study/Task list.png'
-import stTrust        from '../assets/SigTech/Case Study/building trust in AI responses.png'
-import stWireframes   from '../assets/SigTech/Case Study/copilot wireframes.webp'
-import stMetabase     from '../assets/SigTech/Case Study/metabase tracking.webp'
-import stDeployment   from '../assets/SigTech/Case Study/more sigtech deployment.png'
-import stInfoArch     from '../assets/SigTech/Case Study/pivot 2 info arch.png'
-import stPlugin       from '../assets/SigTech/Case Study/plugin.mov'
-import stBBTerminal1  from '../assets/SigTech/Case Study/BB terminal inspo idea1.png'
-import stBBTerminal2  from '../assets/SigTech/Case Study/BB terminal inspo idea2.png'
-
-void stFull   // available for future use
-void df2      // available for future use
-void df3      // available for future use
-void dfDropdown // available for future use
+import st1        from '../assets/SigTech/MAGIC Hero.png'
+import stChatFlow        from '../assets/SigTech/chat-flow.mp4'
+import stAgentsInAction  from '../assets/SigTech/agents-in-action.mp4'
+// SigTech — Overview
+import stIDEv1     from '../assets/SigTech/Case Study/Overview/SigTech IDE.png'
+import stIDEv2     from '../assets/SigTech/Case Study/Overview/SigTech IDE2.png'
+import stPluginMov from '../assets/SigTech/Case Study/Overview/plugin.mov'
+import stChatV1    from '../assets/SigTech/Case Study/Overview/Chat v1.png'
+// SigTech — Approach
+import stProcess             from '../assets/SigTech/Case Study/Approach/process.png'
+import stResearchUsers       from '../assets/SigTech/Case Study/Approach/research with users:stakeholders.png'
+import stResearchCompetition from '../assets/SigTech/Case Study/Approach/research -competition analysis.png'
+// SigTech — Finding Direction
+import stPivot1            from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/starting point or pivot 1 - Multiple GPTs within existing IDE.png'
+import stPivot2ChatBased   from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2 fully chat based.png'
+import stPivot2InfoArch    from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2 info arch.png'
+import stPivot2Agent       from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2.2 - thikning about agent use in real life.png'
+import stPivot3Exploration from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 3 explorations - beyond chats exploration - making the use case generic but scalable or adaptable.png'
+import stPivot3Workflows   from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 3 workflows and jobs as an idea.png'
+import stBloomberg         from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/process - bloomberg.png'
+// SigTech — What finally shipped
+import stDay1         from '../assets/SigTech/Case Study/What finally shipped/Day 1 - chat only.png'
+import stFinalOutcome from '../assets/SigTech/Case Study/What finally shipped/Final outcome - Jobs as a concept.png'
+import stTaskTransp   from '../assets/SigTech/Case Study/What finally shipped/Task list as an idea for transperancy.png'
+import stFinalDraft   from '../assets/SigTech/Case Study/What finally shipped/final draft - verify source, view related, copy with attribition.png'
+import stMetabase     from '../assets/SigTech/Case Study/What finally shipped/metabase tracking.webp'
 
 // Deloitte assets
 import dlHeroVideo  from '../assets/Deloitte SS/Case study/nlg2final.mov'
@@ -107,7 +109,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     projectTabs: [
       {
-        label: 'Navigation',
+        label: 'Research & Redesign',
         problemFirst: true,
         problemImage: { src: dfIssuesNav, alt: 'Issues with navigation' },
         goal: {
@@ -264,11 +266,12 @@ export const CASE_STUDIES: CaseStudy[] = [
     ],
 
     overviewSideMedia: [
-      { src: stIDE, alt: 'SigTech IDE' },
-      { src: stOriginalIDE, alt: 'Original SigTech IDE' },
+      { src: stIDEv1, alt: 'SigTech IDE' },
+      { src: stIDEv2, alt: 'SigTech IDE — second view' },
     ],
 
-    problemMedia: { src: stPlugin, alt: 'The original ChatGPT plugin that became MAGIC' },
+    problemMedia: { src: stPluginMov, alt: 'The original ChatGPT plugin that became MAGIC' },
+    overviewScrollMedia: { src: stChatV1, alt: 'Chat v1 — the original plugin interface', startX: 60 },
 
     showOverviewCards: true,
 
@@ -276,9 +279,37 @@ export const CASE_STUDIES: CaseStudy[] = [
     visualBlocks: [],
 
     projectTabs: [
-      // ── Tab 1: Three Pivots ──────────────────────────────────
+      // ── Tab 1: Process ──────────────────────────────────────
       {
-        label: 'Three Pivots',
+        label: 'Approach',
+        introMedia: { src: stProcess, alt: 'Design process overview' },
+        goal: {
+          heading: 'Four tensions. Four choices.',
+          body: 'The design challenges on MAGIC weren\'t about aesthetics — they were about trust. Every decision had a north star: surfacing reasoning without overwhelming users, without making it unfamiliar. Building a system that felt simple even as it did something novel.\n\nThe persona spectrum — from basic user to power user — drove every layering decision. In B2B, clarity earns trust faster than cleverness.',
+        },
+        process: {
+          heading: 'End-to-end ownership',
+          body: 'My ownership spanned the full design lifecycle: competitive analysis (FinChat, Perplexity, OpenAI\'s GPT editor), user journey mapping, design workshops with the PM and engineers, three major interface versions, and the design system and component library through to production. I also collaborated with the data team to instrument the pilot metrics used to validate each direction.\n\nMidway through the project, I began using Cursor to make direct code pushes for spacing, copy, and component state tweaks — reducing back-and-forth on changes engineers often deprioritised. When an FE engineer became unavailable during a critical build phase, I used a Figma-to-code workflow to build new components directly into the internal UI library, with states integrated into Storybook. What started as a workaround became the standard: by mid-2025 the handoff process had moved to a Figma MCP setup, significantly tightening the design-to-production loop.',
+        },
+        preDecisionVisuals: [
+          {
+            layout: 'two-up' as const,
+            images: [
+              { src: stResearchUsers, alt: 'Research with users and stakeholders', caption: 'User & stakeholder research' },
+              { src: stResearchCompetition, alt: 'Competitive analysis — FinChat, Perplexity, OpenAI', caption: 'Competitive analysis' },
+            ],
+          },
+        ],
+        decisions: [],
+        learnings: {
+          heading: 'What I learnt',
+          body: 'This was the project where I moved from designing systems to shipping them. What started as a workaround — making direct code pushes via Cursor — became the standard. By mid-2025 the handoff process had moved to a Figma MCP setup, significantly tightening the design-to-production loop.\n\nKnowing the full range of your audience matters as much as knowing the cutting edge of the space. In B2B, clarity earns trust faster than cleverness.',
+        },
+      },
+
+      // ── Tab 2: Three Pivots ──────────────────────────────────
+      {
+        label: 'Finding Direction',
         goal: {
           heading: 'Three dead ends. One direction.',
           body: 'The path wasn\'t linear. We went through three distinct directions before landing on what MAGIC needed to be — each abandoned faster than the last, but each teaching us something the final design couldn\'t have done without.\n\nUnderstanding why each direction failed was as important as what replaced it. The failures shaped the product just as much as the successes.',
@@ -288,75 +319,61 @@ export const CASE_STUDIES: CaseStudy[] = [
           body: 'I joined sales feedback sessions, reviewed session data, and ran workshops with the PM and engineers. The signal from every direction was consistent: users weren\'t rejecting the AI — they were rejecting the opacity.\n\nWe used rapid prototyping with select users to kill bad directions fast, before significant design investment. What changed with each pivot wasn\'t just the interface — it was our understanding of what the product actually needed to be.',
         },
         decisionsHeading: 'The three pivots',
-        decisionsLayout: 'side-by-side' as const,
+        decisionsLayout: 'caption' as const,
         decisions: [
           {
             title: '01 — Build a copilot inside the SigTech ecosystem.',
             rationale: 'The initial direction was to embed an AI coding assistant directly into SigTech\'s existing platform — a Copilot for quants. Rapid prototyping with select users killed this quickly. The value proposition immediately ran into Cursor and GitHub Copilot on one side, and SigTech\'s own developer tooling on the other. We were building into a crowded lane we couldn\'t win. Abandoned early, before significant design investment.',
-            image: { src: stWireframes, alt: 'Copilot wireframes — initial direction' },
+            image: { src: stPivot1, alt: 'Pivot 1 — Multiple GPTs within existing IDE' },
           },
           {
-            title: '02 — Focus on simplifying high-value recurring tasks.',
-            rationale: 'Research surfaced what users actually needed: not a smarter coding assistant, but a way to eliminate manual overhead around decisions — writing summary reports, running underwriting checks, synthesising data from multiple sources. Analysts were spending cognitive energy on preparation when their real value was in judgement. This direction shaped the transparency features and multi-agent architecture. But a problem remained: the experience still felt like a better ChatGPT. Not different enough.',
-            image: { src: stInfoArch, alt: 'Information architecture — pivot 2 restructure' },
+            title: '02 · Focus on transparency and error detection',
+            rationale: 'We started to build an enriched chat architecture with an added transparency layer — users could see tasks assigned to each agent, queries sent, and responses returned. For mid-2024, before any mainstream LLM surfaced this kind of reasoning visibility, it was new. But the core experience still felt like a better ChatGPT. Seeing the work behind the answer wasn\'t enough of a reason to switch.',
+            images: [
+              { src: stPivot2ChatBased, alt: 'Pivot 2 — fully chat based' },
+              { src: stPivot2InfoArch,  alt: 'Pivot 2 — information architecture exploration' },
+              { src: stPivot2Agent,     alt: 'Pivot 2 — thinking about agent use in real life' },
+            ],
           },
           {
             title: '03 — From "talk to AI" to "delegate to AI."',
-            rationale: 'Pilot data showed analysts repeating the same complex prompts session after session. Chat was flexible, but flexibility was the wrong value for structured, recurring workflows. The insight: the product didn\'t need to be a better chat interface — it needed to let users create jobs, not conversations. Pre-configured, schedulable, executable workflows. Chat for exploration; Jobs for execution. This reframe separated MAGIC from every general-purpose LLM on the market.',
-            image: { src: stTaskList, alt: 'Jobs system — task list view' },
+            rationale: 'Pilot data showed analysts repeating the same complex prompts session after session. Chat was flexible, but flexibility was the wrong value for structured, recurring workflows. The insight: the product didn\'t need to be a better chat interface — it needed to let users create jobs, not conversations. Pre-configured, schedulable, executable workflows. Chat for exploration; Jobs for execution. This reframe separated MAGIC from every general-purpose LLM on the market. Exploration in Figma Make + Cursor gave me the freedom to rapidly prototype ideas to very high fidelity, while some were half baked and dropped early at the wireframing stage.',
+            imagesLayout: 'column' as const,
+            images: [
+              { src: stPivot3Workflows,   alt: 'Pivot 3 — workflows and jobs as an idea',      scale: 0.75 },
+              { src: stPivot3Exploration, alt: 'Pivot 3 — beyond chat explorations',            scale: 1.0 },
+              { src: stBloomberg,         alt: 'Bloomberg terminal — familiar patterns reference', scale: 0.75 },
+            ],
           },
         ],
-      },
-
-      // ── Tab 2: Process ──────────────────────────────────────
-      {
-        label: 'Process',
-        goal: {
-          heading: 'Four tensions. Four choices.',
-          body: 'The design challenges on MAGIC weren\'t about aesthetics — they were about trust. Every decision had a tension at its core: surfacing reasoning without overwhelming users, making the product distinct without making it unfamiliar, building a system that felt simple even as it did something genuinely novel.\n\nThe persona spectrum — from basic user to power user — drove every layering decision. In B2B, clarity earns trust faster than cleverness.',
-        },
-        process: {
-          heading: 'End-to-end ownership',
-          body: 'My ownership spanned the full design lifecycle: competitive analysis (FinChat, Perplexity, OpenAI\'s GPT editor), user journey mapping, design workshops with the PM and engineers, three major interface versions, and the design system and component library through to production. I also collaborated with the data team to instrument the pilot metrics used to validate each direction.\n\nMidway through the project, I began using Cursor to make direct code pushes for spacing, copy, and component state tweaks — reducing back-and-forth on changes engineers often deprioritised. When an FE engineer became unavailable during a critical build phase, I used a Figma-to-code workflow to build new components directly into the internal UI library, with states integrated into Storybook. What started as a workaround became the standard: by mid-2025 the handoff process had moved to a Figma MCP setup, significantly tightening the design-to-production loop. This was the project where I moved from designing systems to shipping them.',
-        },
-        decisionsHeading: 'Key decisions',
-        decisionsLayout: 'side-by-side' as const,
-        decisions: [
+        keyDecisionsHeading: 'Key decisions',
+        keyDecisions: [
           {
             title: 'Show reasoning, not just results.',
             rationale: 'Stakeholders wanted to surface all reasoning. Engineering favoured raw JSON logs. Both would overwhelm users and bury the signal in noise. I chose a collapsible side panel: scannable summary by default, full JSON and cited sources on demand. Progressive disclosure as a trust mechanism — not just a UI pattern. Pilot data showed 65% of users actively used the reasoning panels.',
-            image: { src: stTrust, alt: 'Building trust in AI responses — reasoning panel' },
+            image: { src: stAgentsInAction, alt: 'Agents in action — reasoning visibility demo' },
           },
           {
             title: 'Chat for exploration. Jobs for delegation.',
             rationale: 'Chat was flexible but indistinguishable from general LLMs. Pilot logs showed the same complex prompts repeated session after session — friction disguised as flexibility. I introduced a Jobs system: pre-configured, schedulable, executable workflows alongside chat. Two modes, one platform. The shift that repositioned MAGIC as a Financial Intelligence Platform.',
-            image: { src: stTaskList, alt: 'Jobs system — task list view' },
+            image: { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept' },
           },
           {
             title: 'Familiarity over novelty in interaction patterns.',
             rationale: 'A differentiated product invites differentiated UI. But novel patterns that delighted power users confused analysts new to LLMs — and confusion erodes the trust we were trying to build. I used established conventions (copy, feedback, sidebar) as the foundation, with progressive disclosure for advanced features.',
-            image: { src: stBBTerminal1, alt: 'BB terminal — familiar interaction patterns reference' },
+            image: { src: stChatFlow, alt: 'Chat flow — familiar interaction pattern in action' },
           },
           {
             title: 'Inline source verification at the point of doubt.',
             rationale: 'Session data showed users weren\'t opening the side panel proactively. Doubt surfaced at a specific claim in the response — navigating away broke the reading flow. I introduced "highlight text → verify source" directly within the response, meeting analysts at the exact moment doubt arises rather than asking them to go looking for it.',
-            image: { src: stBBTerminal2, alt: 'BB terminal — inline verification reference' },
+            image: { src: stFinalDraft, alt: 'Final draft — verify source, view related, copy with attribution' },
           },
         ],
-        outcome: {
-          heading: 'What I took forward',
-          stats: [
-            { label: 'Interface versions', value: '3', description: 'Major iterations before final shipping' },
-            { label: 'Reasoning panel usage', value: '65%', description: 'Pilot users actively opened it — validating the transparency bet' },
-            { label: 'Design-to-prod', value: 'Figma MCP', description: 'Loop tightened significantly by mid-2025' },
-          ],
-          footnote: 'Knowing the full range of your audience matters as much as knowing the cutting edge of the space. In B2B, clarity earns trust faster than cleverness.',
-        },
       },
 
       // ── Tab 3: Outcomes and Learning ─────────────────────────
       {
-        label: 'Outcomes and Learning',
+        label: 'What Shipped',
         goal: {
           heading: 'What we shipped.',
           body: 'Three pivots. Eleven months. The product went from a ChatGPT plugin to a Financial Intelligence Platform. ~24% reduction in churn. ~39% faster time-to-insight. Enterprise interest that had stalled started moving again.',
@@ -390,21 +407,35 @@ export const CASE_STUDIES: CaseStudy[] = [
             { label: 'Churn', value: '↓24%', description: 'After pivot to transparency-first design' },
             { label: 'Time-to-insight', value: '↓39%', description: 'Faster across pilot cohort' },
             { label: 'Reasoning panel', value: '65%', description: 'Pilot users actively used it' },
+            { label: 'Interface versions', value: '3', description: 'Major iterations before final shipping' },
+            { label: 'Reasoning panel usage', value: '65%', description: 'Pilot users actively opened it — validating the transparency bet' },
+            { label: 'Design-to-prod', value: 'Figma MCP', description: 'Loop tightened significantly by mid-2025' },
           ],
           footnote: 'The third pivot — from chat to jobs — drove renewed enterprise interest and changed how leadership framed the product to investors.',
         },
-        visualBlocks: [
+        postGoalVisuals: [
           {
-            label: 'Platform overview',
-            layout: 'scroll-horizontal' as const,
-            images: [{ src: stOverview1, alt: 'MAGIC platform overview', caption: 'MAGIC — full platform view' }],
+            label: 'What we shipped',
+            layout: 'two-up' as const,
+            columns: '7fr 3fr',
+            images: [
+              { src: stDay1,       alt: 'Day 1 — chat only interface',               caption: 'Day 1 — chat only' },
+              { src: stTaskTransp, alt: 'Task list as an idea for transparency',      caption: 'Task list — transparency concept' },
+            ],
           },
           {
-            label: 'Process & production',
-            layout: 'two-up' as const,
+            layout: 'full' as const,
+            height: '460px',
             images: [
-              { src: stMetabase, alt: 'Metabase tracking', caption: 'Pilot analytics — metrics used to validate each direction' },
-              { src: stDeployment, alt: 'SigTech deployment', caption: 'Deployment — rolling out across quant and macro teams' },
+              { src: stFinalDraft, alt: 'Final draft — verify source, view related, copy with attribution', caption: 'Final design — verify source, view related, copy' },
+            ],
+          },
+          {
+            layout: 'two-up' as const,
+            height: '340px',
+            images: [
+              { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept',  caption: 'Final outcome — Jobs' },
+              { src: stMetabase,     alt: 'Metabase pilot analytics',            caption: 'Pilot analytics' },
             ],
           },
         ],
