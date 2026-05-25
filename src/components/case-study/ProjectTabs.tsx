@@ -112,7 +112,7 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
 // ─── Section block (label + heading + body) ───────────────────
 
 function SectionBlock({
-  heading,
+  heading: _heading, // eslint-disable-line @typescript-eslint/no-unused-vars
   body,
   delay = 0,
 }: {
@@ -129,26 +129,6 @@ function SectionBlock({
       transition={{ duration: 0.55, delay, ease: EASE_OUT }}
       style={{ marginBottom: '3rem' }}
     >
-      <h3
-        style={{
-          fontFamily: "'Barlow', sans-serif",
-          fontSize: 'clamp(1.25rem, 2.5vw, 1.6rem)',
-          fontWeight: 600,
-          color: 'rgba(255,255,255,0.92)',
-          margin: '0 0 1.25rem 0',
-          lineHeight: 1.25,
-          letterSpacing: '-0.01em',
-        }}
-      >
-        {heading}
-      </h3>
-      <div
-        style={{
-          height: '1px',
-          background: 'rgba(255,255,255,0.08)',
-          marginBottom: '1.5rem',
-        }}
-      />
       {paragraphs.map((p, i) => (
         <p
           key={i}
@@ -171,7 +151,7 @@ function SectionBlock({
 // ─── Decision cards ────────────────────────────────────────────
 
 function DecisionsBlock({
-  heading,
+  heading: _heading, // eslint-disable-line @typescript-eslint/no-unused-vars
   decisions,
   decisionsLayout = 'grid',
   delay = 0,
@@ -188,97 +168,118 @@ function DecisionsBlock({
       transition={{ duration: 0.55, delay, ease: EASE_OUT }}
       style={{ marginBottom: '3rem' }}
     >
-      <h3
-        style={{
-          fontFamily: "'Barlow', sans-serif",
-          fontSize: 'clamp(1.25rem, 2.5vw, 1.6rem)',
-          fontWeight: 600,
-          color: 'rgba(255,255,255,0.92)',
-          margin: '0 0 1.25rem 0',
-          lineHeight: 1.25,
-          letterSpacing: '-0.01em',
-        }}
-      >
-        {heading}
-      </h3>
-      <div
-        style={{
-          height: '1px',
-          background: 'rgba(255,255,255,0.08)',
-          marginBottom: '1.5rem',
-        }}
-      />
       {decisionsLayout === 'caption' ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem' }}>
-          {decisions.map((d, i) => (
-            <div key={i}>
-              {/* Text first */}
-              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.95rem', fontWeight: 500, color: 'rgba(255,255,255,0.82)', margin: '0 0 0.4rem 0', lineHeight: 1.4 }}>{d.title}</p>
-              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.88rem', fontWeight: 300, color: 'rgba(255,255,255,0.46)', margin: '0 0 1.25rem 0', lineHeight: 1.7 }}>{d.rationale}</p>
-
-              {/* Images below */}
-              {d.images && d.images.length > 0 ? (
-                d.imagesLayout === 'column' ? (
-                  /* Column stack — each image width driven by its scale value */
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    {d.images.map((img, j) => {
-                      const w = img.scale ? `${Math.round(img.scale * 100)}%` : '100%'
-                      return (
-                        <motion.div
-                          key={j}
-                          initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                          viewport={{ once: true, margin: '-40px' }}
-                          transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                          style={{ width: w, margin: '0 auto', borderRadius: '1rem', overflow: 'hidden', lineHeight: 0 }}
-                        >
-                          <img src={img.src} alt={img.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                        </motion.div>
-                      )
-                    })}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+          {decisions.map((d, i) => {
+            const sideAll    = d.images && d.images.length > 0 && d.imagesLayout === 'side-all'
+            const sideColumn = d.images && d.images.length > 0 && d.imagesLayout === 'side-column'
+            const multiFirst = d.images && d.images.length > 0 && !sideAll && !sideColumn
+            return (
+              <div key={i}>
+                {/* Primary row: text 4.5fr | image(s) 5.5fr — tops aligned */}
+                <div style={{ display: 'grid', gridTemplateColumns: '4fr 6fr', gap: '2rem', alignItems: 'start' }}>
+                  {/* Left: title + rationale */}
+                  <div>
+                    <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.95rem', fontWeight: 500, color: 'rgba(255,255,255,0.82)', margin: '0 0 0.4rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                    <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.88rem', fontWeight: 300, color: 'rgba(255,255,255,0.46)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
                   </div>
-                ) : (
-                  /* Responsive grid — side-by-side ≥1200px */
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '0.75rem' }}>
-                    {d.images.map((img, j) => (
+                  {/* Right: images */}
+                  <div>
+                    {sideAll ? (
+                      /* Pivot 3 mode: all images equal-width in right column */
+                      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${d.images!.length}, 1fr)`, gap: '0.5rem' }}>
+                        {d.images!.map((img, j) => (
+                          <motion.div key={j}
+                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: '-40px' }}
+                            transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
+                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
+                          >
+                            <img src={img.src} alt={img.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : sideColumn ? (
+                      /* side-column mode: all images stacked vertically in right column */
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {d.images!.map((img, j) => (
+                          <motion.div key={j}
+                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: '-40px' }}
+                            transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
+                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
+                          >
+                            <img src={img.src} alt={img.alt} style={{
+                              width: '100%', height: 'auto', display: 'block',
+                              ...(j === 0 ? { clipPath: 'inset(150px 0 130px 0)', marginTop: '-150px', marginBottom: '-130px' } : {}),
+                            }} />
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : multiFirst ? (
+                      /* Pivot 2 mode: images[0] in right column, cropped top/bottom */
                       <motion.div
-                        key={j}
+                        initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        viewport={{ once: true, margin: '-40px' }}
+                        transition={{ duration: 0.45, ease: EASE_OUT }}
+                        style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
+                      >
+                        <img src={d.images![0].src} alt={d.images![0].alt} style={{ width: '100%', height: 'auto', display: 'block', marginTop: '-70px', marginBottom: '-70px' }} />
+                      </motion.div>
+                    ) : d.image ? (
+                      /* Pivot 1 mode: single image or video */
+                      (() => {
+                        const vid = isVideoSrc(d.image!.src)
+                        const rawScale = d.image!.scale ?? (vid ? 0.65 : 1)
+                        const cappedScale = Math.min(rawScale, vid ? 0.65 : 1)
+                        const width = `${Math.round(cappedScale * 100)}%`
+                        return (
+                          <motion.div
+                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, margin: '-40px' }}
+                            transition={{ duration: 0.45, ease: EASE_OUT }}
+                            style={{ width, borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
+                          >
+                            {vid ? (
+                              <video src={d.image!.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
+                            ) : (
+                              <img src={d.image!.src} alt={d.image!.alt} style={{ width: '100%', height: 'auto', display: 'block', clipPath: 'inset(40px 0 60px 0)', marginTop: '-40px', marginBottom: '-60px' }} />
+                            )}
+                          </motion.div>
+                        )
+                      })()
+                    ) : null}
+                  </div>
+                </div>
+
+                {/* Secondary row: Pivot 2 overflow images — full-width grid */}
+                {multiFirst && d.images!.length > 1 && (
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: `repeat(${d.images!.length - 1}, 1fr)`,
+                    gap: '0.5rem',
+                    marginTop: '0.5rem',
+                  }}>
+                    {d.images!.slice(1).map((img, j) => (
+                      <motion.div key={j}
                         initial={{ opacity: 0, y: 16, scale: 0.97 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         viewport={{ once: true, margin: '-40px' }}
                         transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                        style={{ borderRadius: '1rem', overflow: 'hidden', lineHeight: 0 }}
+                        style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
                       >
                         <img src={img.src} alt={img.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
                       </motion.div>
                     ))}
                   </div>
-                )
-              ) : d.image ? (
-                (() => {
-                  const vid = isVideoSrc(d.image.src)
-                  const rawScale = d.image.scale ?? (vid ? 0.65 : 1)
-                  const cappedScale = Math.min(rawScale, vid ? 0.65 : 0.6)
-                  const width = `${Math.round(cappedScale * 100)}%`
-                  return (
-                    <motion.div
-                      initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      viewport={{ once: true, margin: '-40px' }}
-                      transition={{ duration: 0.45, ease: EASE_OUT }}
-                      style={{ width, marginLeft: 'auto', marginRight: 'auto', borderRadius: '1rem', overflow: 'hidden', lineHeight: 0 }}
-                    >
-                      {vid ? (
-                        <video src={d.image.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
-                      ) : (
-                        <img src={d.image.src} alt={d.image.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                      )}
-                    </motion.div>
-                  )
-                })()
-              ) : null}
-            </div>
-          ))}
+                )}
+              </div>
+            )
+          })}
         </div>
       ) : decisionsLayout === 'side-by-side' ? (
         /* Narrower text card (260px) so image area dominates */
@@ -567,8 +568,12 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                   height: '336px',
                 }}>
                   {data.overviewSideMedia!.map((img, j) => (
-                    <div
+                    <motion.div
                       key={j}
+                      initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, margin: '-40px' }}
+                      transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
                       style={{
                         borderRadius: '1rem',
                         overflow: 'hidden',
@@ -579,12 +584,12 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                     >
                       {/\.(mp4|webm|mov)$/i.test(img.src) ? (
                         <video src={img.src} autoPlay loop muted playsInline
-                          style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.05)', transformOrigin: 'center center' }} />
+                          style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.35)', transformOrigin: 'center center' }} />
                       ) : (
                         <img src={img.src} alt={img.alt}
-                          style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.05)', transformOrigin: 'center center' }} />
+                          style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.35)', transformOrigin: 'center center' }} />
                       )}
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -593,58 +598,63 @@ function OverviewContent({ data }: { data: CaseStudy }) {
         </div>
       )}
 
-      {/* Problem statement + optional media below it — hidden when overviewHideProblem is set */}
+      {/* Problem statement + optional media — side-by-side 60/40 when problemMedia present */}
       {data.problemStatement && !data.overviewHideProblem && (
         <div style={{ marginTop: '2rem' }}>
-          <p
-            style={{
-              fontFamily: "'Barlow', sans-serif",
-              fontSize: '0.65rem',
-              fontWeight: 500,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.35)',
-              margin: '0 0 0.75rem 0',
-            }}
-          >
-            The Problem
-          </p>
-          <p
-            style={{
-              fontFamily: "'Barlow', sans-serif",
-              fontSize: '1rem',
-              fontWeight: 300,
-              lineHeight: 1.8,
-              color: 'rgba(255,255,255,0.65)',
-              margin: 0,
-            }}
-          >
-            {data.problemStatement}
-          </p>
-          {/* Media directly under the problem text */}
-          {data.problemMedia && (
-            <div style={{
-              marginTop: '1.25rem',
-              display: 'flex',
-              justifyContent: 'flex-start',
-            }}>
-              {/\.(mp4|webm|mov)$/i.test(data.problemMedia.src) ? (
-                <video src={data.problemMedia.src} autoPlay loop muted playsInline
-                  style={{ width: 'auto', height: 'auto', maxHeight: '400px', display: 'block', borderRadius: '1rem' }} />
-              ) : (
-                <img src={data.problemMedia.src} alt={data.problemMedia.alt}
-                  style={{ width: 'auto', height: 'auto', maxHeight: '400px', display: 'block', borderRadius: '1rem' }} />
-              )}
-            </div>
-          )}
-
-          {/* Scroll media — parallax pan (scroll-driven, preserves natural proportions) */}
+          {/* Carousel above the problem text */}
           {data.overviewScrollMedia && (
             <ScrollPanImage
               src={data.overviewScrollMedia.src}
               alt={data.overviewScrollMedia.alt}
             />
           )}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: data.problemMedia ? '6fr 4fr' : '1fr',
+            gap: '2.5rem',
+            alignItems: 'start',
+            marginTop: data.overviewScrollMedia ? '4rem' : '0',
+          }}>
+            {/* Left: paragraph (no label) */}
+            <div>
+              {data.problemStatement.split('\n\n').map((chunk, i) => (
+                <p
+                  key={i}
+                  style={{
+                    fontFamily: "'Barlow', sans-serif",
+                    fontSize: '1rem',
+                    fontWeight: 300,
+                    lineHeight: 1.8,
+                    color: 'rgba(255,255,255,0.65)',
+                    margin: i === 0 ? '0 0 1rem 0' : '0',
+                  }}
+                >
+                  {chunk}
+                </p>
+              ))}
+            </div>
+
+            {/* Right: media (video or image) */}
+            {data.problemMedia && (
+              <motion.div
+                initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, ease: EASE_OUT }}
+                style={{ borderRadius: '1.25rem', overflow: 'hidden', lineHeight: 0,
+                  boxShadow: '0 8px 40px rgba(0,0,0,0.55)', maxWidth: '60%', marginLeft: 'auto' }}
+              >
+                {isVideoSrc(data.problemMedia.src) ? (
+                  <video src={data.problemMedia.src} autoPlay loop muted playsInline
+                    style={{ width: '100%', height: 'auto', display: 'block' }} />
+                ) : (
+                  <img src={data.problemMedia.src} alt={data.problemMedia.alt}
+                    style={{ width: '100%', height: 'auto', display: 'block' }} />
+                )}
+              </motion.div>
+            )}
+          </div>
+
         </div>
       )}
 
@@ -770,7 +780,13 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
           )}
           <SectionBlock heading={tab.goal.heading} body={tab.goal.body} delay={0} />
           {tab.goalMedia && (
-            <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: 0, ease: EASE_OUT }}
+              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}
+            >
               {isVid(tab.goalMedia.src) ? (
                 <video src={tab.goalMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
@@ -779,7 +795,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               {tab.goalMedia.caption && (
                 <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.78rem', fontWeight: 300, color: 'rgba(255,255,255,0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
               )}
-            </div>
+            </motion.div>
           )}
           {tab.postGoalVisuals && tab.postGoalVisuals.length > 0 && (
             <div style={{ margin: '0 -2rem', marginBottom: '1rem' }}>
@@ -790,7 +806,13 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
           )}
           {tab.process && <SectionBlock heading={tab.process.heading} body={tab.process.body} delay={0.06} />}
           {tab.processMedia && (
-            <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: 0.06, ease: EASE_OUT }}
+              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}
+            >
               {isVid(tab.processMedia.src) ? (
                 <video src={tab.processMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
@@ -799,7 +821,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               {tab.processMedia.caption && (
                 <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.78rem', fontWeight: 300, color: 'rgba(255,255,255,0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.processMedia.caption}</p>
               )}
-            </div>
+            </motion.div>
           )}
         </>
       )}
@@ -825,14 +847,36 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               delay={0.12}
             />
           )}
-          {/* Secondary key decisions block (e.g. after pivot captions in Pivots tab) */}
+          {/* Secondary key decisions — own section with nav-tracked heading */}
           {tab.keyDecisions && tab.keyDecisions.length > 0 && (
-            <DecisionsBlock
-              heading={tab.keyDecisionsHeading ?? 'Key decisions'}
-              decisions={tab.keyDecisions}
-              decisionsLayout="caption"
-              delay={0.18}
-            />
+            <section
+              id="section-key-decisions"
+              style={{ paddingTop: '5rem', borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: '2rem' }}
+            >
+              <motion.h2
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.75, ease: EASE_OUT }}
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
+                  fontWeight: 300,
+                  color: 'rgba(255,255,255,0.90)',
+                  margin: '0 0 3rem 0',
+                  lineHeight: 1.0,
+                  letterSpacing: '-0.03em',
+                }}
+              >
+                {tab.keyDecisionsHeading ?? 'Key decisions'}
+              </motion.h2>
+              <DecisionsBlock
+                heading={tab.keyDecisionsHeading ?? 'Key decisions'}
+                decisions={tab.keyDecisions}
+                decisionsLayout="caption"
+                delay={0.18}
+              />
+            </section>
           )}
           {/* Visuals between Decisions and Outcome */}
           {tab.postDecisionVisuals && tab.postDecisionVisuals.length > 0 && (
@@ -843,11 +887,11 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
             </div>
           )}
           {/* Learnings: plain text section replacing outcome stat cards */}
-          {tab.learnings && (
-            <SectionBlock heading={tab.learnings.heading} body={tab.learnings.body} delay={0.22} />
-          )}
           {tab.outcome && (
             <OutcomeBlock outcome={tab.outcome} delay={0.18} />
+          )}
+          {tab.learnings && (
+            <SectionBlock heading={tab.learnings.heading} body={tab.learnings.body} delay={0.22} />
           )}
           {tab.visualBlocks && tab.visualBlocks.length > 0 && (
             <div style={{ margin: '0 -2rem' }}>
@@ -892,7 +936,7 @@ export default function ProjectTabs({ data }: Props) {
           transition={{ duration: 0.75, ease: EASE_OUT }}
           style={{
             fontFamily: "'Source Serif 4', serif",
-            fontSize: 'clamp(3.5rem, 7vw, 5.5rem)',
+            fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
             fontWeight: 300,
             color: 'rgba(255,255,255,0.90)',
             margin: '0 0 3rem 0',
@@ -923,7 +967,7 @@ export default function ProjectTabs({ data }: Props) {
             transition={{ duration: 0.75, ease: EASE_OUT }}
             style={{
               fontFamily: "'Source Serif 4', serif",
-              fontSize: 'clamp(3.5rem, 7vw, 5.5rem)',
+              fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
               fontWeight: 300,
               color: 'rgba(255,255,255,0.90)',
               margin: '0 0 3rem 0',
