@@ -41,7 +41,7 @@ export interface ProjectTab {
     /** Multiple images — renders a responsive grid instead of single image (caption layout only) */
     images?: Array<CaseStudyImage & { scale?: number }>
     /** Layout for the images array: 'grid' (default) or 'column' (stacked vertically, respects scale per image) */
-    imagesLayout?: 'grid' | 'column'
+    imagesLayout?: 'grid' | 'column' | 'side-all' | 'side-column'
   }>
   /** Image shown at the very top of the tab section, before the goal block (default layout only) */
   introMedia?: CaseStudyImage
@@ -63,7 +63,7 @@ export interface ProjectTab {
 
 // ─── Primitives ────────────────────────────────────────────────
 
-export type ImageLayout = 'full' | 'two-up' | 'three-up' | 'scroll-horizontal'
+export type ImageLayout = 'full' | 'two-up' | 'three-up' | 'scroll-horizontal' | 'carousel'
 
 export interface CaseStudyImage {
   src: string
