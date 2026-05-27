@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
-import Navbar from './components/Navbar'
+import Navbar from './components/navbar'
 import HeroSection from './components/HeroSection'
 import AboutSection from './components/AboutSection'
 import WorkSection from './components/WorkSection'

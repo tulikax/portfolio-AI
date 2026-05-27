@@ -1,0 +1,170 @@
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X } from 'lucide-react'
+import { useLocation, Link } from 'react-router-dom'
+import { NAV_EASE_OUT, NAV_LINKS } from './constants'
+import { GlassMotionShell } from './GlassMotionShell'
+import { useCloseMenuOnDesktop, useNavbarScroll } from './hooks'
+import { NavbarCvLink } from './NavbarCvLink'
+import { NavbarMobileMenu } from './NavbarMobileMenu'
+
+export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const scrolled = useNavbarScroll()
+  const location = useLocation()
+  const isCaseStudy = location.pathname.startsWith('/work/')
+
+  useCloseMenuOnDesktop(setMenuOpen)
+
+  const mobileLinks = isCaseStudy
+    ? [{ label: '← Back to Work', href: '/#work' }]
+    : NAV_LINKS
+
+  const pillShadow = scrolled
+    ? 'inset 0 1px 1px rgba(255,255,255,0.10), 0 8px 32px rgba(0,0,0,0.6)'
+    : 'inset 0 1px 1px rgba(255,255,255,0.10)'
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: '1rem',
+        left: '1rem',
+        right: '1rem',
+        maxWidth: '56rem',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        zIndex: 50,
+      }}
+    >
+      <GlassMotionShell
+        entrance="slide"
+        glassStyle={{
+          padding: '0 1.25rem',
+          height: '3.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem',
+          transition: 'box-shadow 300ms cubic-bezier(0.23,1,0.32,1)',
+          boxShadow: pillShadow,
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <a
+            href="#"
+            style={{
+              fontFamily: "'Source Serif 4', serif",
+              fontStyle: 'italic',
+              color: 'white',
+              fontSize: '1.25rem',
+              letterSpacing: '-0.02em',
+              textDecoration: 'none',
+            }}
+          >
+            Tulika
+          </a>
+        </div>
+
+        <nav style={{ alignItems: 'center', gap: '1.5rem' }} className="hidden md:flex">
+          {isCaseStudy ? (
+            <Link
+              to="/#work"
+              style={{
+                fontSize: '0.875rem',
+                color: 'rgba(255,255,255,0.65)',
+                textDecoration: 'none',
+                fontWeight: 400,
+                fontFamily: "'Barlow', sans-serif",
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                transition: 'color 200ms ease',
+              }}
+              onMouseEnter={(e) => {
+                ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
+              }}
+              onMouseLeave={(e) => {
+                ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.65)'
+              }}
+            >
+              ← Back to Work
+            </Link>
+          ) : (
+            NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                style={{
+                  fontSize: '0.875rem',
+                  color: 'rgba(255,255,255,0.75)',
+                  textDecoration: 'none',
+                  fontWeight: 400,
+                  transition: 'color 200ms ease',
+                }}
+                onMouseEnter={(e) => {
+                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
+                }}
+                onMouseLeave={(e) => {
+                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.75)'
+                }}
+              >
+                {link.label}
+              </a>
+            ))
+          )}
+        </nav>
+
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.75rem' }}>
+          <NavbarCvLink variant="pill" />
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            className="flex md:hidden items-center justify-center"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.375rem',
+              color: 'rgba(255,255,255,0.85)',
+              borderRadius: '0.5rem',
+              transition: 'color 150ms ease',
+            }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {menuOpen ? (
+                <motion.span
+                  key="close"
+                  initial={{ opacity: 0, rotate: -45 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 45 }}
+                  transition={{ duration: 0.18, ease: NAV_EASE_OUT }}
+                  className="flex"
+                >
+                  <X style={{ width: '1.25rem', height: '1.25rem' }} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="open"
+                  initial={{ opacity: 0, rotate: 45 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: -45 }}
+                  transition={{ duration: 0.18, ease: NAV_EASE_OUT }}
+                  className="flex"
+                >
+                  <Menu style={{ width: '1.25rem', height: '1.25rem' }} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
+      </GlassMotionShell>
+
+      <NavbarMobileMenu
+        open={menuOpen}
+        links={mobileLinks}
+        onClose={() => setMenuOpen(false)}
+      />
+    </div>
+  )
+}

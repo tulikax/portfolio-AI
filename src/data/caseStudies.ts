@@ -2,7 +2,6 @@ import type { CaseStudy } from '../types/caseStudy'
 
 // DoorFeed assets
 import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
-import dfHero from '../assets/DoorFeed/case study /new dropdown hhorizontal tab.png'
 import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
 import dfBeforeMapsNav from '../assets/DoorFeed/case study /before - maps and navigation.png'
 import dfMapsAnalysisPins from '../assets/DoorFeed/case study /maps location analysis pins.mov'
