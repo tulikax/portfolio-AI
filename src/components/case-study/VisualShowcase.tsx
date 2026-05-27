@@ -91,7 +91,7 @@ function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
         boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
       }}
     >
-      <MediaInner img={img} fixedHeight style={{ height: '100%', objectFit: 'cover' }} />
+      <MediaInner img={img} fixedHeight style={{ height: '100%', objectFit: 'contain', transform: 'scale(0.95)', transformOrigin: 'center center' }} />
       {img.caption && (
         <p style={{
           fontSize: '0.78rem',
