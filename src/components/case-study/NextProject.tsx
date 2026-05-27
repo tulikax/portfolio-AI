@@ -89,11 +89,22 @@ export default function NextProject({ nextProject }: Props) {
                 flexShrink: 0,
               }}
             >
-              <img
-                src={nextProject.coverImage.src}
-                alt={nextProject.coverImage.alt}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
+              {/\.(mp4|webm|mov)$/i.test(nextProject.coverImage.src) ? (
+                <video
+                  src={nextProject.coverImage.src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              ) : (
+                <img
+                  src={nextProject.coverImage.src}
+                  alt={nextProject.coverImage.alt}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              )}
             </div>
           </motion.div>
         </Link>

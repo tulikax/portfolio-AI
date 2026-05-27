@@ -15,7 +15,7 @@ import dfViewComparable from '../assets/DoorFeed/case study /view comparable.mov
 import dfMRHomepage from '../assets/DoorFeed/case study /MR homepage.mov'
 
 // SigTech assets — root
-import st1        from '../assets/SigTech/MAGIC Hero.png'
+import st1        from '../assets/SigTech/Case Study/What finally shipped/Day 1 - chat only.png'
 import stChatFlow        from '../assets/SigTech/chat-flow.mp4'
 import stAgentsInAction  from '../assets/SigTech/agents-in-action.mp4'
 // SigTech — Overview
@@ -405,7 +405,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     nextProject: {
       slug: 'doorfeed',
       title: 'DoorFeed',
-      coverImage: { src: dfHero, alt: 'DoorFeed interface' },
+      coverImage: { src: dfMapsAnalysisPins, alt: 'DoorFeed maps analysis' },
     },
   },
 
