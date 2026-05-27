@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ChevronRight } from 'lucide-react'
+import { CV_PUBLIC_PATH } from '../constants/site'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -92,7 +93,9 @@ export default function CTASection() {
             <ArrowUpRight style={{ width: '1rem', height: '1rem' }} />
           </a>
           <a
-            href="#"
+            href={CV_PUBLIC_PATH}
+            target="_blank"
+            rel="noopener noreferrer"
             className="liquid-glass btn-press"
             style={{
               borderRadius: '9999px',

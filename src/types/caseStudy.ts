@@ -23,7 +23,7 @@ export interface ProjectTab {
   /** Media shown directly below the process section */
   processMedia?: CaseStudyImage
   /** Secondary decisions block rendered after the main decisions (e.g. key design decisions in Pivots tab) */
-  keyDecisions?: Array<{ title: string; rationale: string; image?: CaseStudyImage & { scale?: number } }>
+  keyDecisions?: Array<{ title: string; rationale: string; image?: CaseStudyImage & { scale?: number; cropTop?: number; cropBottom?: number } }>
   keyDecisionsHeading?: string
   /** Replaces outcome block — rendered as a plain section (heading + body, no stat cards) */
   learnings?: { heading: string; body: string }
