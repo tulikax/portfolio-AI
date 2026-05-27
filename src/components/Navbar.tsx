@@ -64,7 +64,7 @@ export default function Navbar() {
           <a
             href="#"
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Source Serif 4', serif",
               fontStyle: 'italic',
               color: 'white',
               fontSize: '1.25rem',

@@ -52,9 +52,9 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
       <Wrap
         {...(animate ? { initial: { opacity: 0, y: 28 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.18, ease: EASE_OUT } } : {})}
         style={{
-          fontFamily: "'Instrument Serif', serif",
-          fontSize: 'clamp(1.75rem, 4.5vw, 3.6rem)',
-          fontWeight: 400,
+          fontFamily: "'Source Serif 4', serif",
+          fontSize: 'clamp(2.75rem, 7vw, 5.5rem)',
+          fontWeight: 300,
           letterSpacing: '-0.02em',
           lineHeight: 1.12,
           color: 'white',
