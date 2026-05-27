@@ -1,2 +1,2 @@
 export { default } from './Navbar'
-export { GlassMotionShell } from './GlassMotionShell'
+export { GlassPanel } from './GlassPanel'
