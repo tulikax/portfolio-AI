@@ -318,7 +318,7 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: '01 — Build a copilot inside the SigTech ecosystem.',
             rationale: 'The initial direction was to embed an AI coding assistant directly into SigTech\'s existing platform — a Copilot for quants. Rapid prototyping with select users killed this quickly. The value proposition immediately ran into Cursor and GitHub Copilot on one side, and SigTech\'s own developer tooling on the other. We were building into a crowded lane we couldn\'t win. Abandoned early, before significant design investment.',
-            image: { src: stPivot1, alt: 'Pivot 1 — Multiple GPTs within existing IDE' },
+            image: { src: stPivot1, alt: 'Pivot 1 — Multiple GPTs within existing IDE', cropTop: 40, cropBottom: 60 },
           },
           {
             title: '02 · Focus on transparency and error detection',
@@ -340,7 +340,7 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: 'Show reasoning, not just results.',
             rationale: 'Stakeholders wanted to surface all reasoning. Engineering favoured raw JSON logs. Both would overwhelm users and bury the signal in noise. I chose a collapsible side panel: scannable summary by default, full JSON and cited sources on demand. Progressive disclosure as a trust mechanism — not just a UI pattern. Pilot data showed 65% of users actively used the reasoning panels.',
-            image: { src: stAgentsInAction, alt: 'Agents in action — reasoning visibility demo' },
+            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', scale: 0.7, cropBottom: 150 },
           },
           {
             title: 'Chat for exploration. Jobs for delegation.',
@@ -392,7 +392,7 @@ export const CASE_STUDIES: CaseStudy[] = [
             height: '440px',
             images: [
               { src: stDay1,         alt: 'Day 1 — chat only interface',                                caption: 'Day 1 — chat only' },
-              { src: stTaskTransp,   alt: 'Task list as an idea for transparency',                      caption: 'Task list — transparency concept' },
+              { src: stAgentsInAction, alt: 'Agents in action — reasoning visibility demo',              caption: 'Agents in action' },
               { src: stFinalDraft,   alt: 'Final draft — verify source, view related, copy',            caption: 'Final design — verify source, view related, copy' },
               { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept',                          caption: 'Final outcome — Jobs' },
               { src: stMetabase,     alt: 'Metabase pilot analytics',                                   caption: 'Pilot analytics' },

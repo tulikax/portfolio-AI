@@ -37,7 +37,7 @@ export interface ProjectTab {
     title: string
     rationale: string
     /** Optional single image rendered inline below this decision card */
-    image?: CaseStudyImage & { scale?: number }
+    image?: CaseStudyImage & { scale?: number; cropTop?: number; cropBottom?: number }
     /** Multiple images — renders a responsive grid instead of single image (caption layout only) */
     images?: Array<CaseStudyImage & { scale?: number }>
     /** Layout for the images array: 'grid' (default) or 'column' (stacked vertically, respects scale per image) */

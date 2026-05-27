@@ -230,12 +230,17 @@ function DecisionsBlock({
                         <img src={d.images![0].src} alt={d.images![0].alt} style={{ width: '100%', height: 'auto', display: 'block', marginTop: '-70px', marginBottom: '-70px' }} />
                       </motion.div>
                     ) : d.image ? (
-                      /* Pivot 1 mode: single image or video */
+                      /* Single image or video — crop values come from the image data */
                       (() => {
                         const vid = isVideoSrc(d.image!.src)
                         const rawScale = d.image!.scale ?? (vid ? 0.65 : 1)
                         const cappedScale = Math.min(rawScale, vid ? 0.65 : 1)
                         const width = `${Math.round(cappedScale * 100)}%`
+                        const ct = d.image!.cropTop ?? 0
+                        const cb = d.image!.cropBottom ?? 0
+                        const cropStyle = (ct || cb)
+                          ? { clipPath: `inset(${ct}px 0 ${cb}px 0)`, marginTop: `-${ct}px`, marginBottom: `-${cb}px` }
+                          : {}
                         return (
                           <motion.div
                             initial={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -247,7 +252,7 @@ function DecisionsBlock({
                             {vid ? (
                               <video src={d.image!.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
                             ) : (
-                              <img src={d.image!.src} alt={d.image!.alt} style={{ width: '100%', height: 'auto', display: 'block', clipPath: 'inset(40px 0 60px 0)', marginTop: '-40px', marginBottom: '-60px' }} />
+                              <img src={d.image!.src} alt={d.image!.alt} style={{ width: '100%', height: 'auto', display: 'block', ...cropStyle }} />
                             )}
                           </motion.div>
                         )
