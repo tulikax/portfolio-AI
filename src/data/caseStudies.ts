@@ -8,9 +8,9 @@ import dfHero from '../assets/DoorFeed/case study /Doorfeed Final outcome.png'
 import dfDropdown from '../assets/DoorFeed/case study /new dropdown menu - cleaned up.png'
 
 // SigTech assets
-import st1 from '../assets/SigTech/Case Study/overview 1.png'
-import st2 from '../assets/SigTech/Case Study/building trust in AI responses.png'
-import st3 from '../assets/SigTech/Case Study/SigTech IDE.png'
+import st1 from '../assets/SigTech/Case Study/Overview/Chat v1.png'
+import st2 from '../assets/SigTech/Case Study/What finally shipped/final draft - verify source, view related, copy with attribition.png'
+import st3 from '../assets/SigTech/Case Study/Overview/SigTech IDE.png'
 
 // Deloitte assets
 import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'

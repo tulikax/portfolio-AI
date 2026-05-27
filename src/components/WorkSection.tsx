@@ -6,9 +6,9 @@ import df1 from '../assets/DoorFeed/homepage glow.mov'
 import df2 from '../assets/DoorFeed/download from dataroom.mov'
 import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 // SigTech
-import st1 from '../assets/SigTech/Case Study/plugin.mov'
-import st2 from '../assets/SigTech/Case Study/overview 1.png'
-import st3 from '../assets/SigTech/Case Study/SigTech IDE.png'
+import st1 from '../assets/SigTech/Case Study/Overview/plugin.mov'
+import st2 from '../assets/SigTech/Case Study/Overview/Chat v1.png'
+import st3 from '../assets/SigTech/Case Study/Overview/SigTech IDE.png'
 // Deloitte
 import dl1 from '../assets/Deloitte SS/Case study/deloitte bento.png'
 import dl2 from '../assets/Deloitte SS/Case study/KMS wierframe.png'
