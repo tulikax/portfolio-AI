@@ -137,6 +137,21 @@ a, button, [role="button"], input, select, textarea, label {
   pointer-events: none;
 }
 
+/* ─── Stack section tool grid ────────────────────────────────── */
+
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  gap: 0.875rem;
+  justify-content: center;
+}
+
+@media (max-width: 359px) {
+  .stack-grid {
+    grid-template-columns: repeat(3, 80px);
+  }
+}
+
 /* ─── Section Badge ──────────────────────────────────────────── */
 
 .section-badge {

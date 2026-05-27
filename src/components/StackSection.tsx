@@ -163,13 +163,8 @@ export default function StackSection() {
           </p>
         </motion.div>
 
-        {/* Responsive fluid grid */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.875rem',
-          justifyContent: 'center',
-        }}>
+        {/* 4-column grid (was 5-4-4 rows; flex-wrap collapsed to 1 row on wide viewports) */}
+        <div className="stack-grid">
           {TOOLS.map((tool, i) => (
             <ToolCard key={tool.slug} tool={tool} delay={i * 0.03} />
           ))}

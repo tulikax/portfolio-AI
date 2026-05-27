@@ -35,6 +35,28 @@ const STEPS = [
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
+function ProcessScrollEyebrow() {
+  return (
+    <p
+      style={{
+        fontFamily: "'Barlow', sans-serif",
+        fontWeight: 500,
+        fontSize: '0.65rem',
+        letterSpacing: '0.14em',
+        textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.35)',
+        textAlign: 'center',
+        margin: 0,
+        flexShrink: 0,
+        position: 'relative',
+        zIndex: 3,
+      }}
+    >
+      Scroll to keep going
+    </p>
+  )
+}
+
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
@@ -177,6 +199,8 @@ function DesktopProcess() {
             )
           })}
         </div>
+
+        <ProcessScrollEyebrow />
 
         {/* Process flow line */}
         <div style={{ position: 'relative', zIndex: 4, padding: '0 3rem', flexShrink: 0 }}>
@@ -321,6 +345,10 @@ function MobileProcess() {
               </motion.div>
             )
           })}
+        </div>
+
+        <div style={{ marginTop: '2rem' }}>
+          <ProcessScrollEyebrow />
         </div>
       </div>
     </div>
