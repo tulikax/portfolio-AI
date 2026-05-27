@@ -1,20 +1,15 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // DoorFeed
 import df1 from '../assets/DoorFeed/homepage glow.mov'
 import df2 from '../assets/DoorFeed/download from dataroom.mov'
-import df3 from '../assets/DoorFeed/case study /MR generation FR.png'
 // SigTech
-import st1 from '../assets/SigTech/Case Study/Overview/plugin.mov'
-import st2 from '../assets/SigTech/Case Study/Overview/Chat v1.png'
-import st3 from '../assets/SigTech/Case Study/Overview/SigTech IDE.png'
+import st1 from '../assets/SigTech/chat-flow.mp4'
+import st2 from '../assets/SigTech/agents-in-action.mp4'
 // Deloitte
-import dl1 from '../assets/Deloitte SS/Case study/deloitte bento.png'
-import dl2 from '../assets/Deloitte SS/Case study/KMS wierframe.png'
-import dl3 from '../assets/Deloitte SS/Case study/final bento.png'
-
-void df3; void st3; void dl3
+import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
+import dl2 from '../assets/Deloitte SS/Deloitte:sketches.png'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -79,7 +74,7 @@ function MediaCard({ src }: { src: string }) {
   const isVideo = /\.(mp4|webm|mov)$/i.test(src)
   return (
     <div style={{
-      borderRadius: '1.25rem',
+      borderRadius: '1rem',
       overflow: 'hidden',
       background: 'linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
       border: '1px solid rgba(255,255,255,0.10)',
@@ -88,13 +83,14 @@ function MediaCard({ src }: { src: string }) {
       flexShrink: 0,
     }}>
       {isVideo
-        ? <video src={src} autoPlay loop muted playsInline style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />
-        : <img src={src} alt="" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />}
+        ? <video src={src} autoPlay loop muted playsInline className="role-media-item" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />
+        : <img src={src} alt="" className="role-media-item" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />}
     </div>
   )
 }
 
 function RoleCard({ role, index }: { role: Role; index: number }) {
+  const navigate = useNavigate()
   const subsections = [
     role.drewMeIn ? { label: 'What drew me in', content: role.drewMeIn } : null,
     { label: 'Where I thrived', content: role.thrived },
@@ -110,12 +106,13 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
         style={{ display: 'flex', justifyContent: 'center' }}
       >
         {/* Centre role card — fixed width, positioning parent for images */}
-        <div
-          className="role-card"
+          <div
+          className="role-card role-card-shell"
+          onClick={() => role.caseStudySlug && navigate(`/work/${role.caseStudySlug}`)}
           style={{
           position: 'relative',
-          width: '600px',
-          flexShrink: 0,
+          width: '100%',
+          maxWidth: '600px',
           borderRadius: '1.5rem',
           padding: '1.75rem',
           background: 'linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))',
@@ -123,7 +120,22 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgba(255,255,255,0.09)',
           boxShadow: '0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
-        }}>
+          cursor: role.caseStudySlug ? 'pointer' : 'default',
+          transition: 'box-shadow 250ms ease, border-color 250ms ease',
+        }}
+          onMouseEnter={e => {
+            if (!role.caseStudySlug) return
+            const el = e.currentTarget as HTMLDivElement
+            el.style.boxShadow = '0 1px 0 rgba(255,255,255,0.10) inset, 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.12)'
+            el.style.borderColor = 'rgba(255,255,255,0.16)'
+          }}
+          onMouseLeave={e => {
+            if (!role.caseStudySlug) return
+            const el = e.currentTarget as HTMLDivElement
+            el.style.boxShadow = '0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.5)'
+            el.style.borderColor = 'rgba(255,255,255,0.09)'
+          }}
+        >
           {/* Shimmer */}
           <div style={{
             position: 'absolute', top: 0, left: '1.5rem', right: '1.5rem', height: '1px',
@@ -138,23 +150,23 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
           }}>{role.number}</span>
 
           <div style={{ marginBottom: '0.25rem' }}>
-            <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 500, color: 'white', fontSize: '1.125rem' }}>
+            <span className="role-card-title" style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 500, color: 'white', fontSize: '1.125rem' }}>
               {role.title}
             </span>
             {' '}
-            <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, color: 'rgba(255,255,255,0.55)', fontSize: '1.125rem' }}>
+            <span className="role-card-title" style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, color: 'rgba(255,255,255,0.55)', fontSize: '1.125rem' }}>
               @ {role.company}
             </span>
           </div>
 
-          <p style={{
+          <p className="role-card-duration" style={{
             fontFamily: "'Barlow', sans-serif", fontWeight: 300,
             color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem',
             letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1.25rem',
           }}>{role.duration}</p>
 
           {subsections.map((sub, i) => (
-            <div key={sub.label} style={{
+            <div key={sub.label} className="role-card-sub" style={{
               paddingBottom: i < subsections.length - 1 ? '1rem' : 0,
               marginBottom: i < subsections.length - 1 ? '1rem' : 0,
               borderBottom: i < subsections.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
@@ -164,12 +176,19 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
                 color: 'rgba(255,255,255,0.40)', fontSize: '0.7rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.25rem',
               }}>{sub.label}</p>
-              <p style={{
+              <p className="role-card-body" style={{
                 fontFamily: "'Barlow', sans-serif", fontWeight: 300,
                 color: 'rgba(255,255,255,0.65)', fontSize: '0.875rem', lineHeight: 1.65,
               }}>{sub.content}</p>
             </div>
           ))}
+
+          {/* Mobile media strip — visible only on small screens, hidden on desktop */}
+          <div className="role-media-strip">
+            {role.images.map((src, idx) => (
+              <MediaCard key={idx} src={src} />
+            ))}
+          </div>
 
           <div style={{
             marginTop: '1.25rem', display: 'flex', alignItems: 'center',
@@ -185,6 +204,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
               <Link
                 to={`/work/${role.caseStudySlug}`}
                 className="btn-press role-cta"
+                onClick={e => e.stopPropagation()}
                 style={{
                   fontFamily: "'Barlow', sans-serif", fontWeight: 500,
                   fontSize: '0.78rem', letterSpacing: '0.06em',
@@ -257,7 +277,7 @@ export default function WorkSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Instrument Serif', serif", fontStyle: 'italic',
+            fontFamily: "'Source Serif 4', serif", fontStyle: 'italic',
             fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em',
             lineHeight: 0.92, color: 'white', margin: '0', fontWeight: 400,
           }}

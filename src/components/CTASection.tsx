@@ -32,7 +32,7 @@ export default function CTASection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Instrument Serif', serif",
+            fontFamily: "'Source Serif 4', serif",
             fontStyle: 'italic',
             fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',

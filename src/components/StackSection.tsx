@@ -136,7 +136,7 @@ export default function StackSection() {
         >
           <h2
             style={{
-              fontFamily: "'Instrument Serif', serif",
+              fontFamily: "'Source Serif 4', serif",
               fontStyle: 'italic',
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               letterSpacing: '-0.04em',
@@ -163,18 +163,16 @@ export default function StackSection() {
           </p>
         </motion.div>
 
-        {/* 5-4-4 grid */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 80px)', gap: '0.875rem', justifyContent: 'center' }}>
-            {TOOLS.slice(0, 5).map((tool, i) => (
-              <ToolCard key={tool.slug} tool={tool} delay={i * 0.03} />
-            ))}
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 80px)', gap: '0.875rem', justifyContent: 'center' }}>
-            {TOOLS.slice(5).map((tool, i) => (
-              <ToolCard key={tool.slug} tool={tool} delay={(i + 5) * 0.03} />
-            ))}
-          </div>
+        {/* Responsive fluid grid */}
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0.875rem',
+          justifyContent: 'center',
+        }}>
+          {TOOLS.map((tool, i) => (
+            <ToolCard key={tool.slug} tool={tool} delay={i * 0.03} />
+          ))}
         </div>
 
       </div>

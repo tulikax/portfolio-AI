@@ -45,7 +45,7 @@ export default function ProblemSection({ data }: Props) {
           >
             <p
               style={{
-                fontFamily: "'Instrument Serif', serif",
+                fontFamily: "'Source Serif 4', serif",
                 fontSize: 'clamp(1.5rem, 3.75vw, 2.625rem)',
                 fontWeight: 400,
                 letterSpacing: '-0.02em',
@@ -88,7 +88,7 @@ export default function ProblemSection({ data }: Props) {
               style={{
                 borderRadius: '1.25rem',
                 overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,0.10)',
+                border: 'none',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
                 lineHeight: 0,
               }}

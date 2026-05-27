@@ -475,9 +475,9 @@ export default function AboutSection() {
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Instrument Serif', serif",
+            fontFamily: "'Source Serif 4', serif",
             fontStyle: 'italic',
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            fontSize: 'clamp(1.75rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.92,
             color: 'white',
@@ -493,6 +493,7 @@ export default function AboutSection() {
         <motion.p
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
+          className="about-body-text"
           style={{
             fontFamily: "'Barlow', sans-serif",
             fontWeight: 300,
@@ -508,6 +509,7 @@ export default function AboutSection() {
         <motion.p
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.24, ease: EASE_OUT }}
+          className="about-body-text"
           style={{
             fontFamily: "'Barlow', sans-serif",
             fontWeight: 300,
@@ -523,6 +525,7 @@ export default function AboutSection() {
         <motion.p
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.32, ease: EASE_OUT }}
+          className="about-body-text"
           style={{
             fontFamily: "'Barlow', sans-serif",
             fontWeight: 300,

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Barlow:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Barlow:wght@300;400;500;600&display=swap');
 
 @import "tailwindcss";
 
@@ -7,7 +7,7 @@ html {
 }
 
 @theme inline {
-  --font-heading: 'Instrument Serif', serif;
+  --font-heading: 'Source Serif 4', serif;
   --font-body: 'Barlow', sans-serif;
   --font-sans: 'Barlow', sans-serif;
 }
@@ -62,13 +62,19 @@ a, button, [role="button"], input, select, textarea, label {
   cursor: none;
 }
 
+/* On touch devices: no custom cursor — restore native */
+@media (hover: none) {
+  body { cursor: auto; }
+  a, button, [role="button"], input, select, textarea, label { cursor: pointer; }
+}
+
 /* ─── Liquid Glass ─────────────────────────────────────────── */
 
 .liquid-glass {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.07);
   background-blend-mode: luminosity;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.10);
   position: relative;
   overflow: hidden;
@@ -271,6 +277,76 @@ a, button, [role="button"], input, select, textarea, label {
 @media (hover: none), (max-width: 1100px) {
   .role-image {
     display: none;
+  }
+}
+
+/* Mobile media strip — hidden on desktop, shown on small screens */
+.role-media-strip {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  /* Card shell — tighter padding */
+  .role-card-shell {
+    padding: 1.25rem !important;
+  }
+
+  /* Title + company */
+  .role-card-title {
+    font-size: 0.975rem !important;
+  }
+
+  /* Duration */
+  .role-card-duration {
+    margin-bottom: 0.875rem !important;
+  }
+
+  /* Subsection rows — tighter gaps */
+  .role-card-sub {
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  /* Body copy */
+  .role-card-body {
+    font-size: 0.8rem !important;
+  }
+
+  /* Media strip */
+  .role-media-strip {
+    display: flex;
+    gap: 0.625rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 1rem;
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    padding: 0 1.25rem 0.25rem;
+  }
+  .role-media-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Media items — smaller on mobile */
+  .role-media-item {
+    width: 200px !important;
+  }
+}
+
+/* Always show the case study CTA on touch devices (no hover state available) */
+@media (hover: none) {
+  .role-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* About section — scale down body text on mobile */
+@media (max-width: 640px) {
+  .about-body-text {
+    font-size: 0.9rem !important;
+    line-height: 1.65 !important;
   }
 }
 

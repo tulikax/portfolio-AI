@@ -78,7 +78,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
             style={{
               borderRadius: '0.75rem',
               overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.10)',
+              border: 'none',
               lineHeight: 0,
             }}
           >
@@ -103,7 +103,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
             style={{
               borderRadius: '0.75rem',
               overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.10)',
+              border: 'none',
               lineHeight: 0,
             }}
           >
@@ -121,69 +121,24 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
 
 interface Props {
   decisions: DesignDecision[]
+  inline?: boolean
 }
 
-export default function DesignDecisions({ decisions }: Props) {
+export default function DesignDecisions({ decisions, inline }: Props) {
+  const Wrapper = inline ? 'div' : 'section'
   return (
-    <section
-      style={{
-        padding: '4rem 2rem',
+    <Wrapper
+      style={inline ? { display: 'flex', flexDirection: 'column', gap: '1rem' } : {
+        padding: '2rem 2rem 4rem',
         maxWidth: '72rem',
         margin: '0 auto',
       }}
     >
-      {/* Divider */}
-      <div
-        style={{
-          height: '1px',
-          background: 'rgba(255,255,255,0.08)',
-          marginBottom: '3.5rem',
-        }}
-      />
-
-      {/* Heading */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.7, ease: EASE_OUT }}
-        style={{ marginBottom: '2.5rem' }}
-      >
-        <span
-          style={{
-            display: 'block',
-            fontSize: '0.68rem',
-            fontWeight: 500,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.38)',
-            fontFamily: "'Barlow', sans-serif",
-            marginBottom: '0.875rem',
-          }}
-        >
-          Key Design Decisions
-        </span>
-        <h2
-          style={{
-            fontFamily: "'Instrument Serif', serif",
-            fontStyle: 'italic',
-            fontSize: 'clamp(1.8rem, 4vw, 3rem)',
-            fontWeight: 400,
-            letterSpacing: '-0.03em',
-            color: 'white',
-            margin: 0,
-            lineHeight: 1.1,
-          }}
-        >
-          The choices that shaped it.
-        </h2>
-      </motion.div>
-
       {/* Cards grid */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gridTemplateColumns: inline ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))',
           gap: '1rem',
         }}
       >
@@ -191,6 +146,6 @@ export default function DesignDecisions({ decisions }: Props) {
           <DecisionCard key={i} decision={decision} index={i} />
         ))}
       </div>
-    </section>
+    </Wrapper>
   )
 }
