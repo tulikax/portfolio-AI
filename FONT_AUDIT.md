@@ -106,3 +106,40 @@ coherent without changing its look.
 5. Keep the `document.fonts.load(...)` guard in `ParticleTitle.tsx` in sync with
    whatever display face ships — a canvas draw before the font resolves rasterises the
    fallback serif permanently into the particle field.
+
+## 5. Light mode
+
+The site is currently dark-only, and the dark execution has real weaknesses: pure
+`#000` background with pure-white text is the harshest possible pairing (maximum
+halation), and most secondary text sits at 35–45% white opacity, which is where F3's
+legibility problems come from. A light version is worth building — serif italic
+display faces like Instrument Serif genuinely look *better* dark-on-light, where
+their thin strokes render crisply instead of blooming.
+
+**Typography adjustments for light mode:**
+
+- **Weights shift down one notch.** Light text on dark appears optically bolder
+  (strokes bloom); the same weight on white looks thinner but crisper. The dark
+  theme's 300-weight body that reads as ~350 will read as a true 300 on white —
+  keep body at 400 in light mode and let the variable axis nudge dark mode to
+  ~380 if it starts to feel heavy.
+- **Replace opacity-based hierarchy with real greys.** `rgba(0,0,0,0.4)` on white
+  is muddier than the equivalent on black. Use proper ink tones (e.g. `#1a1a1a`
+  primary, `#6b6b6b` secondary, `#9a9a9a` tertiary) rather than porting the
+  opacity system across.
+- **Soften both poles.** Off-black text (`#1a1a1a`) on off-white paper
+  (`#faf9f7` warm, or `#fafafa` neutral) reads more "editorial print" and less
+  "unstyled page" — and it flatters the serif. This is also the fix to backport:
+  the dark theme would improve by moving from `#000`/`#fff` to `#0a0a0a`/`#f2f0ec`.
+- **The particle hero and liquid glass need theme-aware variants** — white
+  particles and `rgba(255,255,255,…)` glass fills are hardcoded, so both invert
+  to invisible on white. Particle colour must become a prop/token; glass fills
+  need a dark-tint equivalent (`rgba(0,0,0,0.06)`-range fills with the same blur).
+
+**Prerequisite — same blocker as F4:** colours, like fonts, are hardcoded inline.
+Hundreds of `rgba(255,255,255,…)` literals live in component styles while the
+shadcn-style HSL tokens in [src/index.css](src/index.css:15) go unused. A light
+theme is not viable until text/surface colours route through tokens. Do the font
+tokenisation (§4.3) and colour tokenisation as one refactor pass — it's the same
+mechanical change through the same 26 files, and it unlocks both the font swap
+and the theme toggle at once.
