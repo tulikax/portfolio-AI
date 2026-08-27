@@ -19,7 +19,7 @@ export default function Footer() {
           style={{
             height: '1px',
             width: '100%',
-            background: 'rgba(255,255,255,0.12)',
+            background: 'rgb(var(--ink) / 0.12)',
             marginBottom: '2rem',
           }}
         />
@@ -38,9 +38,9 @@ export default function Footer() {
           {/* Left — Copyright */}
           <p
             style={{
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontWeight: 300,
-              color: 'rgba(255,255,255,0.38)',
+              color: 'rgb(var(--ink) / 0.38)',
               fontSize: '0.75rem',
               margin: 0,
             }}
@@ -55,18 +55,18 @@ export default function Footer() {
                 key={link.label}
                 href={link.href}
                 style={{
-                  fontFamily: "'Barlow', sans-serif",
+                  fontFamily: 'var(--font-body)',
                   fontWeight: 300,
                   fontSize: '0.75rem',
-                  color: 'rgba(255,255,255,0.38)',
+                  color: 'rgb(var(--ink) / 0.38)',
                   textDecoration: 'none',
                   transition: 'color 200ms ease',
                 }}
                 onMouseEnter={(e) => {
-                  ;(e.target as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.70)'
+                  ;(e.target as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.70)'
                 }}
                 onMouseLeave={(e) => {
-                  ;(e.target as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.38)'
+                  ;(e.target as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.38)'
                 }}
               >
                 {link.label}

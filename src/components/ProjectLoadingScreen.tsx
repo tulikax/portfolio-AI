@@ -1,6 +1,7 @@
 import { useRef, useEffect, type MutableRefObject } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GradientBlobs from './GradientBlobs'
+import { displayFont, inkChannel } from '../constants/theme'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -27,6 +28,7 @@ function BackgroundParticles({
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    const INK = inkChannel()
     if (!ctx) return
 
     let particles: BgParticle[] = []
@@ -95,15 +97,15 @@ function BackgroundParticles({
           if (cdist < 120) {
             const nf = Math.max(0, 1 - cdist / 120)
             const glow = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5)
-            glow.addColorStop(0, `rgba(255,255,255,${nf * 0.5 * opacity})`)
-            glow.addColorStop(1, 'rgba(255,255,255,0)')
+            glow.addColorStop(0, `rgb(${INK} / ${nf * 0.5 * opacity})`)
+            glow.addColorStop(1, `rgb(${INK} / 0)`)
             ctx!.beginPath(); ctx!.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2)
             ctx!.fillStyle = glow; ctx!.fill()
           }
         }
         const grad = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.5)
-        grad.addColorStop(0, `rgba(255,255,255,${opacity})`)
-        grad.addColorStop(1, 'rgba(255,255,255,0)')
+        grad.addColorStop(0, `rgb(${INK} / ${opacity})`)
+        grad.addColorStop(1, `rgb(${INK} / 0)`)
         ctx!.beginPath(); ctx!.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2)
         ctx!.fillStyle = grad; ctx!.fill()
       }
@@ -147,10 +149,12 @@ function LoadingParticleText({
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    const INK = inkChannel()
     if (!ctx) return
 
     let particles: TextParticle[] = []
     let animId: number
+    let retryId: ReturnType<typeof setTimeout>
     let solidOpacity = 0
     let settledFrames = 0
     let drawFont = ''
@@ -161,22 +165,31 @@ function LoadingParticleText({
     let textCenterY = 0  // visual center of text (for scatter origin)
 
     async function init() {
-      await document.fonts.load(`italic 80px 'Instrument Serif'`)
+      // Never let a font CDN failure blank the loading title — fall back to the
+      // generic serif and carry on rendering particles.
+      await document.fonts.load(displayFont(80)).catch(() => {})
 
       const dpr = window.devicePixelRatio || 1
       // Canvas fills the entire viewport so scattered particles have room to travel
       const W = window.innerWidth
       const H = window.innerHeight
 
+      // Viewport not measurable yet (hidden/backgrounded tab) — getImageData
+      // throws on a zero-width source, so retry until it lays out.
+      if (W === 0 || H === 0) {
+        retryId = setTimeout(init, 150)
+        return
+      }
+
       let fontSize = Math.min(W * 0.12, 108)
       const testCtx = document.createElement('canvas').getContext('2d')!
-      testCtx.font = `italic ${fontSize}px 'Instrument Serif'`
+      testCtx.font = displayFont(fontSize)
       const measuredW = testCtx.measureText('Loading...').width
       if (measuredW > W * 0.82) fontSize *= (W * 0.82) / measuredW
 
       // Baseline sits slightly below viewport center so visual weight is centred
       const baseline = H / 2 + fontSize * 0.35
-      drawFont = `italic ${fontSize}px 'Instrument Serif'`
+      drawFont = displayFont(fontSize)
       drawW = W; drawH = H; drawY = baseline
       textCenterY = H / 2
 
@@ -190,6 +203,7 @@ function LoadingParticleText({
       const off = document.createElement('canvas')
       off.width = W; off.height = H
       const offCtx = off.getContext('2d')!
+      // Alpha-sampling mask only — this colour is never displayed
       offCtx.fillStyle = 'white'
       offCtx.font = drawFont
       offCtx.textAlign = 'center'
@@ -297,19 +311,19 @@ function LoadingParticleText({
         if (cdist < 110) {
           const nf = Math.max(0, 1 - cdist / 110)
           const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5)
-          glow.addColorStop(0, `rgba(255,255,255,${nf * 0.7 * drawOpacity})`)
-          glow.addColorStop(1, 'rgba(255,255,255,0)')
+          glow.addColorStop(0, `rgb(${INK} / ${nf * 0.7 * drawOpacity})`)
+          glow.addColorStop(1, `rgb(${INK} / 0)`)
           ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2)
           ctx.fillStyle = glow; ctx.fill()
         }
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${drawOpacity})`; ctx.fill()
+        ctx.fillStyle = `rgb(${INK} / ${drawOpacity})`; ctx.fill()
       }
 
       if (solidOpacity > 0 && drawFont && !scatterRef.current) {
         ctx.save()
         ctx.font = drawFont
-        ctx.fillStyle = `rgba(255,255,255,${solidOpacity})`
+        ctx.fillStyle = `rgb(${INK} / ${solidOpacity})`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'alphabetic'
         ctx.fillText('Loading...', drawW / 2, drawY) // drawY = alphabetic baseline
@@ -320,7 +334,7 @@ function LoadingParticleText({
     }
 
     init()
-    return () => { cancelAnimationFrame(animId) }
+    return () => { cancelAnimationFrame(animId); clearTimeout(retryId) }
   }, [cursorRef])
 
   return (
@@ -362,7 +376,7 @@ function ProgressBar({ progress, exiting }: { progress: number; exiting: boolean
             style={{
               width: '100%',
               height: '2px',
-              background: 'rgba(255,255,255,0.07)',
+              background: 'rgb(var(--ink) / 0.07)',
               position: 'relative',
             }}
           >
@@ -375,8 +389,8 @@ function ProgressBar({ progress, exiting }: { progress: number; exiting: boolean
                 left: 0,
                 top: 0,
                 height: '100%',
-                background: 'rgba(255,255,255,0.75)',
-                boxShadow: '0 0 10px rgba(255,255,255,0.5)',
+                background: 'rgb(var(--ink) / 0.75)',
+                boxShadow: '0 0 10px rgb(var(--ink) / 0.5)',
               }}
             />
           </div>
@@ -387,11 +401,11 @@ function ProgressBar({ progress, exiting }: { progress: number; exiting: boolean
               position: 'absolute',
               top: '0.6rem',
               right: '1.25rem',
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontSize: '0.62rem',
               fontWeight: 400,
               letterSpacing: '0.08em',
-              color: 'rgba(255,255,255,0.3)',
+              color: 'rgb(var(--ink) / 0.3)',
             }}
           >
             {Math.round(progress)}%
@@ -459,12 +473,12 @@ export default function ProjectLoadingScreen({
               right: 0,
               textAlign: 'center',
               zIndex: 10,
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontSize: '0.68rem',
               fontWeight: 500,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.38)',
+              color: 'rgb(var(--ink) / 0.38)',
               whiteSpace: 'nowrap',
               pointerEvents: 'none',
             }}

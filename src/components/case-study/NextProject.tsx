@@ -13,7 +13,7 @@ export default function NextProject({ nextProject }: Props) {
   return (
     <section
       style={{
-        borderTop: '1px solid rgba(255,255,255,0.08)',
+        borderTop: '1px solid rgb(var(--ink) / 0.08)',
         marginTop: '2rem',
       }}
     >
@@ -44,8 +44,8 @@ export default function NextProject({ nextProject }: Props) {
                   fontWeight: 500,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.35)',
-                  fontFamily: "'Barlow', sans-serif",
+                  color: 'rgb(var(--ink) / 0.35)',
+                  fontFamily: 'var(--font-body)',
                   marginBottom: '1rem',
                 }}
               >
@@ -54,12 +54,12 @@ export default function NextProject({ nextProject }: Props) {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <h2
                   style={{
-                    fontFamily: "'Source Serif 4', serif",
+                    fontFamily: 'var(--font-display)',
                     fontStyle: 'italic',
                     fontSize: 'clamp(2rem, 5vw, 3.75rem)',
                     fontWeight: 400,
                     letterSpacing: '-0.04em',
-                    color: 'white',
+                    color: 'var(--ink-solid)',
                     margin: 0,
                     lineHeight: 1.05,
                   }}
@@ -70,7 +70,7 @@ export default function NextProject({ nextProject }: Props) {
                   style={{
                     width: 'clamp(1.25rem, 2.5vw, 2rem)',
                     height: 'clamp(1.25rem, 2.5vw, 2rem)',
-                    color: 'rgba(255,255,255,0.45)',
+                    color: 'rgb(var(--ink) / 0.45)',
                     flexShrink: 0,
                   }}
                 />
@@ -131,10 +131,10 @@ export default function NextProject({ nextProject }: Props) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontSize: '0.875rem',
                 fontWeight: 400,
-                color: 'rgba(255,255,255,0.55)',
+                color: 'rgb(var(--ink) / 0.55)',
                 letterSpacing: '0.04em',
               }}
             >

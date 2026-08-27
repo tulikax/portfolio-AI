@@ -1,4 +1,5 @@
 import { useEffect, useRef, type MutableRefObject } from 'react'
+import { displayFont, inkChannel } from '../constants/theme'
 
 const REPEL_RADIUS = 110
 const REPEL_STRENGTH = 8
@@ -6,8 +7,15 @@ const SPRING = 0.025
 const FRICTION = 0.88
 
 // Desktop vs mobile line breaks
-const LINES_DESKTOP = ['Hi, welcome to my corner', 'of the internet :)']
-const LINES_MOBILE  = ['Hi, welcome to', 'my corner of', 'the internet :)']
+const LINES_DESKTOP = ['I work between the', 'noise and the shape']
+const LINES_MOBILE  = ['I work between', 'the noise and', 'the shape']
+
+// Blueprint lens (hover effect): buzz radius, then technical-blueprint resolve
+const LENS_RADIUS = 66
+const SCATTER_FRAMES = 22 // ~0.35s of buzz before the blueprint resolves
+const LENS_GRID = 26
+const BUZZ_BAND = 110 // width of the buzzing noise ring around the active lens
+const BUZZ_EVERY_N_FRAMES = 2 // apply turbulence kicks every Nth frame — higher = slower buzz
 
 interface TitleParticle {
   x: number
@@ -24,9 +32,30 @@ interface TitleParticle {
 
 interface Props {
   cursorRef?: MutableRefObject<{ x: number; y: number }>
+  linesDesktop?: string[]
+  linesMobile?: string[]
+  /** Hover shows a lens: particles buzz for ~1s, then resolve into blueprint-style letters within the radius */
+  blueprintLens?: boolean
+  /** Multiplies the auto-fitted type size (1 = fill the container width) */
+  fontScale?: number
+  /** Horizontal alignment of the lines within the canvas */
+  align?: 'center' | 'left'
+  /** Nudges the auto-fitted size up by this many px (clamped so lines still fit) */
+  fontBoostPx?: number
+  /** Never resolve to solid type — hold the particles in a low idle buzz instead */
+  keepParticles?: boolean
 }
 
-export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
+export default function ParticleTitle({
+  cursorRef: externalCursorRef,
+  linesDesktop = LINES_DESKTOP,
+  linesMobile = LINES_MOBILE,
+  blueprintLens,
+  fontScale = 1,
+  align = 'center',
+  fontBoostPx = 0,
+  keepParticles = false,
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const internalCursorRef = useRef({ x: -9999, y: -9999 })
   const activeCursorRef = externalCursorRef ?? internalCursorRef
@@ -35,10 +64,21 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    const INK = inkChannel()
     if (!ctx) return
 
     let particles: TitleParticle[] = []
     let animId: number
+    let cancelled = false
+    let retryId: ReturnType<typeof setTimeout>
+
+    // Blueprint lens state
+    let hoverFrames = 0
+    let scatterT = 0
+    let blueprintT = 0
+    let lensX = -9999
+    let lensY = -9999
+    let buzzFrame = 0
 
     // Hoisted so draw() can access them for solid-text rendering
     let drawFont = ''
@@ -47,27 +87,45 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
     let drawLineH = 0
     let drawW = 0
     let drawH = 0
+    let drawTextX = 0
     let solidOpacity = 0
     let settledFrames = 0
 
     async function init() {
       if (!canvas || !ctx) return
 
-      await document.fonts.load("italic 80px 'Instrument Serif'")
+      // Never let a font CDN failure blank the headline — fall back to the
+      // generic serif and carry on rendering particles.
+      await document.fonts.load(displayFont(80)).catch(() => {})
+      if (cancelled) return
 
       const W = canvas.offsetWidth
+      // Canvas not laid out yet (e.g. loaded in a hidden/zero-width viewport) — retry until measurable
+      if (W === 0) {
+        retryId = setTimeout(init, 150)
+        return
+      }
       drawW = W
       // Pick line set based on viewport width
-      const lines = W < 500 ? LINES_MOBILE : LINES_DESKTOP
+      const lines = W < 500 ? linesMobile : linesDesktop
       drawLines = lines
 
       // Choose font size so the widest line fits with padding
       const testCtx = document.createElement('canvas').getContext('2d')!
       let fontSize = Math.min(W * 0.12, 110)
-      testCtx.font = `italic ${fontSize}px 'Instrument Serif'`
+      testCtx.font = displayFont(fontSize)
       const maxLineWidth = Math.max(...lines.map(l => testCtx.measureText(l).width))
       if (maxLineWidth > W * 0.9) {
         fontSize *= (W * 0.9) / maxLineWidth
+      }
+      fontSize *= fontScale
+
+      if (fontBoostPx) {
+        // Grow by the requested amount, then pull back if the widest line would overrun
+        fontSize += fontBoostPx
+        testCtx.font = displayFont(fontSize)
+        const boosted = Math.max(...lines.map(l => testCtx.measureText(l).width))
+        if (boosted > W * 0.98) fontSize *= (W * 0.98) / boosted
       }
 
       const lineH = fontSize * 1.15
@@ -84,22 +142,27 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       canvas.style.height = H + 'px'
       ctx.scale(dpr, dpr)
 
-      drawFont = `italic ${fontSize}px 'Instrument Serif'`
+      drawFont = displayFont(fontSize)
 
       // Render all lines to offscreen canvas
       const off = document.createElement('canvas')
       off.width = W
       off.height = H
       const offCtx = off.getContext('2d')!
+      // Alpha-sampling mask only — this colour is never displayed
       offCtx.fillStyle = 'white'
       offCtx.font = drawFont
-      offCtx.textAlign = 'center'
+      offCtx.textAlign = align
       offCtx.textBaseline = 'alphabetic'
+      // Left-aligned canvas text still carries each glyph's side bearing; cancel it so the
+      // title lines up with the HTML copy in the same column
+      const bearings = lines.map(l => offCtx.measureText(l).actualBoundingBoxLeft)
+      drawTextX = align === 'left' ? Math.max(...bearings) : W / 2
 
       const startY = fontSize * 0.5
       drawStartY = startY
       lines.forEach((line, i) => {
-        offCtx.fillText(line, W / 2, startY + i * lineH + fontSize)
+        offCtx.fillText(line, drawTextX, startY + i * lineH + fontSize)
       })
 
       const imgData = offCtx.getImageData(0, 0, W, H).data
@@ -141,8 +204,8 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       const cx = vx === -9999 ? -9999 : vx - canvasRect.left
       const cy = vy === -9999 ? -9999 : vy - canvasRect.top
 
-      // Cursor within canvas bounds triggers break-apart
-      const cursorOnCanvas = cx >= 0 && cx <= canvas.width && cy >= 0 && cy <= canvas.height
+      // Cursor within canvas bounds triggers break-apart (drawW/drawH are CSS px — canvas.width/height are device px)
+      const cursorOnCanvas = cx >= 0 && cx <= drawW && cy >= 0 && cy <= drawH
 
       // Sample 30 particles to check settlement (cheaper than checking all)
       let settledCount = 0
@@ -163,13 +226,27 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       }
 
       // solidOpacity: 0 = all particles, 1 = solid text
-      if (settledFrames > 50 && !cursorOnCanvas) {
-        solidOpacity = Math.min(1, solidOpacity + 0.025)
+      if (keepParticles) {
+        solidOpacity = 0
+      } else if (settledFrames > 12 && !cursorOnCanvas) {
+        solidOpacity = Math.min(1, solidOpacity + 0.06)
       } else {
         solidOpacity = Math.max(0, solidOpacity - 0.05)
       }
 
       const particleAlpha = 1 - solidOpacity
+
+      // Blueprint lens phases: buzz first, then resolve to blueprint while hovering
+      buzzFrame++
+      const buzzTick = buzzFrame % BUZZ_EVERY_N_FRAMES === 0
+      if (blueprintLens) {
+        hoverFrames = cursorOnCanvas ? hoverFrames + 1 : 0
+        if (cursorOnCanvas) { lensX = cx; lensY = cy }
+        const scatterTarget = cursorOnCanvas && hoverFrames < SCATTER_FRAMES ? 1 : 0
+        const blueprintTarget = cursorOnCanvas && hoverFrames >= SCATTER_FRAMES ? 1 : 0
+        scatterT += (scatterTarget - scatterT) * 0.12
+        blueprintT += (blueprintTarget - blueprintT) * 0.2
+      }
 
       for (const p of particles) {
         if (p.delay > 0) { p.delay--; continue }
@@ -195,6 +272,27 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
           p.vy += Math.sin(p.phase * 0.7) * 0.04
         }
 
+        // Held in particle form: a permanent low buzz so the type never reads as static
+        if (keepParticles && buzzTick && dist < 4) {
+          p.vx += (Math.random() - 0.5) * 0.55
+          p.vy += (Math.random() - 0.5) * 0.55
+        }
+
+        // Lens buzz phase: turbulence within the radius, strongest at the center
+        if (buzzTick && scatterT > 0.01 && cdist < LENS_RADIUS) {
+          const fall = 1 - cdist / LENS_RADIUS
+          p.vx += (Math.random() - 0.5) * 7 * scatterT * fall
+          p.vy += (Math.random() - 0.5) * 7 * scatterT * fall
+        }
+
+        // Buzzing noise ring circles the lens from the moment hover starts, fading with distance from the rim
+        const ringT = Math.max(scatterT, blueprintT)
+        if (buzzTick && ringT > 0.01 && cdist >= LENS_RADIUS && cdist < LENS_RADIUS + BUZZ_BAND) {
+          const fall = 1 - (cdist - LENS_RADIUS) / BUZZ_BAND
+          p.vx += (Math.random() - 0.5) * 6 * ringT * fall
+          p.vy += (Math.random() - 0.5) * 6 * ringT * fall
+        }
+
         p.vx += -dx * SPRING
         p.vy += -dy * SPRING
         p.vx *= FRICTION
@@ -207,14 +305,19 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
         // Skip rendering particles when fully solid and cursor away
         if (particleAlpha <= 0) continue
 
-        const drawOpacity = p.opacity * particleAlpha
+        let drawOpacity = p.opacity * particleAlpha
+        // Blueprint phase: particles inside the lens yield to the blueprint rendering
+        if (blueprintT > 0.01 && cdist < LENS_RADIUS) {
+          drawOpacity *= 1 - blueprintT * Math.min(1, (LENS_RADIUS - cdist) / 50)
+        }
+        if (drawOpacity <= 0.003) continue
 
         // Near-cursor glow
         const nearFactor = cdist < REPEL_RADIUS ? Math.max(0, 1 - cdist / REPEL_RADIUS) : 0
         if (nearFactor > 0) {
           const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5)
-          glow.addColorStop(0, `rgba(255,255,255,${nearFactor * 0.7 * drawOpacity})`)
-          glow.addColorStop(1, 'rgba(255,255,255,0)')
+          glow.addColorStop(0, `rgb(${INK} / ${nearFactor * 0.7 * drawOpacity})`)
+          glow.addColorStop(1, `rgb(${INK} / 0)`)
           ctx.beginPath()
           ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2)
           ctx.fillStyle = glow
@@ -223,7 +326,7 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${drawOpacity})`
+        ctx.fillStyle = `rgb(${INK} / ${drawOpacity})`
         ctx.fill()
       }
 
@@ -231,12 +334,64 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
       if (solidOpacity > 0 && drawFont) {
         ctx.save()
         ctx.font = drawFont
-        ctx.fillStyle = `rgba(255,255,255,${solidOpacity})`
-        ctx.textAlign = 'center'
+        ctx.fillStyle = `rgb(${INK} / ${solidOpacity})`
+        ctx.textAlign = align
         ctx.textBaseline = 'alphabetic'
         drawLines.forEach((line, i) => {
-          ctx.fillText(line, drawW / 2, drawStartY + i * drawLineH + drawLineH / 1.15)
+          ctx.fillText(line, drawTextX, drawStartY + i * drawLineH + drawLineH / 1.15)
         })
+        ctx.restore()
+      }
+
+      // Blueprint lens overlay — grid + thin outline letters, clipped to the lens circle
+      if (blueprintT > 0.01 && drawFont) {
+        const a = blueprintT
+        ctx.save()
+        ctx.beginPath()
+        ctx.arc(lensX, lensY, LENS_RADIUS, 0, Math.PI * 2)
+        ctx.clip()
+
+        // Faint grid, aligned to canvas origin so it doesn't swim with the cursor
+        ctx.lineWidth = 1
+        ctx.strokeStyle = `rgba(140,200,255,${0.09 * a})`
+        ctx.beginPath()
+        const gx0 = Math.floor((lensX - LENS_RADIUS) / LENS_GRID) * LENS_GRID
+        const gy0 = Math.floor((lensY - LENS_RADIUS) / LENS_GRID) * LENS_GRID
+        for (let gx = gx0; gx <= lensX + LENS_RADIUS; gx += LENS_GRID) {
+          ctx.moveTo(gx, lensY - LENS_RADIUS)
+          ctx.lineTo(gx, lensY + LENS_RADIUS)
+        }
+        for (let gy = gy0; gy <= lensY + LENS_RADIUS; gy += LENS_GRID) {
+          ctx.moveTo(lensX - LENS_RADIUS, gy)
+          ctx.lineTo(lensX + LENS_RADIUS, gy)
+        }
+        ctx.stroke()
+
+        // Crisp outline strokes of the letters underneath
+        ctx.font = drawFont
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'alphabetic'
+        ctx.strokeStyle = `rgba(165,215,255,${0.95 * a})`
+        drawLines.forEach((line, i) => {
+          ctx.strokeText(line, drawW / 2, drawStartY + i * drawLineH + drawLineH / 1.15)
+        })
+        ctx.restore()
+
+        // Lens ring + center crosshair
+        ctx.save()
+        ctx.lineWidth = 1
+        ctx.strokeStyle = `rgba(150,205,255,${0.4 * a})`
+        ctx.setLineDash([6, 5])
+        ctx.beginPath()
+        ctx.arc(lensX, lensY, LENS_RADIUS, 0, Math.PI * 2)
+        ctx.stroke()
+        ctx.setLineDash([])
+        ctx.beginPath()
+        ctx.moveTo(lensX - 8, lensY)
+        ctx.lineTo(lensX + 8, lensY)
+        ctx.moveTo(lensX, lensY - 8)
+        ctx.lineTo(lensX, lensY + 8)
+        ctx.stroke()
         ctx.restore()
       }
 
@@ -244,7 +399,14 @@ export default function ParticleTitle({ cursorRef: externalCursorRef }: Props) {
     }
 
     init()
-    return () => { cancelAnimationFrame(animId) }
+    return () => {
+      cancelled = true
+      clearTimeout(retryId)
+      cancelAnimationFrame(animId)
+    }
+    // linesDesktop/linesMobile/blueprintLens intentionally omitted: the async init isn't re-entrant,
+    // so text changes must remount the component (key) instead of re-running the effect
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCursorRef])
 
   return (

@@ -40,9 +40,9 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
             fontWeight: 500,
             letterSpacing: '0.11em',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.55)',
+            color: 'rgb(var(--ink) / 0.55)',
             marginBottom: '0.75rem',
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
           }}
         >
           {eyebrow}
@@ -52,12 +52,12 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
       <Wrap
         {...(animate ? { initial: { opacity: 0, y: 28 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.18, ease: EASE_OUT } } : {})}
         style={{
-          fontFamily: "'Source Serif 4', serif",
+          fontFamily: 'var(--font-display)',
           fontSize: 'clamp(2.75rem, 7vw, 5.5rem)',
           fontWeight: 300,
           letterSpacing: '-0.02em',
           lineHeight: 1.12,
-          color: 'white',
+          color: 'var(--ink-solid)',
           margin: '0 0 1rem 0',
           maxWidth: '32ch',
         }}
@@ -70,8 +70,8 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
         style={{
           fontSize: 'clamp(0.875rem, 1.6vw, 1.2rem)',
           fontWeight: 300,
-          color: 'rgba(255,255,255,0.65)',
-          fontFamily: "'Barlow', sans-serif",
+          color: 'rgb(var(--ink) / 0.65)',
+          fontFamily: 'var(--font-body)',
           margin: '0 0 1.4rem 0',
           maxWidth: '34rem',
           lineHeight: 1.5,
@@ -91,25 +91,25 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
           { label: 'Duration', value: data.duration },
         ]).map((meta) => (
           <div key={`${meta.label}-${meta.value}`} style={{ display: 'flex', gap: '0.35rem', alignItems: 'baseline' }}>
-            <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.85rem', fontWeight: 400, color: 'rgba(255,255,255,0.45)' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 400, color: 'rgb(var(--ink) / 0.45)' }}>
               {meta.label}
             </span>
-            <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.85rem', fontWeight: 500, color: 'rgba(255,255,255,0.88)' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)' }}>
               {meta.value}
             </span>
           </div>
         ))}
 
         {data.heroTools && data.heroTools.length > 0 && (
-          <div style={{ width: 1, height: '1.4rem', background: 'rgba(255,255,255,0.14)', alignSelf: 'center', flexShrink: 0 }} />
+          <div style={{ width: 1, height: '1.4rem', background: 'rgb(var(--ink) / 0.14)', alignSelf: 'center', flexShrink: 0 }} />
         )}
 
         {data.heroTools && data.heroTools.map((tool) => (
           <div key={tool.slug} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
-            <div style={{ width: 28, height: 28, borderRadius: '6px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: 28, height: 28, borderRadius: '6px', background: 'rgb(var(--ink) / 0.07)', border: '1px solid rgb(var(--ink) / 0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <img src={`/logos/${tool.slug}.${tool.ext ?? 'svg'}`} alt={tool.name} style={{ width: 16, height: 16, objectFit: 'contain', opacity: 0.75 }} />
             </div>
-            <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.6rem', fontWeight: 400, letterSpacing: '0.04em', color: 'rgba(255,255,255,0.38)', whiteSpace: 'nowrap' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.6rem', fontWeight: 400, letterSpacing: '0.04em', color: 'rgb(var(--ink) / 0.38)', whiteSpace: 'nowrap' }}>
               {tool.name}
             </span>
           </div>

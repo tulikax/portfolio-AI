@@ -1,33 +1,16 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
 import Navbar from './components/navbar'
-import HeroSection from './components/HeroSection'
-import AboutSection from './components/AboutSection'
-import WorkSection from './components/WorkSection'
-import ProcessSection from './components/ProcessSection'
-// import PlaygroundSection from './components/PlaygroundSection'
-import CTASection from './components/CTASection'
-import StackSection from './components/StackSection'
-import Footer from './components/Footer'
+import HomePage from './components/HomePage'
 import CaseStudyPage from './components/case-study/CaseStudyPage'
-import ProjectLoadingScreenDemo from './components/ProjectLoadingScreenDemo'
 
-function HomePage() {
-  return (
-    <div style={{ background: 'black', minHeight: '100vh' }}>
-      <main>
-        <HeroSection />
-        <WorkSection />
-        <AboutSection />
-        {/* <PlaygroundSection /> */}
-        <ProcessSection />
-        <StackSection />
-        <CTASection />
-      </main>
-      <Footer />
-    </div>
-  )
-}
+// Demo pages are dev-only: the routes are never registered in production builds,
+// so the URLs don't resolve on the deployed site
+const ProjectLoadingScreenDemo = lazy(() => import('./components/ProjectLoadingScreenDemo'))
+const HeroCopyDemo = lazy(() => import('./components/HeroCopyDemo'))
+// Lazy so three.js only enters the bundle for this route
+const DoorFeedDemoPage = lazy(() => import('./components/doorfeed-demo/DoorFeedDemoPage'))
 
 export default function App() {
   return (
@@ -35,11 +18,20 @@ export default function App() {
       <div className="grain-overlay" />
       <CustomCursor />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/work/:slug" element={<CaseStudyPage />} />
-        <Route path="/demo/loading" element={<ProjectLoadingScreenDemo />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/work/:slug" element={<CaseStudyPage />} />
+          {import.meta.env.DEV && (
+            <>
+              <Route path="/demo/loading" element={<ProjectLoadingScreenDemo />} />
+              <Route path="/demo/hero" element={<HeroCopyDemo />} />
+              {/* Three segments, so this outranks the /work/:slug case study route */}
+              <Route path="/work/doorfeed/demo" element={<DoorFeedDemoPage />} />
+            </>
+          )}
+        </Routes>
+      </Suspense>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -12,6 +13,22 @@ import dl1 from '../assets/Deloitte SS/Deloitte:phone screens.png'
 import dl2 from '../assets/Deloitte SS/Deloitte:sketches.png'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
+
+// Hover "dramatic focus" tunables
+const HOVER_SCALE = 1.05 // whole-card lift; 1 disables
+const MEDIA_HOVER_SCALE = 1.43 // extra zoom on the side media frames (multiplies HOVER_SCALE; net ≈ 1.5)
+const MEDIA_HOVER_INSET_PX = 25 // slide frames toward the card on hover so growth stays in the viewport
+const CARD_REST_MAX_W = 600 // text card width at rest
+const CARD_HOVER_MAX_W = 520 // narrower on hover — frames follow the edges in, covering less text
+const DIM_OPACITY = 0.45
+const DIM_BLUR_PX = 2.5 // 0 = opacity-only dim
+const FOCUS_TRANSITION = { duration: 0.35, ease: EASE_OUT }
+// Below this viewport width the side frames would clip the screen edges:
+// hide them and flip the card to its media on hover instead
+const FLIP_BELOW_PX = 1440
+const FLIP_TRANSITION = { duration: 0.5, ease: EASE_OUT }
+const canHover = typeof window !== 'undefined'
+  && window.matchMedia('(hover: hover) and (pointer: fine)').matches
 
 interface Role {
   number: string
@@ -70,26 +87,44 @@ const ROLES: Role[] = [
   },
 ]
 
-function MediaCard({ src }: { src: string }) {
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches)
+  useEffect(() => {
+    const mq = window.matchMedia(query)
+    const onChange = () => setMatches(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [query])
+  return matches
+}
+
+function MediaCard({ src, fluid }: { src: string; fluid?: boolean }) {
   const isVideo = /\.(mp4|webm|mov)$/i.test(src)
+  const mediaStyle = { width: fluid ? '100%' : '320px', height: 'auto', display: 'block', maxWidth: 'none' } as const
   return (
     <div style={{
       borderRadius: '1rem',
       overflow: 'hidden',
-      background: 'linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
-      border: '1px solid rgba(255,255,255,0.10)',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.08) inset',
+      background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
+      border: '1px solid rgb(var(--ink) / 0.10)',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 1px 0 rgb(var(--ink) / 0.08) inset',
       lineHeight: 0,
       flexShrink: 0,
     }}>
       {isVideo
-        ? <video src={src} autoPlay loop muted playsInline className="role-media-item" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />
-        : <img src={src} alt="" className="role-media-item" style={{ width: '320px', height: 'auto', display: 'block', maxWidth: 'none' }} />}
+        ? <video src={src} autoPlay loop muted playsInline className="role-media-item" style={mediaStyle} />
+        : <img src={src} alt="" className="role-media-item" style={mediaStyle} />}
     </div>
   )
 }
 
-function RoleCard({ role, index }: { role: Role; index: number }) {
+function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
+  role: Role
+  index: number
+  isHovered: boolean
+  isDimmed: boolean
+  onHoverChange: (hovered: boolean) => void
+}) {
   const navigate = useNavigate()
   const subsections = [
     role.drewMeIn ? { label: 'What drew me in', content: role.drewMeIn } : null,
@@ -97,14 +132,38 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
     { label: role.carriedLabel ?? 'What I carried forward', content: role.carried },
   ].filter(Boolean) as { label: string; content: string }[]
 
+  // Narrow desktops: side frames would clip the screen edges — flip the card to its media instead
+  const flipMode = useMediaQuery(`(max-width: ${FLIP_BELOW_PX - 1}px)`) && canHover
+  const flipped = flipMode && isHovered
+
   return (
     <motion.div
         initial={{ opacity: 0, y: 28 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, delay: index * 0.12, ease: EASE_OUT }}
-        style={{ display: 'flex', justifyContent: 'center' }}
+        style={{ display: 'flex', justifyContent: 'center', zIndex: isHovered ? 30 : 1 }}
       >
+        {/* Hover focus wrapper — scales the card + side frames together, dims siblings */}
+        <motion.div
+          animate={{
+            scale: isHovered ? HOVER_SCALE : 1,
+            maxWidth: isHovered ? CARD_HOVER_MAX_W : CARD_REST_MAX_W,
+            opacity: isDimmed ? DIM_OPACITY : 1,
+            filter: isDimmed ? `blur(${DIM_BLUR_PX}px)` : 'blur(0px)',
+          }}
+          transition={FOCUS_TRANSITION}
+          style={{ width: '100%', maxWidth: `${CARD_REST_MAX_W}px`, transformOrigin: 'center', perspective: '1400px' }}
+          onMouseEnter={() => { if (canHover) onHoverChange(true) }}
+          onMouseLeave={() => { if (canHover) onHoverChange(false) }}
+        >
+        {/* Flip container — hover detection lives on the (non-rotating) wrapper above,
+            because the rotation moves this element out from under the pointer mid-flip */}
+        <motion.div
+          animate={{ rotateY: flipped ? 180 : 0 }}
+          transition={FLIP_TRANSITION}
+          style={{ position: 'relative', transformStyle: 'preserve-3d' }}
+        >
         {/* Centre role card — fixed width, positioning parent for images */}
           <div
           className="role-card role-card-shell"
@@ -113,55 +172,57 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
           position: 'relative',
           width: '100%',
           maxWidth: '600px',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
           borderRadius: '1.5rem',
           padding: '1.75rem',
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))',
+          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02))',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
-          border: '1px solid rgba(255,255,255,0.09)',
-          boxShadow: '0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+          border: '1px solid rgb(var(--ink) / 0.09)',
+          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
           cursor: role.caseStudySlug ? 'pointer' : 'default',
           transition: 'box-shadow 250ms ease, border-color 250ms ease',
         }}
           onMouseEnter={e => {
             if (!role.caseStudySlug) return
             const el = e.currentTarget as HTMLDivElement
-            el.style.boxShadow = '0 1px 0 rgba(255,255,255,0.10) inset, 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.12)'
-            el.style.borderColor = 'rgba(255,255,255,0.16)'
+            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgb(var(--ink) / 0.12)'
+            el.style.borderColor = 'rgb(var(--ink) / 0.16)'
           }}
           onMouseLeave={e => {
             if (!role.caseStudySlug) return
             const el = e.currentTarget as HTMLDivElement
-            el.style.boxShadow = '0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.5)'
-            el.style.borderColor = 'rgba(255,255,255,0.09)'
+            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)'
+            el.style.borderColor = 'rgb(var(--ink) / 0.09)'
           }}
         >
           {/* Shimmer */}
           <div style={{
             position: 'absolute', top: 0, left: '1.5rem', right: '1.5rem', height: '1px',
-            background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent)',
+            background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.18), transparent)',
             pointerEvents: 'none',
           }} />
 
           <span style={{
             position: 'absolute', top: '1.5rem', right: '1.75rem',
-            fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-            color: 'rgba(255,255,255,0.20)', fontSize: '0.75rem', letterSpacing: '0.05em',
+            fontFamily: 'var(--font-body)', fontWeight: 300,
+            color: 'rgb(var(--ink) / 0.20)', fontSize: '0.75rem', letterSpacing: '0.05em',
           }}>{role.number}</span>
 
           <div style={{ marginBottom: '0.25rem' }}>
-            <span className="role-card-title" style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 500, color: 'white', fontSize: '1.125rem' }}>
+            <span className="role-card-title" style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: 'var(--ink-solid)', fontSize: '1rem' }}>
               {role.title}
             </span>
             {' '}
-            <span className="role-card-title" style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, color: 'rgba(255,255,255,0.55)', fontSize: '1.125rem' }}>
+            <span className="role-card-title" style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', fontSize: '1rem' }}>
               @ {role.company}
             </span>
           </div>
 
           <p className="role-card-duration" style={{
-            fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-            color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem',
+            fontFamily: 'var(--font-body)', fontWeight: 300,
+            color: 'rgb(var(--ink) / 0.35)', fontSize: '0.7rem',
             letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1.25rem',
           }}>{role.duration}</p>
 
@@ -169,16 +230,16 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
             <div key={sub.label} className="role-card-sub" style={{
               paddingBottom: i < subsections.length - 1 ? '1rem' : 0,
               marginBottom: i < subsections.length - 1 ? '1rem' : 0,
-              borderBottom: i < subsections.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+              borderBottom: i < subsections.length - 1 ? '1px solid rgb(var(--ink) / 0.06)' : 'none',
             }}>
               <p style={{
-                fontFamily: "'Barlow', sans-serif", fontWeight: 500,
-                color: 'rgba(255,255,255,0.40)', fontSize: '0.7rem',
+                fontFamily: 'var(--font-body)', fontWeight: 500,
+                color: 'rgb(var(--ink) / 0.40)', fontSize: '0.65rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.25rem',
               }}>{sub.label}</p>
               <p className="role-card-body" style={{
-                fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-                color: 'rgba(255,255,255,0.65)', fontSize: '0.875rem', lineHeight: 1.65,
+                fontFamily: 'var(--font-body)', fontWeight: 300,
+                color: 'rgb(var(--ink) / 0.65)', fontSize: '0.8rem', lineHeight: 1.6,
               }}>{sub.content}</p>
             </div>
           ))}
@@ -195,8 +256,8 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
             justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem',
           }}>
             <p style={{
-              fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-              color: 'rgba(255,255,255,0.30)', fontSize: '0.75rem',
+              fontFamily: 'var(--font-body)', fontWeight: 300,
+              color: 'rgb(var(--ink) / 0.30)', fontSize: '0.7rem',
               letterSpacing: '0.12em', textTransform: 'uppercase',
             }}>{role.skills.join(' · ')}</p>
 
@@ -206,7 +267,7 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
                 className="btn-press role-cta"
                 onClick={e => e.stopPropagation()}
                 style={{
-                  fontFamily: "'Barlow', sans-serif", fontWeight: 500,
+                  fontFamily: 'var(--font-body)', fontWeight: 500,
                   fontSize: '0.78rem', letterSpacing: '0.06em',
                   textDecoration: 'none',
                   display: 'inline-flex', alignItems: 'center', gap: '0.375rem',
@@ -236,50 +297,109 @@ function RoleCard({ role, index }: { role: Role; index: number }) {
           </div>
 
           {/* Left image — CSS hover via .role-card:hover .role-image */}
+          {!flipMode && (
           <div
             className="role-image role-image-left"
             style={{
               position: 'absolute',
-              right: 'calc(100% + 24px)',
+              right: 'calc(100% + 79px)',
               top: '50%',
               width: '320px',
               zIndex: 10,
             }}
           >
-            <MediaCard src={role.images[0]} />
+            {/* Growth splits both ways; the inward slide keeps the outer edge inside the viewport */}
+            <motion.div
+              animate={{
+                scale: isHovered ? MEDIA_HOVER_SCALE : 1,
+                x: isHovered ? MEDIA_HOVER_INSET_PX : 0,
+              }}
+              transition={FOCUS_TRANSITION}
+              style={{ transformOrigin: 'center' }}
+            >
+              <MediaCard src={role.images[0]} />
+            </motion.div>
           </div>
+          )}
 
           {/* Right image */}
+          {!flipMode && (
           <div
             className="role-image role-image-right"
             style={{
               position: 'absolute',
-              left: 'calc(100% + 24px)',
+              left: 'calc(100% + 79px)',
               top: '50%',
               width: '320px',
               zIndex: 10,
             }}
           >
-            <MediaCard src={role.images[1]} />
+            <motion.div
+              animate={{
+                scale: isHovered ? MEDIA_HOVER_SCALE : 1,
+                x: isHovered ? -MEDIA_HOVER_INSET_PX : 0,
+              }}
+              transition={FOCUS_TRANSITION}
+              style={{ transformOrigin: 'center' }}
+            >
+              <MediaCard src={role.images[1]} />
+            </motion.div>
           </div>
+          )}
         </div>
+
+        {/* Back face — media shown in the card's footprint on narrow desktops */}
+        {flipMode && (
+          <div
+            onClick={() => role.caseStudySlug && navigate(`/work/${role.caseStudySlug}`)}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              transform: 'rotateY(180deg)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              borderRadius: '1.5rem',
+              padding: '1.75rem',
+              background: 'linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02))',
+              backdropFilter: 'blur(40px)',
+              WebkitBackdropFilter: 'blur(40px)',
+              border: '1px solid rgb(var(--ink) / 0.09)',
+              boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              overflow: 'hidden',
+              cursor: role.caseStudySlug ? 'pointer' : 'default',
+            }}
+          >
+            {role.images.map((src, idx) => (
+              <div key={idx} style={{ flex: 1, minWidth: 0 }}>
+                <MediaCard src={src} fluid />
+              </div>
+            ))}
+          </div>
+        )}
+        </motion.div>
+        </motion.div>
     </motion.div>
   )
 }
 
 export default function WorkSection() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+
   return (
     <section id="work" style={{ background: 'black', paddingTop: '5rem', paddingBottom: '10rem' }}>
-      <div style={{ textAlign: 'center', marginBottom: '1.5rem', padding: '0 1.5rem' }}>
+      <div style={{ textAlign: 'center', marginBottom: '4rem', padding: '0 1.5rem' }}>
         <motion.h2
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Source Serif 4', serif", fontStyle: 'italic',
+            fontFamily: 'var(--font-display)', fontStyle: 'italic',
             fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em',
-            lineHeight: 0.92, color: 'white', margin: '0', fontWeight: 400,
+            lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0', fontWeight: 400,
           }}
         >Things I've done.</motion.h2>
       </div>
@@ -293,7 +413,14 @@ export default function WorkSection() {
         padding: '0 1.5rem',
       }}>
         {ROLES.map((role, i) => (
-          <RoleCard key={role.number} role={role} index={i} />
+          <RoleCard
+            key={role.number}
+            role={role}
+            index={i}
+            isHovered={hoveredIndex === i}
+            isDimmed={hoveredIndex !== null && hoveredIndex !== i}
+            onHoverChange={hovered => setHoveredIndex(hovered ? i : null)}
+          />
         ))}
       </div>
     </section>

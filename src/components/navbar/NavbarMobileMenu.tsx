@@ -31,17 +31,17 @@ export function NavbarMobileMenu({ open, links, onClose }: NavbarMobileMenuProps
             href={link.href}
             onClick={onClose}
             style={{
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontWeight: 400,
               fontSize: '1rem',
-              color: 'rgba(255,255,255,0.80)',
+              color: 'rgb(var(--ink) / 0.80)',
               textDecoration: 'none',
               padding: '0.75rem 1rem',
               borderRadius: '1rem',
               transition: 'background 150ms ease, color 150ms ease',
             }}
             onTouchStart={(e) => {
-              ;(e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.08)'
+              ;(e.currentTarget as HTMLAnchorElement).style.background = 'rgb(var(--ink) / 0.08)'
             }}
             onTouchEnd={(e) => {
               ;(e.currentTarget as HTMLAnchorElement).style.background = 'transparent'
@@ -51,7 +51,7 @@ export function NavbarMobileMenu({ open, links, onClose }: NavbarMobileMenuProps
           </a>
         ))}
 
-        <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '0.25rem 0.5rem' }} />
+        <div style={{ height: '1px', background: 'rgb(var(--ink) / 0.08)', margin: '0.25rem 0.5rem' }} />
 
         <NavbarCvLink variant="menu" onNavigate={onClose} />
       </GlassPanel>

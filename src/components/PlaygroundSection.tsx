@@ -59,11 +59,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           padding: '1.75rem',
           position: 'relative',
           overflow: 'hidden',
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
+          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
-          border: '1px solid rgba(255,255,255,0.09)',
-          boxShadow: '0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+          border: '1px solid rgb(var(--ink) / 0.09)',
+          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
           cursor: 'default',
           transition: 'transform 200ms cubic-bezier(0.23,1,0.32,1)',
         }}
@@ -76,7 +76,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             left: '1.5rem',
             right: '1.5rem',
             height: '1px',
-            background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent)',
+            background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.18), transparent)',
           }}
         />
 
@@ -86,8 +86,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             width: '100%',
             height: '140px',
             borderRadius: '0.875rem',
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px dashed rgba(255,255,255,0.10)',
+            background: 'rgb(var(--ink) / 0.03)',
+            border: '1px dashed rgb(var(--ink) / 0.10)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -99,16 +99,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               style={{
                 width: '1.5rem',
                 height: '1.5rem',
-                color: 'rgba(255,255,255,0.20)',
+                color: 'rgb(var(--ink) / 0.20)',
                 margin: '0 auto 0.5rem',
                 display: 'block',
               }}
             />
             <p
               style={{
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontWeight: 300,
-                color: 'rgba(255,255,255,0.20)',
+                color: 'rgb(var(--ink) / 0.20)',
                 fontSize: '0.75rem',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
@@ -122,9 +122,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {/* Title */}
         <h3
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 500,
-            color: 'white',
+            color: 'var(--ink-solid)',
             fontSize: '1rem',
             margin: '0 0 0.5rem',
           }}
@@ -135,9 +135,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {/* Description */}
         <p
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.60)',
+            color: 'rgb(var(--ink) / 0.60)',
             fontSize: '0.875rem',
             lineHeight: 1.6,
             margin: '0 0 1rem',
@@ -161,9 +161,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               <span
                 key={tag}
                 style={{
-                  fontFamily: "'Barlow', sans-serif",
+                  fontFamily: 'var(--font-body)',
                   fontWeight: 300,
-                  color: 'rgba(255,255,255,0.30)',
+                  color: 'rgb(var(--ink) / 0.30)',
                   fontSize: '0.7rem',
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
@@ -180,18 +180,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontWeight: 300,
-              color: 'rgba(255,255,255,0.35)',
+              color: 'rgb(var(--ink) / 0.35)',
               fontSize: '0.75rem',
               padding: 0,
               transition: 'color 200ms ease',
             }}
             onMouseEnter={(e) => {
-              ;(e.target as HTMLButtonElement).style.color = 'rgba(255,255,255,0.7)'
+              ;(e.target as HTMLButtonElement).style.color = 'rgb(var(--ink) / 0.7)'
             }}
             onMouseLeave={(e) => {
-              ;(e.target as HTMLButtonElement).style.color = 'rgba(255,255,255,0.35)'
+              ;(e.target as HTMLButtonElement).style.color = 'rgb(var(--ink) / 0.35)'
             }}
           >
             Try it ↗
@@ -237,7 +237,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   width: '3rem',
                   height: '0.375rem',
                   borderRadius: '9999px',
-                  background: 'rgba(255,255,255,0.20)',
+                  background: 'rgb(var(--ink) / 0.20)',
                   margin: '0 auto 1.5rem',
                 }}
               />
@@ -248,8 +248,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   width: '100%',
                   height: '320px',
                   borderRadius: '0.875rem',
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px dashed rgba(255,255,255,0.10)',
+                  background: 'rgb(var(--ink) / 0.03)',
+                  border: '1px dashed rgb(var(--ink) / 0.10)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -261,16 +261,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     style={{
                       width: '2rem',
                       height: '2rem',
-                      color: 'rgba(255,255,255,0.20)',
+                      color: 'rgb(var(--ink) / 0.20)',
                       margin: '0 auto 0.75rem',
                       display: 'block',
                     }}
                   />
                   <p
                     style={{
-                      fontFamily: "'Barlow', sans-serif",
+                      fontFamily: 'var(--font-body)',
                       fontWeight: 300,
-                      color: 'rgba(255,255,255,0.25)',
+                      color: 'rgb(var(--ink) / 0.25)',
                       fontSize: '0.8rem',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
@@ -283,10 +283,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
               <h3
                 style={{
-                  fontFamily: "'Instrument Serif', serif",
+                  fontFamily: 'var(--font-display)',
                   fontStyle: 'italic',
                   fontSize: '1.5rem',
-                  color: 'white',
+                  color: 'var(--ink-solid)',
                   margin: '0 0 0.75rem',
                   fontWeight: 400,
                 }}
@@ -295,9 +295,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </h3>
               <p
                 style={{
-                  fontFamily: "'Barlow', sans-serif",
+                  fontFamily: 'var(--font-body)',
                   fontWeight: 300,
-                  color: 'rgba(255,255,255,0.70)',
+                  color: 'rgb(var(--ink) / 0.70)',
                   fontSize: '1rem',
                   lineHeight: 1.75,
                 }}
@@ -332,12 +332,12 @@ export default function PlaygroundSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Instrument Serif', serif",
+            fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
             fontSize: 'clamp(2rem, 5vw, 3.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.92,
-            color: 'white',
+            color: 'var(--ink-solid)',
             margin: '0 0 1.25rem',
             fontWeight: 400,
           }}
@@ -352,9 +352,9 @@ export default function PlaygroundSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.60)',
+            color: 'rgb(var(--ink) / 0.60)',
             fontSize: '1rem',
             maxWidth: '36rem',
             margin: '0 auto',
@@ -369,9 +369,9 @@ export default function PlaygroundSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.24, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.38)',
+            color: 'rgb(var(--ink) / 0.38)',
             fontSize: '0.9rem',
             maxWidth: '36rem',
             margin: '0.75rem auto 0',

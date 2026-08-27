@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Barlow:wght@300;400;500;600&display=swap');
-
+/* Fonts load from index.html (<link rel="preconnect"> + stylesheet) */
 @import "tailwindcss";
 
 html {
@@ -7,12 +6,25 @@ html {
 }
 
 @theme inline {
-  --font-heading: 'Source Serif 4', serif;
+  --font-heading: 'Bodoni Moda', serif;
   --font-body: 'Barlow', sans-serif;
   --font-sans: 'Barlow', sans-serif;
 }
 
 :root {
+  /* ─── Typography tokens — the only place font families are named.
+     (Exception: canvas code in ParticleTitle/ProjectLoadingScreen needs
+     literal family names; keep those in sync with --font-display.) ─── */
+  --font-display: 'Bodoni Moda', serif;
+  --font-body: 'Barlow', sans-serif;
+
+  /* ─── Colour channels — flip these two for light mode.
+     --ink is the text/foreground RGB channel, used as rgb(var(--ink) / <alpha>).
+     Canvas particle colours are literal and need their own theme hook. ─── */
+  --ink: 255 255 255;
+  --ink-solid: rgb(var(--ink));
+  --surface: 0 0 0;
+
   --background: 0 0% 0%;
   --foreground: 0 0% 100%;
   --muted-foreground: 0 0% 100%;
@@ -48,10 +60,10 @@ html {
 }
 
 body {
-  font-family: 'Barlow', sans-serif;
+  font-family: var(--font-body);
   font-weight: 300;
-  color: white;
-  background: black;
+  color: var(--ink-solid);
+  background: rgb(var(--surface));
   overflow-x: hidden;
   margin: 0;
   cursor: none;
@@ -76,8 +88,8 @@ a, button, [role="button"], input, select, textarea, label {
  */
 
 .liquid-glass {
-  --glass-fill: rgba(255, 255, 255, 0.12);
-  --glass-fill-strong: rgba(255, 255, 255, 0.18);
+  --glass-fill: rgb(var(--ink) / 0.12);
+  --glass-fill-strong: rgb(var(--ink) / 0.18);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -93,29 +105,29 @@ a, button, [role="button"], input, select, textarea, label {
   border-radius: inherit;
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(255, 255, 255, 0.08) 100%
+    rgb(var(--ink) / 0.14) 0%,
+    rgb(var(--ink) / 0.08) 100%
   );
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 1px rgb(var(--ink) / 0.12);
   pointer-events: none;
 }
 
 /* Navbar pill — real fill on the element (no ::before ring / ::after blur layer) */
 .nav-glass-pill {
-  background-color: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgb(var(--ink) / 0.22);
+  border: 1px solid rgb(var(--ink) / 0.2);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 1px 0 rgb(var(--ink) / 0.14),
     0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .nav-glass-pill {
-    background-color: rgba(255, 255, 255, 0.28);
+    background-color: rgb(var(--ink) / 0.28);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -130,12 +142,12 @@ a, button, [role="button"], input, select, textarea, label {
   padding: 1.4px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.15) 20%,
-    rgba(255, 255, 255, 0.00) 40%,
-    rgba(255, 255, 255, 0.00) 60%,
-    rgba(255, 255, 255, 0.15) 80%,
-    rgba(255, 255, 255, 0.45) 100%
+    rgb(var(--ink) / 0.45) 0%,
+    rgb(var(--ink) / 0.15) 20%,
+    rgb(var(--ink) / 0.00) 40%,
+    rgb(var(--ink) / 0.00) 60%,
+    rgb(var(--ink) / 0.15) 80%,
+    rgb(var(--ink) / 0.45) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -158,16 +170,16 @@ a, button, [role="button"], input, select, textarea, label {
     -webkit-backdrop-filter: none;
     background: linear-gradient(
       145deg,
-      rgba(255, 255, 255, 0.22) 0%,
-      rgba(255, 255, 255, 0.14) 100%
+      rgb(var(--ink) / 0.22) 0%,
+      rgb(var(--ink) / 0.14) 100%
     );
   }
 
 }
 
 .liquid-glass-strong {
-  --glass-fill: rgba(255, 255, 255, 0.10);
-  --glass-fill-strong: rgba(255, 255, 255, 0.16);
+  --glass-fill: rgb(var(--ink) / 0.10);
+  --glass-fill-strong: rgb(var(--ink) / 0.16);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -182,12 +194,12 @@ a, button, [role="button"], input, select, textarea, label {
   border-radius: inherit;
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    rgba(255, 255, 255, 0.05) 100%
+    rgb(var(--ink) / 0.12) 0%,
+    rgb(var(--ink) / 0.05) 100%
   );
   backdrop-filter: blur(50px) saturate(150%);
   -webkit-backdrop-filter: blur(50px) saturate(150%);
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgb(var(--ink) / 0.15);
   pointer-events: none;
 }
 
@@ -199,7 +211,7 @@ a, button, [role="button"], input, select, textarea, label {
   .liquid-glass-strong::after {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: rgba(255, 255, 255, 0.16);
+    background: rgb(var(--ink) / 0.16);
   }
 }
 
@@ -212,12 +224,12 @@ a, button, [role="button"], input, select, textarea, label {
   padding: 1.4px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.50) 0%,
-    rgba(255, 255, 255, 0.20) 20%,
-    rgba(255, 255, 255, 0.00) 40%,
-    rgba(255, 255, 255, 0.00) 60%,
-    rgba(255, 255, 255, 0.20) 80%,
-    rgba(255, 255, 255, 0.50) 100%
+    rgb(var(--ink) / 0.50) 0%,
+    rgb(var(--ink) / 0.20) 20%,
+    rgb(var(--ink) / 0.00) 40%,
+    rgb(var(--ink) / 0.00) 60%,
+    rgb(var(--ink) / 0.20) 80%,
+    rgb(var(--ink) / 0.50) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -277,10 +289,10 @@ a, button, [role="button"], input, select, textarea, label {
 
 .section-badge {
   display: inline-block;
-  font-family: 'Barlow', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 500;
-  color: white;
+  color: var(--ink-solid);
   margin-bottom: 1rem;
   padding: 0.25rem 0.875rem;
   border-radius: 9999px;
@@ -502,7 +514,7 @@ a, button, [role="button"], input, select, textarea, label {
   display: inline-block;
   width: 1.5px;
   height: 1em;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgb(var(--ink) / 0.55);
   margin-left: 1px;
   vertical-align: text-bottom;
   border-radius: 1px;
@@ -516,4 +528,35 @@ a, button, [role="button"], input, select, textarea, label {
 @media (max-width: 640px) {
   .floating-cards-desktop { display: none; }
   .floating-cards-mobile { display: contents; }
+}
+
+/* Typed hero copy: the full line is laid out up front and each character softens in,
+   so letters appear in place instead of shunting the line sideways */
+.hero-char {
+  transition: opacity 420ms cubic-bezier(0.23, 1, 0.32, 1),
+              filter 420ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-char { transition: none; }
+}
+
+/* Primary hero CTA — soft halo that lifts on hover */
+.cta-glow {
+  box-shadow:
+    0 0 0 1px rgb(var(--ink) / 0.10),
+    0 6px 26px rgb(var(--ink) / 0.14),
+    0 0 34px rgb(var(--ink) / 0.10);
+  transition: box-shadow 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cta-glow:hover {
+  box-shadow:
+    0 0 0 1px rgb(var(--ink) / 0.20),
+    0 8px 32px rgb(var(--ink) / 0.24),
+    0 0 46px rgb(var(--ink) / 0.20);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-glow { transition: none; }
 }

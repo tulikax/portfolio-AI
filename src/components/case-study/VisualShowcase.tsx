@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import type { VisualBlock, CaseStudyImage } from '../../types/caseStudy'
+import { useLightbox } from './LightboxContext'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -15,7 +16,7 @@ function isVideo(src: string) {
   return /\.(mp4|webm|mov)$/i.test(src)
 }
 
-function MediaInner({ img, fixedHeight, style }: { img: CaseStudyImage; fixedHeight?: boolean; style?: React.CSSProperties }) {
+function MediaInner({ img, fixedHeight, style, onImageClick }: { img: CaseStudyImage; fixedHeight?: boolean; style?: React.CSSProperties; onImageClick?: () => void }) {
   return isVideo(img.src) ? (
     <video
       src={img.src}
@@ -29,12 +30,14 @@ function MediaInner({ img, fixedHeight, style }: { img: CaseStudyImage; fixedHei
     <img
       src={img.src}
       alt={img.alt}
-      style={{ width: '100%', height: fixedHeight ? '100%' : 'auto', objectFit: fixedHeight ? 'cover' : undefined, display: 'block', ...style }}
+      onClick={onImageClick}
+      style={{ width: '100%', height: fixedHeight ? '100%' : 'auto', objectFit: fixedHeight ? 'cover' : undefined, display: 'block', cursor: onImageClick ? 'zoom-in' : undefined, ...style }}
     />
   )
 }
 
 function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: number; cardHeight?: string }) {
+  const { openLightbox } = useLightbox()
   return (
     <motion.div
       initial={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -47,21 +50,21 @@ function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: num
           borderRadius: '1.25rem',
           overflow: 'hidden',
           border: 'none',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
-          background: 'rgba(255,255,255,0.03)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgb(var(--ink) / 0.06) inset',
+          background: 'rgb(var(--ink) / 0.03)',
           lineHeight: 0,
           height: cardHeight,
         }}
       >
-        <MediaInner img={img} fixedHeight={!!cardHeight} />
+        <MediaInner img={img} fixedHeight={!!cardHeight} onImageClick={isVideo(img.src) ? undefined : () => openLightbox(img.src, img.alt)} />
       </div>
       {img.caption && (
         <p
           style={{
             fontSize: '0.78rem',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.38)',
-            fontFamily: "'Barlow', sans-serif",
+            color: 'rgb(var(--ink) / 0.38)',
+            fontFamily: 'var(--font-body)',
             marginTop: '0.75rem',
             lineHeight: 1.5,
           }}
@@ -75,6 +78,7 @@ function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: num
 
 /** Snap-scrollable carousel card — uniform height, shows peek of next */
 function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
+  const { openLightbox } = useLightbox()
   return (
     <motion.div
       initial={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -88,16 +92,16 @@ function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
         borderRadius: '1.25rem',
         overflow: 'hidden',
         height: '100%',
-        boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
+        boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgb(var(--ink) / 0.06) inset',
       }}
     >
-      <MediaInner img={img} fixedHeight style={{ height: '100%', objectFit: 'contain', transform: 'scale(0.95)', transformOrigin: 'center center' }} />
+      <MediaInner img={img} fixedHeight style={{ height: '100%', objectFit: 'contain', transform: 'scale(0.95)', transformOrigin: 'center center' }} onImageClick={isVideo(img.src) ? undefined : () => openLightbox(img.src, img.alt)} />
       {img.caption && (
         <p style={{
           fontSize: '0.78rem',
           fontWeight: 300,
-          color: 'rgba(255,255,255,0.38)',
-          fontFamily: "'Barlow', sans-serif",
+          color: 'rgb(var(--ink) / 0.38)',
+          fontFamily: 'var(--font-body)',
           marginTop: '0.75rem',
           lineHeight: 1.5,
           padding: '0 0.25rem',
@@ -111,6 +115,7 @@ function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
 
 /** Image pans right→left as you scroll past it */
 function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
+  const { openLightbox } = useLightbox()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -132,15 +137,15 @@ function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
           borderRadius: '1.25rem',
           overflow: 'hidden',
           border: 'none',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.06) inset',
-          background: 'rgba(255,255,255,0.03)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgb(var(--ink) / 0.06) inset',
+          background: 'rgb(var(--ink) / 0.03)',
           lineHeight: 0,
           // Fixed viewport height so overflow crops cleanly
           height: 'clamp(320px, 48vw, 680px)',
         }}
       >
         <motion.div style={{ x, height: '100%', width: '140%' }}>
-          <MediaInner img={img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <MediaInner img={img} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onImageClick={isVideo(img.src) ? undefined : () => openLightbox(img.src, img.alt)} />
         </motion.div>
       </div>
       {img.caption && (
@@ -148,8 +153,8 @@ function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
           style={{
             fontSize: '0.78rem',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.38)',
-            fontFamily: "'Barlow', sans-serif",
+            color: 'rgb(var(--ink) / 0.38)',
+            fontFamily: 'var(--font-body)',
             marginTop: '0.75rem',
             lineHeight: 1.5,
           }}
@@ -184,8 +189,8 @@ export default function VisualShowcase({ block }: Props) {
             fontWeight: 500,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.35)',
-            fontFamily: "'Barlow', sans-serif",
+            color: 'rgb(var(--ink) / 0.35)',
+            fontFamily: 'var(--font-body)',
             marginBottom: '1.25rem',
           }}
         >

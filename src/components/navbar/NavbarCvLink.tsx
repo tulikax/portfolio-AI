@@ -21,13 +21,13 @@ export function NavbarCvLink({ variant, onNavigate }: NavbarCvLinkProps) {
           : 'btn-press flex items-center justify-center gap-1.5'
       }
       style={{
-        background: 'white',
+        background: 'var(--ink-solid)',
         color: 'black',
         borderRadius: isPill ? '9999px' : '1rem',
         padding: isPill ? '0.375rem 1.25rem' : '0.75rem 1rem',
         fontSize: isPill ? '0.875rem' : '0.95rem',
         fontWeight: 500,
-        fontFamily: "'Barlow', sans-serif",
+        fontFamily: 'var(--font-body)',
         textDecoration: 'none',
         alignItems: 'center',
         gap: isPill ? '0.25rem' : '0.375rem',
