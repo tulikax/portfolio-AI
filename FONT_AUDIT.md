@@ -52,9 +52,24 @@ canvas `ctx.font` can't read CSS variables.)
   optical axis) while the site uses roughly two weights and mostly italic.
 - Barlow 600 loads for 3 uses.
 
-## 3. Recommendation
+## 3. Decision (implemented in `54975c3`)
 
-### Option A — Unify on the Instrument family (recommended)
+**Shipped: Bodoni Moda as the single display face, Barlow retained for body.**
+
+Both serifs (Instrument Serif, Source Serif 4) were collapsed onto Bodoni Moda,
+so every heading from the hero particle title to case-study titles now speaks in
+one voice. Bodoni Moda is a didone — high stroke contrast, editorial lineage —
+which gives the display role far more personality than Source Serif 4 had, and it
+sets up the light theme well (didones render best dark-on-light).
+
+Barlow stays as the body face for now. F2 (Barlow as a filler choice) is
+therefore still open; the tokenisation means changing it later is a one-line edit
+in `:root`, so it can be revisited without another sweep. The mono idea for
+micro-labels is also still on the table and would address F3.
+
+The options below are kept as the record of what was considered.
+
+### Option A — Unify on the Instrument family
 
 The hero already made the site's best typographic decision. Extend it.
 
@@ -90,6 +105,10 @@ sub-0.8rem label from 300 to 400, and do the §4 fixes. The site gets cheaper an
 coherent without changing its look.
 
 ## 4. Fixes to make regardless of option
+
+**Status: 1, 2, 3 and 5 are done in `54975c3`. Item 4 (minimum weight 400 below
+0.8rem) is still open — see the light-mode plan, which folds it into the semantic
+alpha/weight tokens rather than editing 77 call sites.**
 
 1. **Load fonts from `index.html`**, not CSS `@import`:
    ```html
