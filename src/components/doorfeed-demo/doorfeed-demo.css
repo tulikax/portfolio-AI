@@ -1,0 +1,170 @@
+/*
+ * Responsive adjustments for the DoorFeed demo page.
+ *
+ * Everything else on this page is inline-styled to match the site's existing
+ * case-study components; these rules live in CSS because they're media queries
+ * and pseudo-class hovers, which inline styles can't express.
+ */
+
+/* Scroll cue — a highlight travelling down a hairline */
+.df-scroll-bar {
+  position: relative;
+  overflow: hidden;
+  width: 1px;
+  height: 2.25rem;
+  background: rgb(var(--ink) / 0.18);
+}
+
+.df-scroll-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: rgb(var(--ink) / 0.9);
+  animation: df-slide 2s ease-in-out infinite;
+}
+
+@keyframes df-slide {
+  from { top: -40%; }
+  to   { top: 100%; }
+}
+
+/*
+ * Before/after handle hint — pulses until the reader takes the control over,
+ * so the affordance is visible without a caption telling them to drag.
+ */
+.df-slider-hint {
+  animation: df-slider-hint 2.2s ease-in-out infinite;
+}
+
+@keyframes df-slider-hint {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgb(var(--ink) / 0.32),
+      0 0 12px 2px rgb(var(--ink) / 0.16);
+  }
+  50% {
+    box-shadow:
+      0 0 0 11px rgb(var(--ink) / 0),
+      0 0 24px 6px rgb(var(--ink) / 0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .df-slider-hint {
+    animation: none;
+  }
+}
+
+/* Live status dot */
+.df-pulse {
+  animation: df-pulse 2s ease-in-out infinite;
+}
+
+@keyframes df-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .df-scroll-bar::after,
+  .df-pulse {
+    animation: none;
+  }
+}
+
+/* Card hover lift — pointer devices only, matching the site's .card-hover rule */
+@media (hover: hover) and (pointer: fine) {
+  .df-cell {
+    transition: background 0.4s var(--ease-out);
+  }
+  .df-cell:hover {
+    background: rgb(var(--ink) / 0.05) !important;
+  }
+}
+
+/*
+ * Alternating rounds collapse to a single column, copy above media, with the
+ * explicit grid placement cleared so DOM order takes over.
+ */
+@media (max-width: 900px) {
+  .df-round-alt {
+    grid-template-columns: 1fr !important;
+    gap: 1.75rem !important;
+    padding: 2.5rem 0 !important;
+  }
+
+  .df-round-alt > * {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+}
+
+/* Media grids collapse to a single column before their cells get too narrow */
+@media (max-width: 700px) {
+  .df-media-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/*
+ * The diagonal collage only works while there's width to overlap into. Below
+ * that it becomes a plain stack, which is legible where the overlap would just
+ * be two thumbnails on top of each other.
+ */
+@media (max-width: 700px) {
+  .df-collage {
+    aspect-ratio: auto !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .df-collage > * {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+  }
+}
+
+/*
+ * Stacked screens bleed 20% past the text column so dense UI screenshots read
+ * at a usable size. Reverts once the viewport can no longer spare the gutters.
+ */
+.df-media-wide {
+  width: 120%;
+  margin-left: -10%;
+}
+
+@media (max-width: 1100px) {
+  .df-media-wide {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Chapter number stacks above the title rather than sitting in a gutter */
+  .df-chapter-head {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+
+  /* Round markers stack above their content rather than sitting in a gutter */
+  .df-round {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Accordion bodies align flush left once the index gutter is too tight */
+  .df-dive-body {
+    padding-left: 0 !important;
+  }
+
+  .df-footer {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+}
