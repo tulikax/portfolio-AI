@@ -4,6 +4,7 @@ import CustomCursor from './components/CustomCursor'
 import Navbar from './components/navbar'
 import HomePage from './components/HomePage'
 import CaseStudyPage from './components/case-study/CaseStudyPage'
+import AboutPage from './components/about/AboutPage'
 
 // Demo pages are dev-only: the routes are never registered in production builds,
 // so the URLs don't resolve on the deployed site
@@ -21,6 +22,7 @@ export default function App() {
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/work/:slug" element={<CaseStudyPage />} />
           {import.meta.env.DEV && (
             <>
