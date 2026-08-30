@@ -24,6 +24,11 @@ const BODY: React.CSSProperties = {
   margin: '0 auto',
 }
 
+// ─── Toggle the journey timeline ──────────────────────────────
+// Content and component are kept; flip to true to show the section again.
+const SHOW_JOURNEY: boolean = false
+// ──────────────────────────────────────────────────────────────
+
 const PARAGRAPHS = [
   "My day to day gets spent on B2B finance and complex tools. Regulated spaces where trust and speed both have to hold.",
   "Outside of that, however, I've never liked sticking to one lane. Brand design, illustration. Product design for solo founders finding their first users. I've conceptualised and built platforms for galleries, art collectors, patients, social workers, people who'd never touched software like it.",
@@ -98,46 +103,48 @@ export default function AboutPage() {
         </section>
 
         {/* Journey */}
-        <section
-          style={{
-            background: 'black',
-            paddingTop: '4rem',
-            paddingBottom: '7rem',
-            paddingLeft: '1.5rem',
-            paddingRight: '1.5rem',
-          }}
-        >
-          <motion.div
-            {...fadeUp}
-            style={{ textAlign: 'center', marginBottom: '3rem' }}
+        {SHOW_JOURNEY && (
+          <section
+            style={{
+              background: 'black',
+              paddingTop: '4rem',
+              paddingBottom: '7rem',
+              paddingLeft: '1.5rem',
+              paddingRight: '1.5rem',
+            }}
           >
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
-                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                letterSpacing: '-0.04em',
-                lineHeight: 0.92,
-                color: 'var(--ink-solid)',
-                margin: '0 0 0.75rem',
-                fontWeight: 400,
-              }}
+            <motion.div
+              {...fadeUp}
+              style={{ textAlign: 'center', marginBottom: '3rem' }}
             >
-              How I got here.
-            </h2>
-            <p
-              style={{
-                fontFamily: 'var(--font-body)', fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem',
-                lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto',
-              }}
-            >
-              Less a career ladder than a series of problems that changed how I design.
-            </p>
-          </motion.div>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontStyle: 'italic',
+                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                  letterSpacing: '-0.04em',
+                  lineHeight: 0.92,
+                  color: 'var(--ink-solid)',
+                  margin: '0 0 0.75rem',
+                  fontWeight: 400,
+                }}
+              >
+                How I got here.
+              </h2>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)', fontWeight: 300,
+                  color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem',
+                  lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto',
+                }}
+              >
+                Less a career ladder than a series of problems that changed how I design.
+              </p>
+            </motion.div>
 
-          <JourneyTimeline />
-        </section>
+            <JourneyTimeline />
+          </section>
+        )}
 
         {/* Closing */}
         <section
