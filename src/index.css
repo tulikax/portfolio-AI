@@ -541,6 +541,29 @@ a, button, [role="button"], input, select, textarea, label {
   .hero-char { transition: none; }
 }
 
+/* Button glass — the liquid-glass look without backdrop-filter.
+   Hero CTAs live inside Framer Motion transform/opacity ancestors, which make the
+   browser drop backdrop-filter intermittently, so the fill is painted statically here. */
+.btn-glass {
+  background: linear-gradient(145deg, rgb(var(--ink) / 0.16), rgb(var(--ink) / 0.07));
+  border: 1px solid rgb(var(--ink) / 0.20);
+  box-shadow:
+    inset 0 1px 0 rgb(var(--ink) / 0.18),
+    0 8px 28px rgba(0, 0, 0, 0.45);
+  transition:
+    background 200ms var(--ease-out),
+    border-color 200ms var(--ease-out);
+}
+
+.btn-glass:hover {
+  background: linear-gradient(145deg, rgb(var(--ink) / 0.22), rgb(var(--ink) / 0.10));
+  border-color: rgb(var(--ink) / 0.30);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-glass { transition: none; }
+}
+
 /* Primary hero CTA — soft halo that lifts on hover */
 .cta-glow {
   box-shadow:
