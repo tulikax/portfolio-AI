@@ -367,7 +367,7 @@ a, button, [role="button"], input, select, textarea, label {
   }
 }
 
-/* ─── About bento — equalizer bars ──────────────────────────── */
+/* ─── "Currently" block — equalizer bars ────────────────────── */
 
 @keyframes eq1 { 0%,100% { height: 6px } 50% { height: 18px } }
 @keyframes eq2 { 0%,100% { height: 12px } 50% { height: 5px } }
@@ -377,12 +377,12 @@ a, button, [role="button"], input, select, textarea, label {
 .eq-bar-2 { animation: eq2 0.6s ease-in-out infinite; }
 .eq-bar-3 { animation: eq3 1.0s ease-in-out infinite; }
 
-/* ─── About bento — hover overlays ──────────────────────────── */
+/* ─── "Currently" block — hover overlays ────────────────────── */
+/* Overlay stays pointer-events: none so a card can also be a link */
 
-.bento-music-card:hover .bento-overlay,
-.bento-book-card:hover .bento-overlay {
-  opacity: 1 !important;
-  pointer-events: auto !important;
+.currently-card:hover .currently-overlay,
+.currently-card:focus-within .currently-overlay {
+  opacity: 1;
 }
 
 /* ─── Work section role-card hover images ────────────────────── */
@@ -500,6 +500,13 @@ a, button, [role="button"], input, select, textarea, label {
   .about-body-text {
     font-size: 0.9rem !important;
     line-height: 1.65 !important;
+  }
+}
+
+/* "Currently" block — stack the top row on narrow screens */
+@media (max-width: 640px) {
+  .currently-grid-top {
+    grid-template-columns: 1fr !important;
   }
 }
 
