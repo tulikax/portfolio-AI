@@ -52,8 +52,8 @@ export default function OverviewStrip({ data }: Props) {
                 fontWeight: 500,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.40)',
-                fontFamily: "'Barlow', sans-serif",
+                color: 'rgb(var(--ink) / 0.40)',
+                fontFamily: 'var(--font-body)',
               }}
             >
               {label}
@@ -65,8 +65,8 @@ export default function OverviewStrip({ data }: Props) {
                 fontSize: '0.95rem',
                 fontWeight: 300,
                 lineHeight: 1.65,
-                color: 'rgba(255,255,255,0.80)',
-                fontFamily: "'Barlow', sans-serif",
+                color: 'rgb(var(--ink) / 0.80)',
+                fontFamily: 'var(--font-body)',
                 margin: 0,
               }}
             >

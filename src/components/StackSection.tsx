@@ -52,11 +52,11 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
           width: '64px',
           height: '64px',
           borderRadius: '12px',
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))',
+          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02))',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.10)',
-          boxShadow: '0 1px 0 rgba(255,255,255,0.08) inset, 0 8px 24px rgba(0,0,0,0.4)',
+          border: '1px solid rgb(var(--ink) / 0.10)',
+          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 24px rgba(0,0,0,0.4)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -73,7 +73,7 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
             left: '8px',
             right: '8px',
             height: '1px',
-            background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.14), transparent)',
+            background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.14), transparent)',
           }}
         />
         <img
@@ -98,10 +98,10 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
       {/* Tool name */}
       <span
         style={{
-          fontFamily: "'Barlow', sans-serif",
+          fontFamily: 'var(--font-body)',
           fontWeight: 400,
           fontSize: '0.7rem',
-          color: 'rgba(255,255,255,0.60)',
+          color: 'rgb(var(--ink) / 0.60)',
           letterSpacing: '0.01em',
           textAlign: 'center',
           lineHeight: 1.3,
@@ -136,12 +136,12 @@ export default function StackSection() {
         >
           <h2
             style={{
-              fontFamily: "'Source Serif 4', serif",
+              fontFamily: 'var(--font-display)',
               fontStyle: 'italic',
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               letterSpacing: '-0.04em',
               lineHeight: 0.92,
-              color: 'white',
+              color: 'var(--ink-solid)',
               margin: '0 0 1rem',
               fontWeight: 400,
             }}
@@ -150,9 +150,9 @@ export default function StackSection() {
           </h2>
           <p
             style={{
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontWeight: 300,
-              color: 'rgba(255,255,255,0.55)',
+              color: 'rgb(var(--ink) / 0.55)',
               fontSize: '1rem',
               maxWidth: '34rem',
               margin: '0 auto',

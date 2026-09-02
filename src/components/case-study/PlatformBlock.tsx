@@ -24,7 +24,7 @@ export default function PlatformBlock({ section, index }: Props) {
       <div
         style={{
           height: '1px',
-          background: 'rgba(255,255,255,0.07)',
+          background: 'rgb(var(--ink) / 0.07)',
           marginBottom: '3.5rem',
         }}
       />
@@ -56,10 +56,10 @@ export default function PlatformBlock({ section, index }: Props) {
               fontWeight: 500,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              background: 'rgba(255,255,255,0.07)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              color: 'rgba(255,255,255,0.60)',
-              fontFamily: "'Barlow', sans-serif",
+              background: 'rgb(var(--ink) / 0.07)',
+              border: '1px solid rgb(var(--ink) / 0.12)',
+              color: 'rgb(var(--ink) / 0.60)',
+              fontFamily: 'var(--font-body)',
               whiteSpace: 'nowrap',
             }}
           >
@@ -76,12 +76,12 @@ export default function PlatformBlock({ section, index }: Props) {
         >
           <h2
             style={{
-              fontFamily: "'Source Serif 4', serif",
+              fontFamily: 'var(--font-display)',
               fontStyle: 'italic',
               fontSize: 'clamp(1.6rem, 3.5vw, 2.5rem)',
               fontWeight: 400,
               letterSpacing: '-0.03em',
-              color: 'white',
+              color: 'var(--ink-solid)',
               margin: '0 0 1rem 0',
               lineHeight: 1.15,
             }}
@@ -93,8 +93,8 @@ export default function PlatformBlock({ section, index }: Props) {
               fontSize: '1rem',
               fontWeight: 300,
               lineHeight: 1.75,
-              color: 'rgba(255,255,255,0.65)',
-              fontFamily: "'Barlow', sans-serif",
+              color: 'rgb(var(--ink) / 0.65)',
+              fontFamily: 'var(--font-body)',
               margin: 0,
               maxWidth: '44rem',
             }}

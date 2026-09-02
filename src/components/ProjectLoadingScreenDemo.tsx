@@ -80,7 +80,7 @@ export default function ProjectLoadingScreenDemo() {
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
           }}
         >
-          <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.65rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)' }}>
+          <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.65rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)' }}>
             Case study would load here
           </span>
           <div style={{ width: '60vw', height: '1px', background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)' }} />
@@ -105,7 +105,7 @@ export default function ProjectLoadingScreenDemo() {
                 border: `1px solid ${projectIdx === i ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.12)'}`,
                 background: projectIdx === i ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.03)',
                 color: projectIdx === i ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)',
-                fontFamily: "'Barlow', sans-serif", fontSize: '0.75rem', cursor: 'pointer', transition: 'all 0.2s',
+                fontFamily: 'var(--font-body)', fontSize: '0.75rem', cursor: 'pointer', transition: 'all 0.2s',
               }}
             >
               {p.label.split(' · ')[0]}
@@ -122,7 +122,7 @@ export default function ProjectLoadingScreenDemo() {
               border: `1px solid ${autoMode ? 'rgba(160,200,240,0.4)' : 'rgba(255,255,255,0.12)'}`,
               background: autoMode ? 'rgba(160,200,240,0.08)' : 'rgba(255,255,255,0.03)',
               color: autoMode ? 'rgba(160,200,240,0.9)' : 'rgba(255,255,255,0.4)',
-              fontFamily: "'Barlow', sans-serif", fontSize: '0.75rem', cursor: 'pointer', transition: 'all 0.2s',
+              fontFamily: 'var(--font-body)', fontSize: '0.75rem', cursor: 'pointer', transition: 'all 0.2s',
             }}
           >
             {autoMode ? 'Auto' : 'Auto: off'}
@@ -135,7 +135,7 @@ export default function ProjectLoadingScreenDemo() {
               border: '1px solid rgba(255,255,255,0.22)',
               background: 'rgba(255,255,255,0.07)',
               color: 'rgba(255,255,255,0.85)',
-              fontFamily: "'Barlow', sans-serif", fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
+              fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
             }}
           >
             {visible && !isExiting ? 'Trigger exit →' : '↺ Replay'}
@@ -147,7 +147,7 @@ export default function ProjectLoadingScreenDemo() {
       <div
         style={{
           position: 'fixed', top: '1.25rem', left: '50%', transform: 'translateX(-50%)',
-          zIndex: 99999, fontFamily: "'Barlow', sans-serif", fontSize: '0.62rem',
+          zIndex: 99999, fontFamily: 'var(--font-body)', fontSize: '0.62rem',
           letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)',
           pointerEvents: 'none', whiteSpace: 'nowrap',
         }}

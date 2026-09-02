@@ -33,12 +33,12 @@ export default function CTASection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Source Serif 4', serif",
+            fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
             fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.9,
-            color: 'white',
+            color: 'var(--ink-solid)',
             margin: 0,
             fontWeight: 400,
           }}
@@ -54,9 +54,9 @@ export default function CTASection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.70)',
+            color: 'rgb(var(--ink) / 0.70)',
             fontSize: '1.05rem',
             maxWidth: '28rem',
             lineHeight: 1.65,
@@ -79,9 +79,9 @@ export default function CTASection() {
             style={{
               borderRadius: '9999px',
               padding: '0.875rem 2rem',
-              color: 'white',
+              color: 'var(--ink-solid)',
               fontSize: '0.9rem',
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontWeight: 400,
               textDecoration: 'none',
               display: 'inline-flex',
@@ -100,9 +100,9 @@ export default function CTASection() {
             style={{
               borderRadius: '9999px',
               padding: '0.875rem 2rem',
-              color: 'rgba(255,255,255,0.80)',
+              color: 'rgb(var(--ink) / 0.80)',
               fontSize: '0.9rem',
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontWeight: 300,
               textDecoration: 'none',
               display: 'inline-flex',

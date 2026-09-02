@@ -8,6 +8,7 @@ import { GlassPanel } from './GlassPanel'
 import { useCloseMenuOnDesktop, useNavbarScroll } from './hooks'
 import { NavbarCvLink } from './NavbarCvLink'
 import { NavbarMobileMenu } from './NavbarMobileMenu'
+import { NavbarLogo } from './NavbarLogo'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -22,8 +23,8 @@ export default function Navbar() {
     : NAV_LINKS
 
   const pillShadow = scrolled
-    ? 'inset 0 1px 1px rgba(255,255,255,0.10), 0 8px 32px rgba(0,0,0,0.6)'
-    : 'inset 0 1px 1px rgba(255,255,255,0.10)'
+    ? 'inset 0 1px 1px rgb(var(--ink) / 0.10), 0 8px 32px rgba(0,0,0,0.6)'
+    : 'inset 0 1px 1px rgb(var(--ink) / 0.10)'
 
   const nav = (
     <div
@@ -53,20 +54,8 @@ export default function Navbar() {
             boxShadow: pillShadow,
           }}
         >
-          <div style={{ flex: 1 }}>
-            <a
-              href="#"
-              style={{
-                fontFamily: "'Source Serif 4', serif",
-                fontStyle: 'italic',
-                color: 'white',
-                fontSize: '1.25rem',
-                letterSpacing: '-0.02em',
-                textDecoration: 'none',
-              }}
-            >
-              Tulika
-            </a>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+            <NavbarLogo />
           </div>
 
           <nav style={{ alignItems: 'center', gap: '1.5rem' }} className="hidden md:flex">
@@ -75,10 +64,10 @@ export default function Navbar() {
                 to="/#work"
                 style={{
                   fontSize: '0.875rem',
-                  color: 'rgba(255,255,255,0.65)',
+                  color: 'rgb(var(--ink) / 0.65)',
                   textDecoration: 'none',
                   fontWeight: 400,
-                  fontFamily: "'Barlow', sans-serif",
+                  fontFamily: 'var(--font-body)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.375rem',
@@ -88,7 +77,7 @@ export default function Navbar() {
                   ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
                 }}
                 onMouseLeave={(e) => {
-                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.65)'
+                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.65)'
                 }}
               >
                 ← Back to Work
@@ -100,7 +89,7 @@ export default function Navbar() {
                   href={link.href}
                   style={{
                     fontSize: '0.875rem',
-                    color: 'rgba(255,255,255,0.75)',
+                    color: 'rgb(var(--ink) / 0.75)',
                     textDecoration: 'none',
                     fontWeight: 400,
                     transition: 'color 200ms ease',
@@ -109,7 +98,7 @@ export default function Navbar() {
                     ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
                   }}
                   onMouseLeave={(e) => {
-                    ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.75)'
+                    ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.75)'
                   }}
                 >
                   {link.label}
@@ -130,7 +119,7 @@ export default function Navbar() {
                 background: 'none',
                 border: 'none',
                 padding: '0.375rem',
-                color: 'rgba(255,255,255,0.85)',
+                color: 'rgb(var(--ink) / 0.85)',
                 borderRadius: '0.5rem',
                 transition: 'color 150ms ease',
               }}

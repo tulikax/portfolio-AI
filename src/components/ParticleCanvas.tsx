@@ -1,4 +1,5 @@
 import { useEffect, useRef, type MutableRefObject } from 'react'
+import { inkChannel } from '../constants/theme'
 
 interface Particle {
   x: number
@@ -31,6 +32,7 @@ export default function ParticleCanvas({ cursorRef }: Props) {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    const INK = inkChannel()
     if (!ctx) return
 
     const COUNT = 110
@@ -109,8 +111,8 @@ export default function ParticleCanvas({ cursorRef }: Props) {
         if (cdist < BG_REPEL_RADIUS) {
           const nearFactor = Math.max(0, 1 - cdist / BG_REPEL_RADIUS)
           const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5)
-          glow.addColorStop(0, `rgba(255,255,255,${nearFactor * 0.5 * opacity})`)
-          glow.addColorStop(1, 'rgba(255,255,255,0)')
+          glow.addColorStop(0, `rgb(${INK} / ${nearFactor * 0.5 * opacity})`)
+          glow.addColorStop(1, `rgb(${INK} / 0)`)
           ctx.beginPath()
           ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2)
           ctx.fillStyle = glow
@@ -118,8 +120,8 @@ export default function ParticleCanvas({ cursorRef }: Props) {
         }
 
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.5)
-        grad.addColorStop(0, `rgba(255,255,255,${opacity})`)
-        grad.addColorStop(1, 'rgba(255,255,255,0)')
+        grad.addColorStop(0, `rgb(${INK} / ${opacity})`)
+        grad.addColorStop(1, `rgb(${INK} / 0)`)
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2)
         ctx.fillStyle = grad

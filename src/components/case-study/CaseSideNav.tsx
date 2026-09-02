@@ -95,10 +95,10 @@ export default function CaseSideNav({ sections }: Props) {
             <motion.div
               animate={{
                 background: isActive
-                  ? 'rgba(255,255,255,0.80)'
+                  ? 'rgb(var(--ink) / 0.80)'
                   : hovered
-                    ? 'rgba(255,255,255,0.30)'
-                    : 'rgba(255,255,255,0.18)',
+                    ? 'rgb(var(--ink) / 0.30)'
+                    : 'rgb(var(--ink) / 0.18)',
                 height: isActive ? '24px' : '20px',
               }}
               transition={{ duration: 0.2, ease: EASE_OUT }}
@@ -113,14 +113,14 @@ export default function CaseSideNav({ sections }: Props) {
             <motion.span
               animate={{
                 color: isActive
-                  ? 'rgba(255,255,255,0.92)'
+                  ? 'rgb(var(--ink) / 0.92)'
                   : hovered
-                    ? 'rgba(255,255,255,0.65)'
-                    : 'rgba(255,255,255,0.38)',
+                    ? 'rgb(var(--ink) / 0.65)'
+                    : 'rgb(var(--ink) / 0.38)',
               }}
               transition={{ duration: 0.2, ease: EASE_OUT }}
               style={{
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontSize: '0.75rem',
                 fontWeight: isActive ? 500 : 400,
                 letterSpacing: '0.02em',

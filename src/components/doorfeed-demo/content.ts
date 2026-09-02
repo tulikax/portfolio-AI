@@ -1,0 +1,644 @@
+/**
+ * All copy for the DoorFeed agentic case study demo.
+ *
+ * Kept separate from the components so the narrative can be edited without
+ * touching layout — this page is a treatment being trialled against the live
+ * /work/doorfeed case study, so the copy is expected to churn.
+ *
+ * Inline emphasis uses two markdown conventions, rendered by RichText:
+ * `**bold**` and `_italic_`.
+ */
+
+/*
+ * Demo assets. Only the files whose names map onto a claim the copy actually
+ * makes are wired up; slots with no matching asset stay as placeholders.
+ * `ingestion AI - 2.png` is byte-identical to `- 1` and is deliberately unused.
+ */
+import navigationIssues from '../../assets/DoorFeed/case study /issues with navigation.png'
+import oldComps from '../../assets/DoorFeed/demo/old comps.png'
+import newCompsLight from '../../assets/DoorFeed/demo/new comps - light mode.png'
+import dataroom from '../../assets/DoorFeed/demo/dataroom.png'
+// The same clip the homepage role card plays on hover
+import homepageGlow from '../../assets/DoorFeed/homepage glow.mov'
+import posthogReview from '../../assets/DoorFeed/demo/old platform - posthog review.png'
+import type { Crop } from './CroppedImage'
+import ingestionOne from '../../assets/DoorFeed/demo/ingestion AI - 1 .png'
+import ingestionThree from '../../assets/DoorFeed/demo/ingestion AI - 3 .png'
+import hybridUi from '../../assets/DoorFeed/demo/hybrid ui.png'
+import hybridWorkspaceTwo from '../../assets/DoorFeed/demo/hybrid workspace2.png'
+// `hybrid 3.png` is byte-identical to this file and is deliberately unused
+import workflowsIntoConversation from '../../assets/DoorFeed/demo/workflows that open into conversations.png'
+import earlySketches from '../../assets/DoorFeed/demo/directions sketches - early.png'
+
+/**
+ * One run of a chapter title. Titles break at different points and italicise
+ * different fragments, so they're stored as tokens rather than lines —
+ * `br` starts a new line before the token, `em` renders it as the italic
+ * display emphasis that replaces the source design's coloured span.
+ */
+export interface TitleToken {
+  text: string
+  em?: boolean
+  br?: boolean
+}
+
+export interface MediaSpec {
+  /** Shown in the frame's title bar — reads like a filename. */
+  name: string
+  /** When set, the frame renders the real asset; otherwise it draws a placeholder. */
+  src?: string
+  alt?: string
+  /** Placeholder glyph and copy — ignored once `src` is present. */
+  icon?: string
+  label?: string
+  hint?: string
+  caption: string
+  /** Trims empty canvas off a screenshot at render time. */
+  crop?: Crop
+  /** Rendered width as a percentage of the column — centred. Defaults to full width. */
+  width?: number
+}
+
+export interface MediaGridCell {
+  label: string
+  src?: string
+  alt?: string
+  /** Trims empty canvas off a screenshot at render time. */
+  crop?: Crop
+  /** Rendered width as a percentage of the cell — centred. Defaults to full width. */
+  width?: number
+  /** When set, the cell renders a draggable before/after comparison instead of a still. */
+  compare?: {
+    beforeSrc: string
+    beforeAlt: string
+    beforeLabel: string
+    beforeWidth: number
+    afterSrc: string
+    afterAlt: string
+    afterLabel: string
+    afterWidth: number
+    cropRight?: number
+    aspect?: number
+    beforeZoom?: number
+    afterZoom?: number
+  }
+  icon?: string
+  title?: string
+}
+
+export interface MediaGridSpec {
+  columns: 1 | 2 | 3
+  cells: MediaGridCell[]
+  caption: string
+  /** Bleeds the block past the text column so stacked screens read at full size. */
+  wide?: boolean
+}
+
+export interface CollageItem {
+  label: string
+  src: string
+  alt: string
+  /**
+   * Width as a percentage of the collage frame. Set inversely to the image's
+   * aspect ratio so every item lands at the same rendered height.
+   */
+  width: number
+  /** Top-left corner, as a percentage of the frame. */
+  x: number
+  y: number
+  crop?: Crop
+}
+
+export interface CollageSpec {
+  /** Rendered in order — later items overlap earlier ones. */
+  items: CollageItem[]
+  /** Frame width ÷ height. Lower values pull the items further apart. */
+  aspect: number
+  caption: string
+  wide?: boolean
+}
+
+/**
+ * Chapters interleave prose, sub-headings and media in an order that matters,
+ * so their bodies are an ordered block list rather than fixed fields.
+ */
+export type Block =
+  | { kind: 'heading'; text: string }
+  | { kind: 'body'; text: string }
+  | { kind: 'aside'; text: string }
+  | { kind: 'media'; spec: MediaSpec }
+  | { kind: 'mediaGrid'; spec: MediaGridSpec }
+  | { kind: 'collage'; spec: CollageSpec }
+
+/** What fills the media half of a pinned round. */
+export type RoundMedia =
+  | { kind: 'image'; label: string; src: string; alt: string; crop?: Crop }
+  | { kind: 'video'; label: string; src: string }
+  | { kind: 'collage'; spec: CollageSpec }
+  | { kind: 'grid'; spec: MediaGridSpec }
+  | { kind: 'placeholder'; label: string; hint: string }
+
+export interface Round {
+  num: string
+  stage: string
+  title: string
+  paragraphs: string[]
+  verdict: string
+  /** no = dead end, partial = progress with a cost, yes = the resolution. */
+  tone: 'no' | 'partial' | 'yes'
+  media: RoundMedia
+}
+
+export interface Decision {
+  idx: string
+  title: string
+  paragraphs: string[]
+  tags: string[]
+}
+
+export interface ComponentCard {
+  title: string
+  body: string
+}
+
+export interface StatusCard {
+  label: string
+  value: string
+  sub: string
+}
+
+export interface Flag {
+  heading: string
+  body: string
+}
+
+export interface Reflection {
+  num: string
+  title: string
+  body: string
+}
+
+export const RAIL_SECTIONS = [
+  { id: 'hero', label: 'Intro' },
+  { id: 'context', label: 'Context' },
+  { id: 'artifacts', label: 'Final artifacts' },
+  { id: 'decisions', label: 'Key decisions' },
+  { id: 'impact', label: 'Impact' },
+  { id: 'reflections', label: 'Reflections' },
+]
+
+export const HERO = {
+  kicker: 'Product Design · DoorFeed · 2026',
+  title: [
+    { text: 'From data platform' },
+    { text: 'to ', br: true },
+    { text: 'agentic product', em: true },
+  ] satisfies TitleToken[],
+  lede: 'A real estate investment platform built for retrieval, redesigned for reasoning.',
+  scrollCue: 'Scroll to begin',
+}
+
+export const OPENING_PULL = {
+  lines: [
+    'What does an analyst leave the platform to do?',
+    'Can the deliverable be built where the data is?',
+  ],
+  attrib: 'The question that started the project',
+}
+
+export const CONTEXT = {
+  num: '01',
+  eyebrow: 'Context',
+  title: [
+    { text: 'A platform built for retrieval,' },
+    { text: 'not ', br: true },
+    { text: 'reasoning', em: true },
+  ] satisfies TitleToken[],
+  blocks: [
+    {
+      kind: 'body',
+      text: 'DoorFeed began as a dense, functional data platform — structured screens, filters, sortable tables. It was fast because it was predictable, but it had a ceiling: it surfaced data, and never touched the synthesis analysts actually needed to underwrite a deal.',
+    },
+    { kind: 'heading', text: 'Starting with the platform, not the AI' },
+    {
+      kind: 'body',
+      text: 'The first work was unglamorous. The comparables view — the reason most analysts opened the platform at all — had fragmented navigation, 500+ unfiltered results, and a map buried inside the filter sidebar where it had no relationship to the list beside it. PostHog recordings showed rage clicks concentrated in exactly those areas.',
+    },
+    {
+      kind: 'mediaGrid',
+      spec: {
+        columns: 1,
+        wide: true,
+        cells: [
+          {
+            label: 'Comparables — before',
+            src: navigationIssues,
+            alt: 'Annotated breakdown of the navigation problems in the original comparables view',
+            width: 80,
+          },
+          {
+            label: 'PostHog — rage clicks',
+            src: posthogReview,
+            alt: 'PostHog session review showing rage clicks concentrated in the comparables area',
+            // The capture includes the empty replay pane to the left of the event list
+            crop: { width: 2094, height: 938, left: 1015 },
+            width: 32,
+          },
+        ],
+        caption:
+          'Fragmented navigation, 500+ unfiltered results, map nested in the filter sidebar with no relation to the list — and the rage clicks that followed.',
+      },
+    },
+    {
+      kind: 'body',
+      text: "I consolidated the sections into a collapsible tabbed structure, kept it in the same location so existing users didn't have to re-learn the page, and **moved filters ahead of results** so analysts arrived at a workable set rather than filtering their way out of 500. Exit rates from the section fell. It also surfaced the constraint that shaped everything after: the existing design system couldn't stretch much further.",
+    },
+    {
+      kind: 'mediaGrid',
+      spec: {
+        columns: 1,
+        wide: true,
+        cells: [
+          {
+            label: 'Comparables — drag to compare',
+            compare: {
+              beforeSrc: oldComps,
+              beforeAlt: 'The original comparables view, returning an unfiltered result set',
+              beforeLabel: 'Before',
+              // Natural pixel widths — the two screenshots were captured at
+              // different resolutions, so the slider needs both to fit them.
+              beforeWidth: 2048,
+              // Light mode, so the reveal reads as a clear change of state
+              afterSrc: newCompsLight,
+              afterAlt:
+                'The restructured comparables view in light mode, with filters ahead of results and the map alongside the list',
+              afterLabel: 'After',
+              afterWidth: 5106,
+              // Both are full-screen captures at near-identical aspect (1.76 and
+              // 1.78), so the frame matches them rather than cropping to a band.
+              aspect: 1.77,
+            },
+          },
+        ],
+        caption:
+          'The same view, before and after: filters ahead of results, sections consolidated, and the map given a relationship to the list beside it. Drag to compare.',
+      },
+    },
+    { kind: 'heading', text: 'There was already AI in the product' },
+    {
+      kind: 'body',
+      text: 'This is the part that reframed the project. The asset ingestion page already ran a small AI system that converted and normalised rent rolls arriving in any format — a genuinely hard problem, solved, and largely invisible.',
+    },
+    {
+      kind: 'body',
+      text: "But it was slow, and it was **blocking**: users couldn't move on until each item was resolved. The intelligence was there; the interaction model around it forced a stop-and-wait rhythm that didn't match how analysts work. That gap — capable AI, wrong pacing — became the clearest argument for what the agentic layer needed to get right.",
+    },
+    {
+      kind: 'collage',
+      spec: {
+        // Widths are inverse to each image's aspect (1.23 and 1.82), so the two
+        // render at a matching height despite very different source shapes.
+        aspect: 1.9,
+        wide: true,
+        items: [
+          {
+            label: 'Upload & normalisation',
+            src: ingestionOne,
+            alt: 'The deal ingestion flow converting and normalising an uploaded rent roll',
+            width: 46,
+            x: 0,
+            y: 0,
+          },
+          {
+            label: 'Resolve & confirm',
+            src: ingestionThree,
+            alt: 'The deal ingestion step where each unresolved item must be confirmed before proceeding',
+            width: 68,
+            x: 32,
+            y: 29,
+          },
+        ],
+        caption:
+          'The existing deal ingestion flow — AI-powered rent roll normalisation, but sequential and blocking.',
+      },
+    },
+    { kind: 'heading', text: 'And the dataroom was already there too' },
+    {
+      kind: 'body',
+      text: "The same pattern, in a different place. The platform had a dataroom and file versioning — both built, both working, both buried. We knew they were useful; we hadn't worked out how to surface them or what they were _for_ in the flow of a deal.",
+    },
+    {
+      kind: 'body',
+      text: 'Meanwhile analysts were downloading templates, editing in their own Excel vaults, and losing track of which version was authoritative — solving by hand a problem the platform had already solved and hidden. The question stopped being "what do we need to build" and became **what do we already have that\'s in the wrong place.**',
+    },
+    {
+      kind: 'media',
+      spec: {
+        name: 'dataroom — already built, already buried',
+        src: dataroom,
+        alt: 'The platform dataroom, with file versioning',
+        width: 50,
+        caption:
+          'The dataroom and its versioning already existed — the design problem was prominence, not capability.',
+      },
+    },
+    {
+      kind: 'aside',
+      text: 'Two capabilities, both real, both mis-framed: AI with the wrong pacing, and a dataroom with the wrong prominence. The design problem was surfacing and sequencing, not inventing.',
+    },
+    {
+      kind: 'aside',
+      text: 'The bet: wrap the existing platform in a conversational layer so analysts can go from data to finished artifact without leaving it — without removing them from the decisions that matter. Agents wrap existing microservices; they don\'t replace them. The data layer and outputs stay the same. What changes is the entry point, and where the work ends up.',
+    },
+  ] satisfies Block[],
+}
+
+/**
+ * Round 3's media. Widths are inverse to each image's aspect (1.62, 1.61, 1.26),
+ * so all three render at a matching height and cascade cleanly.
+ */
+/**
+ * Round 3's media. Stacked at full column width rather than overlapped — the
+ * two screens each carry a distinct point, and a collage shrank both.
+ */
+const HYBRID_STACK: MediaGridSpec = {
+  columns: 1,
+  cells: [
+    {
+      label: 'Hybrid workspace — expanded',
+      src: hybridWorkspaceTwo,
+      alt: 'The hybrid workspace with the structured panel expanded for review',
+      // Held back so the conversation screen below reads as the larger of the two
+      width: 76,
+    },
+    {
+      label: 'Workflows that open into conversation',
+      src: workflowsIntoConversation,
+      alt: 'A workflow opening into a free-flowing conversation where the agent asks for what it needs',
+    },
+  ],
+  caption:
+    'Chat panel for reasoning, structured panel for review and direct action. Both stay on screen.',
+}
+
+export const ARTIFACTS = {
+  num: '02',
+  eyebrow: 'Final artifacts',
+  title: [
+    { text: 'Three rounds to find' },
+    { text: 'the ', br: true },
+    { text: 'interaction model', em: true },
+  ] satisfies TitleToken[],
+  intro:
+    "The agentic layer went through three distinct shapes. Each one was a reasonable answer to the previous round's problem, and each one taught us something the next round depended on.",
+  rounds: [
+    {
+      num: 'Round 01',
+      stage: 'Open chat',
+      title: 'A single prompt, replacing the UI',
+      paragraphs: [
+        'The purest version: strip the interface back to a conversation and let the agent handle everything. It demoed beautifully — one input, any question, full synthesis.',
+        'On contact with real analysts it revealed the blank-canvas problem. Experienced users — people who\'d run the old platform for months — didn\'t know where to start. _"I\'m not a technical person"_ came up repeatedly from users who were entirely fluent in the existing tool.',
+      ],
+      verdict: 'Too little structure',
+      tone: 'no',
+      media: {
+        kind: 'video',
+        label: 'Open chat interface',
+        src: homepageGlow,
+      },
+    },
+    {
+      num: 'Round 02',
+      stage: 'Structured',
+      title: 'Straight workflows, minimal conversation',
+      paragraphs: [
+        'The correction: lead with structure. Named workflows, clear entry points, the agent running inside defined lanes rather than open-ended dialogue.',
+        'This solved orientation but gave up what made the agent worth building. Pulling a comps set with known parameters _was_ faster as a form — but the moment an analyst needed to interrogate a result, adjust an assumption, or ask why a number looked wrong, the structure got in the way.',
+      ],
+      verdict: 'Oriented, but capped',
+      tone: 'partial',
+      media: {
+        kind: 'image',
+        label: 'Chat workflows',
+        src: hybridUi,
+        alt: 'Named workflow cards offered beneath the prompt — underwrite a deal, generate a market report, generate a business plan',
+      },
+    },
+    {
+      num: 'Round 03',
+      stage: 'Hybrid',
+      title: 'Workflows that open into conversation',
+      paragraphs: [
+        'The resolution splits the difference along the axis the testing actually revealed: **chat wins on synthesis, structure wins on retrieval.**',
+        'Analysts start from asset details and a workflow catalogue — concrete, familiar, oriented. Any workflow can then open into free-flowing conversation where the agent asks for what it needs, rather than a form guessing at it. Results populate into tabs on the existing page structure, so the platform\'s integrity holds.',
+      ],
+      verdict: 'Shipped into prototype',
+      tone: 'yes',
+      media: { kind: 'grid', spec: HYBRID_STACK },
+    },
+  ] satisfies Round[],
+  componentsHeading: 'What shipped inside the prototype',
+  componentsIntro:
+    'Six components, plus a design system for the conversational layer built from scratch — the existing library had nothing for chat, and a platform returning tables, charts, maps, and embedded Excel and PPT previews needs response patterns for each.',
+  components: [
+    {
+      title: 'Comp summary cards',
+      body: 'Colour-coded across three categories, responsive carousel on mobile.',
+    },
+    { title: 'Split table / map', body: 'Right-panel comp mode with bidirectional hover to the map.' },
+    { title: 'Income & NOI strip', body: 'Feeding a NOI bridge with attached leakage bar chart.' },
+    { title: 'Playbook panel', body: 'Deviation flags with citation highlighting back to the rule.' },
+    {
+      title: 'Business plan card',
+      body: 'KPI strip, Sources & Uses, Returns Summary in one view.',
+    },
+    { title: 'Workflow catalogue', body: 'Quick-action cards replacing the blank prompt.' },
+  ] satisfies ComponentCard[],
+}
+
+export const DECISIONS = {
+  num: '03',
+  eyebrow: 'Key design decisions',
+  title: [
+    { text: 'Where it could have' },
+    { text: 'gone ', br: true },
+    { text: 'differently', em: true },
+  ] satisfies TitleToken[],
+  intro:
+    'Each of these had a defensible alternative. These are the trade-offs and the reasoning behind where I landed.',
+  items: [
+    {
+      idx: '01',
+      title: 'Lead with workflows, not chat',
+      paragraphs: [
+        'The central call. Start from workflows and asset details, populate results into the existing tab structure, and let chat come second — because **chat is only helpful once users know where they are.**',
+        'This preserves the original platform\'s integrity and the muscle memory analysts had already built. It also means the agentic layer is additive rather than a replacement, so both versions can run in parallel during rollout without forcing a migration on anyone mid-deal.',
+      ],
+      tags: ['Orientation first', 'Progressive disclosure', 'Parallel rollout'],
+    },
+    {
+      idx: '02',
+      title: 'Dataroom front and centre, not buried',
+      paragraphs: [
+        'The dataroom and versioning already existed but sat somewhere nobody found them. Promoting them wasn\'t a navigation tweak — it changed what the product is for. Once the dataroom is the anchor, the platform stops being a place you _get data from_ and becomes the place the work lives.',
+        "The value is in the combination: **the organisation's own documents and models, sitting alongside DoorFeed's market data, workable together in one place.** Neither is that useful alone. An analyst's Excel model without live comps is stale; live comps without their model and assumptions is just a data feed. Putting both in the same surface — with versioning visible rather than implicit — is what makes generating the final artifact inside the platform reasonable rather than an extra step.",
+        'Excel and PPT preview follow directly from this. If the artifact is going to be produced here, it has to be readable here — reviewing and refining before export, instead of exporting to find out what needs fixing.',
+      ],
+      tags: ['Surfacing latent value', 'Version control', 'Data + documents'],
+    },
+    {
+      idx: '03',
+      title: 'Property-first navigation, staged in two moves',
+      paragraphs: [
+        'Sessions and Projects lived on separate pages. A session could exist with no parent, and the same address could appear multiple times across the Projects list — there was no single place representing "this building." People navigate a deal by address, not by session type.',
+        'I recommended a property-first hierarchy with sessions nested beneath assets, but staged it rather than shipping it whole: **Option A first** — separate pages cleaned up, named sections, session-type filter chips, duplicate addresses collapsed — then migrate to the unified Option B workspace once the data model reliably enforced the project-to-session relationship. Shipping the ideal structure on top of a model that couldn\'t guarantee it would have produced a worse experience than the mess it replaced.',
+        'The homepage was re-anchored on the asset in the same pass: personal greeting instead of a page title, filters collapsed to a single dropdown, "New asset" always first in the grid, and terminology moved from Projects to Assets throughout — matching how the team actually talked about deals.',
+      ],
+      tags: ['Information architecture', 'Staged migration', 'Terminology'],
+    },
+    {
+      idx: '04',
+      title: 'Grouping by causal relationship, not content type',
+      paragraphs: [
+        'The asset detail page took three rounds. Round 1 was a tabbed Overview / Investment / Asset Management page with a bento layout — workflows were one tile among many, and the primary action on the page read as visually weak. Round 2 promoted workflows to a four-tile hero section, which helped but was still organising by content type.',
+        'Round 3 was the actual insight: group by **causal relationship**. Workflows and Chats belong together because launching a workflow _creates_ a chat. Dataroom, Rent roll, and Asset details group separately as reference material — consulted rather than acted on. Three layout directions were then prototyped behind a keyboard-switchable picker so the team could compare them live rather than in static frames.',
+      ],
+      tags: ['Iteration', 'Rapid prototyping', 'Cursor / Figma Make'],
+    },
+    {
+      idx: '05',
+      title: 'Designing for data asymmetry across markets',
+      paragraphs: [
+        'French real estate data is significantly less rich than UK data. In testing, French asset pages returned partially or fully empty states — not errors, just absence. The obvious path was two separate UI states per market, which would have doubled the maintenance surface with every new feature.',
+        "Instead I designed a flexible empty-state system that degrades gracefully and tells the user what's unavailable and why, rather than presenting a page that looks broken. Each new European market inherits the pattern rather than needing its own branch — which matters more as the platform expands.",
+      ],
+      tags: ['Localisation', 'Graceful degradation', 'Scalability'],
+    },
+    {
+      idx: '06',
+      title: 'Knowledge base and hard constraints',
+      paragraphs: [
+        "Firms upload an investment playbook so organisational defaults are visible in the flow and deviations get flagged against the rule they break. That requires admins to set up and maintain a knowledge base at regular cadence — easy to dismiss as back-office config, and fatal to adoption if it's unusable.",
+        'I treated it as its own design problem: readable at a glance, editable without specialist knowledge. The proposed architecture is three-tier — always-loaded rules, system prompt fragment, and RAG — with **hard constraints like IRR floors and LTV limits deliberately kept out of RAG entirely**, so non-negotiables are enforced structurally rather than left to inference. This tier structure is proposed and not yet formally signed off by the team.',
+      ],
+      tags: ['Admin UX', 'AI constraints', 'Governance'],
+    },
+    {
+      idx: '07',
+      title: 'Session locking and failure states',
+      paragraphs: [
+        'Deal ingestion became a session with three asset states — fresh, processing, processed — and the session locks to read-only once processed. Anyone can launch a session, but once live only the launcher can interact with it; everyone else sees "in progress by X."',
+        'The interesting part is the failure path. A 3–5 day timeout with advance warning prevents an abandoned session from blocking a team indefinitely, and an abort route archives a broken session rather than leaving the lock stuck. Multi-user tools break at the edges, not the middle.',
+      ],
+      tags: ['Multi-user states', 'Failure design', 'Edge cases'],
+    },
+  ] satisfies Decision[],
+  mediaGrid: {
+    columns: 2,
+    cells: [
+      { label: 'UK — full data', icon: '◫', title: 'UK asset state' },
+      { label: 'France — partial data', icon: '◫', title: 'FR asset state' },
+    ],
+    caption: 'One flexible system instead of two market-specific UIs.',
+  } satisfies MediaGridSpec,
+}
+
+export const IMPACT = {
+  num: '04',
+  eyebrow: 'Impact',
+  title: [
+    { text: 'Where it stands,' },
+    { text: 'honestly', em: true, br: true },
+  ] satisfies TitleToken[],
+  intro:
+    'The platform improvements shipped and held. The agentic layer is Phase 1 of four, in active build, with the core underwriting journey working end to end as a prototype. Some of what follows is measured; some is still open.',
+  statuses: [
+    {
+      label: 'Platform work',
+      value: 'Shipped',
+      sub: 'Comparables navigation and filter restructure live; exit rates down, time-to-information reduced',
+    },
+    {
+      label: 'Agentic layer',
+      value: 'Phase 1',
+      sub: 'In active build — deal ingestion agent, market report agent, hybrid chat UI, default schema export',
+    },
+    {
+      label: 'Underwriting journey',
+      value: 'Prototype',
+      sub: 'Address through to business plan export, working end to end',
+    },
+  ] satisfies StatusCard[],
+  body: 'Early qualitative signal from client sessions points at two things consistently: **in-platform playbook checking** — validating a deal against organisational defaults before it reaches anyone who signs off — and **embedded report viewing**, which removes the core friction of the download-first workflow. Analysts can review and refine before exporting, rather than exporting to find out what needs fixing.',
+  openHeading: "What's still open",
+  flags: [
+    {
+      heading: 'Flagged — data reliability',
+      body: 'Agent outputs are only as defensible as the data underneath them, and reliability issues surfaced during testing. For a product whose entire premise is _trust the reasoning because you trust the data_, this is the load-bearing risk — not a polish item.',
+    },
+    {
+      heading: 'Flagged — chat action consistency',
+      body: 'Some chat actions post a visible message, some silently update a component, some regenerate a file with no signal. Three different mental models for what "doing something" means. I flagged this as a **sequencing decision rather than a bug** — every new component built on the inconsistency compounds it, so it gates further build rather than queuing behind it.',
+    },
+    {
+      heading: 'Pending — knowledge base sign-off',
+      body: 'The three-tier architecture is proposed and working in prototype, but not yet formally agreed by the team.',
+    },
+  ] satisfies Flag[],
+  media: {
+    name: 'measurement — posthog / testing artefacts',
+    icon: '▤',
+    label: 'Research artefact',
+    hint: 'Rage-click map, session clip, or the data reliability audit',
+    caption: 'Market-segmented event data informed which parts of the flow to rebuild first.',
+  } satisfies MediaSpec,
+}
+
+export const REFLECTIONS = {
+  num: '05',
+  eyebrow: 'Reflections',
+  title: [
+    { text: "What I'd carry" },
+    { text: 'forward', em: true, br: true },
+  ] satisfies TitleToken[],
+  items: [
+    {
+      num: '01',
+      title: "Fluency with a tool isn't fluency with a prompt",
+      body: 'The users who struggled most with open chat were the ones who knew the old platform best. Expertise in a structured tool doesn\'t transfer to an unstructured input — if anything it works against it, because the mental model is "which control do I use" not "what do I ask." Orientation isn\'t an onboarding problem you solve once; it\'s a structural property of the interface.',
+    },
+    {
+      num: '02',
+      title: "Ship the change users can absorb, not the one that's correct",
+      body: 'Twice the right answer was to stage it — Option A before Option B on navigation, additive beta rather than replacement on the agentic layer. And once I got this wrong: we changed the comparables navigation without any helper text, and session data showed a short confusion spike before the improvement landed. Even low-disruption structural changes need a transition moment.',
+    },
+    {
+      num: '03',
+      title: 'Some bugs are architecture in disguise',
+      body: 'A stuck loading state in the playbook flow turned out to be new HTML silently wiping the persistent overlay. Rather than patching each call site, a single helper that always re-appends the overlay turned a recurring bug class into a structural guarantee. The chat action inconsistency is the same shape of problem at a larger scale — which is why it\'s flagged as gating rather than queued.',
+    },
+    {
+      num: '04',
+      title: 'Working solo means the tooling is the team',
+      body: 'Figma for ideation and assets, Cursor and Figma Make for implementation, Claude for design audits and pattern research. Prototyping in code rather than static frames meant three layout directions could be compared live by the CTO and CEO in one session instead of three rounds of review — which is the only reason the causal-grouping insight surfaced when it did.',
+    },
+    {
+      num: '05',
+      title: "The question doesn't stop being asked",
+      body: 'When to use AI and when not to is not a decision made once at the start of a project. It came up at every feature, and the honest answer changed depending on whether the task was retrieval or synthesis. A comps pull with known parameters doesn\'t need a conversation. Interrogating why a valuation looks wrong does.',
+    },
+  ] satisfies Reflection[],
+  media: {
+    name: 'early direction sketches',
+    src: earlySketches,
+    alt: 'Early sketches exploring layout directions for the agentic layer',
+    caption:
+      'Early direction sketches — the layout explorations that preceded the three rounds, compared live rather than in static frames.',
+  } satisfies MediaSpec,
+}
+
+export const CLOSING = {
+  quote: 'A platform that thinks alongside the analyst, not instead of them.',
+  status: 'Phase 1 in active build · prototype iterating',
+}

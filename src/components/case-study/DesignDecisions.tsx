@@ -28,8 +28,8 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
           fontWeight: 500,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.28)',
-          fontFamily: "'Barlow', sans-serif",
+          color: 'rgb(var(--ink) / 0.28)',
+          fontFamily: 'var(--font-body)',
         }}
       >
         {String(index + 1).padStart(2, '0')}
@@ -38,10 +38,10 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       {/* Title */}
       <h3
         style={{
-          fontFamily: "'Barlow', sans-serif",
+          fontFamily: 'var(--font-body)',
           fontSize: '1rem',
           fontWeight: 500,
-          color: 'rgba(255,255,255,0.90)',
+          color: 'rgb(var(--ink) / 0.90)',
           margin: 0,
           lineHeight: 1.4,
         }}
@@ -55,8 +55,8 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
           fontSize: '0.92rem',
           fontWeight: 300,
           lineHeight: 1.7,
-          color: 'rgba(255,255,255,0.60)',
-          fontFamily: "'Barlow', sans-serif",
+          color: 'rgb(var(--ink) / 0.60)',
+          fontFamily: 'var(--font-body)',
           margin: 0,
         }}
       >
@@ -92,8 +92,8 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
           <span
             style={{
               fontSize: '1rem',
-              color: 'rgba(255,255,255,0.28)',
-              fontFamily: "'Barlow', sans-serif",
+              color: 'rgb(var(--ink) / 0.28)',
+              fontFamily: 'var(--font-body)',
             }}
           >
             →

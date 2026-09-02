@@ -34,7 +34,7 @@ export default function CustomCursor() {
         zIndex: 9999,
         pointerEvents: 'none',
         fontSize: '1rem',
-        color: 'white',
+        color: 'var(--ink-solid)',
         lineHeight: 1,
         userSelect: 'none',
       }}

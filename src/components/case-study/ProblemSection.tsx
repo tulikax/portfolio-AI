@@ -22,7 +22,7 @@ export default function ProblemSection({ data }: Props) {
       <div
         style={{
           height: '1px',
-          background: 'rgba(255,255,255,0.08)',
+          background: 'rgb(var(--ink) / 0.08)',
           marginBottom: '4rem',
         }}
       />
@@ -45,11 +45,11 @@ export default function ProblemSection({ data }: Props) {
           >
             <p
               style={{
-                fontFamily: "'Source Serif 4', serif",
+                fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(1.5rem, 3.75vw, 2.625rem)',
                 fontWeight: 400,
                 letterSpacing: '-0.02em',
-                color: 'rgba(255,255,255,0.92)',
+                color: 'rgb(var(--ink) / 0.92)',
                 margin: '0 0 1.5rem 0',
                 lineHeight: 1.1,
               }}
@@ -67,8 +67,8 @@ export default function ProblemSection({ data }: Props) {
               fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
               fontWeight: 300,
               lineHeight: 1.8,
-              color: 'rgba(255,255,255,0.65)',
-              fontFamily: "'Barlow', sans-serif",
+              color: 'rgb(var(--ink) / 0.65)',
+              fontFamily: 'var(--font-body)',
               margin: 0,
             }}
           >
@@ -104,8 +104,8 @@ export default function ProblemSection({ data }: Props) {
                 style={{
                   fontSize: '0.78rem',
                   fontWeight: 300,
-                  color: 'rgba(255,255,255,0.40)',
-                  fontFamily: "'Barlow', sans-serif",
+                  color: 'rgb(var(--ink) / 0.40)',
+                  fontFamily: 'var(--font-body)',
                   marginTop: '0.75rem',
                   lineHeight: 1.5,
                 }}

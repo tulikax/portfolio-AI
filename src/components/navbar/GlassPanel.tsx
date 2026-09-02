@@ -9,8 +9,8 @@ type GlassPanelProps = {
 }
 
 const NAV_SURFACE: CSSProperties = {
-  backgroundColor: 'rgba(255, 255, 255, 0.22)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
+  backgroundColor: 'rgb(var(--ink) / 0.22)',
+  border: '1px solid rgb(var(--ink) / 0.2)',
   backdropFilter: 'blur(16px) saturate(140%)',
   WebkitBackdropFilter: 'blur(16px) saturate(140%)',
 }

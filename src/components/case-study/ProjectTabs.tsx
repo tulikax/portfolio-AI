@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import type { CaseStudy, ProjectTab } from '../../types/caseStudy'
 import VisualShowcase from './VisualShowcase'
 import HighlightPhrase from './HighlightPhrase'
+import { useLightbox } from './LightboxContext'
 
 // ─── Highlight helper ──────────────────────────────────────────
 
@@ -40,6 +41,7 @@ function isVideoSrc(src: string) {
 // Prev/next buttons pan through image at 300px steps
 
 function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
+  const { openLightbox } = useLightbox()
   const containerRef = useRef<HTMLDivElement>(null)
   const [offset, setOffset] = useState(0)
 
@@ -73,7 +75,7 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
           transition={{ type: 'spring', stiffness: 280, damping: 32 }}
           style={{ width: '280%', height: '100%' }}
         >
-          <img src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          <img src={src} alt={alt} onClick={() => openLightbox(src, alt)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }} />
         </motion.div>
       </div>
 
@@ -84,8 +86,8 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
         style={{
           position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)',
           width: '2.25rem', height: '2.25rem', borderRadius: '50%',
-          background: 'rgba(0,0,0,0.45)', border: '1px solid rgba(255,255,255,0.18)',
-          color: 'rgba(255,255,255,0.80)', cursor: 'pointer', display: 'flex',
+          background: 'rgba(0,0,0,0.45)', border: '1px solid rgb(var(--ink) / 0.18)',
+          color: 'rgb(var(--ink) / 0.80)', cursor: 'pointer', display: 'flex',
           alignItems: 'center', justifyContent: 'center', fontSize: '1rem',
           backdropFilter: 'blur(6px)', transition: 'background 0.15s',
           opacity: offset === 0 ? 0.3 : 1,
@@ -99,8 +101,8 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
         style={{
           position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)',
           width: '2.25rem', height: '2.25rem', borderRadius: '50%',
-          background: 'rgba(0,0,0,0.45)', border: '1px solid rgba(255,255,255,0.18)',
-          color: 'rgba(255,255,255,0.80)', cursor: 'pointer', display: 'flex',
+          background: 'rgba(0,0,0,0.45)', border: '1px solid rgb(var(--ink) / 0.18)',
+          color: 'rgb(var(--ink) / 0.80)', cursor: 'pointer', display: 'flex',
           alignItems: 'center', justifyContent: 'center', fontSize: '1rem',
           backdropFilter: 'blur(6px)', transition: 'background 0.15s',
         }}
@@ -115,30 +117,33 @@ function SectionBlock({
   heading: _heading, // eslint-disable-line @typescript-eslint/no-unused-vars
   body,
   delay = 0,
+  variant = 'body',
 }: {
   heading: string
   body: string
   delay?: number
+  variant?: 'body' | 'caption'
 }) {
   const paragraphs = body.split('\n\n').filter(Boolean)
+  const isCaption = variant === 'caption'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, delay, ease: EASE_OUT }}
-      style={{ marginBottom: '3rem' }}
+      style={{ marginBottom: isCaption ? '1.5rem' : '3rem' }}
     >
       {paragraphs.map((p, i) => (
         <p
           key={i}
           style={{
-            fontSize: '1rem',
+            fontSize: isCaption ? '0.82rem' : '1rem',
             fontWeight: 300,
-            lineHeight: 1.8,
-            color: 'rgba(255,255,255,0.68)',
-            fontFamily: "'Barlow', sans-serif",
-            margin: i < paragraphs.length - 1 ? '0 0 1rem 0' : '0',
+            lineHeight: isCaption ? 1.65 : 1.8,
+            color: isCaption ? 'rgb(var(--ink) / 0.46)' : 'rgb(var(--ink) / 0.68)',
+            fontFamily: 'var(--font-body)',
+            margin: i < paragraphs.length - 1 ? '0 0 0.6rem 0' : '0',
           }}
         >
           {p}
@@ -161,6 +166,7 @@ function DecisionsBlock({
   decisionsLayout?: 'grid' | 'side-by-side' | 'caption'
   delay?: number
 }) {
+  const { openLightbox } = useLightbox()
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -176,17 +182,12 @@ function DecisionsBlock({
             const multiFirst = d.images && d.images.length > 0 && !sideAll && !sideColumn
             return (
               <div key={i}>
-                {/* Primary row: text 4.5fr | image(s) 5.5fr — tops aligned */}
-                <div style={{ display: 'grid', gridTemplateColumns: '4fr 6fr', gap: '2rem', alignItems: 'start' }}>
-                  {/* Left: title + rationale */}
-                  <div>
-                    <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.95rem', fontWeight: 500, color: 'rgba(255,255,255,0.82)', margin: '0 0 0.4rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                    <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.88rem', fontWeight: 300, color: 'rgba(255,255,255,0.46)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
-                  </div>
-                  {/* Right: images */}
+                {/* Image hero (left 3fr) | caption text (right 1fr) */}
+                <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '2rem', alignItems: 'start' }}>
+
+                  {/* Left: images — the hero */}
                   <div>
                     {sideAll ? (
-                      /* Pivot 3 mode: all images equal-width in right column */
                       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${d.images!.length}, 1fr)`, gap: '0.5rem' }}>
                         {d.images!.map((img, j) => (
                           <motion.div key={j}
@@ -196,12 +197,11 @@ function DecisionsBlock({
                             transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
                             style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
                           >
-                            <img src={img.src} alt={img.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                            <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
                           </motion.div>
                         ))}
                       </div>
                     ) : sideColumn ? (
-                      /* side-column mode: all images stacked vertically in right column */
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                         {d.images!.map((img, j) => (
                           <motion.div key={j}
@@ -211,31 +211,43 @@ function DecisionsBlock({
                             transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
                             style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
                           >
-                            <img src={img.src} alt={img.alt} style={{
-                              width: '100%', height: 'auto', display: 'block',
+                            <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{
+                              width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in',
                               ...(j === 0 ? { clipPath: 'inset(150px 0 130px 0)', marginTop: '-150px', marginBottom: '-130px' } : {}),
                             }} />
                           </motion.div>
                         ))}
                       </div>
                     ) : multiFirst ? (
-                      /* Pivot 2 mode: images[0] in right column, cropped top/bottom */
-                      <motion.div
-                        initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        viewport={{ once: true, margin: '-40px' }}
-                        transition={{ duration: 0.45, ease: EASE_OUT }}
-                        style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                      >
-                        <img src={d.images![0].src} alt={d.images![0].alt} style={{ width: '100%', height: 'auto', display: 'block', marginTop: '-70px', marginBottom: '-70px' }} />
-                      </motion.div>
+                      <div>
+                        <motion.div
+                          initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                          viewport={{ once: true, margin: '-40px' }}
+                          transition={{ duration: 0.45, ease: EASE_OUT }}
+                          style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
+                        >
+                          <img src={d.images![0].src} alt={d.images![0].alt} onClick={() => openLightbox(d.images![0].src, d.images![0].alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in', marginTop: '-70px', marginBottom: '-70px' }} />
+                        </motion.div>
+                        {d.images!.length > 1 && (
+                          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${d.images!.length - 1}, 1fr)`, gap: '0.5rem', marginTop: '0.5rem' }}>
+                            {d.images!.slice(1).map((img, j) => (
+                              <motion.div key={j}
+                                initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                viewport={{ once: true, margin: '-40px' }}
+                                transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
+                                style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
+                              >
+                                <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
+                              </motion.div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ) : d.image ? (
-                      /* Single image or video — crop values come from the image data */
                       (() => {
                         const vid = isVideoSrc(d.image!.src)
-                        const rawScale = d.image!.scale ?? (vid ? 0.65 : 1)
-                        const cappedScale = Math.min(rawScale, vid ? 0.65 : 1)
-                        const width = `${Math.round(cappedScale * 100)}%`
                         const ct = d.image!.cropTop ?? 0
                         const cb = d.image!.cropBottom ?? 0
                         const cropStyle = (ct || cb)
@@ -247,41 +259,26 @@ function DecisionsBlock({
                             whileInView={{ opacity: 1, y: 0, scale: 1 }}
                             viewport={{ once: true, margin: '-40px' }}
                             transition={{ duration: 0.45, ease: EASE_OUT }}
-                            style={{ width, borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
+                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
                           >
                             {vid ? (
                               <video src={d.image!.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
                             ) : (
-                              <img src={d.image!.src} alt={d.image!.alt} style={{ width: '100%', height: 'auto', display: 'block', ...cropStyle }} />
+                              <img src={d.image!.src} alt={d.image!.alt} onClick={() => openLightbox(d.image!.src, d.image!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in', ...cropStyle }} />
                             )}
                           </motion.div>
                         )
                       })()
                     ) : null}
                   </div>
-                </div>
 
-                {/* Secondary row: Pivot 2 overflow images — full-width grid */}
-                {multiFirst && d.images!.length > 1 && (
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${d.images!.length - 1}, 1fr)`,
-                    gap: '0.5rem',
-                    marginTop: '0.5rem',
-                  }}>
-                    {d.images!.slice(1).map((img, j) => (
-                      <motion.div key={j}
-                        initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        viewport={{ once: true, margin: '-40px' }}
-                        transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                        style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                      >
-                        <img src={img.src} alt={img.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                      </motion.div>
-                    ))}
+                  {/* Right: caption text */}
+                  <div style={{ paddingTop: '0.25rem' }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.65)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
                   </div>
-                )}
+
+                </div>
               </div>
             )
           })}
@@ -291,9 +288,9 @@ function DecisionsBlock({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {decisions.map((d, i) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: d.image ? '260px 1fr' : '1fr', gap: '1rem', alignItems: 'start' }}>
-              <div style={{ borderRadius: '1rem', padding: '1rem 1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.88rem', fontWeight: 500, color: 'rgba(255,255,255,0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.82rem', fontWeight: 300, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+              <div style={{ borderRadius: '1rem', padding: '1rem 1.25rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
               </div>
               {d.image && (
                 <motion.div
@@ -306,7 +303,7 @@ function DecisionsBlock({
                   {/\.(mp4|webm|mov)$/i.test(d.image.src) ? (
                     <video src={d.image.src} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   ) : (
-                    <img src={d.image.src} alt={d.image.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <img src={d.image.src} alt={d.image.alt} onClick={() => openLightbox(d.image!.src, d.image!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
                   )}
                 </motion.div>
               )}
@@ -317,16 +314,16 @@ function DecisionsBlock({
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem' }}>
           {decisions.map((d, i) => (
             <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <div style={{ borderRadius: '1rem', padding: '1.25rem 1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.95rem', fontWeight: 500, color: 'rgba(255,255,255,0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+              <div style={{ borderRadius: '1rem', padding: '1.25rem 1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
               </div>
               {d.image && (
                 <div style={{ borderRadius: '1rem', overflow: 'hidden', border: 'none', lineHeight: 0 }}>
                   {/\.(mp4|webm|mov)$/i.test(d.image.src) ? (
                     <video src={d.image.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
                   ) : (
-                    <img src={d.image.src} alt={d.image.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <img src={d.image.src} alt={d.image.alt} onClick={() => openLightbox(d.image!.src, d.image!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
                   )}
                 </div>
               )}
@@ -347,6 +344,7 @@ function OutcomeBlock({
   outcome: NonNullable<ProjectTab['outcome']>
   delay?: number
 }) {
+  const { openLightbox } = useLightbox()
   const { heading, stats, footnote, variant, outcomeMedia, footnoteVariant } = outcome
   const isTealLabels = variant === 'teal-labels'
 
@@ -359,10 +357,10 @@ function OutcomeBlock({
     >
       <h3
         style={{
-          fontFamily: "'Barlow', sans-serif",
+          fontFamily: 'var(--font-body)',
           fontSize: 'clamp(1.25rem, 2.5vw, 1.6rem)',
           fontWeight: 600,
-          color: 'rgba(255,255,255,0.92)',
+          color: 'rgb(var(--ink) / 0.92)',
           margin: '0 0 1.25rem 0',
           lineHeight: 1.25,
           letterSpacing: '-0.01em',
@@ -373,7 +371,7 @@ function OutcomeBlock({
       <div
         style={{
           height: '1px',
-          background: 'rgba(255,255,255,0.08)',
+          background: 'rgb(var(--ink) / 0.08)',
           marginBottom: '1.75rem',
         }}
       />
@@ -392,19 +390,19 @@ function OutcomeBlock({
             style={{
               borderRadius: '1rem',
               padding: '1.25rem 1.5rem',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.06)',
+              background: 'rgb(var(--ink) / 0.03)',
+              border: '1px solid rgb(var(--ink) / 0.06)',
             }}
           >
             <span
               style={{
                 display: 'block',
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontSize: '0.72rem',
                 fontWeight: 500,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                color: isTealLabels ? 'rgba(45, 212, 191, 0.4)' : 'rgba(255,255,255,0.38)',
+                color: isTealLabels ? 'rgba(45, 212, 191, 0.4)' : 'rgb(var(--ink) / 0.38)',
                 marginBottom: isTealLabels ? '0.75rem' : '0.5rem',
               }}
             >
@@ -414,10 +412,10 @@ function OutcomeBlock({
               <span
                 style={{
                   display: 'block',
-                  fontFamily: "'Source Serif 4', serif",
+                  fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2rem, 4vw, 3rem)',
                   fontWeight: 400,
-                  color: 'white',
+                  color: 'var(--ink-solid)',
                   lineHeight: 1,
                   marginBottom: '0.5rem',
                 }}
@@ -428,10 +426,10 @@ function OutcomeBlock({
             <span
               style={{
                 display: 'block',
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontSize: '0.82rem',
                 fontWeight: 300,
-                color: 'rgba(255,255,255,0.50)',
+                color: 'rgb(var(--ink) / 0.50)',
                 lineHeight: 1.5,
               }}
             >
@@ -446,7 +444,7 @@ function OutcomeBlock({
           {/\.(mp4|webm|mov)$/i.test(outcomeMedia.src) ? (
             <video src={outcomeMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
           ) : (
-            <img src={outcomeMedia.src} alt={outcomeMedia.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+            <img src={outcomeMedia.src} alt={outcomeMedia.alt} onClick={() => openLightbox(outcomeMedia.src, outcomeMedia.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
           )}
         </div>
       )}
@@ -460,7 +458,7 @@ function OutcomeBlock({
             padding: '1rem 1.25rem',
           }}>
             <p style={{
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontSize: '0.88rem',
               fontWeight: 300,
               color: 'rgba(245, 200, 66, 0.80)',
@@ -473,13 +471,13 @@ function OutcomeBlock({
         ) : (
           <p
             style={{
-              fontFamily: "'Barlow', sans-serif",
+              fontFamily: 'var(--font-body)',
               fontSize: '0.88rem',
               fontWeight: 300,
-              color: 'rgba(255,255,255,0.42)',
+              color: 'rgb(var(--ink) / 0.42)',
               lineHeight: 1.7,
               margin: 0,
-              borderLeft: '2px solid rgba(255,255,255,0.12)',
+              borderLeft: '2px solid rgb(var(--ink) / 0.12)',
               paddingLeft: '1rem',
             }}
           >
@@ -494,6 +492,7 @@ function OutcomeBlock({
 // ─── Overview tab content ──────────────────────────────────────
 
 function OverviewContent({ data }: { data: CaseStudy }) {
+  const { openLightbox } = useLightbox()
   const paragraphs = (data.overviewBody ?? '').split('\n\n').filter(Boolean)
   const hasSideMedia = !!(data.overviewSideMedia && data.overviewSideMedia.length > 0)
 
@@ -509,11 +508,11 @@ function OverviewContent({ data }: { data: CaseStudy }) {
             {isVid ? (
               <video src={m.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
             ) : (
-              <img src={m.src} alt={m.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+              <img src={m.src} alt={m.alt} onClick={() => openLightbox(m.src, m.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
             )}
           </div>
           {m.caption && (
-            <p style={{ fontSize: '0.78rem', fontWeight: 300, color: 'rgba(255,255,255,0.38)', fontFamily: "'Barlow', sans-serif", marginTop: '0.75rem' }}>{m.caption}</p>
+            <p style={{ fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', fontFamily: 'var(--font-body)', marginTop: '0.75rem' }}>{m.caption}</p>
           )}
         </div>
       )
@@ -534,12 +533,12 @@ function OverviewContent({ data }: { data: CaseStudy }) {
           {data.overviewSubtitle && (
             <p
               style={{
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontSize: '0.78rem',
                 fontWeight: 500,
                 letterSpacing: '0.10em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.38)',
+                color: 'rgb(var(--ink) / 0.38)',
                 margin: '0 0 1.25rem 0',
               }}
             >
@@ -551,11 +550,11 @@ function OverviewContent({ data }: { data: CaseStudy }) {
             <div key={i}>
               <p
                 style={{
-                  fontFamily: "'Barlow', sans-serif",
+                  fontFamily: 'var(--font-body)',
                   fontSize: '1rem',
                   fontWeight: 300,
                   lineHeight: 1.8,
-                  color: 'rgba(255,255,255,0.72)',
+                  color: 'rgb(var(--ink) / 0.72)',
                   margin: '0 0 1rem 0',
                 }}
               >
@@ -592,7 +591,8 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                           style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.35)', transformOrigin: 'center center' }} />
                       ) : (
                         <img src={img.src} alt={img.alt}
-                          style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.35)', transformOrigin: 'center center' }} />
+                          onClick={() => openLightbox(img.src, img.alt)}
+                          style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', transform: 'scale(1.35)', transformOrigin: 'center center', cursor: 'zoom-in' }} />
                       )}
                     </motion.div>
                   ))}
@@ -626,11 +626,11 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                 <p
                   key={i}
                   style={{
-                    fontFamily: "'Barlow', sans-serif",
+                    fontFamily: 'var(--font-body)',
                     fontSize: '1rem',
                     fontWeight: 300,
                     lineHeight: 1.8,
-                    color: 'rgba(255,255,255,0.65)',
+                    color: 'rgb(var(--ink) / 0.65)',
                     margin: i === 0 ? '0 0 1rem 0' : '0',
                   }}
                 >
@@ -654,7 +654,8 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                     style={{ width: '100%', height: 'auto', display: 'block' }} />
                 ) : (
                   <img src={data.problemMedia.src} alt={data.problemMedia.alt}
-                    style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    onClick={() => openLightbox(data.problemMedia!.src, data.problemMedia!.alt)}
+                    style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
                 )}
               </motion.div>
             )}
@@ -695,7 +696,7 @@ function WIPBox({ message }: { message: string }) {
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
         color: 'rgba(255, 200, 60, 0.7)',
-        fontFamily: "'Barlow', sans-serif",
+        fontFamily: 'var(--font-body)',
       }}>
         {message}
       </span>
@@ -706,6 +707,7 @@ function WIPBox({ message }: { message: string }) {
 // ─── Project tab content ───────────────────────────────────────
 
 function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemStatement?: string }) {
+  const { openLightbox } = useLightbox()
   const isVid = (src: string) => /\.(mp4|webm|mov)$/i.test(src)
 
   return (
@@ -726,8 +728,8 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               transition={{ duration: 0.55, ease: EASE_OUT }}
               style={{ marginBottom: '2rem' }}
             >
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>The Problem</span>
-              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '1rem', fontWeight: 300, lineHeight: 1.8, color: 'rgba(255,255,255,0.65)', margin: 0 }}>{problemStatement}</p>
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 300, lineHeight: 1.8, color: 'rgb(var(--ink) / 0.65)', margin: 0 }}>{problemStatement}</p>
             </motion.div>
           )}
           {tab.problemImage && (
@@ -735,32 +737,32 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               {isVid(tab.problemImage.src) ? (
                 <video src={tab.problemImage.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
-                <img src={tab.problemImage.src} alt={tab.problemImage.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src={tab.problemImage.src} alt={tab.problemImage.alt} onClick={() => openLightbox(tab.problemImage!.src, tab.problemImage!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
             </div>
           )}
-          <SectionBlock heading={tab.goal.heading} body={tab.goal.body} delay={0} />
-          {tab.process && <SectionBlock heading={tab.process.heading} body={tab.process.body} delay={0.06} />}
+          <SectionBlock heading={tab.goal.heading} body={tab.goal.body} delay={0} variant={tab.captionText ? 'caption' : 'body'} />
+          {tab.process && <SectionBlock heading={tab.process.heading} body={tab.process.body} delay={0.06} variant={tab.captionText ? 'caption' : 'body'} />}
         </>
       ) : tab.showProblemStatement ? (
         /* ── 3-card grid: problem + goal + process ── */
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
           {problemStatement && (
-            <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>The Problem</span>
-              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
+            <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.65)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
             </div>
           )}
-          <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>Project Goal</span>
-            <h3 style={{ fontFamily: "'Barlow', sans-serif", fontSize: '1rem', fontWeight: 600, color: 'rgba(255,255,255,0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.60)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
+          <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
+            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Project Goal</span>
+            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
           </div>
           {tab.process && (
-            <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', fontFamily: "'Barlow', sans-serif", marginBottom: '0.75rem' }}>Process</span>
-              <h3 style={{ fontFamily: "'Barlow', sans-serif", fontSize: '1rem', fontWeight: 600, color: 'rgba(255,255,255,0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
-              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.9rem', fontWeight: 300, color: 'rgba(255,255,255,0.60)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
+            <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Process</span>
+              <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
             </div>
           )}
         </div>
@@ -774,16 +776,16 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, ease: EASE_OUT }}
-              style={{ maxWidth: '82%', margin: '0 auto 2.5rem', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.45)', lineHeight: 0 }}
+              style={{ maxWidth: tab.captionText ? '100%' : '82%', margin: '0 auto 2.5rem', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.45)', lineHeight: 0 }}
             >
               {isVid(tab.introMedia.src) ? (
                 <video src={tab.introMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
-                <img src={tab.introMedia.src} alt={tab.introMedia.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src={tab.introMedia.src} alt={tab.introMedia.alt} onClick={() => openLightbox(tab.introMedia!.src, tab.introMedia!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
             </motion.div>
           )}
-          <SectionBlock heading={tab.goal.heading} body={tab.goal.body} delay={0} />
+          <SectionBlock heading={tab.goal.heading} body={tab.goal.body} delay={0} variant={tab.captionText ? 'caption' : 'body'} />
           {tab.goalMedia && (
             <motion.div
               initial={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -795,10 +797,10 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               {isVid(tab.goalMedia.src) ? (
                 <video src={tab.goalMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
-                <img src={tab.goalMedia.src} alt={tab.goalMedia.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src={tab.goalMedia.src} alt={tab.goalMedia.alt} onClick={() => openLightbox(tab.goalMedia!.src, tab.goalMedia!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
               {tab.goalMedia.caption && (
-                <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.78rem', fontWeight: 300, color: 'rgba(255,255,255,0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
               )}
             </motion.div>
           )}
@@ -809,7 +811,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               ))}
             </div>
           )}
-          {tab.process && <SectionBlock heading={tab.process.heading} body={tab.process.body} delay={0.06} />}
+          {tab.process && <SectionBlock heading={tab.process.heading} body={tab.process.body} delay={0.06} variant={tab.captionText ? 'caption' : 'body'} />}
           {tab.processMedia && (
             <motion.div
               initial={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -821,10 +823,10 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               {isVid(tab.processMedia.src) ? (
                 <video src={tab.processMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
-                <img src={tab.processMedia.src} alt={tab.processMedia.alt} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src={tab.processMedia.src} alt={tab.processMedia.alt} onClick={() => openLightbox(tab.processMedia!.src, tab.processMedia!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
               {tab.processMedia.caption && (
-                <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: '0.78rem', fontWeight: 300, color: 'rgba(255,255,255,0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.processMedia.caption}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.processMedia.caption}</p>
               )}
             </motion.div>
           )}
@@ -856,7 +858,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
           {tab.keyDecisions && tab.keyDecisions.length > 0 && (
             <section
               id="section-key-decisions"
-              style={{ paddingTop: '5rem', borderTop: '1px solid rgba(255,255,255,0.07)', marginTop: '2rem' }}
+              style={{ paddingTop: '5rem', borderTop: '1px solid rgb(var(--ink) / 0.07)', marginTop: '2rem' }}
             >
               <motion.h2
                 initial={{ opacity: 0, y: 24 }}
@@ -864,10 +866,10 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
                 viewport={{ once: true }}
                 transition={{ duration: 0.75, ease: EASE_OUT }}
                 style={{
-                  fontFamily: "'Source Serif 4', serif",
+                  fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
                   fontWeight: 300,
-                  color: 'rgba(255,255,255,0.90)',
+                  color: 'rgb(var(--ink) / 0.90)',
                   margin: '0 0 3rem 0',
                   lineHeight: 1.0,
                   letterSpacing: '-0.03em',
@@ -940,10 +942,10 @@ export default function ProjectTabs({ data }: Props) {
           viewport={{ once: true }}
           transition={{ duration: 0.75, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Source Serif 4', serif",
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.90)',
+            color: 'rgb(var(--ink) / 0.90)',
             margin: '0 0 3rem 0',
             lineHeight: 1.0,
             letterSpacing: '-0.03em',
@@ -961,7 +963,7 @@ export default function ProjectTabs({ data }: Props) {
           id={sectionId(tab.label)}
           style={{
             paddingTop: '5rem',
-            borderTop: '1px solid rgba(255,255,255,0.07)',
+            borderTop: '1px solid rgb(var(--ink) / 0.07)',
             marginTop: '2rem',
           }}
         >
@@ -971,10 +973,10 @@ export default function ProjectTabs({ data }: Props) {
             viewport={{ once: true }}
             transition={{ duration: 0.75, ease: EASE_OUT }}
             style={{
-              fontFamily: "'Source Serif 4', serif",
+              fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
               fontWeight: 300,
-              color: 'rgba(255,255,255,0.90)',
+              color: 'rgb(var(--ink) / 0.90)',
               margin: '0 0 3rem 0',
               lineHeight: 1.0,
               letterSpacing: '-0.03em',

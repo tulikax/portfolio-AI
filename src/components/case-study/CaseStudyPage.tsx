@@ -12,6 +12,7 @@ import PrototypeEmbed from './PrototypeEmbed'
 import NextProject from './NextProject'
 import ProjectTabs from './ProjectTabs'
 import CaseSideNav from './CaseSideNav'
+import { LightboxProvider } from './LightboxContext'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -91,6 +92,7 @@ export default function CaseStudyPage() {
     : []
 
   return (
+    <LightboxProvider>
     <div style={{ background: 'black', minHeight: '100vh' }}>
       {/* Sticky left side nav — only for case studies with project tabs */}
       {hasProjectTabs && !loaderVisible && <CaseSideNav sections={sideNavSections} />}
@@ -124,7 +126,7 @@ export default function CaseStudyPage() {
       {/* 2a — Body paragraphs layout (replaces problem section, reorders prototype before decisions) */}
       {!hasProjectTabs && hasBodyParagraphs && (
         <section style={{ padding: '0.5rem 2rem 4rem', maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '1.5rem 0 3rem' }} />
+          <div style={{ height: '1px', background: 'rgb(var(--ink) / 0.08)', margin: '1.5rem 0 3rem' }} />
           {data.bodyParagraphs!.map((para, i) => (
             <motion.p
               key={i}
@@ -133,10 +135,10 @@ export default function CaseStudyPage() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.7, delay: i * 0.15, ease: EASE_OUT }}
               style={{
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontSize: '1rem',
                 fontWeight: 300,
-                color: 'rgba(255,255,255,0.72)',
+                color: 'rgb(var(--ink) / 0.72)',
                 lineHeight: 1.8,
                 margin: '0 0 1rem 0',
               }}
@@ -188,7 +190,7 @@ export default function CaseStudyPage() {
           <div
             style={{
               height: '1px',
-              background: 'rgba(255,255,255,0.08)',
+              background: 'rgb(var(--ink) / 0.08)',
               maxWidth: '72rem',
               margin: '0 auto 4rem',
             }}
@@ -224,10 +226,10 @@ export default function CaseStudyPage() {
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.7, ease: EASE_OUT }}
                 style={{
-                  fontFamily: "'Barlow', sans-serif",
+                  fontFamily: 'var(--font-body)',
                   fontSize: '1rem',
                   fontWeight: 300,
-                  color: 'rgba(255,255,255,0.72)',
+                  color: 'rgb(var(--ink) / 0.72)',
                   lineHeight: 1.8,
                   margin: 0,
                 }}
@@ -258,10 +260,10 @@ export default function CaseStudyPage() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.7, ease: EASE_OUT }}
               style={{
-                fontFamily: "'Barlow', sans-serif",
+                fontFamily: 'var(--font-body)',
                 fontSize: '1rem',
                 fontWeight: 300,
-                color: 'rgba(255,255,255,0.72)',
+                color: 'rgb(var(--ink) / 0.72)',
                 lineHeight: 1.8,
                 margin: 0,
               }}
@@ -282,5 +284,6 @@ export default function CaseStudyPage() {
 
       </motion.div>
     </div>
+    </LightboxProvider>
   )
 }

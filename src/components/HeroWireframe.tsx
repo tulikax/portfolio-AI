@@ -1,4 +1,5 @@
 import { useEffect, useRef, type MutableRefObject } from 'react'
+import { inkChannel } from '../constants/theme'
 
 interface Props {
   cursorRef?: MutableRefObject<{ x: number; y: number }>
@@ -82,6 +83,7 @@ export default function HeroWireframe({ cursorRef }: Props) {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
+    const INK = inkChannel()
     if (!ctx) return
 
     let shapes: Shape[] = []
@@ -171,8 +173,8 @@ export default function HeroWireframe({ cursorRef }: Props) {
           const va = s.verts[a]
           const vb = s.verts[b]
           const grad = ctx.createLinearGradient(va.px, va.py, vb.px, vb.py)
-          grad.addColorStop(0, `rgba(255,255,255,${s.opacity})`)
-          grad.addColorStop(1, `rgba(255,255,255,${s.opacity * 0.5})`)
+          grad.addColorStop(0, `rgb(${INK} / ${s.opacity})`)
+          grad.addColorStop(1, `rgb(${INK} / ${s.opacity * 0.5})`)
           ctx.strokeStyle = grad
           ctx.beginPath()
           ctx.moveTo(va.px, va.py)
@@ -189,8 +191,8 @@ export default function HeroWireframe({ cursorRef }: Props) {
 
           if (nearFactor > 0) {
             const glow = ctx.createRadialGradient(v.px, v.py, 0, v.px, v.py, 10)
-            glow.addColorStop(0, `rgba(255,255,255,${nearFactor * 0.55})`)
-            glow.addColorStop(1, 'rgba(255,255,255,0)')
+            glow.addColorStop(0, `rgb(${INK} / ${nearFactor * 0.55})`)
+            glow.addColorStop(1, `rgb(${INK} / 0)`)
             ctx.beginPath()
             ctx.arc(v.px, v.py, 10, 0, Math.PI * 2)
             ctx.fillStyle = glow
@@ -199,7 +201,7 @@ export default function HeroWireframe({ cursorRef }: Props) {
 
           ctx.beginPath()
           ctx.arc(v.px, v.py, 2, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(255,255,255,${s.opacity * 2})`
+          ctx.fillStyle = `rgb(${INK} / ${s.opacity * 2})`
           ctx.fill()
         }
       }

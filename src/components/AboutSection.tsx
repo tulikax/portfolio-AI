@@ -26,11 +26,11 @@ const OBSESSIONS = [
 
 const TILE: React.CSSProperties = {
   borderRadius: '1.25rem',
-  background: 'linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
+  background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
   backdropFilter: 'blur(20px)',
   WebkitBackdropFilter: 'blur(20px)',
-  border: '1px solid rgba(255,255,255,0.09)',
-  boxShadow: '0 1px 0 rgba(255,255,255,0.08) inset, 0 8px 32px rgba(0,0,0,0.3)',
+  border: '1px solid rgb(var(--ink) / 0.09)',
+  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 32px rgba(0,0,0,0.3)',
   padding: '1.25rem',
   position: 'relative',
   overflow: 'hidden',
@@ -38,7 +38,7 @@ const TILE: React.CSSProperties = {
 
 const SHIMMER: React.CSSProperties = {
   position: 'absolute', top: 0, left: '1rem', right: '1rem', height: '1px',
-  background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent)',
+  background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.12), transparent)',
 }
 
 const STATS = [
@@ -98,13 +98,13 @@ function BentoDashboard() {
             <span style={{ fontSize: '1.1rem' }}>🎵</span>
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(29,185,84,0.8)', margin: '0 0 0.2rem' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(29,185,84,0.8)', margin: '0 0 0.2rem' }}>
               Now playing
             </p>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 500, fontSize: '0.8rem', color: 'white', margin: '0 0 0.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.8rem', color: 'var(--ink-solid)', margin: '0 0 0.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               Comptine d'un autre été
             </p>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.7rem', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.7rem', color: 'rgb(var(--ink) / 0.45)', margin: 0 }}>
               Yann Tiersen
             </p>
           </div>
@@ -115,17 +115,17 @@ function BentoDashboard() {
           </div>
           {/* Hover overlay — thought bubble */}
           <div className="bento-overlay" style={overlayBase}>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', margin: '0 0 0.5rem' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', margin: '0 0 0.5rem' }}>
               💭 sounds like
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
               {SONG_TAGS.map(tag => (
                 <span key={tag} style={{
-                  fontFamily: "'Barlow', sans-serif", fontWeight: 300,
-                  fontSize: '0.75rem', color: 'rgba(255,255,255,0.75)',
+                  fontFamily: 'var(--font-body)', fontWeight: 300,
+                  fontSize: '0.75rem', color: 'rgb(var(--ink) / 0.75)',
                   padding: '0.2rem 0.6rem', borderRadius: '9999px',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgb(var(--ink) / 0.15)',
+                  background: 'rgb(var(--ink) / 0.05)',
                 }}>{tag}</span>
               ))}
             </div>
@@ -139,25 +139,25 @@ function BentoDashboard() {
           <div style={{
             width: 36, height: 52, borderRadius: '0.25rem', flexShrink: 0,
             background: 'linear-gradient(160deg, rgba(180,140,100,0.3), rgba(120,80,60,0.2))',
-            border: '1px solid rgba(255,255,255,0.1)',
+            border: '1px solid rgb(var(--ink) / 0.1)',
           }} />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', margin: '0 0 0.3rem' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', margin: '0 0 0.3rem' }}>
               Reading
             </p>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 500, fontSize: '0.78rem', color: 'white', margin: '0 0 0.15rem', lineHeight: 1.3 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.78rem', color: 'var(--ink-solid)', margin: '0 0 0.15rem', lineHeight: 1.3 }}>
               {BOOK.title}
             </p>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.68rem', color: 'rgba(255,255,255,0.40)', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.68rem', color: 'rgb(var(--ink) / 0.40)', margin: 0 }}>
               {BOOK.author}
             </p>
           </div>
           {/* Hover overlay — book thoughts */}
           <div className="bento-overlay" style={overlayBase}>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', margin: '0 0 0.5rem' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', margin: '0 0 0.5rem' }}>
               💭 my take
             </p>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.75rem', color: 'rgba(255,255,255,0.75)', margin: 0, lineHeight: 1.55 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.75rem', color: 'rgb(var(--ink) / 0.75)', margin: 0, lineHeight: 1.55 }}>
               {BOOK.thoughts}
             </p>
           </div>
@@ -167,12 +167,12 @@ function BentoDashboard() {
         <div style={{ ...TILE, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div style={SHIMMER} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-            <MapPin style={{ width: 12, height: 12, color: 'rgba(255,255,255,0.35)', flexShrink: 0 }} />
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.7rem', color: 'rgba(255,255,255,0.40)', margin: 0, letterSpacing: '0.04em' }}>
+            <MapPin style={{ width: 12, height: 12, color: 'rgb(var(--ink) / 0.35)', flexShrink: 0 }} />
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.7rem', color: 'rgb(var(--ink) / 0.40)', margin: 0, letterSpacing: '0.04em' }}>
               London, UK
             </p>
           </div>
-          <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '1.4rem', color: 'white', margin: '0.5rem 0 0', letterSpacing: '-0.02em' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '1.4rem', color: 'var(--ink-solid)', margin: '0.5rem 0 0', letterSpacing: '-0.02em' }}>
             {time}
           </p>
         </div>
@@ -183,8 +183,8 @@ function BentoDashboard() {
         {STATS.map(s => (
           <div key={s.label} style={{ ...TILE }}>
             <div style={SHIMMER} />
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 400, fontSize: '1.5rem', color: 'white', margin: '0 0 0.25rem', letterSpacing: '-0.03em' }}>{s.value}</p>
-            <p style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 300, fontSize: '0.7rem', color: 'rgba(255,255,255,0.40)', margin: 0, letterSpacing: '0.04em' }}>{s.label}</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '1.5rem', color: 'var(--ink-solid)', margin: '0 0 0.25rem', letterSpacing: '-0.03em' }}>{s.value}</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.7rem', color: 'rgb(var(--ink) / 0.40)', margin: 0, letterSpacing: '0.04em' }}>{s.label}</p>
           </div>
         ))}
       </div>
@@ -244,12 +244,12 @@ function ObsessionsReveal() {
         ref={btnRef}
         onClick={fire}
         style={{
-          fontFamily: "'Barlow', sans-serif",
+          fontFamily: 'var(--font-body)',
           fontWeight: 400,
           fontSize: '0.875rem',
-          color: open ? 'rgba(255,255,255,0.5)' : 'white',
-          background: open ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.08)',
-          border: '1px solid rgba(255,255,255,0.14)',
+          color: open ? 'rgb(var(--ink) / 0.5)' : 'var(--ink-solid)',
+          background: open ? 'rgb(var(--ink) / 0.04)' : 'rgb(var(--ink) / 0.08)',
+          border: '1px solid rgb(var(--ink) / 0.14)',
           borderRadius: '9999px',
           padding: '0.5rem 1.25rem',
           cursor: 'pointer',
@@ -259,8 +259,8 @@ function ObsessionsReveal() {
           alignItems: 'center',
           gap: '0.5rem',
         }}
-        onMouseEnter={e => { if (!open) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.13)' }}
-        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = open ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.08)' }}
+        onMouseEnter={e => { if (!open) (e.currentTarget as HTMLButtonElement).style.background = 'rgb(var(--ink) / 0.13)' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = open ? 'rgb(var(--ink) / 0.04)' : 'rgb(var(--ink) / 0.08)' }}
       >
         <span style={{ fontSize: '1rem' }}>{open ? '✕' : '✦'}</span>
         {open ? 'Close' : 'My current obsessions'}
@@ -285,12 +285,12 @@ function ObsessionsReveal() {
                   exit={{ opacity: 0, y: 20, scale: 0.7, transition: { duration: 0.15, delay: 0 } }}
                   transition={{ type: 'spring', stiffness: 220, damping: 16, delay: i * 0.04, mass: 0.9 }}
                   style={{
-                    fontFamily: "'Barlow', sans-serif",
+                    fontFamily: 'var(--font-body)',
                     fontWeight: 300,
                     fontSize: '0.85rem',
-                    color: 'rgba(255,255,255,0.82)',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: 'rgb(var(--ink) / 0.82)',
+                    background: 'rgb(var(--ink) / 0.06)',
+                    border: '1px solid rgb(var(--ink) / 0.12)',
                     borderRadius: '9999px',
                     padding: '0.35rem 0.9rem',
                     display: 'inline-flex',
@@ -359,8 +359,8 @@ function FloatingCard({ card }: {
         left: card.left,
         width: card.w,
         borderRadius: '10px',
-        border: '1px solid rgba(255,255,255,0.10)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.08) inset',
+        border: '1px solid rgb(var(--ink) / 0.10)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgb(var(--ink) / 0.08) inset',
         overflow: 'hidden',
         zIndex: 1,
         pointerEvents: 'none',
@@ -388,7 +388,7 @@ function FloatingCard({ card }: {
   )
 }
 
-export default function AboutSection() {
+export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs?: string[] } = {}) {
   return (
     <section
       id="about"
@@ -475,12 +475,12 @@ export default function AboutSection() {
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: "'Source Serif 4', serif",
+            fontFamily: 'var(--font-display)',
             fontStyle: 'italic',
             fontSize: 'clamp(1.75rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.92,
-            color: 'white',
+            color: 'var(--ink-solid)',
             margin: 0,
             fontWeight: 400,
           }}
@@ -495,10 +495,10 @@ export default function AboutSection() {
           transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
           className="about-body-text"
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 300,
             fontSize: '1.05rem',
-            color: 'rgba(255,255,255,0.70)',
+            color: 'rgb(var(--ink) / 0.70)',
             lineHeight: 1.7,
             maxWidth: '640px',
           }}
@@ -511,10 +511,10 @@ export default function AboutSection() {
           transition={{ duration: 0.7, delay: 0.24, ease: EASE_OUT }}
           className="about-body-text"
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 300,
             fontSize: '1.05rem',
-            color: 'rgba(255,255,255,0.70)',
+            color: 'rgb(var(--ink) / 0.70)',
             lineHeight: 1.7,
             maxWidth: '640px',
           }}
@@ -527,16 +527,36 @@ export default function AboutSection() {
           transition={{ duration: 0.7, delay: 0.32, ease: EASE_OUT }}
           className="about-body-text"
           style={{
-            fontFamily: "'Barlow', sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 300,
             fontSize: '1.05rem',
-            color: 'rgba(255,255,255,0.70)',
+            color: 'rgb(var(--ink) / 0.70)',
             lineHeight: 1.7,
             maxWidth: '640px',
           }}
         >
           Figma was a constant, but I'm moving towards building prototypes directly with AI. Less static, more real: something stakeholders can click through, developers can react to, and teams can test before anyone's committed. To me, good experience doesn't stop at the user; it extends to everyone in the room who has to build, approve, and ship the thing.
         </motion.p>
+
+        {/* Appended copy (e.g. the intro paragraphs moved down from the hero) */}
+        {extraParagraphs.map((para, i) => (
+          <motion.p
+            key={i}
+            {...fadeUp}
+            transition={{ duration: 0.7, delay: 0.4 + i * 0.08, ease: EASE_OUT }}
+            className="about-body-text"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontWeight: 300,
+              fontSize: '1.05rem',
+              color: 'rgb(var(--ink) / 0.70)',
+              lineHeight: 1.7,
+              maxWidth: '640px',
+            }}
+          >
+            {para}
+          </motion.p>
+        ))}
 
         {/* Bento dashboard — toggle with SHOW_BENTO in AboutSection.tsx */}
         {SHOW_BENTO && (

@@ -59,6 +59,8 @@ export interface ProjectTab {
   visualBlocks?: VisualBlock[]
   /** If set, renders a WIP info box and skips process/decisions/outcome */
   wip?: { message: string }
+  /** When true, renders goal/process body text at caption size so images can be the hero */
+  captionText?: boolean
 }
 
 // ─── Primitives ────────────────────────────────────────────────

@@ -21,7 +21,7 @@ function toTransparent(color: string): string {
  */
 export default function HighlightPhrase({
   children,
-  color = 'rgba(255, 255, 255, 0.92)',
+  color = 'rgb(var(--ink) / 0.92)',
   textColor,
 }: Props) {
   const spanRef = useRef<HTMLSpanElement>(null)

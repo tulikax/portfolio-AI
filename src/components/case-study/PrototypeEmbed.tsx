@@ -34,7 +34,7 @@ export default function PrototypeEmbed({ embed }: Props) {
       <div
         style={{
           height: '1px',
-          background: 'rgba(255,255,255,0.08)',
+          background: 'rgb(var(--ink) / 0.08)',
           marginBottom: '3.5rem',
         }}
       />
@@ -92,8 +92,8 @@ export default function PrototypeEmbed({ embed }: Props) {
           style={{
             fontSize: '0.78rem',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.38)',
-            fontFamily: "'Barlow', sans-serif",
+            color: 'rgb(var(--ink) / 0.38)',
+            fontFamily: 'var(--font-body)',
             marginTop: '0.875rem',
             lineHeight: 1.5,
           }}

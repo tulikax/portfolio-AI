@@ -279,6 +279,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       // ── Tab 1: Process ──────────────────────────────────────
       {
         label: 'Approach',
+        captionText: true,
         introMedia: { src: stProcess, alt: 'Design process overview' },
         goal: {
           heading: 'Four tensions. Four choices.',
@@ -303,6 +304,7 @@ export const CASE_STUDIES: CaseStudy[] = [
       // ── Tab 2: Three Pivots ──────────────────────────────────
       {
         label: 'Finding Direction',
+        captionText: true,
         goal: {
           heading: 'Three dead ends. One direction.',
           body: 'The path wasn\'t linear. We went through three distinct directions before landing on what MAGIC needed to be — each abandoned faster than the last, but each teaching us something the final design couldn\'t have done without.\n\nUnderstanding why each direction failed was as important as what replaced it. The failures shaped the product just as much as the successes.',
