@@ -20,9 +20,13 @@ export const warm = (alpha: number) => `rgb(${WARM} / ${alpha})`
 
 export const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
-/** Page gutter — matches the max-width used across the site's case studies. */
+/**
+ * Page gutter. 72rem matches the container every section of the live case
+ * studies uses, so the left edge of titles and copy lines up between the two.
+ * Body copy keeps its own narrower measure via BODY below.
+ */
 export const WRAP: CSSProperties = {
-  maxWidth: '58rem',
+  maxWidth: '72rem',
   margin: '0 auto',
   padding: '0 2rem',
 }

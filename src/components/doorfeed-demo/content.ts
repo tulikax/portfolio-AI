@@ -10,25 +10,15 @@
  */
 
 /*
- * Demo assets. Only the files whose names map onto a claim the copy actually
- * makes are wired up; slots with no matching asset stay as placeholders.
- * `ingestion AI - 2.png` is byte-identical to `- 1` and is deliberately unused.
+ * Screenshots are served from Cloudinary — see src/constants/media.ts for why,
+ * and for the mapping between these identifiers and their public IDs. Slots
+ * with no matching asset stay as placeholders.
  */
-import navigationIssues from '../../assets/DoorFeed/case study /issues with navigation.png'
-import oldComps from '../../assets/DoorFeed/demo/old comps.png'
-import newCompsLight from '../../assets/DoorFeed/demo/new comps - light mode.png'
-import dataroom from '../../assets/DoorFeed/demo/dataroom.png'
-// The same clip the homepage role card plays on hover
+import { MID_PLATFORM, NEW_PLATFORM, OLD_PLATFORM } from '../../constants/media'
+// Still bundled: this clip is not on Cloudinary yet. It is also the same file
+// the homepage role card plays on hover.
 import homepageGlow from '../../assets/DoorFeed/homepage glow.mov'
-import posthogReview from '../../assets/DoorFeed/demo/old platform - posthog review.png'
 import type { Crop } from './CroppedImage'
-import ingestionOne from '../../assets/DoorFeed/demo/ingestion AI - 1 .png'
-import ingestionThree from '../../assets/DoorFeed/demo/ingestion AI - 3 .png'
-import hybridUi from '../../assets/DoorFeed/demo/hybrid ui.png'
-import hybridWorkspaceTwo from '../../assets/DoorFeed/demo/hybrid workspace2.png'
-// `hybrid 3.png` is byte-identical to this file and is deliberately unused
-import workflowsIntoConversation from '../../assets/DoorFeed/demo/workflows that open into conversations.png'
-import earlySketches from '../../assets/DoorFeed/demo/directions sketches - early.png'
 
 /**
  * One run of a chapter title. Titles break at different points and italicise
@@ -63,6 +53,8 @@ export interface MediaGridCell {
   label: string
   src?: string
   alt?: string
+  /** Renders a looping muted clip instead of a still. Takes precedence over `src`. */
+  videoSrc?: string
   /** Trims empty canvas off a screenshot at render time. */
   crop?: Crop
   /** Rendered width as a percentage of the cell — centred. Defaults to full width. */
@@ -92,6 +84,12 @@ export interface MediaGridSpec {
   caption: string
   /** Bleeds the block past the text column so stacked screens read at full size. */
   wide?: boolean
+  /**
+   * Drops the cell chrome — background, hairlines and the label bar's rule — so
+   * each cell is exactly its media plus a caption. Use when cells carry their
+   * own `width`, where a full-column card would frame empty space around them.
+   */
+  bare?: boolean
 }
 
 export interface CollageItem {
@@ -232,13 +230,13 @@ export const CONTEXT = {
         cells: [
           {
             label: 'Comparables — before',
-            src: navigationIssues,
+            src: OLD_PLATFORM.issues,
             alt: 'Annotated breakdown of the navigation problems in the original comparables view',
             width: 80,
           },
           {
             label: 'PostHog — rage clicks',
-            src: posthogReview,
+            src: OLD_PLATFORM.posthog,
             alt: 'PostHog session review showing rage clicks concentrated in the comparables area',
             // The capture includes the empty replay pane to the left of the event list
             crop: { width: 2094, height: 938, left: 1015 },
@@ -262,14 +260,14 @@ export const CONTEXT = {
           {
             label: 'Comparables — drag to compare',
             compare: {
-              beforeSrc: oldComps,
+              beforeSrc: OLD_PLATFORM.comps,
               beforeAlt: 'The original comparables view, returning an unfiltered result set',
               beforeLabel: 'Before',
               // Natural pixel widths — the two screenshots were captured at
               // different resolutions, so the slider needs both to fit them.
               beforeWidth: 2048,
               // Light mode, so the reveal reads as a clear change of state
-              afterSrc: newCompsLight,
+              afterSrc: MID_PLATFORM.compsLight,
               afterAlt:
                 'The restructured comparables view in light mode, with filters ahead of results and the map alongside the list',
               afterLabel: 'After',
@@ -303,7 +301,7 @@ export const CONTEXT = {
         items: [
           {
             label: 'Upload & normalisation',
-            src: ingestionOne,
+            src: OLD_PLATFORM.ingestionClean,
             alt: 'The deal ingestion flow converting and normalising an uploaded rent roll',
             width: 46,
             x: 0,
@@ -311,7 +309,7 @@ export const CONTEXT = {
           },
           {
             label: 'Resolve & confirm',
-            src: ingestionThree,
+            src: OLD_PLATFORM.ingestionSelect,
             alt: 'The deal ingestion step where each unresolved item must be confirmed before proceeding',
             width: 68,
             x: 32,
@@ -335,7 +333,7 @@ export const CONTEXT = {
       kind: 'media',
       spec: {
         name: 'dataroom — already built, already buried',
-        src: dataroom,
+        src: OLD_PLATFORM.dataroom,
         alt: 'The platform dataroom, with file versioning',
         width: 50,
         caption:
@@ -366,14 +364,14 @@ const HYBRID_STACK: MediaGridSpec = {
   cells: [
     {
       label: 'Hybrid workspace — expanded',
-      src: hybridWorkspaceTwo,
+      src: NEW_PLATFORM.hybridWorkspaceExpanded,
       alt: 'The hybrid workspace with the structured panel expanded for review',
       // Held back so the conversation screen below reads as the larger of the two
       width: 76,
     },
     {
       label: 'Workflows that open into conversation',
-      src: workflowsIntoConversation,
+      src: NEW_PLATFORM.workflowsIntoConversation,
       alt: 'A workflow opening into a free-flowing conversation where the agent asks for what it needs',
     },
   ],
@@ -421,7 +419,7 @@ export const ARTIFACTS = {
       media: {
         kind: 'image',
         label: 'Chat workflows',
-        src: hybridUi,
+        src: NEW_PLATFORM.chatWorkflows,
         alt: 'Named workflow cards offered beneath the prompt — underwrite a deal, generate a market report, generate a business plan',
       },
     },
@@ -455,6 +453,39 @@ export const ARTIFACTS = {
     },
     { title: 'Workflow catalogue', body: 'Quick-action cards replacing the blank prompt.' },
   ] satisfies ComponentCard[],
+  flowsHeading: 'The journey, end to end',
+  flows: {
+    columns: 1,
+    wide: true,
+    bare: true,
+    cells: [
+      // NEW_PLATFORM.createNewAsset — the asset-creation clip — is deliberately
+      // not shown here; the manifest entry stays so it can be dropped back in.
+      {
+        label: 'Drop files into the dataroom',
+        videoSrc: NEW_PLATFORM.dataroomFileDrop,
+        // Clips run at three-quarter width so they sit quieter than the stills
+        width: 75,
+        alt: 'Files dropped straight into the dataroom, versioned in one place',
+      },
+      {
+        label: 'Calculate ERV inside a workflow',
+        videoSrc: NEW_PLATFORM.calculateErv,
+        // Clips run at three-quarter width so they sit quieter than the stills
+        width: 75,
+        alt: 'A workflow calculating estimated rental value, with the analyst adjusting assumptions',
+      },
+      {
+        label: 'Generate a market report',
+        videoSrc: NEW_PLATFORM.marketReportGeneration,
+        // Clips run at three-quarter width so they sit quieter than the stills
+        width: 75,
+        alt: 'A market report generated and previewed inside the platform',
+      },
+    ],
+    caption:
+      'Address to deliverable without leaving the platform — the files landing in one versioned place, a workflow mid-flight, and the artifact it produces.',
+  } satisfies MediaGridSpec,
 }
 
 export const DECISIONS = {
@@ -631,7 +662,7 @@ export const REFLECTIONS = {
   ] satisfies Reflection[],
   media: {
     name: 'early direction sketches',
-    src: earlySketches,
+    src: NEW_PLATFORM.earlyDirection,
     alt: 'Early sketches exploring layout directions for the agentic layer',
     caption:
       'Early direction sketches — the layout explorations that preceded the three rounds, compared live rather than in static frames.',

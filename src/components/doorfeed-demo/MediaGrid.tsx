@@ -19,36 +19,66 @@ export default function MediaGrid({ spec }: { spec: MediaGridSpec }) {
           style={{
             display: 'grid',
             gridTemplateColumns: `repeat(${spec.columns}, 1fr)`,
-            gap: '1px',
-            background: HAIRLINE,
-            border: `1px solid ${HAIRLINE}`,
-            borderRadius: '0.75rem',
-            overflow: 'hidden',
+            ...(spec.bare
+              ? { gap: '3rem' }
+              : {
+                  gap: '1px',
+                  background: HAIRLINE,
+                  border: `1px solid ${HAIRLINE}`,
+                  borderRadius: '0.75rem',
+                  overflow: 'hidden',
+                }),
           }}
         >
           {spec.cells.map((cell) => (
-            <div key={cell.label} style={{ background: ink(0.03) }}>
+            <div
+              key={cell.label}
+              style={
+                spec.bare
+                  ? // Cell hugs its media rather than framing it in a full-column card
+                    { width: cell.width ? `${cell.width}%` : '100%', margin: '0 auto' }
+                  : { background: ink(0.03) }
+              }
+            >
               <div
                 style={{
                   ...MONO,
                   fontSize: '0.56rem',
                   color: ink(0.42),
-                  padding: '0.625rem 0.875rem',
-                  borderBottom: `1px solid ${HAIRLINE}`,
+                  padding: spec.bare ? '0 0 0.625rem' : '0.625rem 0.875rem',
+                  borderBottom: spec.bare ? 'none' : `1px solid ${HAIRLINE}`,
                 }}
               >
                 {cell.label}
               </div>
               {cell.compare ? (
                 <BeforeAfterSlider {...cell.compare} />
-              ) : cell.src ? (
+              ) : cell.videoSrc || cell.src ? (
+                /*
+                 * `width` scales stills and clips alike, centred in the cell —
+                 * except in bare mode, where the cell itself already carries it.
+                 */
                 <div
                   style={{
-                    width: cell.width ? `${cell.width}%` : '100%',
+                    width: !spec.bare && cell.width ? `${cell.width}%` : '100%',
                     margin: '0 auto',
+                    borderRadius: spec.bare ? '0.5rem' : 0,
+                    overflow: spec.bare ? 'hidden' : undefined,
                   }}
                 >
-                  <CroppedImage src={cell.src} alt={cell.alt ?? ''} crop={cell.crop} />
+                  {cell.videoSrc ? (
+                    <video
+                      src={cell.videoSrc}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      aria-label={cell.alt ?? cell.label}
+                      style={{ width: '100%', display: 'block' }}
+                    />
+                  ) : (
+                    <CroppedImage src={cell.src ?? ''} alt={cell.alt ?? ''} crop={cell.crop} />
+                  )}
                 </div>
               ) : (
                 <div

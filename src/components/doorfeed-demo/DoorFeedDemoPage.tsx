@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { motion, useScroll } from 'framer-motion'
+import ArtifactsChapter from './ArtifactsChapter'
 import ChapterHead, { TitleTokens } from './ChapterHead'
 import DeepDiveAccordion from './DeepDiveAccordion'
 import FlagList from './FlagList'
 import HeroVideoDissolve from './HeroVideoDissolve'
 import MediaGrid from './MediaGrid'
 import MediaSlot from './MediaSlot'
-import Rounds from './Rounds'
 import ProseBlocks from './ProseBlocks'
 import ReflectionList from './ReflectionList'
 import Reveal from './Reveal'
@@ -14,7 +14,6 @@ import RichText from './RichText'
 import SectionRail from './SectionRail'
 import StatusGrid from './StatusGrid'
 import {
-  ARTIFACTS,
   CLOSING,
   CONTEXT,
   DECISIONS,
@@ -107,16 +106,15 @@ export default function DoorFeedDemoPage() {
           }}
         />
 
-        {/* Breaks out of the centred column the chapters use — the hero copy is
-            pinned to the page gutter so it clears the product behind it */}
+        {/* Same centred 72rem column as the chapters below and as the live case
+            study hero — anything narrower runs under the section rail */}
         <div
           style={{
+            ...WRAP,
             position: 'relative',
             zIndex: 2,
             width: '100%',
-            maxWidth: '38rem',
-            marginRight: 'auto',
-            padding: '0 2rem 5rem',
+            padding: '0 2rem 3.5rem',
           }}
         >
           <Reveal>
@@ -224,77 +222,7 @@ export default function DoorFeedDemoPage() {
 
       {/* ─── 02 · Final artifacts ─────────────────────────────── */}
       <section id="artifacts" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
-        <div style={WRAP}>
-          <ChapterHead num={ARTIFACTS.num} eyebrow={ARTIFACTS.eyebrow} title={ARTIFACTS.title} />
-
-          <Reveal>
-            <p style={BODY}>{ARTIFACTS.intro}</p>
-          </Reveal>
-        </div>
-
-        {/* Wider than the text column — rounds alternate media and copy side to side */}
-        <Rounds />
-
-        <div style={WRAP}>
-          <Reveal>
-            <h3
-              style={{
-                ...DISPLAY,
-                fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
-                color: ink(0.95),
-                margin: '3.5rem 0 1.125rem',
-              }}
-            >
-              {ARTIFACTS.componentsHeading}
-            </h3>
-          </Reveal>
-          <Reveal>
-            <p style={BODY}>{ARTIFACTS.componentsIntro}</p>
-          </Reveal>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(13.4375rem, 1fr))',
-              gap: '1px',
-              background: HAIRLINE,
-              border: `1px solid ${HAIRLINE}`,
-              margin: '2.625rem 0',
-            }}
-          >
-            {ARTIFACTS.components.map((component, i) => (
-              <Reveal
-                key={component.title}
-                delay={i * 0.05}
-                className="df-cell"
-                style={{ background: 'rgb(var(--surface))', padding: '1.5625rem 1.4375rem' }}
-              >
-                <div
-                  style={{ ...MONO, fontSize: '0.54rem', color: ink(0.45), marginBottom: '0.5625rem' }}
-                >
-                  Component
-                </div>
-                <h4
-                  style={{ ...DISPLAY, fontSize: '1.09375rem', color: ink(0.95), margin: '0 0 0.375rem' }}
-                >
-                  {component.title}
-                </h4>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.84375rem',
-                    fontWeight: 300,
-                    lineHeight: 1.65,
-                    color: ink(0.55),
-                    margin: 0,
-                  }}
-                >
-                  {component.body}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+        <ArtifactsChapter />
       </section>
 
       {/* ─── 03 · Key decisions ───────────────────────────────── */}

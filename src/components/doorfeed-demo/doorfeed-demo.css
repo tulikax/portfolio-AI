@@ -102,6 +102,29 @@
   }
 }
 
+/*
+ * Flow carousel. A real overflow container, so trackpad swipes and touch drags
+ * are native — the page's vertical scroll is never intercepted. The scrollbar
+ * is hidden because the arrows and dots already say where you are.
+ */
+.df-carousel-track {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Slides sit flush with the column edge rather than centred in the viewport */
+  scroll-padding-inline: 0;
+}
+
+.df-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.df-carousel-track:focus-visible {
+  outline: 1px solid rgb(var(--ink) / 0.4);
+  outline-offset: 6px;
+}
+
 /* Media grids collapse to a single column before their cells get too narrow */
 @media (max-width: 700px) {
   .df-media-grid {
@@ -134,11 +157,15 @@
  * at a usable size. Reverts once the viewport can no longer spare the gutters.
  */
 .df-media-wide {
-  width: 120%;
-  margin-left: -10%;
+  width: 108%;
+  margin-left: -4%;
 }
 
-@media (max-width: 1100px) {
+/*
+ * The column is 72rem, so a heavier bleed would run past the viewport edge on
+ * mid-size screens — where body { overflow-x: hidden } would silently clip it.
+ */
+@media (max-width: 1250px) {
   .df-media-wide {
     width: 100%;
     margin-left: 0;

@@ -22,7 +22,13 @@ const VERDICT_TONE: Record<Round['tone'], { background: string; color: string }>
 
 export default function Rounds() {
   return (
-    <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '0 2rem' }}>
+    /*
+     * Wider than the 72rem text column, and the media column takes 1.4fr to the
+     * copy's 1fr — together that lands the screens ~38% larger than an even
+     * split inside 72rem, which was too small to read a dense product UI in.
+     * maxWidth alone caps it, so narrow viewports just shrink rather than clip.
+     */
+    <div style={{ maxWidth: '84rem', margin: '0 auto', padding: '0 2rem' }}>
       {ARTIFACTS.rounds.map((round, i) => {
         // Rounds 1 and 3 lead with the image; round 2 leads with the copy
         const mediaLeads = i % 2 === 0
@@ -33,7 +39,9 @@ export default function Rounds() {
             className="df-round-alt"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gridTemplateColumns: mediaLeads
+                ? 'minmax(0, 1.4fr) minmax(0, 1fr)'
+                : 'minmax(0, 1fr) minmax(0, 1.4fr)',
               gap: '3.5rem',
               alignItems: 'center',
               padding: '4rem 0',
