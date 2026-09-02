@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { animate, motion, useMotionValue, type AnimationPlaybackControls } from 'framer-motion'
 import { NAV_EASE_OUT } from './constants'
 import tulikaAvatar from '../../assets/tulika-avatar.png'
@@ -57,8 +58,8 @@ export function NavbarLogo() {
   }
 
   return (
-    <a
-      href="#"
+    <Link
+      to="/"
       aria-label="Tulika — home"
       onMouseEnter={startSpin}
       onMouseLeave={stopSpin}
@@ -133,6 +134,6 @@ export function NavbarLogo() {
           ))}
         </svg>
       </motion.div>
-    </a>
+    </Link>
   )
 }

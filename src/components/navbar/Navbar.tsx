@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
@@ -15,12 +15,18 @@ export default function Navbar() {
   const scrolled = useNavbarScroll()
   const location = useLocation()
   const isCaseStudy = location.pathname.startsWith('/work/')
+  // Section anchors only resolve on the homepage; anywhere else they have to route there first
+  const isHome = location.pathname === '/'
 
   useCloseMenuOnDesktop(setMenuOpen)
 
+  const sectionLinks = isHome
+    ? NAV_LINKS
+    : NAV_LINKS.map((link) => ({ ...link, href: `/${link.href}` }))
+
   const mobileLinks = isCaseStudy
     ? [{ label: '← Back to Work', href: '/#work' }]
-    : NAV_LINKS
+    : sectionLinks
 
   const pillShadow = scrolled
     ? 'inset 0 1px 1px rgb(var(--ink) / 0.10), 0 8px 32px rgba(0,0,0,0.6)'
@@ -83,27 +89,32 @@ export default function Navbar() {
                 ← Back to Work
               </Link>
             ) : (
-              NAV_LINKS.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  style={{
-                    fontSize: '0.875rem',
-                    color: 'rgb(var(--ink) / 0.75)',
-                    textDecoration: 'none',
-                    fontWeight: 400,
-                    transition: 'color 200ms ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
-                  }}
-                  onMouseLeave={(e) => {
-                    ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.75)'
-                  }}
-                >
-                  {link.label}
-                </a>
-              ))
+              sectionLinks.map((link) => {
+                const linkStyle = {
+                  fontSize: '0.875rem',
+                  color: 'rgb(var(--ink) / 0.75)',
+                  textDecoration: 'none',
+                  fontWeight: 400,
+                  transition: 'color 200ms ease',
+                } as const
+                const hover = {
+                  onMouseEnter: (e: MouseEvent<HTMLAnchorElement>) => {
+                    e.currentTarget.style.color = 'white'
+                  },
+                  onMouseLeave: (e: MouseEvent<HTMLAnchorElement>) => {
+                    e.currentTarget.style.color = 'rgb(var(--ink) / 0.75)'
+                  },
+                }
+                return isHome ? (
+                  <a key={link.label} href={link.href} style={linkStyle} {...hover}>
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link key={link.label} to={link.href} style={linkStyle} {...hover}>
+                    {link.label}
+                  </Link>
+                )
+              })
             )}
           </nav>
 
