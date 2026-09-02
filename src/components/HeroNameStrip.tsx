@@ -13,12 +13,15 @@ const BAND_MOBILE = 210
 const TAG_GAP = 14 // clearance between the photo edge and the nearest tag
 const CLUSTER_SHIFT = 34 // pulls the cluster left so right-hand tags clear the page edge
 
-/** Petal tints lifted from the illustration — rose, lavender, sage, blush */
+/**
+ * Petal tints lifted from the illustration — rose, lavender, sage, blush.
+ * Kept low-alpha with no coloured bloom so the tags read as paper notes, not lit chips.
+ */
 const PETALS = [
-  { border: 'rgba(244,158,180,0.42)', from: 'rgba(244,158,180,0.16)', to: 'rgba(244,158,180,0.04)', text: 'rgba(255,226,234,0.94)', glow: 'rgba(240,120,155,0.20)' },
-  { border: 'rgba(186,170,232,0.42)', from: 'rgba(186,170,232,0.16)', to: 'rgba(186,170,232,0.04)', text: 'rgba(233,226,255,0.94)', glow: 'rgba(150,125,220,0.20)' },
-  { border: 'rgba(158,198,164,0.40)', from: 'rgba(158,198,164,0.15)', to: 'rgba(158,198,164,0.04)', text: 'rgba(226,244,230,0.94)', glow: 'rgba(120,180,130,0.18)' },
-  { border: 'rgba(242,190,158,0.42)', from: 'rgba(242,190,158,0.16)', to: 'rgba(242,190,158,0.04)', text: 'rgba(255,236,222,0.94)', glow: 'rgba(232,155,110,0.20)' },
+  { border: 'rgba(244,158,180,0.26)', from: 'rgba(244,158,180,0.09)', to: 'rgba(244,158,180,0.03)', text: 'rgba(255,226,234,0.85)' },
+  { border: 'rgba(186,170,232,0.26)', from: 'rgba(186,170,232,0.09)', to: 'rgba(186,170,232,0.03)', text: 'rgba(233,226,255,0.85)' },
+  { border: 'rgba(158,198,164,0.24)', from: 'rgba(158,198,164,0.08)', to: 'rgba(158,198,164,0.03)', text: 'rgba(226,244,230,0.85)' },
+  { border: 'rgba(242,190,158,0.26)', from: 'rgba(242,190,158,0.09)', to: 'rgba(242,190,158,0.03)', text: 'rgba(255,236,222,0.85)' },
 ]
 
 /**
@@ -29,9 +32,6 @@ const PETALS = [
 const TAG_COUNT = 5
 const AUTO_CYCLE_MS = 5000 // tags refresh on their own, not just via the button
 const SWAP_OUT_MS = 340 // time for the old set to scale away before the new one lands
-const GRID_LINE = 'rgba(150,205,255,0.22)'
-const GRID_MASK = 'radial-gradient(circle at 50% 50%, black 62%, transparent 100%)'
-
 /**
  * Five resting places: two off each side, one under the photo. Phrases are shuffled
  * into them, so the arrangement changes but never collides with the portrait.
@@ -137,27 +137,6 @@ export function HeroNameStrip({ compact = false, start = true }: {
         pointerEvents: 'none',
       }}
     >
-      {/* Blueprint grid sitting behind the portrait */}
-      <motion.span
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={start ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.94 }}
-        transition={{ duration: 0.5, delay: start ? 0.08 : 0, ease: EASE_OUT }}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: `calc(50% - ${CLUSTER_SHIFT}px)`,
-          width: photo * 1.5,
-          height: photo * 1.6,
-          marginTop: -(photo * 1.6) / 2,
-          marginLeft: -(photo * 1.5) / 2,
-          display: 'block',
-          backgroundImage: `linear-gradient(${GRID_LINE} 1px, transparent 1px), linear-gradient(90deg, ${GRID_LINE} 1px, transparent 1px)`,
-          backgroundSize: '26px 26px',
-          maskImage: GRID_MASK,
-          WebkitMaskImage: GRID_MASK,
-        }}
-      />
-
       {/* Portrait, tilted so it reads as pinned to the page */}
       <motion.img
         src={tulikaAvatar}
@@ -220,11 +199,10 @@ export function HeroNameStrip({ compact = false, start = true }: {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.4rem',
-              fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
-              fontWeight: 400,
+              fontFamily: 'var(--font-body)',
+              fontWeight: 500,
               fontSize: '0.8rem',
-              letterSpacing: '0.01em',
+              letterSpacing: '0.015em',
               lineHeight: 1.25,
               padding: '6px 14px',
               borderRadius: '9999px',
@@ -232,12 +210,12 @@ export function HeroNameStrip({ compact = false, start = true }: {
               background: `linear-gradient(145deg, ${petal.from}, ${petal.to})`,
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
-              boxShadow: `0 6px 22px ${petal.glow}, inset 0 1px 0 rgba(255,255,255,0.10)`,
+              boxShadow: '0 3px 12px rgba(0,0,0,0.30)',
               color: petal.text,
               whiteSpace: 'nowrap',
             }}
           >
-            <span style={{ fontSize: '1rem', lineHeight: 1, flexShrink: 0, fontStyle: 'normal' }}>{b.phrase.emoji}</span>
+            <span style={{ fontSize: '1rem', lineHeight: 1, flexShrink: 0 }}>{b.phrase.emoji}</span>
             {b.phrase.text}
           </motion.span>
         )

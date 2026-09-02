@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback, useMemo, Fragment } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowUpRight, ChevronRight, ChevronsDown } from 'lucide-react'
+import { ArrowDown, ChevronsDown, MousePointer2 } from 'lucide-react'
 import ParticleTitle from './ParticleTitle'
 import GradientBlobs from './GradientBlobs'
 import HeroWireframe from './HeroWireframe'
@@ -486,7 +486,7 @@ export default function HeroSection({
           >
             <a
               href="#work"
-              className="liquid-glass-strong btn-press"
+              className="btn-glass btn-press"
               style={{
                 borderRadius: '9999px',
                 padding: '0.7rem 1.6rem',
@@ -498,7 +498,7 @@ export default function HeroSection({
                 cursor: 'pointer',
               }}
             >
-              {/* Above the .liquid-glass-strong ::after overlay, which otherwise paints over the label */}
+              {/* Label and icon share one row so they can never be split by a paint layer */}
               <span
                 style={{
                   position: 'relative',
@@ -510,7 +510,7 @@ export default function HeroSection({
                 }}
               >
                 See My Work
-                <ArrowUpRight style={{ width: '1rem', height: '1rem' }} />
+                <ArrowDown style={{ width: '0.95rem', height: '0.95rem', strokeWidth: 1.75, flexShrink: 0 }} />
               </span>
             </a>
           </motion.div>
@@ -646,40 +646,36 @@ export default function HeroSection({
               </div>
             )}
 
-            {/* Nudge toward the lens, tucked at the foot of the title */}
+            {/* Nudge toward the lens — a whisper at the foot of the title, no chrome */}
             <motion.span
               initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: stripDone ? 0.9 : 0, y: stripDone ? 0 : 6 }}
+              animate={{ opacity: stripDone ? 0.34 : 0, y: stripDone ? 0 : 6 }}
               transition={{ duration: 0.6, delay: stripDone ? 1.1 : 0, ease: EASE_OUT }}
               style={{
                 position: 'absolute',
                 left: isMobile ? '50%' : 0,
                 bottom: isMobile ? -6 : 4,
-                marginLeft: isMobile ? -58 : 0,
-                display: 'inline-block',
-                transform: 'rotate(-5deg)',
+                marginLeft: isMobile ? -42 : 0,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
                 fontFamily: 'var(--font-body)',
                 fontWeight: 400,
-                fontSize: '0.68rem',
-                letterSpacing: '0.04em',
-                padding: '5px 12px',
-                borderRadius: '8px',
-                background: 'rgba(0,0,0,0.55)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                border: '1px solid rgb(var(--ink) / 0.10)',
-                color: 'rgb(var(--ink) / 0.52)',
+                fontSize: '0.62rem',
+                letterSpacing: '0.06em',
+                color: 'var(--ink-solid)',
                 whiteSpace: 'nowrap',
                 pointerEvents: 'none',
               }}
             >
-              hover to peek
+              <MousePointer2 style={{ width: 11, height: 11, strokeWidth: 1.5, flexShrink: 0 }} />
+              {IS_TOUCH ? 'touch to peek' : 'hover to peek'}
             </motion.span>
           </div>
         </div>
 
-        {/* Group 3: Subtitle + CTAs */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0' }}>
+        {/* Group 3: Subtitle + CTAs — flush with the copy above on desktop */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'center' : 'flex-start', gap: '0', width: '100%' }}>
           <p
             style={{
               fontFamily: 'var(--font-body)',
@@ -700,11 +696,11 @@ export default function HeroSection({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: streamDone ? 1 : 0, y: streamDone ? 0 : 12 }}
             transition={{ duration: 0.6, delay: streamDone ? 0.15 : 0, ease: EASE_OUT }}
-            style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', justifyContent: 'center' }}
+            style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-start' }}
           >
             <a
               href="#work"
-              className="liquid-glass-strong btn-press cta-glow"
+              className="btn-glass btn-press cta-glow"
               style={{
                 borderRadius: '9999px',
                 padding: '0.75rem 1.75rem',
@@ -715,12 +711,12 @@ export default function HeroSection({
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.375rem',
+                gap: '0.4rem',
                 cursor: 'pointer',
               }}
             >
               See My Work
-              <ArrowUpRight style={{ width: '1rem', height: '1rem' }} />
+              <ArrowDown style={{ width: '0.95rem', height: '0.95rem', strokeWidth: 1.75, flexShrink: 0 }} />
             </a>
             <a
               href="#about"
@@ -735,12 +731,10 @@ export default function HeroSection({
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.25rem',
                 cursor: 'pointer',
               }}
             >
               About Me
-              <ChevronRight style={{ width: '1rem', height: '1rem' }} />
             </a>
           </motion.div>
         </div>
