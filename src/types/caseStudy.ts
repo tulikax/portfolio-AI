@@ -143,6 +143,12 @@ export interface CaseStudy {
   overviewInlineMedia?: Array<{ afterParagraph: number; src: string; alt: string; caption?: string; scale?: number }>
   /** If true, hides the problem statement block in the Overview tab */
   overviewHideProblem?: boolean
+  /**
+   * Renders the shared Context chapter in place of the generic Overview
+   * section. The chapter's copy and block layout live in
+   * components/doorfeed-demo/content.ts, which the demo treatment also uses.
+   */
+  contextChapter?: boolean
   projectTabs?: ProjectTab[]   // if present, replaces platformSections + designDecisions
   visualBlocks?: VisualBlock[]
   platformSections?: PlatformSection[]

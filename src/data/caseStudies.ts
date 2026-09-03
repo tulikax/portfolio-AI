@@ -1,17 +1,10 @@
 import type { CaseStudy } from '../types/caseStudy'
 
 // DoorFeed assets
-import df1 from '../assets/DoorFeed/case study /New comparables with map.png'
 import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
 import dfBeforeMapsNav from '../assets/DoorFeed/case study /before - maps and navigation.png'
 import dfMapsAnalysisPins from '../assets/DoorFeed/case study /maps location analysis pins.mov'
 import dfGenerateResultsComps from '../assets/DoorFeed/case study /generate results-comps.mov'
-import dfIssuesNav from '../assets/DoorFeed/case study /issues with navigation.png'
-import dfPosthog from '../assets/DoorFeed/case study /posthog review.png'
-import dfNewfrenchTabs from '../assets/DoorFeed/case study /newfrench dropdown tabs.mov'
-import dfMapsExploration from '../assets/DoorFeed/case study /maps exploration.png'
-import dfViewComparable from '../assets/DoorFeed/case study /view comparable.mov'
-import dfMRHomepage from '../assets/DoorFeed/case study /MR homepage.mov'
 
 // SigTech assets — root
 import st1        from '../assets/SigTech/Case Study/What finally shipped/Day 1 - chat only.png'
@@ -54,8 +47,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     duration: '6 months',
     company: 'DoorFeed',
     heroEyebrow: '',
-    heroHeadline: 'DoorFeed',
-    heroSubheadline: 'From fragmented navigation to an AI-native workspace for institutional investors operating across UK and French markets.',
+    heroHeadline: 'From data platform to agentic product',
+    heroSubheadline: 'A real estate investment platform built for retrieval, redesigned for reasoning.',
+    // Renders the shared Context chapter instead of the generic Overview section
+    contextChapter: true,
     heroMeta: [
       { label: 'Role', value: 'Product Designer (solo)' },
       { label: 'Markets', value: 'UK · France' },
@@ -103,111 +98,9 @@ export const CASE_STUDIES: CaseStudy[] = [
       { afterParagraph: 2, src: dfGenerateResultsComps, alt: 'Generate results comps' },
     ],
 
-    projectTabs: [
-      {
-        label: 'Research & Redesign',
-        problemFirst: true,
-        problemImage: { src: dfIssuesNav, alt: 'Issues with navigation' },
-        goal: {
-          heading: 'Fixing a fragmented comparables experience',
-          body: "DoorFeed's asset page surfaces comparable properties to help institutional investors build valuation models and investment strategies. The comparables section had grown fragmented — multiple disconnected navigation patterns, an undersized map buried inside a filters sidebar, and no clear relationship between the list view and the map.\n\nFor a data-heavy B2B platform serving analysts working at speed, this created real cognitive load and was causing users to exit the section before finding what they needed. The fix had to work within an existing design system with real constraints, and be validated across both UK and French markets.",
-        },
-        process: {
-          heading: 'Research before redesign',
-          body: 'I started with PostHog session recordings — identifying where users were rage-clicking and abandoning. The filter area and map interaction were the clearest pain points. I reviewed event trigger data segmented by market, since UK and French users were navigating differently. From there I wireframed in Figma, used Claude for design audits, and worked with the CTO and engineers on what was feasible within the existing component library.',
-        },
-        preDecisionVisuals: [
-          {
-            layout: 'full' as const,
-            images: [{ src: dfPosthog, alt: 'PostHog session review', caption: 'PostHog session recording review — identifying rage clicks and abandonment patterns' }],
-          },
-        ],
-        decisionsHeading: 'What shaped the outcome',
-        decisions: [
-          {
-            title: 'Collapsible tabbed navigation over a flat layout',
-            rationale: "PostHog confirmed users weren't lost — they were overwhelmed. I consolidated everything into a collapsible dropdown with tabbed navigation, kept in the same location deliberately so existing users didn't have to re-learn. This freed up significant screen real estate for the data itself.",
-          },
-          {
-            title: 'Filters before results, not alongside them',
-            rationale: 'Users were landing on 400–500 results and then trying to filter down, which drove exits. Moving filters ahead of results meant users arrived at a manageable set. This had the most direct impact on the metrics we saw post-launch.',
-          },
-          {
-            title: 'Staying within design system constraints',
-            rationale: "Some UX patterns I wanted weren't possible without breaking the existing component library. I made a deliberate call to stay within constraints for this phase, noting the debt to address in the agentic platform work, rather than creating inconsistency for a fix that didn't warrant it.",
-          },
-          {
-            title: 'Skipping onboarding copy — and what that cost',
-            rationale: "We didn't add helper text when the navigation changed. Session data showed a short spike in confusion before drop-off rates improved. The learning: even low-disruption structural changes need a lightweight transition moment for existing users.",
-          },
-        ],
-        postDecisionVisuals: [
-          {
-            layout: 'two-up' as const,
-            height: '320px',
-            // NOTE: 'Doorfeed Final outcome.png' is missing from assets — second slot pending
-            images: [
-              { src: dfNewfrenchTabs, alt: 'New French dropdown tabs', caption: 'New dropdown navigation — tabbed layout for French and UK markets' },
-              { src: df1, alt: 'New comparables with map', caption: 'New comparables with map — redesigned comparables layout' },
-            ],
-          },
-        ],
-        outcome: {
-          heading: 'Results',
-          stats: [
-            { label: 'Exit rate', value: '↓', description: 'Comparables section exits reduced post-launch' },
-            { label: 'Time to results', value: '↓', description: 'Faster due to upfront filters removing noise' },
-            { label: 'Markets tested', value: '2', description: 'UK and France throughout' },
-          ],
-          variant: 'teal-labels' as const,
-          footnote: 'The French market remains a live constraint in the product. Where UK data is rich, French asset pages surface sparse or empty states — not errors, just absence. The approach: surface what\'s unavailable clearly, never filling gaps with false accuracy, while actively working to strengthen data coverage. Trust is earned by being honest about limitations, not by hiding them.',
-          footnoteVariant: 'problem-callout' as const,
-        },
-        visualBlocks: [
-          {
-            layout: 'two-up' as const,
-            height: '320px',
-            images: [
-              { src: dfMapsExploration, alt: 'Maps exploration' },
-              { src: dfViewComparable, alt: 'View comparable', caption: 'View comparable — in-platform comparable review' },
-            ],
-          },
-        ],
-      },
-      {
-        label: 'AI Platform',
-        goal: {
-          heading: 'Shifting DoorFeed from a data source to a workspace',
-          body: 'Institutional investors were using DoorFeed primarily to pull comparables, then exporting to Excel and running analysis externally — often feeding data through internal AI tools to filter noise. The platform was a data source, not a workspace.\n\nThe business goal: bring the intelligence layer inside DoorFeed, reduce dependency on external tools, increase time on platform, and reduce churn. I owned the full strategy, phasing, and design of the agentic version — including a net-new design system for the chat-based interface.',
-        },
-        goalMedia: { src: dfMRHomepage, alt: 'MR homepage — AI workspace interface' },
-        wip: { message: 'work in progress — last updated 29th April 2026' },
-        /* Remaining content commented out pending further updates:
-        process: {
-          heading: 'Structured audit, then phased change',
-          body: 'I ran a structured audit of the existing platform using PostHog — session recordings, rage click mapping, and event trigger analytics split by UK and French markets — to understand which features users actually engaged with and where they gave up. I worked directly with the CEO, CTO, sales team, and engineers throughout. I used Figma for wireframing and asset creation, Figma Make and Cursor for implementation, and Claude for design audits and pattern research — essential for moving fast as a solo designer.',
-        },
-        decisionsHeading: 'What shaped the outcome',
-        decisions: [
-          { title: 'Phased rollout with shell continuity', rationale: "..." },
-          { title: 'Building a new design system for data-heavy chat UI', rationale: "..." },
-          { title: 'Knowledge base UX as a first-class problem', rationale: '...' },
-          { title: 'Designing for data asymmetry across markets', rationale: "..." },
-          { title: 'In-platform output viewing before download', rationale: "..." },
-        ],
-        outcome: {
-          heading: 'Early beta results',
-          stats: [
-            { label: 'Report exports', value: '+10%', description: 'First month of beta' },
-            { label: 'Standout stat', value: '14', description: 'Reports in 2 weeks by clients with 120/yr quota' },
-            { label: 'Logins', value: '↑', description: 'More frequent logins among beta users' },
-          ],
-          footnote: 'The features most positively received: in-platform playbook checking against organisational defaults, and embedded report viewing — which removed the major friction point of the download-first workflow.',
-        },
-        */
-        decisions: [],
-      },
-    ],
+    // Everything up to the Final artifacts chapter now lives in the shared
+    // Context chapter; the later chapters have not been ported across yet.
+    projectTabs: [],
 
     nextProject: {
       slug: 'sigtech',
