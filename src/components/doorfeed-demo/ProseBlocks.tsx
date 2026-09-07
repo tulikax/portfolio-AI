@@ -64,6 +64,34 @@ export default function ProseBlocks({ blocks }: { blocks: Block[] }) {
 
           case 'collage':
             return <MediaCollage key={i} spec={block.spec} />
+
+          case 'split':
+            return (
+              <div
+                key={i}
+                className="df-split"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+                  gap: '3rem',
+                  alignItems: 'start',
+                  margin: '2.5rem 0',
+                }}
+              >
+                <div>
+                  {block.text.map((para, j) => (
+                    <Reveal key={j}>
+                      <p style={{ ...BODY, maxWidth: 'none' }}>
+                        <RichText text={para} />
+                      </p>
+                    </Reveal>
+                  ))}
+                </div>
+
+                {/* Media column — `columns: 1` stacks the screens at equal width */}
+                <MediaGrid spec={block.spec} flush />
+              </div>
+            )
         }
       })}
     </>

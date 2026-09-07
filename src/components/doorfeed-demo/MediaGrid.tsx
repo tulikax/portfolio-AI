@@ -9,9 +9,19 @@ import { DISPLAY, HAIRLINE, HAIRLINE_STRONG, MONO, ink } from './styles'
  * only make their point side by side (the three ingestion steps, UK vs France).
  * Collapses to a single column on narrow viewports via `.df-media-grid`.
  */
-export default function MediaGrid({ spec }: { spec: MediaGridSpec }) {
+export default function MediaGrid({
+  spec,
+  flush = false,
+}: {
+  spec: MediaGridSpec
+  /** Drops the leading margin so the first label lines up with copy beside it. */
+  flush?: boolean
+}) {
   return (
-    <div className={spec.wide ? 'df-media-wide' : undefined} style={{ margin: '2.75rem 0' }}>
+    <div
+      className={spec.wide ? 'df-media-wide' : undefined}
+      style={{ margin: flush ? '0 0 2.75rem' : '2.75rem 0' }}
+    >
       <Reveal>
         <div
           className="df-media-grid"

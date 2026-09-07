@@ -127,6 +127,8 @@ export type Block =
   | { kind: 'media'; spec: MediaSpec }
   | { kind: 'mediaGrid'; spec: MediaGridSpec }
   | { kind: 'collage'; spec: CollageSpec }
+  /** Copy on the left, media stacked alongside it on the right. */
+  | { kind: 'split'; text: string[]; spec: MediaGridSpec }
 
 /** What fills the media half of a pinned round. */
 export type RoundMedia =
@@ -313,36 +315,25 @@ export const CONTEXT = {
     },
     { kind: 'heading', text: 'There was already AI in the product' },
     {
-      kind: 'body',
-      text: 'This is the part that reframed the project. The asset ingestion page already ran a small AI system that converted and normalised rent rolls arriving in any format — a genuinely hard problem, solved, and largely invisible.',
-    },
-    {
-      kind: 'body',
-      text: "But it was slow, and it was **blocking**: users couldn't move on until each item was resolved. The intelligence was there; the interaction model around it forced a stop-and-wait rhythm that didn't match how analysts work. That gap — capable AI, wrong pacing — became the clearest argument for what the agentic layer needed to get right.",
-    },
-    {
-      kind: 'collage',
+      kind: 'split',
+      text: [
+        'This is the part that reframed the project. The asset ingestion page already ran a small AI system that converted and normalised rent rolls arriving in any format — a genuinely hard problem, solved, and largely invisible.',
+        "But it was slow, and it was **blocking**: users couldn't move on until each item was resolved. The intelligence was there; the interaction model around it forced a stop-and-wait rhythm that didn't match how analysts work. That gap — capable AI, wrong pacing — became the clearest argument for what the agentic layer needed to get right.",
+      ],
       spec: {
-        // Widths are inverse to each image's aspect (1.23 and 1.82), so the two
-        // render at a matching height despite very different source shapes.
-        aspect: 1.9,
-        wide: true,
-        items: [
-          {
-            label: 'Upload & normalisation',
-            src: OLD_PLATFORM.ingestionClean,
-            alt: 'The deal ingestion flow converting and normalising an uploaded rent roll',
-            width: 46,
-            x: 0,
-            y: 0,
-          },
+        // Stacked at one column, so both screens render at the same width
+        columns: 1,
+        bare: true,
+        cells: [
           {
             label: 'Resolve & confirm',
             src: OLD_PLATFORM.ingestionSelect,
             alt: 'The deal ingestion step where each unresolved item must be confirmed before proceeding',
-            width: 68,
-            x: 32,
-            y: 29,
+          },
+          {
+            label: 'Upload & normalisation',
+            src: OLD_PLATFORM.ingestionClean,
+            alt: 'The deal ingestion flow converting and normalising an uploaded rent roll',
           },
         ],
         caption:

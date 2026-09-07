@@ -133,6 +133,14 @@
   }
 }
 
+/* Copy-beside-media collapses to a stack once the two columns get too narrow */
+@media (max-width: 900px) {
+  .df-split {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}
+
 /* Media grids collapse to a single column before their cells get too narrow */
 @media (max-width: 700px) {
   .df-media-grid {
