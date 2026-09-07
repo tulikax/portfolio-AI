@@ -115,6 +115,10 @@ export interface CaseStudy {
   heroAccentColor?: string   // optional CSS color for gradient overlay tint
   heroEyebrow?: string
   heroHeadline?: string
+  /** Multiplies the hero headline size. Use below 1 when the headline is a sentence. */
+  heroHeadlineScale?: number
+  /** How the hero clip fills its frame. `contain` shows the whole thing; defaults to `cover`. */
+  heroMediaFit?: 'cover' | 'contain'
   heroSubheadline?: string
   heroMeta?: Array<{ label: string; value: string }>
   heroTools?: Array<{ name: string; slug: string; ext?: string }>

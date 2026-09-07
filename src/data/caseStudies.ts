@@ -1,7 +1,7 @@
 import type { CaseStudy } from '../types/caseStudy'
+import { NEW_PLATFORM } from '../constants/media'
 
 // DoorFeed assets
-import dfHeroVideo from '../assets/DoorFeed/case study /hero video.mov'
 import dfBeforeMapsNav from '../assets/DoorFeed/case study /before - maps and navigation.png'
 import dfMapsAnalysisPins from '../assets/DoorFeed/case study /maps location analysis pins.mov'
 import dfGenerateResultsComps from '../assets/DoorFeed/case study /generate results-comps.mov'
@@ -49,6 +49,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     heroEyebrow: '',
     heroHeadline: 'From data platform to agentic product',
     heroSubheadline: 'A real estate investment platform built for retrieval, redesigned for reasoning.',
+    // The headline is a sentence here, not a one-word title
+    heroHeadlineScale: 0.6,
     // Renders the shared Context chapter instead of the generic Overview section
     contextChapter: true,
     heroMeta: [
@@ -62,7 +64,9 @@ export const CASE_STUDIES: CaseStudy[] = [
       { name: 'PostHog', slug: 'posthog', ext: 'png' },
     ],
 
-    heroMedia: { src: dfHeroVideo, alt: 'DoorFeed interface overview' },
+    // Shown whole rather than cropped — the clip is a full product screen
+    heroMediaFit: 'contain',
+    heroMedia: { src: NEW_PLATFORM.compsOutput, alt: 'DoorFeed comparables output' },
 
     goal: 'Design a property data platform that surfaces granular, comparable market data in a way that feels as refined as it is accurate — turning dense datasets into clear, trustworthy decision surfaces.',
     yourRole: 'Solo product designer working end-to-end: research, strategy, interaction design, and direct collaboration with engineering through 20+ pull requests.',

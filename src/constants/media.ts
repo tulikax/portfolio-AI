@@ -95,6 +95,8 @@ export const NEW_PLATFORM = {
   /** Early direction sketches. */
   earlyDirection: img('directions_sketches_-_early'),
 
+  /** Hero clip — comparables output on the agentic platform. */
+  compsOutput: video('comps-output'),
   /** Creating an asset from a file drop, before any structured input. */
   createNewAsset: video('create-new-asset'),
   /** Dropping files straight into the dataroom. */

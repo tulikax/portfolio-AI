@@ -11,6 +11,7 @@ import DesignDecisions from './DesignDecisions'
 import PrototypeEmbed from './PrototypeEmbed'
 import NextProject from './NextProject'
 import ProjectTabs from './ProjectTabs'
+import DoorFeedExploration from './DoorFeedExploration'
 import DoorFeedArtifacts from './DoorFeedArtifacts'
 import CaseSideNav from './CaseSideNav'
 import { LightboxProvider } from './LightboxContext'
@@ -93,7 +94,12 @@ export default function CaseStudyPage() {
               : []
           return [tabEntry, ...keyDecisionsEntry]
         }),
-        ...(data.contextChapter ? [{ id: 'section-artifacts', label: 'Final artifacts' }] : []),
+        ...(data.contextChapter
+          ? [
+              { id: 'section-exploration', label: 'Exploration' },
+              { id: 'section-artifacts', label: 'Final artifacts' },
+            ]
+          : []),
       ]
     : []
 
@@ -161,7 +167,8 @@ export default function CaseStudyPage() {
       {/* 3a — Project tabs */}
       {hasProjectTabs && <ProjectTabs data={data} />}
 
-      {/* Final artifacts — full width, so the rounds get their own column */}
+      {/* Exploration and Final artifacts — full width, so the rounds get their own column */}
+      {data.contextChapter && <DoorFeedExploration />}
       {data.contextChapter && <DoorFeedArtifacts />}
 
       {/* 3b — Video + decisions side-by-side (when bodyParagraphs present) */}
