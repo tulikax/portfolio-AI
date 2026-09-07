@@ -4,7 +4,7 @@ import MediaSlot from './MediaSlot'
 import Reveal from './Reveal'
 import RichText from './RichText'
 import type { Block } from './content'
-import { BODY, DISPLAY, ink } from './styles'
+import { BODY, H2, ink } from './styles'
 
 /**
  * Renders a chapter's ordered block list. Prose, sub-headings and media are
@@ -19,14 +19,7 @@ export default function ProseBlocks({ blocks }: { blocks: Block[] }) {
           case 'heading':
             return (
               <Reveal key={i}>
-                <h3
-                  style={{
-                    ...DISPLAY,
-                    fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
-                    color: ink(0.95),
-                    margin: '3.5rem 0 1.125rem',
-                  }}
-                >
+                <h3 style={{ ...H2, margin: '3.5rem 0 1.125rem' }}>
                   {block.text}
                 </h3>
               </Reveal>

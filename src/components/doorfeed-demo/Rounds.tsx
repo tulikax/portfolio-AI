@@ -1,8 +1,8 @@
 import Reveal from './Reveal'
 import RichText from './RichText'
 import RoundMediaView from './RoundMediaView'
-import { ARTIFACTS, type Round } from './content'
-import { DISPLAY, HAIRLINE, MONO, ink, warm } from './styles'
+import { EXPLORATION, type Round } from './content'
+import { H3, HAIRLINE, MONO, ink, warm } from './styles'
 
 /**
  * The three attempts at the interaction model. Each round's verdict is what
@@ -29,7 +29,7 @@ export default function Rounds() {
      * maxWidth alone caps it, so narrow viewports just shrink rather than clip.
      */
     <div style={{ maxWidth: '84rem', margin: '0 auto', padding: '0 2rem' }}>
-      {ARTIFACTS.rounds.map((round, i) => {
+      {EXPLORATION.rounds.map((round, i) => {
         // Rounds 1 and 3 lead with the image; round 2 leads with the copy
         const mediaLeads = i % 2 === 0
 
@@ -57,14 +57,7 @@ export default function Rounds() {
                 {round.stage}
               </div>
 
-              <h4
-                style={{
-                  ...DISPLAY,
-                  fontSize: 'clamp(1.375rem, 2.4vw, 1.75rem)',
-                  color: ink(0.95),
-                  margin: '0 0 0.875rem',
-                }}
-              >
+              <h4 style={{ ...H3, margin: '0 0 0.875rem' }}>
                 {round.title}
               </h4>
 
