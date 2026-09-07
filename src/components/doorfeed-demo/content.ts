@@ -157,7 +157,25 @@ export interface Decision {
 export interface ComponentCard {
   title: string
   body: string
+  /**
+   * The component's Storybook view. Left without a `src` until the captures are
+   * uploaded, in which case the panel draws a placeholder frame.
+   */
+  storybook?: { src?: string; alt?: string }
 }
+
+/**
+ * One item in "What shipped inside the prototype".
+ *
+ * Numbers are set explicitly rather than derived from position: the carousel is
+ * the outcome of the point above it, not a point of its own, so it carries a
+ * label and no number.
+ */
+export type ShippedItem =
+  | { kind: 'heading'; text: string }
+  | { kind: 'point'; num?: string; label?: string; text: string; withComponents?: boolean }
+  | { kind: 'flows'; label?: string }
+  | { kind: 'placeholder'; num?: string; label: string; hint: string }
 
 export interface StatusCard {
   label: string
@@ -179,6 +197,7 @@ export interface Reflection {
 export const RAIL_SECTIONS = [
   { id: 'hero', label: 'Intro' },
   { id: 'context', label: 'Context' },
+  { id: 'exploration', label: 'Exploration' },
   { id: 'artifacts', label: 'Final artifacts' },
   { id: 'decisions', label: 'Key decisions' },
   { id: 'impact', label: 'Impact' },
@@ -320,14 +339,10 @@ export const CONTEXT = {
           'The existing deal ingestion flow — AI-powered rent roll normalisation, but sequential and blocking.',
       },
     },
-    { kind: 'heading', text: 'And the dataroom was already there too' },
+    { kind: 'heading', text: 'A dormant dataroom, built but unused' },
     {
       kind: 'body',
       text: "The same pattern, in a different place. The platform had a dataroom and file versioning — both built, both working, both buried. We knew they were useful; we hadn't worked out how to surface them or what they were _for_ in the flow of a deal.",
-    },
-    {
-      kind: 'body',
-      text: 'Meanwhile analysts were downloading templates, editing in their own Excel vaults, and losing track of which version was authoritative — solving by hand a problem the platform had already solved and hidden. The question stopped being "what do we need to build" and became **what do we already have that\'s in the wrong place.**',
     },
     {
       kind: 'media',
@@ -339,14 +354,6 @@ export const CONTEXT = {
         caption:
           'The dataroom and its versioning already existed — the design problem was prominence, not capability.',
       },
-    },
-    {
-      kind: 'aside',
-      text: 'Two capabilities, both real, both mis-framed: AI with the wrong pacing, and a dataroom with the wrong prominence. The design problem was surfacing and sequencing, not inventing.',
-    },
-    {
-      kind: 'aside',
-      text: 'The bet: wrap the existing platform in a conversational layer so analysts can go from data to finished artifact without leaving it — without removing them from the decisions that matter. Agents wrap existing microservices; they don\'t replace them. The data layer and outputs stay the same. What changes is the entry point, and where the work ends up.',
     },
   ] satisfies Block[],
 }
@@ -379,14 +386,24 @@ const HYBRID_STACK: MediaGridSpec = {
     'Chat panel for reasoning, structured panel for review and direct action. Both stay on screen.',
 }
 
-export const ARTIFACTS = {
+export const EXPLORATION = {
   num: '02',
-  eyebrow: 'Final artifacts',
+  eyebrow: 'Exploration',
   title: [
     { text: 'Three rounds to find' },
     { text: 'the ', br: true },
     { text: 'interaction model', em: true },
   ] satisfies TitleToken[],
+  blocks: [
+    {
+      kind: 'aside',
+      text: 'Two capabilities, both real, both mis-framed: AI with the wrong pacing, and a dataroom with the wrong prominence. The design problem was surfacing and sequencing, not inventing.',
+    },
+    {
+      kind: 'aside',
+      text: 'The bet: wrap the existing platform in a conversational layer so analysts can go from data to finished artifact without leaving it — without removing them from the decisions that matter. Agents wrap existing microservices; they don\'t replace them. The data layer and outputs stay the same. What changes is the entry point, and where the work ends up.',
+    },
+  ] satisfies Block[],
   intro:
     "The agentic layer went through three distinct shapes. Each one was a reasonable answer to the previous round's problem, and each one taught us something the next round depended on.",
   rounds: [
@@ -436,9 +453,49 @@ export const ARTIFACTS = {
       media: { kind: 'grid', spec: HYBRID_STACK },
     },
   ] satisfies Round[],
+}
+
+export const ARTIFACTS = {
+  num: '03',
+  eyebrow: 'Final artifacts',
+  title: [
+    { text: 'What the prototype' },
+    { text: 'actually ', br: true },
+    { text: 'ships', em: true },
+  ] satisfies TitleToken[],
   componentsHeading: 'What shipped inside the prototype',
-  componentsIntro:
-    'Six components, plus a design system for the conversational layer built from scratch — the existing library had nothing for chat, and a platform returning tables, charts, maps, and embedded Excel and PPT previews needs response patterns for each.',
+  shipped: [
+    {
+      kind: 'point',
+      num: '01',
+      label: 'Insight',
+      text: 'Not every enriched flow needed a conversation. The signal was both qualitative and quantitative: dogfooding sessions and interviews with our asset acquisition SMEs, the customer support requests coming in from existing clients, and PostHog session reviews of how beta users actually moved through the product.',
+    },
+    {
+      kind: 'point',
+      label: 'Outcome',
+      text: "Some of those processes were audited, and I proposed **removing the use of chat where it added friction** rather than eased the work. This strengthened the platform, and we're still defining the balance between user control and AI optimisation taking over the steering wheel.",
+    },
+    { kind: 'flows' },
+    { kind: 'heading', text: 'From tokens to components, in code' },
+    {
+      kind: 'point',
+      num: '02',
+      text: 'I set the foundations in Figma first — defined design tokens, spacing and type scales, and the rules governing how each response type renders — then built the system directly in code using Claude Code and Cursor, with assistant-ui and shadcn primitives as a tested starting point. Components were developed in Storybook, so every state was reviewable and testable in isolation as it was built.',
+    },
+    {
+      kind: 'point',
+      num: '03',
+      text: 'There were still custom components that had to be rendered in the chat.',
+      withComponents: true,
+    },
+    {
+      kind: 'placeholder',
+      num: '04',
+      label: 'Storybook artefacts',
+      hint: 'A few Storybook artefacts to come.',
+    },
+  ] satisfies ShippedItem[],
   components: [
     {
       title: 'Comp summary cards',
@@ -453,7 +510,6 @@ export const ARTIFACTS = {
     },
     { title: 'Workflow catalogue', body: 'Quick-action cards replacing the blank prompt.' },
   ] satisfies ComponentCard[],
-  flowsHeading: 'The journey, end to end',
   flows: {
     columns: 1,
     wide: true,
@@ -462,34 +518,29 @@ export const ARTIFACTS = {
       // NEW_PLATFORM.createNewAsset — the asset-creation clip — is deliberately
       // not shown here; the manifest entry stays so it can be dropped back in.
       {
-        label: 'Drop files into the dataroom',
+        label: 'Dataroom — enhanced with AI-assisted document classification',
         videoSrc: NEW_PLATFORM.dataroomFileDrop,
-        // Clips run at three-quarter width so they sit quieter than the stills
-        width: 75,
-        alt: 'Files dropped straight into the dataroom, versioned in one place',
+        alt: 'Files dropped into the dataroom and classified automatically',
       },
       {
-        label: 'Calculate ERV inside a workflow',
+        label:
+          "Using the AI chat to build out valuation model outputs that can be transformed into Excel files enriched with the user's organisation template",
         videoSrc: NEW_PLATFORM.calculateErv,
-        // Clips run at three-quarter width so they sit quieter than the stills
-        width: 75,
-        alt: 'A workflow calculating estimated rental value, with the analyst adjusting assumptions',
+        alt: 'A valuation model built in chat and exported to an organisation-templated Excel file',
       },
       {
-        label: 'Generate a market report',
+        label:
+          'Using AI behind the scenes — generating AI-enriched market reports for users without having to go to chat',
         videoSrc: NEW_PLATFORM.marketReportGeneration,
-        // Clips run at three-quarter width so they sit quieter than the stills
-        width: 75,
-        alt: 'A market report generated and previewed inside the platform',
+        alt: 'A market report generated and previewed inside the platform, without a chat step',
       },
     ],
-    caption:
-      'Address to deliverable without leaving the platform — the files landing in one versioned place, a workflow mid-flight, and the artifact it produces.',
+    caption: '',
   } satisfies MediaGridSpec,
 }
 
 export const DECISIONS = {
-  num: '03',
+  num: '04',
   eyebrow: 'Key design decisions',
   title: [
     { text: 'Where it could have' },
@@ -576,7 +627,7 @@ export const DECISIONS = {
 }
 
 export const IMPACT = {
-  num: '04',
+  num: '05',
   eyebrow: 'Impact',
   title: [
     { text: 'Where it stands,' },
@@ -627,7 +678,7 @@ export const IMPACT = {
 }
 
 export const REFLECTIONS = {
-  num: '05',
+  num: '06',
   eyebrow: 'Reflections',
   title: [
     { text: "What I'd carry" },

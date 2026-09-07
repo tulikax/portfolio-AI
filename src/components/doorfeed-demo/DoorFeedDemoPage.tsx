@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import { motion, useScroll } from 'framer-motion'
 import ArtifactsChapter from './ArtifactsChapter'
+import ExplorationChapter from './ExplorationChapter'
 import ChapterHead, { TitleTokens } from './ChapterHead'
 import DeepDiveAccordion from './DeepDiveAccordion'
 import FlagList from './FlagList'
 import HeroVideoDissolve from './HeroVideoDissolve'
 import MediaGrid from './MediaGrid'
 import MediaSlot from './MediaSlot'
+import OpeningQuote from './OpeningQuote'
 import ProseBlocks from './ProseBlocks'
 import ReflectionList from './ReflectionList'
 import Reveal from './Reveal'
@@ -19,12 +21,12 @@ import {
   DECISIONS,
   HERO,
   IMPACT,
-  OPENING_PULL,
   REFLECTIONS,
 } from './content'
 import {
   BODY,
   CHAPTER_TITLE,
+  H2,
   DISPLAY,
   EMPHASIS,
   HAIRLINE,
@@ -139,7 +141,7 @@ export default function DoorFeedDemoPage() {
               style={{
                 ...DISPLAY,
                 fontWeight: 300,
-                fontSize: 'clamp(1.875rem, 4.4vw, 3.25rem)',
+                fontSize: 'clamp(1.125rem, 2.65vw, 1.95rem)',
                 lineHeight: 1.02,
                 color: ink(0.97),
                 margin: '0 0 1.125rem',
@@ -183,49 +185,26 @@ export default function DoorFeedDemoPage() {
         </div>
       </section>
 
-      {/* ─── Opening pull quote ───────────────────────────────── */}
-      <div style={{ ...WRAP, padding: '7.5rem 2rem', textAlign: 'center' }}>
-        <Reveal>
-          <blockquote
-            style={{
-              ...DISPLAY,
-              fontStyle: 'italic',
-              fontWeight: 300,
-              fontSize: 'clamp(1.5rem, 3.5vw, 2.375rem)',
-              lineHeight: 1.32,
-              color: ink(0.95),
-              maxWidth: '46rem',
-              margin: '0 auto',
-            }}
-          >
-            {OPENING_PULL.lines.map((line, i) => (
-              <span key={i} style={{ display: 'block' }}>
-                {line}
-              </span>
-            ))}
-          </blockquote>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <div style={{ ...MONO, color: ink(0.4), marginTop: '1.625rem' }}>
-            {OPENING_PULL.attrib}
-          </div>
-        </Reveal>
-      </div>
-
       {/* ─── 01 · Context ─────────────────────────────────────── */}
       <section id="context" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
-          <ChapterHead num={CONTEXT.num} eyebrow={CONTEXT.eyebrow} title={CONTEXT.title} />
+          <ChapterHead num={CONTEXT.num} eyebrow={CONTEXT.eyebrow} />
           <ProseBlocks blocks={CONTEXT.blocks} />
+          <OpeningQuote />
         </div>
       </section>
 
-      {/* ─── 02 · Final artifacts ─────────────────────────────── */}
+      {/* ─── 02 · Exploration ─────────────────────────────────── */}
+      <section id="exploration" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
+        <ExplorationChapter />
+      </section>
+
+      {/* ─── 03 · Final artifacts ─────────────────────────────── */}
       <section id="artifacts" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <ArtifactsChapter />
       </section>
 
-      {/* ─── 03 · Key decisions ───────────────────────────────── */}
+      {/* ─── 04 · Key decisions ───────────────────────────────── */}
       <section id="decisions" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
           <ChapterHead num={DECISIONS.num} eyebrow={DECISIONS.eyebrow} title={DECISIONS.title} />
@@ -242,7 +221,7 @@ export default function DoorFeedDemoPage() {
         </div>
       </section>
 
-      {/* ─── 04 · Impact ──────────────────────────────────────── */}
+      {/* ─── 05 · Impact ──────────────────────────────────────── */}
       <section id="impact" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
           <ChapterHead num={IMPACT.num} eyebrow={IMPACT.eyebrow} title={IMPACT.title} />
@@ -260,16 +239,7 @@ export default function DoorFeedDemoPage() {
           </Reveal>
 
           <Reveal>
-            <h3
-              style={{
-                ...DISPLAY,
-                fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
-                color: ink(0.95),
-                margin: '3.5rem 0 1.125rem',
-              }}
-            >
-              {IMPACT.openHeading}
-            </h3>
+            <h3 style={{ ...H2, margin: '3.5rem 0 1.125rem' }}>{IMPACT.openHeading}</h3>
           </Reveal>
 
           <FlagList />
@@ -278,7 +248,7 @@ export default function DoorFeedDemoPage() {
         </div>
       </section>
 
-      {/* ─── 05 · Reflections ─────────────────────────────────── */}
+      {/* ─── 06 · Reflections ─────────────────────────────────── */}
       <section id="reflections" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
           <ChapterHead
