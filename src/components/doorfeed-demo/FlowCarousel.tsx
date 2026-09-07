@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Reveal from './Reveal'
 import type { MediaGridSpec } from './content'
-import { HAIRLINE_STRONG, MONO, ink } from './styles'
+import { HAIRLINE_STRONG, ink } from './styles'
 
 /** Slide width as a percentage of the track — leaves the next clip peeking. */
 const SLIDE_BASIS = 74
@@ -125,14 +125,18 @@ export default function FlowCarousel({ spec }: { spec: MediaGridSpec }) {
                 transition: 'opacity 0.4s var(--ease-out)',
               }}
             >
-              <div style={{ ...MONO, fontSize: '0.56rem', color: ink(0.42), padding: '0 0 0.625rem' }}>
-                {cell.label}
-              </div>
+              {/*
+               * Fixed frame ratio, not the clip's own — the three recordings
+               * differ in aspect, and unequal heights made the carousel jump as
+               * it snapped between them.
+               */}
               <div
                 style={{
+                  aspectRatio: '16 / 9',
                   borderRadius: '0.5rem',
                   overflow: 'hidden',
                   border: `1px solid ${HAIRLINE_STRONG}`,
+                  background: 'rgb(var(--surface))',
                 }}
               >
                 {cell.videoSrc && (
@@ -146,10 +150,29 @@ export default function FlowCarousel({ spec }: { spec: MediaGridSpec }) {
                     playsInline
                     preload="metadata"
                     aria-label={cell.alt ?? cell.label}
-                    style={{ width: '100%', display: 'block' }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'left top',
+                      display: 'block',
+                    }}
                   />
                 )}
               </div>
+
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.875rem',
+                  fontWeight: 300,
+                  lineHeight: 1.7,
+                  color: ink(0.68),
+                  margin: '1rem 0 0',
+                }}
+              >
+                {cell.label}
+              </p>
             </div>
           ))}
         </div>
@@ -188,22 +211,24 @@ export default function FlowCarousel({ spec }: { spec: MediaGridSpec }) {
             ))}
           </div>
 
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.82rem',
-              fontStyle: 'italic',
-              fontWeight: 300,
-              lineHeight: 1.6,
-              color: ink(0.42),
-              margin: 0,
-              marginLeft: 'auto',
-              maxWidth: '34rem',
-              textAlign: 'right',
-            }}
-          >
-            {spec.caption}
-          </p>
+          {spec.caption && (
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.82rem',
+                fontStyle: 'italic',
+                fontWeight: 300,
+                lineHeight: 1.6,
+                color: ink(0.42),
+                margin: 0,
+                marginLeft: 'auto',
+                maxWidth: '34rem',
+                textAlign: 'right',
+              }}
+            >
+              {spec.caption}
+            </p>
+          )}
         </div>
       </Reveal>
     </div>

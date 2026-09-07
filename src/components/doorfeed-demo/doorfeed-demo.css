@@ -125,6 +125,14 @@
   outline-offset: 6px;
 }
 
+/* Numbered "what shipped" items lose their number gutter on narrow screens */
+@media (max-width: 640px) {
+  .df-shipped-item {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+}
+
 /* Media grids collapse to a single column before their cells get too narrow */
 @media (max-width: 700px) {
   .df-media-grid {
