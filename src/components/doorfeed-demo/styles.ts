@@ -56,7 +56,8 @@ export const BODY: CSSProperties = {
   fontWeight: 300,
   lineHeight: 1.8,
   color: ink(0.72),
-  maxWidth: '42rem',
+  // 44.8rem ≈ 717px — the column is 72rem, but body copy keeps its own measure
+  maxWidth: '44.8rem',
   margin: '0 0 1.375rem',
 }
 

@@ -1,5 +1,6 @@
 import ChapterHead from './ChapterHead'
 import { ComponentTabsBlock } from './ComponentTabs'
+import Pill from './Pill'
 import FlowCarousel from './FlowCarousel'
 import Reveal from './Reveal'
 import { ARTIFACTS } from './content'
@@ -73,6 +74,14 @@ export default function ArtifactsChapter() {
                     </p>
                   </Reveal>
 
+                  {item.pill && (
+                    <Reveal>
+                      <div style={{ marginTop: '1rem' }}>
+                        <Pill text={item.pill} />
+                      </div>
+                    </Reveal>
+                  )}
+
                   {item.withComponents && (
                     <ComponentTabsBlock components={ARTIFACTS.components} />
                   )}
@@ -114,6 +123,11 @@ export default function ArtifactsChapter() {
                       {item.hint}
                     </div>
                   </div>
+                  {item.pill && (
+                    <div style={{ marginTop: '1rem' }}>
+                      <Pill text={item.pill} />
+                    </div>
+                  )}
                 </Reveal>
               )}
             </div>
