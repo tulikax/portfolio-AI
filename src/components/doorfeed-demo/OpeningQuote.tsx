@@ -35,6 +35,23 @@ export default function OpeningQuote() {
       <Reveal delay={0.1}>
         <div style={{ ...MONO, color: ink(0.4), marginTop: '1.25rem' }}>{OPENING_PULL.attrib}</div>
       </Reveal>
+
+      {/* The answer the question turned out to have, kept with it */}
+      <Reveal delay={0.16}>
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.9375rem',
+            fontWeight: 300,
+            lineHeight: 1.75,
+            color: ink(0.6),
+            maxWidth: '38rem',
+            margin: '1.75rem auto 0',
+          }}
+        >
+          {OPENING_PULL.note}
+        </p>
+      </Reveal>
     </div>
   )
 }

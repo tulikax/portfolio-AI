@@ -140,8 +140,11 @@ export interface Round {
   num: string
   stage: string
   title: string
+  /** A paragraph beginning `> ` renders as a pull quote. */
   paragraphs: string[]
   verdict: string
+  /** Rendered under the verdict tag — what the round sent us off to do next. */
+  afterVerdict?: string
   /** no = dead end, partial = progress with a cost, yes = the resolution. */
   tone: 'no' | 'partial' | 'yes'
   media: RoundMedia
@@ -173,9 +176,17 @@ export interface ComponentCard {
  */
 export type ShippedItem =
   | { kind: 'heading'; text: string }
-  | { kind: 'point'; num?: string; label?: string; text: string; withComponents?: boolean }
+  | {
+      kind: 'point'
+      num?: string
+      label?: string
+      text: string
+      withComponents?: boolean
+      /** Status tag rendered under the copy, e.g. an unfinished section's date. */
+      pill?: string
+    }
   | { kind: 'flows'; label?: string }
-  | { kind: 'placeholder'; num?: string; label: string; hint: string }
+  | { kind: 'placeholder'; num?: string; label: string; hint: string; pill?: string }
 
 export interface StatusCard {
   label: string
@@ -216,11 +227,10 @@ export const HERO = {
 }
 
 export const OPENING_PULL = {
-  lines: [
-    'What does an analyst leave the platform to do?',
-    'Can the deliverable be built where the data is?',
-  ],
-  attrib: 'The question that started the project',
+  lines: ['What if we already had the pieces, just in the wrong order?'],
+  attrib: 'The question that started the exploration',
+  /** Sits directly under the question — the answer it turned out to have. */
+  note: 'Two capabilities, both real, both mis-framed: AI with the wrong pacing, a dataroom with the wrong prominence. The problem was surfacing and sequencing, not inventing.',
 }
 
 export const CONTEXT = {
@@ -396,27 +406,32 @@ export const EXPLORATION = {
   ] satisfies TitleToken[],
   blocks: [
     {
-      kind: 'aside',
-      text: 'Two capabilities, both real, both mis-framed: AI with the wrong pacing, and a dataroom with the wrong prominence. The design problem was surfacing and sequencing, not inventing.',
+      kind: 'body',
+      text: '**The motivation.** User signals and the market pointed the same way — competitors were moving on AI, and AI-assisted development meant we could build fast enough to reach for something larger than a single enhanced feature.',
     },
     {
-      kind: 'aside',
-      text: 'The bet: wrap the existing platform in a conversational layer so analysts can go from data to finished artifact without leaving it — without removing them from the decisions that matter. Agents wrap existing microservices; they don\'t replace them. The data layer and outputs stay the same. What changes is the entry point, and where the work ends up.',
+      kind: 'body',
+      text: '**The bet.** Rather than bolt intelligence onto one flow, we reconsidered the whole product around it: analysts going from data to finished artifact without leaving the platform. Agents wrap existing microservices, not replace them. The data layer and outputs stay the same. What changes is the entry point, and how the work is extracted.',
     },
   ] satisfies Block[],
   intro:
-    "The agentic layer went through three distinct shapes. Each one was a reasonable answer to the previous round's problem, and each one taught us something the next round depended on.",
+    "The agentic layer then went through three shapes, each a reasonable answer to the last round's problem.",
   rounds: [
     {
       num: 'Round 01',
       stage: 'Open chat',
-      title: 'A single prompt, replacing the UI',
+      title: 'A clean prompt-first interface, prototyped in Figma Make',
       paragraphs: [
-        'The purest version: strip the interface back to a conversation and let the agent handle everything. It demoed beautifully — one input, any question, full synthesis.',
-        'On contact with real analysts it revealed the blank-canvas problem. Experienced users — people who\'d run the old platform for months — didn\'t know where to start. _"I\'m not a technical person"_ came up repeatedly from users who were entirely fluent in the existing tool.',
+        'I built a working prototype quickly in Figma Make and put it in front of two groups.',
+        '**Internally first.** Dogfooding with our SME and in-house analysts went well. Their reaction to being able to do almost any asset valuation using AI was strong; the only feedback that came back was about navigation refinements and information architecture rather than the flow or the journey, because they were able to get to the happy path.',
+        "**Next, existing clients.** The reaction came as a surprise. These were experienced users, months into the old platform, and the clean, low-density interface was itself a surprise coming from a data-heavy tool. But the real issue was that the open prompt left everything equally available, and nothing pointed at the task they'd actually come to do. There were generic pointers we'd provided, but they didn't fit naturally with their real flow. This exposed a major flaw in our assumptions about why users weren't reaching for the tool.",
+        '> It\'s fun to play around and see how the AI can quickly do things, but I need a starting point for my usual tasks that I was doing already.',
+        "The prompt was open enough to support every workflow and specific enough to suggest none. **The gap wasn't capability, it was a default path.**",
       ],
       verdict: 'Too little structure',
       tone: 'no',
+      afterVerdict:
+        "This finding drove me back to the drawing board, to the workspace version, and eventually to the decision to lead with structure and let conversation follow. It also exposed a problem with how we were testing: the briefing we'd given internally was doing work the interface should have been doing on its own, which is why the internal sessions looked fine and the client sessions didn't. Round 2 was tested cold for exactly that reason.",
       media: {
         kind: 'video',
         label: 'Open chat interface',
@@ -426,12 +441,14 @@ export const EXPLORATION = {
     {
       num: 'Round 02',
       stage: 'Structured',
-      title: 'Straight workflows, minimal conversation',
+      title: 'Lead with structure, keep the conversation available',
       paragraphs: [
-        'The correction: lead with structure. Named workflows, clear entry points, the agent running inside defined lanes rather than open-ended dialogue.',
-        'This solved orientation but gave up what made the agent worth building. Pulling a comps set with known parameters _was_ faster as a form — but the moment an analyst needed to interrogate a result, adjust an assumption, or ask why a number looked wrong, the structure got in the way.',
+        '**The correction:** give the page a shape. Asset context in the header, the dataroom pulled out of hiding into a persistent left panel, three contextually relevant workflows as named entry points, and running tasks visible below. The open prompt stayed, but now sat inside a screen that told you where you were and what was available.',
+        "**How we tested it.** This round was dogfooded cold, with minimal context and only two or three tasks to complete, so we could watch where people went rather than where we'd pointed them. Testing Round 1 with a full brief had masked the orientation problem; **stripping the setup out was the only way to see whether the structure did the work on its own.** It did. Users knew what the page was for and what came next without being told.",
+        '**What still came up:** pulling a comps set with known parameters still felt faster on the original platform — click through, wait for ingestion, get comps. A task that had been tedious but low-effort became a conversation, and **conversations carry their own overhead**: composing the request, reading the response, confirming it understood.',
+        "The input wasn't just an option sitting alongside the workflows. It was an invitation, and it competed with the faster path. The affordance itself was shaping behaviour — which meant the question wasn't whether to offer chat, but when to put it in front of someone.",
       ],
-      verdict: 'Oriented, but capped',
+      verdict: 'Oriented, but competing with itself',
       tone: 'partial',
       media: {
         kind: 'image',
@@ -467,7 +484,6 @@ export const ARTIFACTS = {
   shipped: [
     {
       kind: 'point',
-      num: '01',
       label: 'Insight',
       text: 'Not every enriched flow needed a conversation. The signal was both qualitative and quantitative: dogfooding sessions and interviews with our asset acquisition SMEs, the customer support requests coming in from existing clients, and PostHog session reviews of how beta users actually moved through the product.',
     },
@@ -485,8 +501,8 @@ export const ARTIFACTS = {
     },
     {
       kind: 'point',
-      num: '03',
       text: 'There were still custom components that had to be rendered in the chat.',
+      pill: 'More coming soon — last updated July 2026',
       withComponents: true,
     },
     {
@@ -494,6 +510,7 @@ export const ARTIFACTS = {
       num: '04',
       label: 'Storybook artefacts',
       hint: 'A few Storybook artefacts to come.',
+      pill: 'Coming soon — last updated July 2026',
     },
   ] satisfies ShippedItem[],
   components: [
