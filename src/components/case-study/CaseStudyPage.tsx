@@ -11,6 +11,8 @@ import DesignDecisions from './DesignDecisions'
 import PrototypeEmbed from './PrototypeEmbed'
 import NextProject from './NextProject'
 import ProjectTabs from './ProjectTabs'
+import DoorFeedExploration from './DoorFeedExploration'
+import DoorFeedArtifacts from './DoorFeedArtifacts'
 import CaseSideNav from './CaseSideNav'
 import { LightboxProvider } from './LightboxContext'
 
@@ -71,12 +73,16 @@ export default function CaseStudyPage() {
   const loaderLabel = [data.company ?? data.title, data.role, data.year]
     .filter(Boolean).join(' · ')
 
-  const hasProjectTabs = data.projectTabs && data.projectTabs.length > 0
+  // The Context chapter renders inside ProjectTabs' container, so a study using
+  // it takes the tabbed layout even with no tabs of its own — otherwise the
+  // legacy Problem/visual/platform sections would switch back on beneath it.
+  const hasProjectTabs =
+    (data.projectTabs && data.projectTabs.length > 0) || data.contextChapter === true
   const hasBodyParagraphs = data.bodyParagraphs && data.bodyParagraphs.length > 0
 
   const sideNavSections = hasProjectTabs
     ? [
-        { id: 'section-overview', label: 'Overview' },
+        { id: 'section-overview', label: data.contextChapter ? 'Context' : 'Overview' },
         ...(data.projectTabs ?? []).flatMap((t) => {
           const tabEntry = {
             id: 'section-' + t.label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
@@ -88,6 +94,12 @@ export default function CaseStudyPage() {
               : []
           return [tabEntry, ...keyDecisionsEntry]
         }),
+        ...(data.contextChapter
+          ? [
+              { id: 'section-exploration', label: 'Exploration' },
+              { id: 'section-artifacts', label: 'Final artifacts' },
+            ]
+          : []),
       ]
     : []
 
@@ -154,6 +166,10 @@ export default function CaseStudyPage() {
 
       {/* 3a — Project tabs */}
       {hasProjectTabs && <ProjectTabs data={data} />}
+
+      {/* Exploration and Final artifacts — full width, so the rounds get their own column */}
+      {data.contextChapter && <DoorFeedExploration />}
+      {data.contextChapter && <DoorFeedArtifacts />}
 
       {/* 3b — Video + decisions side-by-side (when bodyParagraphs present) */}
       {!hasProjectTabs && hasBodyParagraphs && (data.prototypeEmbed || (data.designDecisions && data.designDecisions.length > 0)) && (

@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import { motion, useScroll } from 'framer-motion'
+import ArtifactsChapter from './ArtifactsChapter'
+import ExplorationChapter from './ExplorationChapter'
 import ChapterHead, { TitleTokens } from './ChapterHead'
 import DeepDiveAccordion from './DeepDiveAccordion'
 import FlagList from './FlagList'
 import HeroVideoDissolve from './HeroVideoDissolve'
 import MediaGrid from './MediaGrid'
 import MediaSlot from './MediaSlot'
-import Rounds from './Rounds'
+import OpeningQuote from './OpeningQuote'
 import ProseBlocks from './ProseBlocks'
 import ReflectionList from './ReflectionList'
 import Reveal from './Reveal'
@@ -14,18 +16,17 @@ import RichText from './RichText'
 import SectionRail from './SectionRail'
 import StatusGrid from './StatusGrid'
 import {
-  ARTIFACTS,
   CLOSING,
   CONTEXT,
   DECISIONS,
   HERO,
   IMPACT,
-  OPENING_PULL,
   REFLECTIONS,
 } from './content'
 import {
   BODY,
   CHAPTER_TITLE,
+  H2,
   DISPLAY,
   EMPHASIS,
   HAIRLINE,
@@ -107,16 +108,15 @@ export default function DoorFeedDemoPage() {
           }}
         />
 
-        {/* Breaks out of the centred column the chapters use — the hero copy is
-            pinned to the page gutter so it clears the product behind it */}
+        {/* Same centred 72rem column as the chapters below and as the live case
+            study hero — anything narrower runs under the section rail */}
         <div
           style={{
+            ...WRAP,
             position: 'relative',
             zIndex: 2,
             width: '100%',
-            maxWidth: '38rem',
-            marginRight: 'auto',
-            padding: '0 2rem 5rem',
+            padding: '0 2rem 3.5rem',
           }}
         >
           <Reveal>
@@ -141,7 +141,7 @@ export default function DoorFeedDemoPage() {
               style={{
                 ...DISPLAY,
                 fontWeight: 300,
-                fontSize: 'clamp(1.875rem, 4.4vw, 3.25rem)',
+                fontSize: 'clamp(1.125rem, 2.65vw, 1.95rem)',
                 lineHeight: 1.02,
                 color: ink(0.97),
                 margin: '0 0 1.125rem',
@@ -185,119 +185,26 @@ export default function DoorFeedDemoPage() {
         </div>
       </section>
 
-      {/* ─── Opening pull quote ───────────────────────────────── */}
-      <div style={{ ...WRAP, padding: '7.5rem 2rem', textAlign: 'center' }}>
-        <Reveal>
-          <blockquote
-            style={{
-              ...DISPLAY,
-              fontStyle: 'italic',
-              fontWeight: 300,
-              fontSize: 'clamp(1.5rem, 3.5vw, 2.375rem)',
-              lineHeight: 1.32,
-              color: ink(0.95),
-              maxWidth: '46rem',
-              margin: '0 auto',
-            }}
-          >
-            {OPENING_PULL.lines.map((line, i) => (
-              <span key={i} style={{ display: 'block' }}>
-                {line}
-              </span>
-            ))}
-          </blockquote>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <div style={{ ...MONO, color: ink(0.4), marginTop: '1.625rem' }}>
-            {OPENING_PULL.attrib}
-          </div>
-        </Reveal>
-      </div>
-
       {/* ─── 01 · Context ─────────────────────────────────────── */}
       <section id="context" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
-          <ChapterHead num={CONTEXT.num} eyebrow={CONTEXT.eyebrow} title={CONTEXT.title} />
+          <ChapterHead num={CONTEXT.num} eyebrow={CONTEXT.eyebrow} />
           <ProseBlocks blocks={CONTEXT.blocks} />
+          <OpeningQuote />
         </div>
       </section>
 
-      {/* ─── 02 · Final artifacts ─────────────────────────────── */}
+      {/* ─── 02 · Exploration ─────────────────────────────────── */}
+      <section id="exploration" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
+        <ExplorationChapter />
+      </section>
+
+      {/* ─── 03 · Final artifacts ─────────────────────────────── */}
       <section id="artifacts" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
-        <div style={WRAP}>
-          <ChapterHead num={ARTIFACTS.num} eyebrow={ARTIFACTS.eyebrow} title={ARTIFACTS.title} />
-
-          <Reveal>
-            <p style={BODY}>{ARTIFACTS.intro}</p>
-          </Reveal>
-        </div>
-
-        {/* Wider than the text column — rounds alternate media and copy side to side */}
-        <Rounds />
-
-        <div style={WRAP}>
-          <Reveal>
-            <h3
-              style={{
-                ...DISPLAY,
-                fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
-                color: ink(0.95),
-                margin: '3.5rem 0 1.125rem',
-              }}
-            >
-              {ARTIFACTS.componentsHeading}
-            </h3>
-          </Reveal>
-          <Reveal>
-            <p style={BODY}>{ARTIFACTS.componentsIntro}</p>
-          </Reveal>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(13.4375rem, 1fr))',
-              gap: '1px',
-              background: HAIRLINE,
-              border: `1px solid ${HAIRLINE}`,
-              margin: '2.625rem 0',
-            }}
-          >
-            {ARTIFACTS.components.map((component, i) => (
-              <Reveal
-                key={component.title}
-                delay={i * 0.05}
-                className="df-cell"
-                style={{ background: 'rgb(var(--surface))', padding: '1.5625rem 1.4375rem' }}
-              >
-                <div
-                  style={{ ...MONO, fontSize: '0.54rem', color: ink(0.45), marginBottom: '0.5625rem' }}
-                >
-                  Component
-                </div>
-                <h4
-                  style={{ ...DISPLAY, fontSize: '1.09375rem', color: ink(0.95), margin: '0 0 0.375rem' }}
-                >
-                  {component.title}
-                </h4>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.84375rem',
-                    fontWeight: 300,
-                    lineHeight: 1.65,
-                    color: ink(0.55),
-                    margin: 0,
-                  }}
-                >
-                  {component.body}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+        <ArtifactsChapter />
       </section>
 
-      {/* ─── 03 · Key decisions ───────────────────────────────── */}
+      {/* ─── 04 · Key decisions ───────────────────────────────── */}
       <section id="decisions" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
           <ChapterHead num={DECISIONS.num} eyebrow={DECISIONS.eyebrow} title={DECISIONS.title} />
@@ -314,7 +221,7 @@ export default function DoorFeedDemoPage() {
         </div>
       </section>
 
-      {/* ─── 04 · Impact ──────────────────────────────────────── */}
+      {/* ─── 05 · Impact ──────────────────────────────────────── */}
       <section id="impact" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
           <ChapterHead num={IMPACT.num} eyebrow={IMPACT.eyebrow} title={IMPACT.title} />
@@ -332,16 +239,7 @@ export default function DoorFeedDemoPage() {
           </Reveal>
 
           <Reveal>
-            <h3
-              style={{
-                ...DISPLAY,
-                fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
-                color: ink(0.95),
-                margin: '3.5rem 0 1.125rem',
-              }}
-            >
-              {IMPACT.openHeading}
-            </h3>
+            <h3 style={{ ...H2, margin: '3.5rem 0 1.125rem' }}>{IMPACT.openHeading}</h3>
           </Reveal>
 
           <FlagList />
@@ -350,7 +248,7 @@ export default function DoorFeedDemoPage() {
         </div>
       </section>
 
-      {/* ─── 05 · Reflections ─────────────────────────────────── */}
+      {/* ─── 06 · Reflections ─────────────────────────────────── */}
       <section id="reflections" style={{ padding: '6rem 0', borderTop: `1px solid ${HAIRLINE}` }}>
         <div style={WRAP}>
           <ChapterHead

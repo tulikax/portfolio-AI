@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import RichText from './RichText'
 import { DECISIONS } from './content'
-import { DISPLAY, EASE_OUT, HAIRLINE, HAIRLINE_STRONG, MONO, ink } from './styles'
+import { EASE_OUT, H3, HAIRLINE, HAIRLINE_STRONG, MONO, ink } from './styles'
 
 /**
  * The key design decisions, as an accordion. Each is a trade-off with a real
@@ -39,12 +39,7 @@ export default function DeepDiveAccordion() {
                 {dive.idx}
               </span>
               <span
-                style={{
-                  ...DISPLAY,
-                  fontSize: 'clamp(1.125rem, 2.4vw, 1.5rem)',
-                  color: ink(0.95),
-                  flex: 1,
-                }}
+                style={{ ...H3, flex: 1 }}
               >
                 {dive.title}
               </span>

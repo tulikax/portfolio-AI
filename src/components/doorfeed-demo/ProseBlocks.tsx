@@ -4,7 +4,7 @@ import MediaSlot from './MediaSlot'
 import Reveal from './Reveal'
 import RichText from './RichText'
 import type { Block } from './content'
-import { BODY, DISPLAY, ink } from './styles'
+import { BODY, H2, ink } from './styles'
 
 /**
  * Renders a chapter's ordered block list. Prose, sub-headings and media are
@@ -19,14 +19,7 @@ export default function ProseBlocks({ blocks }: { blocks: Block[] }) {
           case 'heading':
             return (
               <Reveal key={i}>
-                <h3
-                  style={{
-                    ...DISPLAY,
-                    fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
-                    color: ink(0.95),
-                    margin: '3.5rem 0 1.125rem',
-                  }}
-                >
+                <h3 style={{ ...H2, margin: '3.5rem 0 1.125rem' }}>
                   {block.text}
                 </h3>
               </Reveal>
@@ -71,6 +64,34 @@ export default function ProseBlocks({ blocks }: { blocks: Block[] }) {
 
           case 'collage':
             return <MediaCollage key={i} spec={block.spec} />
+
+          case 'split':
+            return (
+              <div
+                key={i}
+                className="df-split"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+                  gap: '3rem',
+                  alignItems: 'start',
+                  margin: '2.5rem 0',
+                }}
+              >
+                <div>
+                  {block.text.map((para, j) => (
+                    <Reveal key={j}>
+                      <p style={{ ...BODY, maxWidth: 'none' }}>
+                        <RichText text={para} />
+                      </p>
+                    </Reveal>
+                  ))}
+                </div>
+
+                {/* Media column — `columns: 1` stacks the screens at equal width */}
+                <MediaGrid spec={block.spec} flush />
+              </div>
+            )
         }
       })}
     </>
