@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import { RAIL_SECTIONS } from './content'
-import { MONO, ink, warm } from './styles'
+import { EASE_OUT } from './styles'
 
 /**
- * Fixed dot-rail down the left edge. Labels stay hidden until hover, so the
- * rail reads as punctuation rather than navigation until it's wanted.
+ * Fixed section rail down the left edge.
  *
- * Uses the same IntersectionObserver approach as CaseSideNav; hidden below
- * 1100px where it would collide with the content column.
+ * Deliberately identical to CaseSideNav on the live case studies — same
+ * offsets, same 3px bars, same always-visible labels — so moving between
+ * /work/:slug and this page doesn't feel like moving between two sites.
+ *
+ * Hidden below 1100px, where it would collide with the content column.
  */
 export default function SectionRail() {
   const [activeId, setActiveId] = useState(RAIL_SECTIONS[0].id)
   const [visible, setVisible] = useState(false)
-  const [hovered, setHovered] = useState<string | null>(null)
+  const [hovered, setHovered] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
@@ -48,7 +51,7 @@ export default function SectionRail() {
   function scrollTo(id: string) {
     const el = document.getElementById(id)
     if (!el) return
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: 'smooth' })
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' })
   }
 
   if (!visible) return null
@@ -56,60 +59,71 @@ export default function SectionRail() {
   return (
     <nav
       aria-label="Case study sections"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         position: 'fixed',
-        left: '2rem',
+        left: '24px',
         top: '50%',
         transform: 'translateY(-50%)',
         zIndex: 50,
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.875rem',
+        gap: '12px',
       }}
     >
       {RAIL_SECTIONS.map(({ id, label }) => {
-        const active = id === activeId
-        const lit = active || hovered === id
+        const isActive = id === activeId
         return (
           <button
             key={id}
             onClick={() => scrollTo(id)}
-            onMouseEnter={() => setHovered(id)}
-            onMouseLeave={() => setHovered(null)}
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.625rem',
+              gap: '10px',
+              height: '20px',
               background: 'none',
               border: 'none',
               padding: 0,
               textAlign: 'left',
             }}
           >
-            <span
-              style={{
-                width: '0.375rem',
-                height: '0.375rem',
-                borderRadius: '50%',
-                background: active ? warm(0.85) : ink(0.35),
-                transform: active ? 'scale(1.6)' : 'scale(1)',
-                transition: 'transform 0.3s var(--ease-out), background 0.3s var(--ease-out)',
-                flexShrink: 0,
+            {/* Bar */}
+            <motion.span
+              animate={{
+                background: isActive
+                  ? 'rgb(var(--ink) / 0.80)'
+                  : hovered
+                    ? 'rgb(var(--ink) / 0.30)'
+                    : 'rgb(var(--ink) / 0.18)',
+                height: isActive ? '24px' : '20px',
               }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
+              style={{ width: '3px', borderRadius: '2px', flexShrink: 0, display: 'block' }}
             />
-            <span
+
+            {/* Label — always visible */}
+            <motion.span
+              animate={{
+                color: isActive
+                  ? 'rgb(var(--ink) / 0.92)'
+                  : hovered
+                    ? 'rgb(var(--ink) / 0.65)'
+                    : 'rgb(var(--ink) / 0.38)',
+              }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
               style={{
-                ...MONO,
-                fontSize: '0.62rem',
-                color: lit ? ink(0.85) : ink(0.4),
-                opacity: lit ? 1 : 0,
-                transform: lit ? 'translateX(0)' : 'translateX(-6px)',
-                transition: 'opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out)',
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.75rem',
+                fontWeight: isActive ? 500 : 400,
+                letterSpacing: '0.02em',
                 whiteSpace: 'nowrap',
+                userSelect: 'none',
               }}
             >
               {label}
-            </span>
+            </motion.span>
           </button>
         )
       })}

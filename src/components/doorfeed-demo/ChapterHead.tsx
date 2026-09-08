@@ -6,7 +6,11 @@ import { CHAPTER_TITLE, EMPHASIS, MONO, ink } from './styles'
 interface Props {
   num: string
   eyebrow: string
-  title: TitleToken[]
+  /**
+   * Optional. Chapters whose sub-headings already carry the argument omit it —
+   * a display title on top of them just repeats the section twice.
+   */
+  title?: TitleToken[]
 }
 
 /** Renders a token list as a display heading with italic emphasis and line breaks. */
@@ -35,13 +39,32 @@ export default function ChapterHead({ num, eyebrow, title }: Props) {
       </Reveal>
       <div>
         <Reveal>
-          <div style={{ ...MONO, color: ink(0.4), marginBottom: '0.75rem' }}>{eyebrow}</div>
+          {/*
+           * Serif and larger than a standard eyebrow: in chapters that drop the
+           * display title, this is what names the section on the page. Colour
+           * stays where it was so it still reads as a label.
+           */}
+          <div
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 400,
+              fontStyle: 'italic',
+              fontSize: '1.0625rem',
+              letterSpacing: '0.01em',
+              color: ink(0.4),
+              marginBottom: title ? '0.75rem' : 0,
+            }}
+          >
+            {eyebrow}
+          </div>
         </Reveal>
-        <Reveal delay={0.06}>
-          <h2 style={CHAPTER_TITLE}>
-            <TitleTokens tokens={title} />
-          </h2>
-        </Reveal>
+        {title && (
+          <Reveal delay={0.06}>
+            <h2 style={CHAPTER_TITLE}>
+              <TitleTokens tokens={title} />
+            </h2>
+          </Reveal>
+        )}
       </div>
     </div>
   )

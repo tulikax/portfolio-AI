@@ -27,6 +27,8 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
   const eyebrow = data.heroEyebrow ?? data.company
   const headline = data.heroHeadline ?? data.title
   const subheadline = data.heroSubheadline ?? data.tagline
+  // Studies whose headline is a sentence rather than a name scale it down
+  const headlineScale = data.heroHeadlineScale ?? 1
 
   const Wrap = animate ? motion.div : 'div'
 
@@ -53,7 +55,7 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
         {...(animate ? { initial: { opacity: 0, y: 28 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.18, ease: EASE_OUT } } : {})}
         style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.75rem, 7vw, 5.5rem)',
+          fontSize: `clamp(${2.75 * headlineScale}rem, ${7 * headlineScale}vw, ${5.5 * headlineScale}rem)`,
           fontWeight: 300,
           letterSpacing: '-0.02em',
           lineHeight: 1.12,
@@ -123,9 +125,14 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
   const ref = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
+  // `contain` keeps the whole frame visible, so the media box can't overhang the
+  // section and the parallax travel has to stay small or it drifts out of view.
+  const mediaFit = data.heroMediaFit ?? 'cover'
+  const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', mediaFit === 'contain' ? '8%' : '20%'])
 
-  const isVideo = /\.(mp4|webm|mov)$/i.test(data.heroMedia.src)
+  // Cloudinary delivery URLs carry no file extension, so the path decides
+  const isVideo =
+    /\.(mp4|webm|mov)$/i.test(data.heroMedia.src) || data.heroMedia.src.includes('/video/upload/')
 
   function handleProgress(e: React.SyntheticEvent<HTMLVideoElement>) {
     if (!onVideoProgress) return
@@ -187,12 +194,14 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
         <GradientBlobs />
       </div>
 
-      <motion.div style={{ y: mediaY, position: 'absolute', inset: '-10% 0', zIndex: 1 }}>
+      <motion.div
+        style={{ y: mediaY, position: 'absolute', inset: mediaFit === 'contain' ? 0 : '-10% 0', zIndex: 1 }}
+      >
         {isVideo ? (
           <video
             src={data.heroMedia.src}
             autoPlay loop muted playsInline
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: mediaFit }}
             onCanPlay={onVideoReady}
             onProgress={handleProgress}
           />
@@ -200,14 +209,17 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
           <img
             src={data.heroMedia.src}
             alt={data.heroMedia.alt}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: mediaFit }}
             onLoad={onVideoReady}
           />
         )}
       </motion.div>
 
-      {/* Gradient fade to black at bottom */}
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 55%, black 100%)', zIndex: 2 }} />
+      {/* Vignette — darkens the edges so the copy holds over a busy clip */}
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(120% 90% at 50% 35%, transparent 30%, rgba(0,0,0,0.45) 72%, rgba(0,0,0,0.82) 100%)', zIndex: 2, pointerEvents: 'none' }} />
+
+      {/* Gradient fade to black at bottom, where the headline sits */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.85) 78%, black 100%)', zIndex: 2, pointerEvents: 'none' }} />
 
       {/* Top fade for navbar blending */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '120px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)', zIndex: 3 }} />

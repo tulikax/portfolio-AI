@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import type { CaseStudy, ProjectTab } from '../../types/caseStudy'
 import VisualShowcase from './VisualShowcase'
 import HighlightPhrase from './HighlightPhrase'
+import DoorFeedContext from './DoorFeedContext'
 import { useLightbox } from './LightboxContext'
 
 // ─── Highlight helper ──────────────────────────────────────────
@@ -924,7 +925,8 @@ function sectionId(label: string) {
 }
 
 export default function ProjectTabs({ data }: Props) {
-  if (!data.projectTabs || data.projectTabs.length === 0) return null
+  const tabs = data.projectTabs ?? []
+  if (tabs.length === 0 && !data.contextChapter) return null
 
   return (
     <div
@@ -934,30 +936,36 @@ export default function ProjectTabs({ data }: Props) {
         padding: '0 2rem 4rem',
       }}
     >
-      {/* Overview section */}
+      {/* Overview section — or the Context chapter, where a study opts into it */}
       <section id="section-overview">
-        <motion.h2
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.75, ease: EASE_OUT }}
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
-            fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.90)',
-            margin: '0 0 3rem 0',
-            lineHeight: 1.0,
-            letterSpacing: '-0.03em',
-          }}
-        >
-          Overview
-        </motion.h2>
-        <OverviewContent data={data} />
+        {data.contextChapter ? (
+          <DoorFeedContext />
+        ) : (
+          <>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.75, ease: EASE_OUT }}
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
+                fontWeight: 300,
+                color: 'rgb(var(--ink) / 0.90)',
+                margin: '0 0 3rem 0',
+                lineHeight: 1.0,
+                letterSpacing: '-0.03em',
+              }}
+            >
+              Overview
+            </motion.h2>
+            <OverviewContent data={data} />
+          </>
+        )}
       </section>
 
       {/* One section per project tab */}
-      {data.projectTabs.map((tab) => (
+      {tabs.map((tab) => (
         <section
           key={tab.label}
           id={sectionId(tab.label)}

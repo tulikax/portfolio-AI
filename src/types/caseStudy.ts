@@ -115,6 +115,10 @@ export interface CaseStudy {
   heroAccentColor?: string   // optional CSS color for gradient overlay tint
   heroEyebrow?: string
   heroHeadline?: string
+  /** Multiplies the hero headline size. Use below 1 when the headline is a sentence. */
+  heroHeadlineScale?: number
+  /** How the hero clip fills its frame. `contain` shows the whole thing; defaults to `cover`. */
+  heroMediaFit?: 'cover' | 'contain'
   heroSubheadline?: string
   heroMeta?: Array<{ label: string; value: string }>
   heroTools?: Array<{ name: string; slug: string; ext?: string }>
@@ -143,6 +147,12 @@ export interface CaseStudy {
   overviewInlineMedia?: Array<{ afterParagraph: number; src: string; alt: string; caption?: string; scale?: number }>
   /** If true, hides the problem statement block in the Overview tab */
   overviewHideProblem?: boolean
+  /**
+   * Renders the shared Context chapter in place of the generic Overview
+   * section. The chapter's copy and block layout live in
+   * components/doorfeed-demo/content.ts, which the demo treatment also uses.
+   */
+  contextChapter?: boolean
   projectTabs?: ProjectTab[]   // if present, replaces platformSections + designDecisions
   visualBlocks?: VisualBlock[]
   platformSections?: PlatformSection[]

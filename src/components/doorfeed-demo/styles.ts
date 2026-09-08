@@ -20,9 +20,13 @@ export const warm = (alpha: number) => `rgb(${WARM} / ${alpha})`
 
 export const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
-/** Page gutter — matches the max-width used across the site's case studies. */
+/**
+ * Page gutter. 72rem matches the container every section of the live case
+ * studies uses, so the left edge of titles and copy lines up between the two.
+ * Body copy keeps its own narrower measure via BODY below.
+ */
 export const WRAP: CSSProperties = {
-  maxWidth: '58rem',
+  maxWidth: '72rem',
   margin: '0 auto',
   padding: '0 2rem',
 }
@@ -52,8 +56,45 @@ export const BODY: CSSProperties = {
   fontWeight: 300,
   lineHeight: 1.8,
   color: ink(0.72),
-  maxWidth: '42rem',
+  // 44.8rem ≈ 717px — the column is 72rem, but body copy keeps its own measure
+  maxWidth: '44.8rem',
   margin: '0 0 1.375rem',
+}
+
+/*
+ * Heading scale. Four steps, used everywhere on the page so a sub-heading in
+ * one chapter is the same size as a sub-heading in another:
+ *
+ *   CHAPTER_TITLE  chapter openers
+ *   H2             sub-headings inside a chapter
+ *   H3             item titles — rounds, findings, reflections, decisions
+ *   H4             card titles
+ */
+export const H2: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 400,
+  letterSpacing: '-0.02em',
+  fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
+  lineHeight: 1.15,
+  color: 'rgb(var(--ink) / 0.95)',
+}
+
+export const H3: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 400,
+  letterSpacing: '-0.015em',
+  fontSize: 'clamp(1.125rem, 2.1vw, 1.375rem)',
+  lineHeight: 1.25,
+  color: 'rgb(var(--ink) / 0.95)',
+}
+
+export const H4: CSSProperties = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 400,
+  letterSpacing: '-0.01em',
+  fontSize: '1.0625rem',
+  lineHeight: 1.3,
+  color: 'rgb(var(--ink) / 0.95)',
 }
 
 export const CHAPTER_TITLE: CSSProperties = {

@@ -1,7 +1,7 @@
 import Reveal from './Reveal'
 import RichText from './RichText'
 import { REFLECTIONS } from './content'
-import { DISPLAY, HAIRLINE, MONO, ink } from './styles'
+import { H3, HAIRLINE, MONO, ink } from './styles'
 
 /** The closing takeaways — one stacked cell each, same hairline grid as the rest. */
 export default function ReflectionList() {
@@ -25,7 +25,7 @@ export default function ReflectionList() {
           <div style={{ ...MONO, fontSize: '0.6rem', color: ink(0.45), marginBottom: '0.625rem' }}>
             {item.num}
           </div>
-          <h4 style={{ ...DISPLAY, fontSize: '1.3125rem', color: ink(0.95), margin: '0 0 0.7rem' }}>
+          <h4 style={{ ...H3, margin: '0 0 0.7rem' }}>
             {item.title}
           </h4>
           <p
