@@ -4,7 +4,7 @@
 
 **Goal:** Make the site's theme switchable between a softened dark and a warm light palette, reviewable via a private keyboard shortcut and unreachable by visitors.
 
-**Architecture:** The palette lives entirely in `index.css` under `:root` / `:root[data-theme='light']`. A small React module (`src/theme/`) stamps `data-theme` on `<html>`, persists the choice, and exposes a `themeVersion` that canvas components depend on so they re-initialise on flip. Canvas code keeps reading tokens out of CSS through `src/constants/theme.ts`, which becomes element-scoped so a pinned subtree resolves correctly.
+**Architecture:** The palette lives entirely in `index.css` under `:root` / `:root[data-theme='light']`. A small React module (`src/theme/`) stamps `data-theme` on `<html>` in a layout effect, persists the choice, and hands canvas components a memoised accessor object whose identity changes with the theme, so their effects re-run and re-read the tokens. Canvas code keeps reading tokens out of CSS through `src/constants/theme.ts`, which becomes element-scoped so a pinned subtree resolves correctly.
 
 **Tech Stack:** React 19, TypeScript 5.9, Vite 8, react-router-dom 7, Tailwind v4 (installed, CSS-first, barely used — the codebase is inline styles).
 
@@ -165,10 +165,10 @@ git commit -m "refactor(theme): scope token reads to an element and cache per ro
   - `type ResolvedTheme = 'light' | 'dark'`
   - `SYSTEM_FOLLOWS_OS: boolean` (const `false`)
   - `STORAGE_KEY: string` (`'portfolio:theme-mode'`)
-  - `ThemeStateContext` — value `{ mode, resolved, themeVersion, setMode, toggle }`
+  - `ThemeStateContext` — value `{ mode, resolved, setMode, toggle }`
   - `ThemeRootContext` — value `Element | null` (null until mounted; consumers fall back to `document.documentElement`)
   - `<ThemeProvider>` component
-  - `useTheme(): { mode, resolved, themeVersion, setMode, toggle }`
+  - `useTheme(): { mode, resolved, setMode, toggle }`
 
 Two separate contexts on purpose: `ThemeScope` (Task 5) overrides only the *root
 element*, never the mode. Bundling them would make a pinned subtree look like it
@@ -199,8 +199,6 @@ export const SYSTEM_FOLLOWS_OS = false
 export interface ThemeState {
   mode: ThemeMode
   resolved: ResolvedTheme
-  /** Increments on every resolved-theme change; canvas effects depend on it. */
-  themeVersion: number
   setMode: (mode: ThemeMode) => void
   toggle: () => void
 }
@@ -216,7 +214,14 @@ export const ThemeRootContext = createContext<Element | null>(null)
 Create `src/theme/ThemeProvider.tsx`:
 
 ```tsx
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
 import { refreshTheme } from '../constants/theme'
 import {
   STORAGE_KEY,
@@ -247,8 +252,6 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   const [prefersLight, setPrefersLight] = useState(
     () => typeof window !== 'undefined' && matchMedia('(prefers-color-scheme: light)').matches,
   )
-  const [themeVersion, setThemeVersion] = useState(0)
-
   const resolved = resolve(mode, prefersLight)
 
   // Track the OS preference even while SYSTEM_FOLLOWS_OS is false, so that
@@ -260,7 +263,13 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
     return () => query.removeEventListener('change', onChange)
   }, [])
 
-  useEffect(() => {
+  // A LAYOUT effect, deliberately. React's commit phase runs every layout effect
+  // (child-first, then parent) before any passive effect. Consumers read tokens in
+  // ordinary useEffects, so this is guaranteed to have stamped the attribute and
+  // cleared the cache before any of them look. A passive effect here would run
+  // child-first — i.e. after the consumers that depend on it — and hand them stale
+  // tokens.
+  useLayoutEffect(() => {
     document.documentElement.dataset.theme = resolved
     const meta = document.querySelector('meta[name="theme-color"]')
     if (meta) {
@@ -268,7 +277,6 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
     }
     // Tokens are cached against the old palette until this runs.
     refreshTheme()
-    setThemeVersion((version) => version + 1)
   }, [resolved])
 
   const setMode = useCallback((next: ThemeMode) => {
@@ -305,8 +313,8 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   }, [toggle])
 
   const state = useMemo(
-    () => ({ mode, resolved, themeVersion, setMode, toggle }),
-    [mode, resolved, themeVersion, setMode, toggle],
+    () => ({ mode, resolved, setMode, toggle }),
+    [mode, resolved, setMode, toggle],
   )
 
   return (
@@ -444,7 +452,7 @@ git commit -m "feat(theme): stamp data-theme before first paint"
 
 Canvas components capture `inkChannel()` once at effect start, so they keep drawing
 the old colour after a flip. Rather than asking each component to remember a
-`themeVersion` dep — a convention that will rot the first time someone adds a
+theme dep — a convention that will rot the first time someone adds a
 canvas component — this hook returns the ink accessors and the version as one
 memoised object. Depending on it is the only way to read the ink, so the two cannot
 drift apart.
@@ -462,7 +470,7 @@ drift apart.
 
   ```ts
   interface ThemedCanvas {
-    themeVersion: number
+    resolved: ResolvedTheme
     themeRoot: Element
     inkChannel: () => string
     ink: (alpha?: number) => string
@@ -479,11 +487,11 @@ Create `src/theme/useThemedCanvas.ts`:
 ```ts
 import { useContext, useMemo } from 'react'
 import { displayFont, ink, inkChannel } from '../constants/theme'
-import { ThemeRootContext } from './ThemeContext'
+import { ThemeRootContext, type ResolvedTheme } from './ThemeContext'
 import { useTheme } from './useTheme'
 
 export interface ThemedCanvas {
-  themeVersion: number
+  resolved: ResolvedTheme
   themeRoot: Element
   inkChannel: () => string
   ink: (alpha?: number) => string
@@ -491,27 +499,32 @@ export interface ThemedCanvas {
 }
 
 /**
- * Ink accessors bundled with the theme version that invalidates them.
+ * Ink accessors bundled with the theme identity that invalidates them.
  *
  * Canvas effects cache colours at effect start, so they must re-run on a theme
  * flip. Put the whole returned object in the effect's dependency array: because
  * reading the ink and subscribing to its changes come from the same value, a
  * component cannot do one without the other.
+ *
+ * Ordering is safe because ThemeProvider stamps `data-theme` and calls
+ * `refreshTheme()` in a LAYOUT effect: every layout effect completes before any
+ * passive effect, so by the time a consumer's useEffect calls `inkChannel()` the
+ * attribute is set and the cache is empty.
  */
 export function useThemedCanvas(): ThemedCanvas {
-  const { themeVersion } = useTheme()
+  const { resolved } = useTheme()
   const scopedRoot = useContext(ThemeRootContext)
 
   return useMemo(() => {
     const themeRoot = scopedRoot ?? document.documentElement
     return {
-      themeVersion,
+      resolved,
       themeRoot,
       inkChannel: () => inkChannel(themeRoot),
       ink: (alpha = 1) => ink(alpha, themeRoot),
       displayFont: (sizePx: number, style = 'italic') => displayFont(sizePx, style, themeRoot),
     }
-  }, [themeVersion, scopedRoot])
+  }, [resolved, scopedRoot])
 }
 ```
 
