@@ -5,6 +5,7 @@ import Navbar from './components/navbar'
 import HomePage from './components/HomePage'
 import CaseStudyPage from './components/case-study/CaseStudyPage'
 import AboutPage from './components/about/AboutPage'
+import ThemeToggle from './theme/ThemeToggle'
 
 // Demo pages are dev-only: the routes are never registered in production builds,
 // so the URLs don't resolve on the deployed site
@@ -19,6 +20,7 @@ export default function App() {
       <div className="grain-overlay" />
       <CustomCursor />
       <Navbar />
+      {import.meta.env.DEV && <ThemeToggle />}
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<HomePage />} />

@@ -75,10 +75,12 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
     })
   }, [prefersLight])
 
-  // Private review shortcut. Phase 3 replaces this with a visible control.
+  // Private review shortcut, kept alongside the dev-only ThemeToggle. Uses
+  // event.code, not event.key: on macOS, Option changes the emitted character
+  // (Option+L gives '¬'), so a key-based check never matches there.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'l') {
+      if (event.ctrlKey && event.altKey && event.code === 'KeyL') {
         event.preventDefault()
         toggle()
       }
