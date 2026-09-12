@@ -21,9 +21,9 @@ html {
   /* ─── Colour channels — flip these two for light mode.
      --ink is the text/foreground RGB channel, used as rgb(var(--ink) / <alpha>).
      Canvas particle colours are literal and need their own theme hook. ─── */
-  --ink: 255 255 255;
+  --ink: 242 240 236;
   --ink-solid: rgb(var(--ink));
-  --surface: 0 0 0;
+  --surface: 10 10 10;
 
   /* Shadow ink is its own channel: on paper a shadow is not the foreground
      colour at low alpha, and the two need to diverge in light mode. */
