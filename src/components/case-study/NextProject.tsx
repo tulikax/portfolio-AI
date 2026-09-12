@@ -85,7 +85,7 @@ export default function NextProject({ nextProject }: Props) {
                 borderRadius: '1rem',
                 overflow: 'hidden',
                 border: 'none',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                boxShadow: 'var(--shadow-card)',
                 flexShrink: 0,
               }}
             >

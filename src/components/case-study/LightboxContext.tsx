@@ -65,7 +65,7 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
                   maxWidth: '90vw',
                   maxHeight: '86vh',
                   borderRadius: '0.75rem',
-                  boxShadow: '0 32px 80px rgba(0,0,0,0.85)',
+                  boxShadow: '0 32px 80px rgb(var(--shadow-ink) / 0.85)',
                   objectFit: 'contain',
                   cursor: 'default',
                   display: 'block',

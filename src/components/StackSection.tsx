@@ -56,7 +56,7 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           border: '1px solid rgb(var(--ink) / 0.10)',
-          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 24px rgba(0,0,0,0.4)',
+          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 24px rgb(var(--shadow-ink) / 0.4)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

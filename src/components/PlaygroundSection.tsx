@@ -63,7 +63,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgb(var(--ink) / 0.09)',
-          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+          boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
           cursor: 'default',
           transition: 'transform 200ms cubic-bezier(0.23,1,0.32,1)',
         }}

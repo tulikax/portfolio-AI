@@ -177,7 +177,7 @@ function DesktopProcess() {
                   background: 'linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04))',
                   backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.13)',
-                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgba(0,0,0,0.60)',
+                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / 0.60)',
                 }}>
                   <div style={{ position: 'absolute', top: 0, left: '1.25rem', right: '1.25rem', height: '1px', background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.18), transparent)' }} />
                   <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.20)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
@@ -325,7 +325,7 @@ function MobileProcess() {
                   backdropFilter: 'blur(40px)',
                   WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.11)',
-                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 12px 32px rgba(0,0,0,0.50)',
+                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 12px 32px rgb(var(--shadow-ink) / 0.50)',
                 }}>
                   <div style={{ position: 'absolute', top: 0, left: '1rem', right: '1rem', height: '1px', background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.16), transparent)' }} />
 

@@ -107,7 +107,7 @@ function MediaCard({ src, fluid }: { src: string; fluid?: boolean }) {
       overflow: 'hidden',
       background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
       border: '1px solid rgb(var(--ink) / 0.10)',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 1px 0 rgb(var(--ink) / 0.08) inset',
+      boxShadow: 'var(--shadow-card), var(--shadow-hairline)',
       lineHeight: 0,
       flexShrink: 0,
     }}>
@@ -180,20 +180,20 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgb(var(--ink) / 0.09)',
-          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+          boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
           cursor: role.caseStudySlug ? 'pointer' : 'default',
           transition: 'box-shadow 250ms ease, border-color 250ms ease',
         }}
           onMouseEnter={e => {
             if (!role.caseStudySlug) return
             const el = e.currentTarget as HTMLDivElement
-            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgb(var(--ink) / 0.12)'
+            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 60px rgb(var(--shadow-ink) / 0.6), 0 0 0 1px rgb(var(--ink) / 0.12)'
             el.style.borderColor = 'rgb(var(--ink) / 0.16)'
           }}
           onMouseLeave={e => {
             if (!role.caseStudySlug) return
             const el = e.currentTarget as HTMLDivElement
-            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)'
+            el.style.boxShadow = 'var(--shadow-hairline), var(--shadow-float)'
             el.style.borderColor = 'rgb(var(--ink) / 0.09)'
           }}
         >
@@ -364,7 +364,7 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
               backdropFilter: 'blur(40px)',
               WebkitBackdropFilter: 'blur(40px)',
               border: '1px solid rgb(var(--ink) / 0.09)',
-              boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+              boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
               display: 'flex',
               alignItems: 'center',
               gap: '1rem',
