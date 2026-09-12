@@ -558,7 +558,7 @@ export default function HeroSection({
           zIndex: 5,
           bottom: 0, left: 0, right: 0,
           height: '160px',
-          background: 'linear-gradient(to bottom, transparent 0%, black 100%)',
+          background: 'linear-gradient(to bottom, transparent 0%, rgb(var(--surface)) 100%)',
           pointerEvents: 'none',
         }}
       />

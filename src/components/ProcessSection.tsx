@@ -142,7 +142,7 @@ function DesktopProcess() {
         </div>
 
         {/* Edge fades */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, black 0%, transparent 20%, transparent 80%, black 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgb(var(--surface)) 0%, transparent 20%, transparent 80%, rgb(var(--surface)) 100%)' }} />
 
         {/* Heading */}
         <div style={{ position: 'relative', textAlign: 'center', zIndex: 3, padding: '0 1.5rem', flexShrink: 0 }}>

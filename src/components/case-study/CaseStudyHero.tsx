@@ -167,7 +167,7 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
             />
           )}
           {/* subtle bottom fade into the text section */}
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, transparent, black)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, transparent, rgb(var(--surface)))', pointerEvents: 'none' }} />
         </div>
 
         {/* Text content — in document flow below the video */}
