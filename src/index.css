@@ -25,6 +25,17 @@ html {
   --ink-solid: rgb(var(--ink));
   --surface: 0 0 0;
 
+  /* Shadow ink is its own channel: on paper a shadow is not the foreground
+     colour at low alpha, and the two need to diverge in light mode. */
+  --shadow-ink: 0 0 0;
+
+  /* Composite because inline styles can only consume a finished value.
+     Compose them at call sites: `var(--shadow-hairline), var(--shadow-float)`.
+     Geometry is per-theme — see the light block below for why. */
+  --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.08) inset;
+  --shadow-card: 0 8px 32px rgb(var(--shadow-ink) / 0.5);
+  --shadow-float: 0 20px 60px rgb(var(--shadow-ink) / 0.5);
+
   --background: 0 0% 0%;
   --foreground: 0 0% 100%;
   --muted-foreground: 0 0% 100%;
@@ -50,6 +61,24 @@ html {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Warm paper and warm ink — both poles pulled off the extremes. Bodoni Moda is
+   a didone and renders far better dark-on-light, where its hairlines stay crisp
+   instead of blooming. */
+:root[data-theme='light'] {
+  --ink: 26 24 22;
+  --ink-solid: rgb(var(--ink));
+  --surface: 250 249 246;
+
+  --shadow-ink: 26 24 22;
+
+  /* Not the dark values at lower opacity: the blur roughly halves and the offset
+     tightens. A shadow on paper comes from a near light source and stays close
+     to its object; the same geometry at low alpha reads as a grey smudge. */
+  --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.06) inset;
+  --shadow-card: 0 2px 8px rgb(var(--shadow-ink) / 0.08);
+  --shadow-float: 0 6px 20px rgb(var(--shadow-ink) / 0.10);
 }
 
 @layer base {
