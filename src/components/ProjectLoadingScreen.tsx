@@ -1,7 +1,7 @@
 import { useRef, useEffect, type MutableRefObject } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GradientBlobs from './GradientBlobs'
-import { displayFont, inkChannel } from '../constants/theme'
+import { useThemedCanvas } from '../theme/useThemedCanvas'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -22,13 +22,14 @@ function BackgroundParticles({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const scatterRef = useRef(scattering)
+  const theme = useThemedCanvas()
   useEffect(() => { scatterRef.current = scattering }, [scattering])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    const INK = inkChannel()
+    const INK = theme.inkChannel()
     if (!ctx) return
 
     let particles: BgParticle[] = []
@@ -117,7 +118,7 @@ function BackgroundParticles({
     const ro = new ResizeObserver(resize)
     ro.observe(canvas)
     return () => { cancelAnimationFrame(animId); ro.disconnect() }
-  }, [cursorRef])
+  }, [cursorRef, theme])
 
   return (
     <canvas
@@ -143,13 +144,14 @@ function LoadingParticleText({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const scatterRef = useRef(scattering)
+  const theme = useThemedCanvas()
   useEffect(() => { scatterRef.current = scattering }, [scattering])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    const INK = inkChannel()
+    const INK = theme.inkChannel()
     if (!ctx) return
 
     let particles: TextParticle[] = []
@@ -167,7 +169,7 @@ function LoadingParticleText({
     async function init() {
       // Never let a font CDN failure blank the loading title — fall back to the
       // generic serif and carry on rendering particles.
-      await document.fonts.load(displayFont(80)).catch(() => {})
+      await document.fonts.load(theme.displayFont(80)).catch(() => {})
 
       const dpr = window.devicePixelRatio || 1
       // Canvas fills the entire viewport so scattered particles have room to travel
@@ -183,13 +185,13 @@ function LoadingParticleText({
 
       let fontSize = Math.min(W * 0.12, 108)
       const testCtx = document.createElement('canvas').getContext('2d')!
-      testCtx.font = displayFont(fontSize)
+      testCtx.font = theme.displayFont(fontSize)
       const measuredW = testCtx.measureText('Loading...').width
       if (measuredW > W * 0.82) fontSize *= (W * 0.82) / measuredW
 
       // Baseline sits slightly below viewport center so visual weight is centred
       const baseline = H / 2 + fontSize * 0.35
-      drawFont = displayFont(fontSize)
+      drawFont = theme.displayFont(fontSize)
       drawW = W; drawH = H; drawY = baseline
       textCenterY = H / 2
 
@@ -335,7 +337,7 @@ function LoadingParticleText({
 
     init()
     return () => { cancelAnimationFrame(animId); clearTimeout(retryId) }
-  }, [cursorRef])
+  }, [cursorRef, theme])
 
   return (
     <canvas
