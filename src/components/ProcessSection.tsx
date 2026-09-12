@@ -359,7 +359,7 @@ export default function ProcessSection() {
   const isMobile = useIsMobile()
 
   return (
-    <section id="process" style={{ background: 'black', position: 'relative' }}>
+    <section id="process" style={{ background: 'rgb(var(--surface))', position: 'relative' }}>
       {isMobile ? <MobileProcess /> : <DesktopProcess />}
     </section>
   )

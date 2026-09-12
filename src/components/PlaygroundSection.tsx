@@ -317,7 +317,7 @@ export default function PlaygroundSection() {
     <section
       id="playground"
       style={{
-        background: 'black',
+        background: 'rgb(var(--surface))',
         paddingTop: '7rem',
         paddingBottom: '10rem',
         paddingLeft: '1.5rem',

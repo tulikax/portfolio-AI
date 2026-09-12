@@ -42,12 +42,12 @@ export default function AboutPage() {
   }, [])
 
   return (
-    <div style={{ background: 'black', minHeight: '100vh' }}>
+    <div style={{ background: 'rgb(var(--surface))', minHeight: '100vh' }}>
       <main>
         {/* Intro */}
         <section
           style={{
-            background: 'black',
+            background: 'rgb(var(--surface))',
             paddingTop: '10rem',
             paddingBottom: '5rem',
             paddingLeft: '1.5rem',
@@ -106,7 +106,7 @@ export default function AboutPage() {
         {SHOW_JOURNEY && (
           <section
             style={{
-              background: 'black',
+              background: 'rgb(var(--surface))',
               paddingTop: '4rem',
               paddingBottom: '7rem',
               paddingLeft: '1.5rem',
@@ -149,7 +149,7 @@ export default function AboutPage() {
         {/* Closing */}
         <section
           style={{
-            background: 'black',
+            background: 'rgb(var(--surface))',
             paddingTop: '2rem',
             paddingBottom: '6rem',
             paddingLeft: '1.5rem',

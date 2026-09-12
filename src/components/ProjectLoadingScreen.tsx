@@ -442,7 +442,7 @@ export default function ProjectLoadingScreen({
       exit={{ opacity: 0, transition: { duration: 0.5, delay: 0.15 } }}
       onMouseMove={(e) => { cursorRef.current = { x: e.clientX, y: e.clientY } }}
       onMouseLeave={() => { cursorRef.current = { x: -9999, y: -9999 } }}
-      style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'black', overflow: 'hidden' }}
+      style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgb(var(--surface))', overflow: 'hidden' }}
     >
       {/* Full-width progress bar at top */}
       <ProgressBar progress={progress} exiting={isExiting} />

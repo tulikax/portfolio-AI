@@ -16,7 +16,7 @@ const DoorFeedDemoPage = lazy(() => import('./components/doorfeed-demo/DoorFeedD
 
 export default function App() {
   return (
-    <div style={{ background: 'black', minHeight: '100vh' }}>
+    <div style={{ background: 'rgb(var(--surface))', minHeight: '100vh' }}>
       <div className="grain-overlay" />
       <CustomCursor />
       <Navbar />

@@ -25,7 +25,7 @@ export default function HomePage({ hero, aboutExtra }: {
   }, [hash])
 
   return (
-    <div style={{ background: 'black', minHeight: '100vh' }}>
+    <div style={{ background: 'rgb(var(--surface))', minHeight: '100vh' }}>
       <main>
         {hero ?? <HeroSection />}
         <WorkSection />

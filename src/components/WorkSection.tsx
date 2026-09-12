@@ -389,7 +389,7 @@ export default function WorkSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   return (
-    <section id="work" style={{ background: 'black', paddingTop: '5rem', paddingBottom: '10rem' }}>
+    <section id="work" style={{ background: 'rgb(var(--surface))', paddingTop: '5rem', paddingBottom: '10rem' }}>
       <div style={{ textAlign: 'center', marginBottom: '4rem', padding: '0 1.5rem' }}>
         <motion.h2
           initial={{ opacity: 0, y: 28 }}
