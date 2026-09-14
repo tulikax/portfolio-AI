@@ -22,7 +22,7 @@ export function NavbarCvLink({ variant, onNavigate }: NavbarCvLinkProps) {
       }
       style={{
         background: 'var(--ink-solid)',
-        color: 'black',
+        color: 'rgb(var(--surface))',
         borderRadius: isPill ? '9999px' : '1rem',
         padding: isPill ? '0.375rem 1.25rem' : '0.75rem 1rem',
         fontSize: isPill ? '0.875rem' : '0.95rem',
