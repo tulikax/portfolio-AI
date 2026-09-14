@@ -61,23 +61,31 @@ review: re-export, or give media a CSS mat (which Phase 3 wants regardless).
 - `SYSTEM_FOLLOWS_OS = false` makes `'system'` resolve to dark. Flipping this
   constant is the whole of "go public" — it is self-documenting and greppable.
 - On resolve: stamps `data-theme` on `document.documentElement`, writes `mode` to
-  `localStorage` under `portfolio:theme-mode`, calls `refreshTheme()`, increments
-  `themeVersion`.
+  `localStorage` under `portfolio:theme-mode`, and calls `refreshTheme()` — the
+  stamp and the refresh both happen inside a `useLayoutEffect`, which is what
+  `useThemedCanvas` below relies on.
 - Reads `prefers-color-scheme` via `matchMedia` and keeps it in state, so the
   system option works the moment the constant flips.
 
-**`useThemedCanvas.ts`** returns `{ ink, inkChannel, themeRoot, themeVersion }`.
+**`useThemedCanvas.ts`** returns `{ resolved, themeRoot, inkChannel, ink, displayFont }`.
 
 This is the load-bearing piece. Canvas components cache `inkChannel()` at effect
 start (`ParticleTitle.tsx:67`), so they need re-initialising when the theme flips.
-Relying on each component to remember to add `themeVersion` to its deps is a
+Relying on each component to remember to add the right dependency is a
 convention, and conventions rot: a canvas component added next year that forgets
 the dep renders white particles on paper, silently, with no type or lint error.
 
-Bundling the ink accessor and the version into one hook makes reading the colour
-and subscribing to its changes the same act. The four existing canvas components
-(`ParticleTitle`, `ParticleCanvas`, `HeroWireframe`, `ProjectLoadingScreen`)
-migrate to it.
+The returned object is memoised on `[resolved, scopedRoot]`, so its identity
+changes whenever the theme changes, and putting the whole object in an effect's
+dependency array is enough on its own — reading the ink and subscribing to its
+changes come from the same value, so a component cannot do one without the
+other. Ordering is safe because `ThemeProvider` stamps `data-theme` and calls
+`refreshTheme()` inside a `useLayoutEffect`, while consumers read tokens in
+ordinary `useEffect`s; React runs every layout effect to completion before any
+passive effect fires, so by the time a consumer's effect calls `inkChannel()`
+the attribute is already set and the cache already cleared. The four existing
+canvas components (`ParticleTitle`, `ParticleCanvas`, `HeroWireframe`,
+`ProjectLoadingScreen`) migrate to it.
 
 **`useTheme.ts`** exposes `{ mode, resolved, setMode, toggle }` for everything
 that is not canvas.
