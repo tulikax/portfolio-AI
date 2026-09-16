@@ -14,6 +14,7 @@
   --studio-faint: rgb(26 26 24 / 0.38);
   --studio-hairline: rgb(26 26 24 / 0.12);
   --studio-slot: #ededea;
+  --studio-raised: #ffffff;
 
   /* The bio column and the media slabs are the only two widths on the page */
   --studio-column: 460px;
@@ -34,6 +35,229 @@
  */
 body.studio-ground {
   background: #f5f5f2;
+}
+
+/* The three layouts stand on different grounds */
+body.studio-ground[data-studio-layout='stack'],
+body.studio-ground[data-studio-layout='bento'] {
+  background: #fcfcfd;
+}
+
+/* .studio paints the quiet ground; the alt layouts bring their own */
+body[data-studio-layout='stack'] .studio,
+body[data-studio-layout='bento'] .studio {
+  background: transparent;
+}
+
+/* Dark is opt-in via the toggle — see tokens.css */
+body.studio-ground[data-studio-theme='dark'] {
+  background: #14140f;
+}
+
+body.studio-ground[data-studio-theme='dark'][data-studio-layout='stack'],
+body.studio-ground[data-studio-theme='dark'][data-studio-layout='bento'] {
+  background: #0d0f12;
+}
+
+/* The quiet layout's own palette, flipped */
+body[data-studio-theme='dark'] .studio {
+  --studio-ground: #14140f;
+  --studio-ink: #ecebe6;
+  --studio-muted: rgb(236 235 230 / 0.58);
+  --studio-faint: rgb(236 235 230 / 0.4);
+  --studio-hairline: rgb(236 235 230 / 0.14);
+  --studio-slot: #1e1e19;
+  --studio-raised: #24241e;
+  color-scheme: dark;
+}
+
+body[data-studio-theme='dark'] .studio-link {
+  text-decoration-color: rgb(236 235 230 / 0.38);
+}
+
+body[data-studio-theme='dark'] .studio-link:hover {
+  text-decoration-color: rgb(236 235 230 / 0.9);
+}
+
+body[data-studio-theme='dark'] .studio-track:focus-visible {
+  outline-color: rgb(236 235 230 / 0.45);
+}
+
+body[data-studio-theme='dark'] .studio-arrow {
+  background: #24241e;
+  color: var(--studio-ink);
+  box-shadow: 0 0 0 1px var(--studio-hairline);
+}
+
+body[data-studio-theme='dark'] .studio-arrow:not(:disabled):hover {
+  box-shadow: 0 0 0 1px rgb(236 235 230 / 0.34);
+}
+
+/* ── Layout switcher ──────────────────────────────────────────────────────── */
+
+.layout-switcher {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 80;
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.86);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px rgb(21 23 28 / 0.08),
+    0 8px 28px rgb(15 20 30 / 0.16);
+}
+
+.layout-switcher button {
+  padding: 7px 14px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #5b616b;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+.layout-switcher button:active {
+  transform: scale(0.97);
+}
+
+.layout-switcher button[aria-pressed='true'] {
+  background: #15171c;
+  color: #fff;
+}
+
+body[data-studio-theme='dark'] .layout-switcher {
+  background: rgb(28 32 38 / 0.88);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.1),
+    0 8px 28px rgb(0 0 0 / 0.45);
+}
+
+body[data-studio-theme='dark'] .layout-switcher button {
+  color: #99a0aa;
+}
+
+body[data-studio-theme='dark'] .layout-switcher button[aria-pressed='true'] {
+  background: #eceef1;
+  color: #0d0f12;
+}
+
+/* ── Theme toggle ─────────────────────────────────────────────────────────── */
+
+.layout-switcher-divider {
+  width: 1px;
+  align-self: stretch;
+  margin-inline: 2px;
+  background: rgb(21 23 28 / 0.12);
+}
+
+body[data-studio-theme='dark'] .layout-switcher-divider {
+  background: rgb(255 255 255 / 0.14);
+}
+
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #5b616b;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+.theme-toggle:active {
+  transform: scale(0.97);
+}
+
+body[data-studio-theme='dark'] .theme-toggle {
+  color: #99a0aa;
+}
+
+/* The half-turn: the whole icon stack spins, the two faces swap across it */
+.theme-toggle-spin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  transform: rotate(0deg);
+  transition: transform 320ms var(--ease-out);
+}
+
+body[data-studio-theme='dark'] .theme-toggle-spin {
+  transform: rotate(180deg);
+}
+
+.theme-toggle-face {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 220ms var(--ease-out),
+    scale 220ms var(--ease-out);
+}
+
+.theme-toggle-sun {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Counter-rotated so the moon lands upright at the end of the half-turn */
+.theme-toggle-moon {
+  opacity: 0;
+  scale: 0.9;
+  transform: rotate(-180deg);
+}
+
+body[data-studio-theme='dark'] .theme-toggle-sun {
+  opacity: 0;
+  scale: 0.9;
+}
+
+body[data-studio-theme='dark'] .theme-toggle-moon {
+  opacity: 1;
+  scale: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layout-switcher button,
+  .theme-toggle,
+  .theme-toggle-spin,
+  .theme-toggle-face {
+    transition: none;
+  }
+
+  /* Swap the faces without the spin */
+  .theme-toggle-spin,
+  body[data-studio-theme='dark'] .theme-toggle-spin {
+    transform: none;
+  }
+
+  .theme-toggle-moon {
+    transform: none;
+  }
 }
 
 body.studio-ground,

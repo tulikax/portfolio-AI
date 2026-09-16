@@ -1,0 +1,642 @@
+/**
+ * Tokens for the Pocket stack and Bento board layouts.
+ *
+ * Scoped to `.studio-alt` rather than `:root`, and `body` is never given a
+ * global background here. The spec asked for both, but this project already
+ * paints `body` black in index.css for the main site — setting `--color-bg` at
+ * the root would black-hole the existing portfolio the moment this file loads.
+ * Scoping keeps the two worlds honest; the body ground is switched by a data
+ * attribute in studio.css instead.
+ */
+
+.studio-alt {
+  /* Colour */
+  --color-bg: #fcfcfd;
+  --color-surface: #f3f4f6;
+  --color-surface-raised: #ffffff;
+  --color-ink: #15171c;
+  --color-muted: #5b616b;
+  --color-line: rgb(21 23 28 / 0.08);
+  --color-pill: #15171c;
+  --color-pill-ink: #ffffff;
+  --color-overlay: rgb(10 12 16 / 0.45);
+  --color-focus: #15171c;
+
+  /* Project tints */
+  --tint-doorfeed: #cfdce9;
+  --tint-sigtech: #dcd7ec;
+  --tint-deloitte: #d4e5d8;
+  --tint-brushh: #ebe0d2;
+
+  /* Radii */
+  --radius-stage: 28px;
+  --radius-tile: 26px;
+  --radius-inner: 16px;
+  --radius-shot: 14px;
+  --radius-pocket: 48px;
+  --radius-pill: 999px;
+
+  /* Spacing and layout */
+  --container-max: 1240px;
+  --space-page-x: clamp(18px, 4vw, 40px);
+  --space-hero-top: clamp(48px, 9vw, 120px);
+  --space-hero-bottom: clamp(36px, 6vw, 72px);
+  --space-stack-gap: clamp(80px, 12vw, 160px);
+  --space-grid-gap: 14px;
+  --space-tile-pad: 22px;
+  --space-footer-top: 80px;
+
+  /* Shadow and blur */
+  --shadow-shot: 0 24px 60px rgb(15 20 30 / 0.14);
+  --shadow-tile-shot: 0 10px 30px rgb(15 20 30 / 0.12);
+  --shadow-sheet: 0 24px 80px rgb(10 12 16 / 0.18);
+  --inset-front-highlight: inset 0 1px 0 rgb(255 255 255 / 0.6);
+  --blur-front: 14px;
+
+  /* Motion — --ease-out already exists globally with this exact curve */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-hover: 240ms;
+  --duration-reveal: 280ms;
+  --duration-tags: 300ms;
+  --stagger-tags: 30ms;
+  --duration-tags-exit: 220ms;
+  --duration-layout: 260ms;
+  --duration-sheet: 220ms;
+  --duration-press: 120ms;
+
+  /* Pocket geometry, as percentages of the stage */
+  --pocket-back-inset-x: 12%;
+  --pocket-back-top: 20%;
+  --pocket-shot-inset-x: 19%;
+  --pocket-shot-top: 8%;
+  --pocket-shot-height: 76%;
+  --pocket-shot-rest-y: 30%;
+  --pocket-shot-rest-scale: 0.95;
+  --pocket-front-height: 46%;
+  --pocket-front-open-y: 52%;
+
+  /* Layering */
+  --z-pocket-back: 1;
+  --z-pocket-tags: 2;
+  --z-pocket-shot: 3;
+  --z-pocket-front: 4;
+  --z-cursor-pill: 60;
+  --z-sheet: 70;
+
+  background: var(--color-bg);
+  color: var(--color-ink);
+  color-scheme: light;
+}
+
+/**
+ * Dark is opt-in through the toggle, never automatic: all three layouts are
+ * designed light, and following `prefers-color-scheme` would hand a visitor a
+ * theme none of them was composed for. Keyed off body rather than
+ * `html[data-theme]` so it cannot collide with the separate light-mode work on
+ * the main site.
+ */
+body[data-studio-theme='dark'] .studio-alt {
+  --color-bg: #0d0f12;
+  --color-surface: #16191e;
+  --color-surface-raised: #1c2026;
+  --color-ink: #eceef1;
+  --color-muted: #99a0aa;
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-pill: #eceef1;
+  --color-pill-ink: #0d0f12;
+  --color-focus: #eceef1;
+  --tint-doorfeed: #223140;
+  --tint-sigtech: #2a2640;
+  --tint-deloitte: #1e3027;
+  --tint-brushh: #342a20;
+  --inset-front-highlight: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  color-scheme: dark;
+}
+
+/* ── Shared primitives ────────────────────────────────────────────────────── */
+
+.studio-alt :focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.studio-alt-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-inline: var(--space-page-x);
+}
+
+/* Emil: every pressable element confirms the press */
+.studio-alt-press {
+  transition: transform var(--duration-press) var(--ease-out);
+}
+
+.studio-alt-press:active {
+  transform: scale(0.97);
+}
+
+/* ── Pocket stage ─────────────────────────────────────────────────────────── */
+
+.pocket {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--radius-stage);
+  container-type: inline-size;
+  aspect-ratio: 4 / 3;
+  background: color-mix(in oklab, var(--tint) 24%, var(--color-bg));
+}
+
+@media (min-width: 700px) {
+  .pocket {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.pocket-back {
+  position: absolute;
+  inset-inline: 4%;
+  top: var(--pocket-back-top);
+  bottom: 0;
+  z-index: var(--z-pocket-back);
+  background: var(--tint);
+  border-radius: var(--radius-pocket) var(--radius-pocket) 0 0;
+}
+
+.pocket-shot {
+  position: absolute;
+  inset-inline: 9%;
+  top: var(--pocket-shot-top);
+  height: var(--pocket-shot-height);
+  z-index: var(--z-pocket-shot);
+  border-radius: var(--radius-shot);
+  box-shadow: var(--shadow-shot);
+  overflow: hidden;
+  transform-origin: 50% 100%;
+  transform: translate3d(0, var(--pocket-shot-rest-y), 0) scale(var(--pocket-shot-rest-scale));
+  transition: transform var(--duration-reveal) var(--ease-out);
+  will-change: transform;
+}
+
+.pocket-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.pocket-front {
+  position: absolute;
+  inset-inline: 4%;
+  bottom: 0;
+  height: var(--pocket-front-height);
+  z-index: var(--z-pocket-front);
+  border-radius: var(--radius-pocket) var(--radius-pocket) 0 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--tint) 70%, transparent) 0%,
+    color-mix(in oklab, var(--color-bg) 88%, transparent) 70%,
+    var(--color-bg) 100%
+  );
+  -webkit-backdrop-filter: blur(var(--blur-front));
+  backdrop-filter: blur(var(--blur-front));
+  box-shadow: var(--inset-front-highlight);
+  transform: translate3d(0, 0, 0);
+  transition: transform var(--duration-reveal) var(--ease-out);
+  will-change: transform;
+}
+
+.pocket-tag {
+  position: absolute;
+  z-index: var(--z-pocket-tags);
+  white-space: nowrap;
+  background: var(--color-pill);
+  color: var(--color-pill-ink);
+  font-weight: 500;
+  font-size: max(12px, 1.45cqw);
+  padding: 0.45em 1em;
+  border-radius: var(--radius-pill);
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  transition: transform var(--duration-tags-exit) var(--ease-out);
+  will-change: transform;
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .pocket {
+    --pocket-back-inset-x: 12%;
+  }
+
+  .pocket-back,
+  .pocket-front {
+    inset-inline: var(--pocket-back-inset-x);
+  }
+
+  .pocket-shot {
+    inset-inline: var(--pocket-shot-inset-x);
+  }
+
+  .pocket-tag {
+    display: block;
+  }
+}
+
+/* Open — hover only on a real pointer, plus keyboard and the touch observer */
+@media (hover: hover) and (pointer: fine) {
+  .pocket:hover .pocket-shot {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .pocket:hover .pocket-front {
+    transform: translate3d(0, var(--pocket-front-open-y), 0);
+  }
+
+  .pocket:hover .pocket-tag {
+    transform: translate3d(var(--tag-x), var(--tag-y), 0) rotate(var(--tag-rotate));
+    transition-duration: var(--duration-tags);
+    transition-delay: var(--tag-delay);
+  }
+}
+
+.pocket:focus-visible .pocket-shot,
+.pocket.is-open .pocket-shot {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.pocket:focus-visible .pocket-front,
+.pocket.is-open .pocket-front {
+  transform: translate3d(0, var(--pocket-front-open-y), 0);
+}
+
+.pocket:focus-visible .pocket-tag,
+.pocket.is-open .pocket-tag {
+  transform: translate3d(var(--tag-x), var(--tag-y), 0) rotate(var(--tag-rotate));
+  transition-duration: var(--duration-tags);
+  transition-delay: var(--tag-delay);
+}
+
+/* ── Cursor pill ──────────────────────────────────────────────────────────── */
+
+.cursor-pill {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-cursor-pill);
+  pointer-events: none;
+  transform-origin: top left;
+  background: var(--color-pill);
+  color: var(--color-pill-ink);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0.5em 1em;
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
+  scale: 0.9;
+}
+
+.cursor-pill[data-visible='true'] {
+  opacity: 1;
+  scale: 1;
+}
+
+/* ── Links ────────────────────────────────────────────────────────────────── */
+
+.studio-alt-link {
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  transition: text-decoration-thickness var(--duration-base) var(--ease-out);
+}
+
+.studio-alt-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ── Sheet ────────────────────────────────────────────────────────────────── */
+
+.short-sheet {
+  width: min(640px, calc(100vw - 24px));
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+
+.short-sheet::backdrop {
+  background: var(--color-overlay);
+}
+
+.short-sheet-panel {
+  background: var(--color-surface-raised);
+  color: var(--color-ink);
+  border-radius: var(--radius-tile);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-sheet);
+  padding: clamp(22px, 4vw, 36px);
+  /* Modals stay centred — they are not anchored to a trigger */
+  transform-origin: center;
+  animation: short-sheet-in var(--duration-sheet) var(--ease-out);
+}
+
+@keyframes short-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+}
+
+/* ── Pocket stack ─────────────────────────────────────────────────────────── */
+
+.stack-headline {
+  margin: clamp(12px, 2vw, 24px) 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(28px, 3.6vw, 50px);
+  line-height: 1.08;
+  max-width: 30ch;
+}
+
+.stack-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  margin-top: 18px;
+  font-size: 15px;
+}
+
+.stack-chip {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  padding: 0.3em 0.85em;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+/* Above md the pocket shows its own tags, and the copy aligns to the back panel */
+@media (min-width: 700px) {
+  .stack-headline,
+  .stack-meta {
+    margin-inline: var(--pocket-back-inset-x);
+  }
+
+  .stack-chip {
+    display: none;
+  }
+}
+
+.studio-alt-nav {
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.studio-alt-nav:hover {
+  color: var(--color-ink);
+}
+
+/* ── Bento ────────────────────────────────────────────────────────────────── */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(200px, auto);
+  grid-auto-flow: dense;
+  gap: var(--space-grid-gap);
+  margin-top: 18px;
+}
+
+@media (min-width: 560px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bento-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-tile-pad);
+  border-radius: var(--radius-tile);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Below sm every tile is a single cell */
+@media (max-width: 559px) {
+  .bento-tile {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+}
+
+/* Each tile sits inside a motion wrapper that owns the grid cell */
+.bento-tile {
+  flex: 1;
+}
+
+.bento-project {
+  position: relative;
+  background: var(--tint);
+  border-color: transparent;
+}
+
+.bento-email-big {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--duration-base) var(--ease-out);
+}
+
+.bento-email:hover .bento-email-big {
+  text-decoration-color: currentColor;
+}
+
+.bento-shot {
+  margin-top: auto;
+  margin-right: calc(var(--space-tile-pad) * -1);
+  margin-bottom: calc(var(--space-tile-pad) * -1);
+  margin-left: 12%;
+  aspect-ratio: 16 / 10;
+  border-start-start-radius: var(--radius-inner);
+  overflow: hidden;
+  box-shadow: var(--shadow-tile-shot);
+  transform: translate3d(0, 6%, 0);
+  transition: transform var(--duration-hover) var(--ease-out);
+  will-change: transform;
+}
+
+.bento-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.bento-band {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  background: var(--color-pill);
+  color: var(--color-pill-ink);
+  border-radius: var(--radius-inner);
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.35;
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bento-project:hover .bento-shot {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .bento-project:hover .bento-band,
+  .bento-project:focus-visible .bento-band {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.bento-project:focus-visible .bento-shot {
+  transform: translate3d(0, 0, 0);
+}
+
+.bento-project:focus-visible .bento-band {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Touch: nothing to hover, so the band is simply part of the tile */
+@media not all and (hover: hover) {
+  .bento-band {
+    position: static;
+    opacity: 1;
+    transform: none;
+    margin-top: 12px;
+  }
+
+  .bento-shot {
+    transform: none;
+  }
+}
+
+.bento-filter {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+}
+
+.bento-filter button {
+  padding: 7px 16px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 15px;
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    transform var(--duration-press) var(--ease-out);
+}
+
+.bento-filter button:active {
+  transform: scale(0.97);
+}
+
+.bento-filter button[aria-pressed='true'] {
+  background: var(--color-pill);
+  color: var(--color-pill-ink);
+}
+
+.eq-bar {
+  width: 8px;
+  border-radius: 4px;
+  background: var(--color-ink);
+  transform-origin: bottom;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .eq:hover .eq-bar {
+    animation: eq-pulse 900ms ease-in-out infinite alternate;
+  }
+}
+
+@keyframes eq-pulse {
+  to {
+    transform: scaleY(var(--eq-alt));
+  }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-alt .pocket-shot,
+  .studio-alt .pocket-front,
+  .studio-alt .pocket-tag,
+  .studio-alt .bento-shot,
+  .studio-alt .bento-band,
+  .studio-alt .cursor-pill,
+  .studio-alt .studio-alt-press {
+    transition: none;
+  }
+
+  /* Pockets render open rather than animating there */
+  .studio-alt .pocket-shot {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .studio-alt .pocket-front {
+    transform: translate3d(0, var(--pocket-front-open-y), 0);
+  }
+
+  .studio-alt .pocket-tag {
+    transform: translate3d(var(--tag-x), var(--tag-y), 0) rotate(var(--tag-rotate));
+  }
+
+  .studio-alt .bento-band {
+    opacity: 1;
+    transform: none;
+  }
+
+  .studio-alt .short-sheet-panel {
+    animation: none;
+  }
+
+  .studio-alt .eq:hover .eq-bar {
+    animation: none;
+  }
+}
