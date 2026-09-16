@@ -1,10 +1,13 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Outlet } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
 import Navbar from './components/navbar'
 import HomePage from './components/HomePage'
 import CaseStudyPage from './components/case-study/CaseStudyPage'
 import AboutPage from './components/about/AboutPage'
+import StudioShell from './components/studio/StudioShell'
+import StudioHome from './components/studio/StudioHome'
+import StudioCase from './components/studio/StudioCase'
 
 // Demo pages are dev-only: the routes are never registered in production builds,
 // so the URLs don't resolve on the deployed site
@@ -13,14 +16,28 @@ const HeroCopyDemo = lazy(() => import('./components/HeroCopyDemo'))
 // Lazy so three.js only enters the bundle for this route
 const DoorFeedDemoPage = lazy(() => import('./components/doorfeed-demo/DoorFeedDemoPage'))
 
-export default function App() {
+/**
+ * Chrome for the main site: black ground, grain, custom cursor, navbar.
+ *
+ * This used to wrap every route. It now wraps only its own, because /studio is
+ * a light page and inherits none of it.
+ */
+function DarkShell() {
   return (
     <div style={{ background: 'black', minHeight: '100vh' }}>
       <div className="grain-overlay" />
       <CustomCursor />
       <Navbar />
-      <Suspense fallback={null}>
-        <Routes>
+      <Outlet />
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <Suspense fallback={null}>
+      <Routes>
+        <Route element={<DarkShell />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/work/:slug" element={<CaseStudyPage />} />
@@ -32,8 +49,13 @@ export default function App() {
               <Route path="/work/doorfeed/demo" element={<DoorFeedDemoPage />} />
             </>
           )}
-        </Routes>
-      </Suspense>
-    </div>
+        </Route>
+
+        <Route element={<StudioShell />}>
+          <Route path="/studio" element={<StudioHome />} />
+          <Route path="/studio/:slug" element={<StudioCase />} />
+        </Route>
+      </Routes>
+    </Suspense>
   )
 }

@@ -79,9 +79,13 @@ src/components/studio/
   StudioShell.tsx    layout route — ground, cursor, scroll reset
   StudioHome.tsx     the intro page
   StudioCase.tsx     the detail template, one component for all three
+  Carousel.tsx       the intro page's horizontal bento track
+  Slab.tsx           a full-width media unit, used by the detail pages
+  MediaFrame.tsx     renders image / video / reserved slot into any box
   Reveal.tsx         motion primitive
-  Slab.tsx           one media unit — real media or reserved slot
+  RichText.tsx       inline `[label](href)` links in copy
   content.ts         all copy and media IDs
+  studio.css         scoped tokens, track and arrow styles
 ```
 
 `content.ts` sits beside its pages, matching the convention already used by
@@ -106,17 +110,28 @@ is, what she is doing now at DoorFeed, the shape of the path here, and what she
 is open to. Inline underlined links on company names and on the three case
 studies. This is the only dense text on the page.
 
-**The scroll.** Slabs at `max-width: 1080px`, centred, 8px radius, ~140px of air
-between. Grouped by project: DoorFeed, SigTech, Deloitte.
+**The scroll.** One horizontal bento carousel per project — DoorFeed, SigTech,
+Deloitte — each carrying that project's full media set rather than a few hero
+shots, since the track is browsable.
+
+Tiles are `large` (a full-height column to themselves) or `small` (paired two to
+a column), and each tile's width comes from its own aspect ratio, so varying
+ratios in `content.ts` is what makes the brick pattern irregular. Fixed
+geometry: 210px rows, 16px gaps, a 36px caption band, giving a 508px track. The
+track scrolls natively, snaps on proximity, is keyboard-reachable, and carries
+prev/next arrows that disable at each end.
 
 Each group opens with a small always-visible eyebrow — `DoorFeed · 2026`, 12px,
 letterspaced, muted — which on hover gains an arrow and reads `DoorFeed · Read
-the case study →`. The whole group is the link target.
+the case study →`.
 
-This is a deliberate departure from the reference. fetch has no internal links,
-so its groups need no labels and get none. These groups have somewhere to go,
-and a set of images that silently happens to be clickable is a detail page
-nobody finds.
+Two deliberate departures from the reference. First, fetch has no internal
+links, so its groups need no labels and get none; these groups have somewhere to
+go, and a set of images that silently happens to be clickable is a detail page
+nobody finds. Second, **the link sits on the eyebrow, not the group** — a
+scrollable region inside an anchor fights itself, because releasing a drag would
+navigate. That also gives screen readers one clean link instead of one wrapping
+a dozen images.
 
 **Footer.** One line: email, LinkedIn (`linkedin.com/in/tulika-`), and the CV at
 `CV_PUBLIC_PATH`. No X link — there is no account to point at, and the existing

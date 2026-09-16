@@ -44,6 +44,16 @@ export function video(id: string): string {
   return `${BASE}/video/upload/f_auto,q_auto/${id}`
 }
 
+/**
+ * Poster frame for a video, taken at the first frame (`so_0`).
+ *
+ * Videos that only start on scroll need something to show before they do,
+ * otherwise the slab sits empty until it is played.
+ */
+export function poster(id: string): string {
+  return `${BASE}/video/upload/so_0,f_auto,q_auto/${id}.jpg`
+}
+
 /** The platform as it was before any of this work. */
 export const OLD_PLATFORM = {
   /** Annotated breakdown of the navigation problems. */
