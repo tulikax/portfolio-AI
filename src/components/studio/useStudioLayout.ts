@@ -23,6 +23,18 @@ function isLayout(value: string | null): value is StudioLayout {
  * The URL is the source of truth so a layout can be linked and shared;
  * localStorage only remembers the last choice for a plain visit to /studio.
  */
+/**
+ * `?layout=…` for the current layout, to hang off in-studio links.
+ *
+ * Without this a link drops the param and the next page has to fall back to
+ * localStorage — which works, but leaves URLs that don't describe what they
+ * open, so a shared link can show a different layout than the sender saw.
+ */
+export function useLayoutSearch(): string {
+  const [layout] = useStudioLayout()
+  return `?layout=${layout}`
+}
+
 export default function useStudioLayout(): [StudioLayout, (next: StudioLayout) => void] {
   const [params, setParams] = useSearchParams()
 

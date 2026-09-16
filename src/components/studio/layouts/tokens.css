@@ -84,6 +84,20 @@
   --z-cursor-pill: 60;
   --z-sheet: 70;
 
+  /* Case study */
+  --radius-card: 24px;
+  --space-section: clamp(28px, 5vw, 56px);
+  --space-card-pad: clamp(20px, 2.6vw, 30px);
+  --space-next-pad: clamp(22px, 3vw, 34px);
+  --space-bento-gap: 12px;
+  --space-row: 14px;
+  --space-block: 18px;
+  --space-stat-x: 24px;
+  --measure-body: 62ch;
+  --measure-longform: 68ch;
+  --hero-aspect: 16 / 8;
+  --hero-aspect-compact: 4 / 3;
+
   background: var(--color-bg);
   color: var(--color-ink);
   color-scheme: light;
@@ -180,11 +194,24 @@ body[data-studio-theme='dark'] .studio-alt {
   will-change: transform;
 }
 
+/**
+ * `contain`, not `cover`.
+ *
+ * The pocket's shot box is roughly 4:3 while the product screenshots are much
+ * wider, so `cover` was cutting DoorFeed off at both ends. `contain` fits the
+ * whole frame no matter what ratio the source image happens to be, and the
+ * raised background turns the remaining margin into part of the device rather
+ * than a gap.
+ */
+.pocket-shot {
+  background: var(--color-surface-raised);
+}
+
 .pocket-shot img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
+  object-position: top center;
   display: block;
 }
 
@@ -276,6 +303,287 @@ body[data-studio-theme='dark'] .studio-alt {
   transform: translate3d(var(--tag-x), var(--tag-y), 0) rotate(var(--tag-rotate));
   transition-duration: var(--duration-tags);
   transition-delay: var(--tag-delay);
+}
+
+/**
+ * Static variant — the case study hero.
+ *
+ * Renders permanently open with no transitions, no observer and no link. It is
+ * the same composition as the hover state, held still.
+ */
+/* Outranks `body.studio-ground *`, which would otherwise force cursor: auto */
+body .pocket--static,
+body .pocket--static * {
+  cursor: default;
+}
+
+.pocket--static .pocket-shot,
+.pocket--static .pocket-front,
+.pocket--static .pocket-tag {
+  transition: none;
+  will-change: auto;
+}
+
+.pocket--static .pocket-shot {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.pocket--static .pocket-front {
+  transform: translate3d(0, var(--pocket-front-open-y), 0);
+}
+
+.pocket--static .pocket-tag {
+  transform: translate3d(var(--tag-x), var(--tag-y), 0) rotate(var(--tag-rotate));
+}
+
+.pocket--hero {
+  aspect-ratio: var(--hero-aspect-compact);
+}
+
+@media (min-width: 700px) {
+  .pocket--hero {
+    aspect-ratio: var(--hero-aspect);
+  }
+}
+
+/* Available to screen readers, invisible on screen — not display:none */
+.studio-alt-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Case study ───────────────────────────────────────────────────────────── */
+
+.case-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  padding: var(--space-card-pad);
+  min-width: 0;
+}
+
+.case-h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1.1;
+}
+
+.case-h2 em {
+  color: var(--color-muted);
+  margin-left: 0.3em;
+}
+
+.case-body {
+  margin: 0;
+  color: var(--color-muted);
+  max-width: var(--measure-body);
+  line-height: 1.55;
+}
+
+.case-bento {
+  display: grid;
+  gap: var(--space-bento-gap);
+  margin-top: var(--space-section);
+}
+
+@media (min-width: 900px) {
+  .case-bento {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .case-bento-product {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .case-bento-details {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .case-bento-story {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  .case-bento-impact {
+    grid-column: 1 / 3;
+    grid-row: 3;
+  }
+}
+
+/* Details rows — value first visually, label first for screen readers */
+.case-details-row {
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--space-row);
+  border-top: 1px solid var(--color-line);
+}
+
+.case-details-row:first-of-type {
+  border-top: none;
+  padding-top: 4px;
+}
+
+.case-details-row dt {
+  order: 2;
+  font-size: 15px;
+  color: var(--color-muted);
+}
+
+.case-details-row dd {
+  order: 1;
+  margin: 0;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.case-story-block {
+  padding-block: var(--space-block);
+  border-top: 1px solid var(--color-line);
+}
+
+.case-story-block:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.case-stats {
+  display: grid;
+  gap: 0;
+  margin-top: 8px;
+}
+
+.case-stat + .case-stat {
+  border-top: 1px solid var(--color-line);
+  padding-top: 18px;
+  margin-top: 18px;
+}
+
+@media (min-width: 900px) {
+  .case-stats {
+    grid-template-columns: repeat(var(--stat-count), 1fr);
+  }
+
+  .case-stat {
+    padding-top: 8px;
+    padding-right: var(--space-stat-x);
+  }
+
+  .case-stat + .case-stat {
+    border-top: none;
+    margin-top: 0;
+    padding-left: var(--space-stat-x);
+    border-left: 1px solid var(--color-line);
+  }
+}
+
+.case-figure {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(44px, 5vw, 64px);
+  line-height: 1;
+}
+
+.case-stat-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(20px, 1.8vw, 24px);
+  line-height: 1.15;
+  margin-block: 6px;
+}
+
+.case-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-chip {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  padding: 0.3em 0.85em;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+/**
+ * Above md the hero pocket shows these same tags, so the chips would repeat
+ * them. They stay in the accessibility tree — the pocket's own tags are
+ * aria-hidden, so removing these outright would lose them for screen readers.
+ */
+@media (min-width: 700px) {
+  .case-chips--hero {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.case-back {
+  display: inline-block;
+  padding-block: 6px;
+  font-size: 15px;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.case-back:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.case-next {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: var(--radius-card);
+  padding: var(--space-next-pad);
+  background: var(--tint);
+  color: inherit;
+  text-decoration: none;
+}
+
+.case-next-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.05;
+}
+
+.case-next:hover .case-next-title,
+.case-next:focus-visible .case-next-title {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+
+.case-longform p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-ink);
+  margin: 0 0 16px;
 }
 
 /* ── Cursor pill ──────────────────────────────────────────────────────────── */

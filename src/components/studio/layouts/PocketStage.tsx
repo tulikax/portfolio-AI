@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import type { Project } from './data'
 import useFinePointer from './useFinePointer'
+import { useLayoutSearch } from '../useStudioLayout'
 
 /**
  * Where each tag sits at rest and where it flies to when the pocket opens.
@@ -21,6 +22,13 @@ interface PocketStageProps {
   href?: string
   /** The first stage on the page loads its image eagerly. */
   eager?: boolean
+  /**
+   * `static` is the case study hero: the same composition, held permanently
+   * open, with no link, no tab stop, no observer and no cursor pill.
+   */
+  variant?: 'interactive' | 'static'
+  /** Widens the stage to the hero aspect ratio. */
+  hero?: boolean
 }
 
 /**
@@ -33,13 +41,22 @@ interface PocketStageProps {
  * pure hover state, so it belongs on the compositor where it stays smooth even
  * while the main thread is busy.
  */
-export default function PocketStage({ project, tagCount = 4, href, eager = false }: PocketStageProps) {
+export default function PocketStage({
+  project,
+  tagCount = 4,
+  href,
+  eager = false,
+  variant = 'interactive',
+  hero = false,
+}: PocketStageProps) {
   const ref = useRef<HTMLAnchorElement>(null)
   const finePointer = useFinePointer()
+  const layoutSearch = useLayoutSearch()
+  const isStatic = variant === 'static'
 
   // Touch devices have no hover, so the stage opens when it is mostly on screen
   useEffect(() => {
-    if (finePointer) return
+    if (isStatic || finePointer) return
     const el = ref.current
     if (!el) return
 
@@ -50,18 +67,13 @@ export default function PocketStage({ project, tagCount = 4, href, eager = false
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [finePointer])
+  }, [finePointer, isStatic])
 
   const tags = project.tags.slice(0, tagCount)
+  const className = `pocket${isStatic ? ' pocket--static' : ''}${hero ? ' pocket--hero' : ''}`
 
-  return (
-    <Link
-      ref={ref}
-      to={href ?? `/studio/${project.slug}`}
-      className="pocket"
-      aria-label={`View the ${project.company} case study`}
-      style={{ ['--tint' as string]: `var(--tint-${project.tint})` }}
-    >
+  const layers = (
+    <>
       <span className="pocket-back" aria-hidden="true" />
 
       {tags.map((tag, i) => {
@@ -89,8 +101,10 @@ export default function PocketStage({ project, tagCount = 4, href, eager = false
         {project.screenshot ? (
           <img
             src={project.screenshot.src}
-            alt={project.screenshot.alt}
+            alt={isStatic ? '' : project.screenshot.alt}
             loading={eager ? 'eager' : 'lazy'}
+            // The hero is the largest paint on the case study page
+            {...(eager ? { fetchPriority: 'high' as const } : {})}
             decoding="async"
           />
         ) : (
@@ -103,6 +117,35 @@ export default function PocketStage({ project, tagCount = 4, href, eager = false
       </span>
 
       <span className="pocket-front" aria-hidden="true" />
+    </>
+  )
+
+  if (isStatic) {
+    return (
+      <figure style={{ margin: 0 }}>
+        <div
+          className={className}
+          aria-hidden="true"
+          style={{ ['--tint' as string]: `var(--tint-${project.tint})` }}
+        >
+          {layers}
+        </div>
+        {project.screenshot && (
+          <figcaption className="studio-alt-sr">{project.screenshot.alt}</figcaption>
+        )}
+      </figure>
+    )
+  }
+
+  return (
+    <Link
+      ref={ref}
+      to={href ?? `/studio/${project.slug}${layoutSearch}`}
+      className={className}
+      aria-label={`View the ${project.company} case study`}
+      style={{ ['--tint' as string]: `var(--tint-${project.tint})` }}
+    >
+      {layers}
     </Link>
   )
 }

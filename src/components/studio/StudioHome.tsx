@@ -1,40 +1,46 @@
 import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import AltLayoutPage from './layouts/AltLayoutPage'
-import LayoutSwitcher from './LayoutSwitcher'
 import QuietHome from './QuietHome'
 import useStudioLayout from './useStudioLayout'
-import useStudioTheme from './useStudioTheme'
 
 /**
- * /studio, showing one of three homepage designs.
- *
- * The switcher is a comparison tool, not part of any of the three designs — see
- * LayoutSwitcher for why it floats rather than sitting in a header.
+ * /studio, showing one of three homepage designs. The switcher and the theme
+ * live in StudioShell, which wraps the case study pages too.
  */
 export default function StudioHome() {
-  const [layout, setLayout] = useStudioLayout()
-  const [theme, toggleTheme] = useStudioTheme()
+  const [layout] = useStudioLayout()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const scrollToProject = location.state?.scrollToProject as string | undefined
 
-  // The three designs stand on different grounds, so body follows the choice
   useEffect(() => {
-    document.body.dataset.studioLayout = layout
-    return () => {
-      delete document.body.dataset.studioLayout
-    }
-  }, [layout])
+    document.title = 'Tulika Singh, product designer'
+  }, [])
 
-  return (
-    <>
-      {layout === 'quiet' && <QuietHome />}
-      {layout === 'stack' && <AltLayoutPage work="stack" />}
-      {layout === 'bento' && <AltLayoutPage work="bento" />}
+  /**
+   * Coming back from a case study, return the reader to the project they left
+   * rather than the top of the page.
+   *
+   * Done straight in the effect rather than inside requestAnimationFrame: the
+   * tiles are already committed to the DOM by the time effects run, and rAF
+   * does not fire in a background tab — which would leave the state uncleared
+   * and fire the jump later, when the reader came back to the tab.
+   *
+   * Brushh is not in the Pocket stack, so an absent project falls back to the
+   * work section.
+   */
+  useEffect(() => {
+    if (!scrollToProject) return
 
-      <LayoutSwitcher
-        value={layout}
-        onChange={setLayout}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
-    </>
-  )
+    const target =
+      document.getElementById(`project-${scrollToProject}`) ?? document.getElementById('work')
+    target?.scrollIntoView({ block: 'center', behavior: 'auto' })
+
+    // Otherwise a refresh would jump again
+    navigate(location.pathname + location.search, { replace: true, state: null })
+  }, [scrollToProject, navigate, location.pathname, location.search])
+
+  if (layout === 'quiet') return <QuietHome />
+  return <AltLayoutPage work={layout} />
 }

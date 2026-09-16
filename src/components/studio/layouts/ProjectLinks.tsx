@@ -2,11 +2,13 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Project } from './data'
 import ShortVersionSheet from './ShortVersionSheet'
+import { useLayoutSearch } from '../useStudioLayout'
 
 /** "Read the short version" and "Read the full case study", side by side. */
 export default function ProjectLinks({ project }: { project: Project }) {
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const layoutSearch = useLayoutSearch()
 
   return (
     <>
@@ -20,7 +22,7 @@ export default function ProjectLinks({ project }: { project: Project }) {
           Read the short version
         </button>
 
-        <Link to={`/studio/${project.slug}`} className="studio-alt-link">
+        <Link to={`/studio/${project.slug}${layoutSearch}`} className="studio-alt-link">
           Read the full case study
         </Link>
       </span>

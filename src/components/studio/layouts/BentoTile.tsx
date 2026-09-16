@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { Project } from './data'
+import { useLayoutSearch } from '../useStudioLayout'
 
 /**
  * A project tile on the bento board. The whole tile is the link.
@@ -9,9 +10,13 @@ import type { Project } from './data'
  * the band is simply part of the tile — there is no hover to reveal it.
  */
 export default function BentoTile({ project, eager = false }: { project: Project; eager?: boolean }) {
+  const layoutSearch = useLayoutSearch()
+
   return (
     <Link
-      to={`/studio/${project.slug}`}
+      // Lets the back link from a case study return the reader to this tile
+      id={`project-${project.slug}`}
+      to={`/studio/${project.slug}${layoutSearch}`}
       className="bento-tile bento-project"
       style={{ ['--tint' as string]: `var(--tint-${project.tint})` }}
     >

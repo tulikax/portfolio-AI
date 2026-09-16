@@ -1,7 +1,9 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { getStudioProject } from './content'
+import CasePage from './layouts/case/CasePage'
 import Reveal, { REVEAL_STEP } from './Reveal'
 import Slab from './Slab'
+import useStudioLayout from './useStudioLayout'
 
 const column: React.CSSProperties = {
   maxWidth: 'var(--studio-column)',
@@ -11,6 +13,12 @@ const column: React.CSSProperties = {
 
 export default function StudioCase() {
   const { slug } = useParams<{ slug: string }>()
+  const [layout] = useStudioLayout()
+
+  // The Pocket stack and Bento board share the bento-summary case study; the
+  // quiet layout keeps its own five-beat template below.
+  if (layout !== 'quiet') return <CasePage slug={slug ?? ''} />
+
   const project = slug ? getStudioProject(slug) : undefined
 
   if (!project) return <Navigate to="/studio" replace />

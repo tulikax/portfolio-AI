@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ImpactStats } from './case/CaseBento'
 import type { Project } from './data'
 
 const ROWS = [
@@ -104,6 +105,18 @@ export default function ShortVersionSheet({
             </div>
           ))}
         </dl>
+
+        {/* The same figures as the case study's Impact card, beneath the details */}
+        <section
+          className="case-card"
+          style={{ marginTop: 26, background: 'var(--color-surface)' }}
+          aria-label="Impact"
+        >
+          <h4 className="case-h2" style={{ fontSize: 'clamp(20px, 2vw, 24px)' }}>
+            Impact {project.caseStudy.impactNote && <em>{project.caseStudy.impactNote}</em>}
+          </h4>
+          <ImpactStats impact={project.caseStudy.impact} />
+        </section>
 
         <div
           style={{

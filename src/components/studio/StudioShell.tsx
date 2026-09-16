@@ -1,31 +1,54 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import LayoutSwitcher from './LayoutSwitcher'
+import useStudioLayout from './useStudioLayout'
+import useStudioTheme from './useStudioTheme'
 import './studio.css'
 
 /**
  * Layout route for /studio. The light counterpart to the dark site's chrome —
  * no grain, no custom cursor, no navbar.
  *
- * The body class is what undoes `cursor: none` and the black background set
- * globally in index.css; it is removed on unmount so leaving /studio hands the
- * dark site back exactly what it had.
+ * Layout and theme live here rather than on the homepage because the case study
+ * pages need them too: the ground colour and the case study template both
+ * follow the chosen layout, so leaving the homepage must not drop it.
  */
 export default function StudioShell() {
-  const { pathname } = useLocation()
+  const location = useLocation()
+  const [layout, setLayout] = useStudioLayout()
+  const [theme, toggleTheme] = useStudioTheme()
 
+  // The body class is what undoes `cursor: none` and the black background set
+  // globally in index.css; removed on unmount so the dark site gets it back
   useEffect(() => {
     document.body.classList.add('studio-ground')
     return () => document.body.classList.remove('studio-ground')
   }, [])
 
-  // `html` carries scroll-behavior: smooth, which would animate this
   useEffect(() => {
+    document.body.dataset.studioLayout = layout
+    return () => {
+      delete document.body.dataset.studioLayout
+    }
+  }, [layout])
+
+  useEffect(() => {
+    // Returning from a case study scrolls to that project instead — see
+    // StudioHome — so this must not fight it
+    if (location.state?.scrollToProject) return
+    // `html` carries scroll-behavior: smooth, which would animate this
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [pathname])
+  }, [location.pathname, location.state])
 
   return (
     <div className="studio">
       <Outlet />
+      <LayoutSwitcher
+        value={layout}
+        onChange={setLayout}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
     </div>
   )
 }
