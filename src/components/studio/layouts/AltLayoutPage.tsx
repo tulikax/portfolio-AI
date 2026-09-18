@@ -3,6 +3,7 @@ import BentoBoard, { BentoFilter, type Filter } from './BentoBoard'
 import { Hero, SiteFooter, SiteHeader, WorkHeader } from './Chrome'
 import CursorPill from './CursorPill'
 import PocketStack from './PocketStack'
+import StackBackdrop from './StackBackdrop'
 import './tokens.css'
 
 /**
@@ -16,7 +17,10 @@ export default function AltLayoutPage({ work }: { work: 'stack' | 'bento' }) {
   const [filter, setFilter] = useState<Filter>('all')
 
   return (
-    <div className="studio-alt">
+    <div className={`studio-alt${work === 'stack' ? ' studio-alt--stack' : ''}`}>
+      {/* Ambient tint and parallax, Pocket stack only */}
+      {work === 'stack' && <StackBackdrop />}
+
       <SiteHeader />
       <Hero />
       <WorkHeader filter={work === 'bento' ? <BentoFilter value={filter} onChange={setFilter} /> : undefined} />
