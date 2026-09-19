@@ -122,10 +122,7 @@ export default function PocketStage({
           />
         ) : (
           // Media for this project is not on Cloudinary yet; hold the space
-          <span
-            aria-hidden="true"
-            style={{ display: 'block', width: '100%', height: '100%', background: 'var(--color-surface)' }}
-          />
+          <span className="pocket-shot-placeholder" aria-hidden="true" />
         )}
       </span>
 

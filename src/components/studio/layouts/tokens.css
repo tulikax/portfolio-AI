@@ -189,7 +189,19 @@ body[data-studio-theme='dark'] .studio-alt {
   position: absolute;
   inset-inline: 9%;
   top: var(--pocket-shot-top);
-  height: var(--pocket-shot-height);
+  /**
+   * Height comes from the image, not the token.
+   *
+   * A fixed box meant every screenshot was either cropped (`cover`) or matted
+   * with a white surround (`contain`). Letting the image set the height makes
+   * the frame exactly its own aspect ratio, so it is shown whole with nothing
+   * padding it out. The token becomes a ceiling, so an unusually tall image
+   * still cannot outgrow the pocket.
+   */
+  height: auto;
+  /* A ceiling, not a target — above the tallest ratio these screenshots reach,
+     so it never clips one, including in the wider hero stage */
+  max-height: 84%;
   z-index: var(--z-pocket-shot);
   border-radius: var(--radius-shot);
   box-shadow: var(--shadow-shot);
@@ -200,25 +212,19 @@ body[data-studio-theme='dark'] .studio-alt {
   will-change: transform;
 }
 
-/**
- * `contain`, not `cover`.
- *
- * The pocket's shot box is roughly 4:3 while the product screenshots are much
- * wider, so `cover` was cutting DoorFeed off at both ends. `contain` fits the
- * whole frame no matter what ratio the source image happens to be, and the
- * raised background turns the remaining margin into part of the device rather
- * than a gap.
- */
-.pocket-shot {
-  background: var(--color-surface-raised);
-}
-
+/* No background: with the box sized to the image there is nothing to show */
 .pocket-shot img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: top center;
+  height: auto;
   display: block;
+}
+
+/* Media not on Cloudinary yet — the one case with no image to set the height */
+.pocket-shot-placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--color-surface);
 }
 
 .pocket-front {
