@@ -1,6 +1,7 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
 import BentoTile from './BentoTile'
+import useFinePointer from './useFinePointer'
 import { PHOTOGRAPHY } from '../../../constants/media'
 import { EMAIL_ADDRESS, PROJECTS } from './data'
 
@@ -184,22 +185,31 @@ interface Cell {
    * to a single-column grid and push the page sideways.
    */
   span: string
+  /**
+   * Shape in this tile's own filtered view.
+   *
+   * The spans that tile cleanly with all ten present leave holes once a filter
+   * removes half of them — one empty cell under Work, three under About — so
+   * the tiles that would border a gap grow to close it.
+   */
+  spanFiltered: string
   node: ReactNode
 }
 
-const SPAN_2 = 'bento-w2'
-const SPAN_4 = 'bento-w4'
-const SPAN_2x2 = 'bento-w2h2'
+const W1 = ''
+const W2 = 'bento-w2'
+const W4 = 'bento-w4'
+const W2H2 = 'bento-w2h2'
 
 /**
- * Tile order and spans at the 4-column breakpoint. The rows work out as:
+ * Tile order and spans at the 4-column breakpoint.
  *
- *   1  Intro(2)  Clock(1)  Email(1)
- *   2  DoorFeed(2×2)       SigTech(2×2)
- *   3  ↑                   ↑
- *   4  Photo(2×2)          Deloitte(2)
- *   5  ↑                   Playlist(1)  Brushh(1)
- *   6  Off-screen(4)
+ * All:                        Work:              About:
+ *   Intro(2) Clock Email        DoorFeed(2×2)      Intro(2) Clock Email
+ *   DoorFeed(2×2) SigTech(2×2)  SigTech(2×2)       Photo(2×2)  Playlist(2)
+ *   Photo(2×2)    Deloitte(2)   Deloitte(2×2)      ↑           Off-screen(2)
+ *   ↑         Playlist Brushh   Brushh(2×2)
+ *   Off-screen(4)
  *
  * Photo takes two columns because the photographs are landscape and were being
  * squeezed into a portrait slot. Playlist drops to a single cell and sits in
@@ -211,16 +221,16 @@ function useCells(): Cell[] {
   const [doorfeed, sigtech, deloitte, brushh] = PROJECTS
 
   return [
-    { id: 'intro', category: 'about', span: SPAN_2, node: <IntroTile /> },
-    { id: 'clock', category: 'about', span: '', node: <ClockTile /> },
-    { id: 'email', category: 'about', span: '', node: <EmailTile /> },
-    { id: 'doorfeed', category: 'work', span: SPAN_2x2, node: <BentoTile project={doorfeed} eager /> },
-    { id: 'sigtech', category: 'work', span: SPAN_2x2, node: <BentoTile project={sigtech} /> },
-    { id: 'photo', category: 'about', span: SPAN_2x2, node: <PhotoTile /> },
-    { id: 'deloitte', category: 'work', span: SPAN_2, node: <BentoTile project={deloitte} /> },
-    { id: 'playlist', category: 'about', span: '', node: <PlaylistTile /> },
-    { id: 'brushh', category: 'work', span: '', node: <BentoTile project={brushh} /> },
-    { id: 'offscreen', category: 'about', span: SPAN_4, node: <OffScreenTile /> },
+    { id: 'intro', category: 'about', span: W2, spanFiltered: W2, node: <IntroTile /> },
+    { id: 'clock', category: 'about', span: W1, spanFiltered: W1, node: <ClockTile /> },
+    { id: 'email', category: 'about', span: W1, spanFiltered: W1, node: <EmailTile /> },
+    { id: 'doorfeed', category: 'work', span: W2H2, spanFiltered: W2H2, node: <BentoTile project={doorfeed} eager /> },
+    { id: 'sigtech', category: 'work', span: W2H2, spanFiltered: W2H2, node: <BentoTile project={sigtech} /> },
+    { id: 'photo', category: 'about', span: W2H2, spanFiltered: W2H2, node: <PhotoTile /> },
+    { id: 'deloitte', category: 'work', span: W2, spanFiltered: W2H2, node: <BentoTile project={deloitte} /> },
+    { id: 'playlist', category: 'about', span: W1, spanFiltered: W2, node: <PlaylistTile /> },
+    { id: 'brushh', category: 'work', span: W1, spanFiltered: W2H2, node: <BentoTile project={brushh} /> },
+    { id: 'offscreen', category: 'about', span: W4, spanFiltered: W2, node: <OffScreenTile /> },
   ]
 }
 
@@ -247,30 +257,97 @@ export function BentoFilter({ value, onChange }: { value: Filter; onChange: (v: 
   )
 }
 
+/** Minimum gap between swaps, so a tile straddling a border cannot oscillate. */
+const SWAP_COOLDOWN = 140
+
 export default function BentoBoard({ filter }: { filter: Filter }) {
   const cells = useCells()
   const reduceMotion = useReducedMotion()
+  const finePointer = useFinePointer()
   const visible = cells.filter((cell) => filter === 'all' || cell.category === filter)
+
+  /**
+   * Which tile sits in which slot.
+   *
+   * The spans belong to the slot, not the tile, so dragging swaps only the
+   * contents of two positions and the grid itself never changes shape. Swapping
+   * the tiles' own spans instead would let a 2×2 trade places with a 1×1 and
+   * tear a hole in the layout.
+   *
+   * Stored with the filter it was arranged under rather than reset in an
+   * effect, so switching views falls back to the default order on its own.
+   */
+  const [arrangement, setArrangement] = useState<{ filter: Filter; ids: string[] } | null>(null)
+  const order = arrangement?.filter === filter ? arrangement.ids : visible.map((c) => c.id)
+
+  const lastSwap = useRef(0)
+  const dragged = useRef(0)
+
+  /** `now` comes from the event, not the clock — a render-scope Date.now() is impure. */
+  const swap = (a: string, b: string, now: number) => {
+    if (now - lastSwap.current < SWAP_COOLDOWN) return
+    lastSwap.current = now
+
+    const next = [...order]
+    const i = next.indexOf(a)
+    const j = next.indexOf(b)
+    if (i < 0 || j < 0) return
+    ;[next[i], next[j]] = [next[j], next[i]]
+    setArrangement({ filter, ids: next })
+  }
 
   return (
     <div className="studio-alt-container">
       <LayoutGroup>
         <div className="bento-grid">
           <AnimatePresence initial={false}>
-            {visible.map((cell) => (
+            {order.map((id, slot) => {
+              const cell = visible.find((c) => c.id === id)
+              if (!cell) return null
+              // The span comes from the slot, so the grid holds its shape
+              const slotCell = visible[slot]
+              const span = filter === 'all' ? slotCell.span : slotCell.spanFiltered
+
+              return (
               <motion.div
                 key={cell.id}
+                data-tile={cell.id}
                 layout={reduceMotion ? false : true}
+                drag={finePointer}
+                dragSnapToOrigin
+                dragElastic={0.16}
+                dragMomentum={false}
+                whileDrag={{ scale: 1.03, zIndex: 20, cursor: 'grabbing' }}
+                onDragStart={() => {
+                  dragged.current = 0
+                }}
+                onDrag={(event, info) => {
+                  dragged.current = Math.hypot(info.offset.x, info.offset.y)
+                  const native = event as PointerEvent
+                  const under = document
+                    .elementFromPoint(native.clientX, native.clientY)
+                    ?.closest('[data-tile]')
+                  const overId = under?.getAttribute('data-tile')
+                  if (overId && overId !== cell.id) swap(cell.id, overId, native.timeStamp)
+                }}
+                // A tile that was dragged must not also follow its link
+                onClickCapture={(event) => {
+                  if (dragged.current > 5) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                  }
+                }}
                 // Exit is instant: a tile leaving should get out of the way at once
                 initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={reduceMotion ? { duration: 0 } : { ...LAYOUT_TRANSITION, duration: 0.22 }}
-                className={cell.span}
-                style={{ display: 'flex', minWidth: 0 }}
+                className={span}
+                style={{ display: 'flex', minWidth: 0, cursor: finePointer ? 'grab' : undefined }}
               >
                 {cell.node}
               </motion.div>
-            ))}
+              )
+            })}
           </AnimatePresence>
         </div>
       </LayoutGroup>

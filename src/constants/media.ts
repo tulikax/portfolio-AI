@@ -147,7 +147,10 @@ export const DELOITTE = {
  * The tile falls back to an empty frame while this is empty, and starts
  * cycling as soon as there are two or more.
  */
-export const PHOTOGRAPHY: string[] = []
+export const PHOTOGRAPHY: string[] = [
+  /** Birds on a streetlamp. */
+  img('Screenshot_2025-06-21_at_15.19.54'),
+]
 
 /** The platform as it was before any of this work. */
 export const OLD_PLATFORM = {
