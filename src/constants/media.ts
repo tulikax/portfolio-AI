@@ -128,6 +128,27 @@ export const DELOITTE = {
   nlgEditing: video('nlg2'),
 } as const
 
+/**
+ * Photographs for the bento board's photography tile.
+ *
+ * ⚠️ Tulika: this is the one list I could not fill in for you. The folder name
+ * in the Media Library is only a label — the delivered public ID is flat, taken
+ * from the original filename — and the account has Cloudinary's "resource list"
+ * delivery disabled (it answers 401), so there is no way to enumerate a folder
+ * without the Admin API and its secret.
+ *
+ * Add one entry per photograph, using the same ID rule as everything else
+ * above: the original filename with spaces replaced by underscores, the
+ * extension dropped, and any colons or commas removed. For example a file named
+ * `car park, hackney.jpg` delivers at `car_park_hackney`:
+ *
+ *   export const PHOTOGRAPHY = [img('car_park_hackney'), img('stairwell_02')]
+ *
+ * The tile falls back to an empty frame while this is empty, and starts
+ * cycling as soon as there are two or more.
+ */
+export const PHOTOGRAPHY: string[] = []
+
 /** The platform as it was before any of this work. */
 export const OLD_PLATFORM = {
   /** Annotated breakdown of the navigation problems. */

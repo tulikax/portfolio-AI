@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
 import BentoTile from './BentoTile'
+import { PHOTOGRAPHY } from '../../../constants/media'
 import { EMAIL_ADDRESS, PROJECTS } from './data'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
@@ -107,22 +108,51 @@ function PlaylistTile() {
   )
 }
 
+/** Seconds each photograph holds before the next one crosses over. */
+const PHOTO_INTERVAL = 3500
+
 function PhotoTile() {
+  const reduceMotion = useReducedMotion()
+  const [index, setIndex] = useState(0)
+  const count = PHOTOGRAPHY.length
+
+  useEffect(() => {
+    // Nothing to cycle through, and reduced motion holds on the first frame
+    if (reduceMotion || count < 2) return
+
+    const id = setInterval(() => {
+      // A background tab would otherwise keep pulling photographs nobody sees
+      if (document.hidden) return
+      setIndex((current) => (current + 1) % count)
+    }, PHOTO_INTERVAL)
+
+    return () => clearInterval(id)
+  }, [reduceMotion, count])
+
   return (
     <div className="bento-tile">
       <span style={meta}>Photos of ordinary places</span>
-      {/* ⚠️ Tulika: drop a real image in here — /about/photo-1.webp does not exist yet */}
-      <span
-        aria-hidden="true"
-        style={{
-          flex: 1,
-          minHeight: 180,
-          marginBlock: 6,
-          borderRadius: 'var(--radius-inner)',
-          background: 'var(--color-bg)',
-          border: '1px solid var(--color-line)',
-        }}
-      />
+
+      {/*
+        Every photograph is stacked in the frame and only the active one is
+        opaque, so the change is a true crossfade rather than one image
+        swapping out and the next fading up over the background.
+      */}
+      <span className="photo-stack">
+        {PHOTOGRAPHY.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            // Decorative rotation; the caption below carries the meaning
+            alt=""
+            className="photo-frame"
+            data-active={i === index}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        ))}
+      </span>
+
       <span style={meta}>Stairwells, laundromats, car parks</span>
     </div>
   )

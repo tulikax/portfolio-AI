@@ -15,7 +15,13 @@
   --color-surface: #f3f4f6;
   --color-surface-raised: #ffffff;
   --color-ink: #15171c;
-  --color-muted: #5b616b;
+  /**
+   * Darkened from #5B616B, which passed comfortably on the page ground (6.08:1)
+   * but fell to 4.45:1 on the SigTech tint and 4.47:1 on DoorFeed's — both just
+   * under AA for the 14px meta line on a project tile. This clears 4.8:1 on the
+   * worst tint and 6.57:1 on the page.
+   */
+  --color-muted: #565c66;
   --color-line: rgb(21 23 28 / 0.08);
   --color-pill: #15171c;
   --color-pill-ink: #ffffff;
@@ -934,6 +940,45 @@ body .pocket--static * {
     opacity: 1;
     transform: none;
     margin-top: 12px;
+  }
+}
+
+/* ── Photography slideshow ────────────────────────────────────────────────── */
+
+.photo-stack {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-height: 180px;
+  margin-block: 6px;
+  border-radius: var(--radius-inner);
+  overflow: hidden;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+}
+
+/**
+ * A slow crossfade, far past the 300ms ceiling for UI motion on purpose: this
+ * is ambient content, not feedback to an action, and a quick cut between two
+ * photographs reads as a glitch rather than a change.
+ */
+.photo-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1200ms var(--ease-out);
+}
+
+.photo-frame[data-active='true'] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-frame {
+    transition: none;
   }
 }
 
