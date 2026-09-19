@@ -3,7 +3,7 @@ import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-m
 import BentoTile from './BentoTile'
 import useFinePointer from './useFinePointer'
 import { PHOTOGRAPHY } from '../../../constants/media'
-import { EMAIL_ADDRESS, PROJECTS } from './data'
+import { EMAIL_ADDRESS, HERO_BODY, HERO_HEADLINE, PROJECTS } from './data'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 /** Kept in sync with --duration-layout and --duration-base. */
@@ -18,13 +18,46 @@ const big: CSSProperties = {
 
 /* ── Personal tiles ───────────────────────────────────────────────────────── */
 
+/**
+ * The bento board's opening statement.
+ *
+ * This tile carries the claim and the subline that the Pocket stack puts in a
+ * hero, so the bento has no separate hero above it — the board starts the page.
+ * The tile's old paragraph is gone rather than kept alongside: it said the same
+ * thing more weakly, and in the words ("data-heavy") the headline just dropped.
+ */
 function IntroTile() {
   return (
     <div className="bento-tile">
-      <span style={big}>Hi, I&rsquo;m Tulika.</span>
-      <p style={{ margin: '6px 0 0', color: 'var(--color-muted)', maxWidth: '44ch', lineHeight: 1.5 }}>
-        I work on data-heavy products, from property maps to finance analytics, and I like making
-        complicated systems feel simple to use.
+      <span style={meta}>Hi, I&rsquo;m Tulika</span>
+
+      {/* The page's h1. With no hero above the board, the claim has to be a
+          real heading or the bento view has none at all */}
+      <h1
+        style={{
+          margin: '4px 0 0',
+          fontFamily: 'var(--font-display)',
+          fontStyle: 'italic',
+          fontWeight: 400,
+          fontSize: 'clamp(22px, 2.2vw, 30px)',
+          lineHeight: 1.1,
+          letterSpacing: '-0.01em',
+        }}
+      >
+        {HERO_HEADLINE}
+      </h1>
+
+      <p
+        style={{
+          margin: 'auto 0 0',
+          paddingTop: 14,
+          color: 'var(--color-muted)',
+          maxWidth: '52ch',
+          fontSize: 15,
+          lineHeight: 1.5,
+        }}
+      >
+        {HERO_BODY}
       </p>
     </div>
   )
@@ -205,11 +238,16 @@ const W2H2 = 'bento-w2h2'
  * Tile order and spans at the 4-column breakpoint.
  *
  * All:                        Work:              About:
- *   Intro(2) Clock Email        DoorFeed(2×2)      Intro(2) Clock Email
- *   DoorFeed(2×2) SigTech(2×2)  SigTech(2×2)       Photo(2×2)  Playlist(2)
- *   Photo(2×2)    Deloitte(2)   Deloitte(2×2)      ↑           Off-screen(2)
- *   ↑         Playlist Brushh   Brushh(2×2)
+ *   Intro(2×2)   Clock(2)       DoorFeed(2×2)      Intro(2×2)  Clock(2)
+ *   ↑            Email(2)       SigTech(2×2)       ↑           Email(2)
+ *   DoorFeed(2×2) SigTech(2×2)  Deloitte(2×2)      Photo(2×2)  Playlist(2)
+ *   Photo(2×2)    Deloitte(2)   Brushh(2×2)        ↑           Off-screen(2)
+ *   ↑         Playlist Brushh
  *   Off-screen(4)
+ *
+ * Intro holds the headline and subline, so it needs two rows; Clock and Email
+ * widen to two columns alongside it, which is what keeps every view packing
+ * without holes (checked against a dense-packing simulation).
  *
  * Photo takes two columns because the photographs are landscape and were being
  * squeezed into a portrait slot. Playlist drops to a single cell and sits in
@@ -221,9 +259,9 @@ function useCells(): Cell[] {
   const [doorfeed, sigtech, deloitte, brushh] = PROJECTS
 
   return [
-    { id: 'intro', category: 'about', span: W2, spanFiltered: W2, node: <IntroTile /> },
-    { id: 'clock', category: 'about', span: W1, spanFiltered: W1, node: <ClockTile /> },
-    { id: 'email', category: 'about', span: W1, spanFiltered: W1, node: <EmailTile /> },
+    { id: 'intro', category: 'about', span: W2H2, spanFiltered: W2H2, node: <IntroTile /> },
+    { id: 'clock', category: 'about', span: W2, spanFiltered: W2, node: <ClockTile /> },
+    { id: 'email', category: 'about', span: W2, spanFiltered: W2, node: <EmailTile /> },
     { id: 'doorfeed', category: 'work', span: W2H2, spanFiltered: W2H2, node: <BentoTile project={doorfeed} eager /> },
     { id: 'sigtech', category: 'work', span: W2H2, spanFiltered: W2H2, node: <BentoTile project={sigtech} /> },
     { id: 'photo', category: 'about', span: W2H2, spanFiltered: W2H2, node: <PhotoTile /> },

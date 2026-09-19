@@ -22,7 +22,11 @@ export default function AltLayoutPage({ work }: { work: 'stack' | 'bento' }) {
       {work === 'stack' && <StackBackdrop />}
 
       <SiteHeader />
-      <Hero />
+
+      {/* The bento says all this inside its intro tile, so there is no hero
+          above the board — the grid opens the page itself */}
+      {work === 'stack' && <Hero />}
+
       <WorkHeader filter={work === 'bento' ? <BentoFilter value={filter} onChange={setFilter} /> : undefined} />
 
       {work === 'stack' ? <PocketStack /> : <BentoBoard filter={filter} />}
