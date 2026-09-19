@@ -1,4 +1,5 @@
 import { DELOITTE, MID_PLATFORM, SIGTECH } from '../../../constants/media'
+import { CV_PUBLIC_PATH } from '../../../constants/site'
 
 /**
  * Content for the Pocket stack and Bento board layouts, and for the bento
@@ -303,7 +304,25 @@ export function getNextProject(slug: string): Project {
 
 export const EMAIL_ADDRESS = `${'tulikaxu'}@${'gmail.com'}`
 
-export const HERO_HEADLINE = 'I make complex, data-heavy products feel obvious to use.'
+/**
+ * "Non-deterministic" rather than "data-heavy": volume is a scale problem that
+ * every dashboard has, whereas non-determinism is a trust problem, and the
+ * second is what the work is actually about.
+ */
+export const HERO_HEADLINE = 'I make complex, non-deterministic products feel obvious to use.'
 
+/**
+ * The subline used to be a logo list, which every portfolio already has. It
+ * carries the why instead — and the shipping-in-React clause stays above the
+ * fold, because a designer who writes production code is a rarer signal than
+ * one who understands AI.
+ */
 export const HERO_BODY =
-  'Senior product designer in London. Currently at DoorFeed, before that SigTech, Brushh and Deloitte.'
+  'Senior product designer in London, working on multi-agent and AI-native interfaces. I design the layer where people decide whether to believe the machine — then ship it in React.'
+
+/** The scroll cue and the two things a hiring manager reaches for next. */
+export const HERO_LINKS = [
+  { label: 'See the work ↓', href: '#work' },
+  { label: 'CV', href: CV_PUBLIC_PATH },
+  { label: 'Email', href: `mailto:${EMAIL_ADDRESS}` },
+]

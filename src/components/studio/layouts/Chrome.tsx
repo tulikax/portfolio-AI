@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { EMAIL_ADDRESS, HERO_BODY, HERO_HEADLINE } from './data'
+import { EMAIL_ADDRESS, HERO_BODY, HERO_HEADLINE, HERO_LINKS } from './data'
 
 /*
  * SiteHeader, Hero and SiteFooter live together: each is a dozen lines, they
@@ -68,16 +68,38 @@ export function Hero() {
         {HERO_HEADLINE}
       </h1>
 
+      {/*
+        The mid-tier. The scale used to jump straight from the display size to
+        14px grey, which is a cliff rather than a hierarchy: 84 → 22 → 15, with
+        the subline in ink and only the link row muted.
+      */}
       <p
         style={{
-          margin: '22px 0 0',
-          fontSize: 'clamp(16px, 1.6vw, 19px)',
-          color: 'var(--color-muted)',
-          maxWidth: '52ch',
-          lineHeight: 1.5,
+          margin: '24px 0 0',
+          fontSize: 'clamp(19px, 1.8vw, 22px)',
+          color: 'var(--color-ink)',
+          maxWidth: '46ch',
+          lineHeight: 1.45,
         }}
       >
         {HERO_BODY}
+      </p>
+
+      <p
+        style={{
+          margin: '18px 0 0',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '6px 18px',
+          fontSize: 15,
+          color: 'var(--color-muted)',
+        }}
+      >
+        {HERO_LINKS.map((link) => (
+          <a key={link.label} href={link.href} className="studio-alt-link">
+            {link.label}
+          </a>
+        ))}
       </p>
     </section>
   )
