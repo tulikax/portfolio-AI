@@ -147,29 +147,50 @@ type Filter = 'all' | Category
 interface Cell {
   id: string
   category: Category
-  /** Grid spans at the 4-column breakpoint. */
-  span: CSSProperties
+  /**
+   * Span class rather than an inline style, so the spans can shrink at the
+   * 2-column breakpoint and disappear at 1 column. Inline styles could not be
+   * overridden by a media query, which is how a `span 2` used to survive down
+   * to a single-column grid and push the page sideways.
+   */
+  span: string
   node: ReactNode
 }
 
-const SPAN_2 = { gridColumn: 'span 2' } as CSSProperties
-const SPAN_2x2 = { gridColumn: 'span 2', gridRow: 'span 2' } as CSSProperties
-const SPAN_1x2 = { gridRow: 'span 2' } as CSSProperties
+const SPAN_2 = 'bento-w2'
+const SPAN_4 = 'bento-w4'
+const SPAN_2x2 = 'bento-w2h2'
 
+/**
+ * Tile order and spans at the 4-column breakpoint. The rows work out as:
+ *
+ *   1  Intro(2)  Clock(1)  Email(1)
+ *   2  DoorFeed(2×2)       SigTech(2×2)
+ *   3  ↑                   ↑
+ *   4  Photo(2×2)          Deloitte(2)
+ *   5  ↑                   Playlist(1)  Brushh(1)
+ *   6  Off-screen(4)
+ *
+ * Photo takes two columns because the photographs are landscape and were being
+ * squeezed into a portrait slot. Playlist drops to a single cell and sits in
+ * the same row as Brushh, so the two match — a row is only as tall as the
+ * tallest tile in it, which is why the playlist looked oversized while it
+ * shared a row with a 2×2 project tile.
+ */
 function useCells(): Cell[] {
   const [doorfeed, sigtech, deloitte, brushh] = PROJECTS
 
   return [
     { id: 'intro', category: 'about', span: SPAN_2, node: <IntroTile /> },
-    { id: 'clock', category: 'about', span: {}, node: <ClockTile /> },
-    { id: 'email', category: 'about', span: {}, node: <EmailTile /> },
+    { id: 'clock', category: 'about', span: '', node: <ClockTile /> },
+    { id: 'email', category: 'about', span: '', node: <EmailTile /> },
     { id: 'doorfeed', category: 'work', span: SPAN_2x2, node: <BentoTile project={doorfeed} eager /> },
     { id: 'sigtech', category: 'work', span: SPAN_2x2, node: <BentoTile project={sigtech} /> },
-    { id: 'playlist', category: 'about', span: {}, node: <PlaylistTile /> },
-    { id: 'photo', category: 'about', span: SPAN_1x2, node: <PhotoTile /> },
+    { id: 'photo', category: 'about', span: SPAN_2x2, node: <PhotoTile /> },
     { id: 'deloitte', category: 'work', span: SPAN_2, node: <BentoTile project={deloitte} /> },
-    { id: 'brushh', category: 'work', span: {}, node: <BentoTile project={brushh} /> },
-    { id: 'offscreen', category: 'about', span: SPAN_2, node: <OffScreenTile /> },
+    { id: 'playlist', category: 'about', span: '', node: <PlaylistTile /> },
+    { id: 'brushh', category: 'work', span: '', node: <BentoTile project={brushh} /> },
+    { id: 'offscreen', category: 'about', span: SPAN_4, node: <OffScreenTile /> },
   ]
 }
 
@@ -214,7 +235,8 @@ export default function BentoBoard({ filter }: { filter: Filter }) {
                 initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={reduceMotion ? { duration: 0 } : { ...LAYOUT_TRANSITION, duration: 0.22 }}
-                style={{ ...cell.span, display: 'flex', minWidth: 0 }}
+                className={cell.span}
+                style={{ display: 'flex', minWidth: 0 }}
               >
                 {cell.node}
               </motion.div>

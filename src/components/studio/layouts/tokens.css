@@ -846,11 +846,29 @@ body .pocket--static * {
   text-decoration: none;
 }
 
-/* Below sm every tile is a single cell */
-@media (max-width: 559px) {
-  .bento-tile {
-    grid-column: span 1 !important;
-    grid-row: span 1 !important;
+/**
+ * Spans.
+ *
+ * Applied to the grid item itself, not the tile inside it — the tile is a
+ * child, so span rules on it never reached the grid. Below sm no span class
+ * applies at all, which is what keeps a 2-wide tile from spilling out of a
+ * single-column grid.
+ */
+@media (min-width: 560px) {
+  .bento-w2,
+  .bento-w2h2,
+  .bento-w4 {
+    grid-column: span 2;
+  }
+
+  .bento-w2h2 {
+    grid-row: span 2;
+  }
+}
+
+@media (min-width: 900px) {
+  .bento-w4 {
+    grid-column: span 4;
   }
 }
 

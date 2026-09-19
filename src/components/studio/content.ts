@@ -6,12 +6,13 @@
  * file's chapter model, and bending it to fit would mean adding studio-only
  * fields to a type the dark site also depends on.
  *
- * ─── On the pending slabs ────────────────────────────────────────────────────
- * SigTech and Deloitte media has never been migrated to Cloudinary — it still
- * lives as 25MB+ `.mov` and `.png` files in `src/assets`, which is too heavy to
- * ship and unreliable to autoplay. Those slabs are `kind: 'pending'`: the space
- * and caption are correct, the media is not there yet. To fill one, upload the
- * asset and swap `kind: 'pending'` for `kind: 'image' | 'video'` with the ID.
+ * ─── On the media ────────────────────────────────────────────────────────────
+ * Everything now resolves through Cloudinary, DoorFeed, SigTech and Deloitte
+ * alike, so no slab is left reserving empty space. `kind: 'pending'` still
+ * exists in MediaFrame for anything added before its asset is uploaded.
+ *
+ * The Deloitte NLG tool was only ever captured on video, so its stills are
+ * poster frames pulled from the first frame of those clips.
  *
  * ─── ⚠️ Tulika ──────────────────────────────────────────────────────────────
  * Lines marked `⚠️ inferred` are the places where I filled a gap rather than
@@ -19,7 +20,14 @@
  * about/content.ts. Edit freely — this file is the whole content surface.
  */
 
-import { MID_PLATFORM, NEW_PLATFORM, OLD_PLATFORM, poster } from '../../constants/media'
+import {
+  DELOITTE,
+  MID_PLATFORM,
+  NEW_PLATFORM,
+  OLD_PLATFORM,
+  SIGTECH,
+  poster,
+} from '../../constants/media'
 import type { SlabMedia } from './MediaFrame'
 
 export interface StudioSlab {
@@ -269,39 +277,39 @@ const sigtech: StudioProject = {
 
   gallery: [
     {
-      media: { kind: 'pending', alt: 'MAGIC — the shipped chat flow' },
+      media: { kind: 'image', src: SIGTECH.shipped, alt: 'MAGIC — chat beside its tasks and actions' },
       caption: 'MAGIC — the shipped interface.',
       size: 'large',
       ratio: 1.62,
     },
     {
-      media: { kind: 'pending', alt: 'Jobs as a concept' },
+      media: { kind: 'image', src: SIGTECH.jobs, alt: 'Jobs as a concept' },
       caption: 'Jobs — the unit that replaced the conversation.',
       ratio: 1.78,
     },
     {
-      media: { kind: 'pending', alt: 'Task list as a transparency device' },
+      media: { kind: 'image', src: SIGTECH.taskList, alt: 'The task list, making reasoning visible' },
       caption: 'The task list, making reasoning visible.',
       ratio: 1.5,
     },
     {
-      media: { kind: 'pending', alt: 'Verify source, view related, copy with attribution' },
+      media: { kind: 'image', src: SIGTECH.verifySource, alt: 'Verify source, view related, copy with attribution' },
       caption: 'Every claim carrying its source.',
       size: 'large',
       ratio: 1.5,
     },
     {
-      media: { kind: 'pending', alt: 'The SigTech Quant IDE' },
+      media: { kind: 'image', src: SIGTECH.quantIde, alt: 'The SigTech Quant IDE' },
       caption: 'The Quant IDE this began inside.',
       ratio: 1.9,
     },
     {
-      media: { kind: 'pending', alt: 'Pivot explorations beyond chat' },
+      media: { kind: 'image', src: SIGTECH.pivot3, alt: 'Pivot three — explorations beyond chat' },
       caption: 'Explorations beyond chat.',
       ratio: 1.4,
     },
     {
-      media: { kind: 'pending', alt: 'Metabase tracking of pilot metrics' },
+      media: { kind: 'image', src: SIGTECH.metabase, alt: 'Metabase tracking of pilot metrics' },
       caption: 'Pilot metrics, instrumented to validate each direction.',
       size: 'large',
       ratio: 1.7,
@@ -313,39 +321,39 @@ const sigtech: StudioProject = {
       label: 'Context',
       body: 'I was brought in to improve SigTech’s Quant IDE. Running alongside it was an internal experiment — a ChatGPT-style plugin for macroeconomic data, originally built to enhance the IDE, by then showing enough promise to become a product of its own.',
       slabs: [
-        { media: { kind: 'pending', alt: 'The SigTech Quant IDE' }, caption: 'The Quant IDE — the platform I was hired to work on.' },
+        { media: { kind: 'image', src: SIGTECH.quantIde, alt: 'The SigTech Quant IDE' }, caption: 'The Quant IDE — the platform I was hired to work on.' },
       ],
     },
     {
       label: 'Problem',
       body: 'Usage was reasonable and churn was high, and enterprise contracts kept stalling at the same point. Sitting in on sales calls and cross-referencing session data, the signal was consistent: analysts were not rejecting the AI, they were rejecting its opacity. They could not see how a conclusion was reached, which sources it used, or why today’s output differed from yesterday’s. In mid-2024 ChatGPT answers carried no citations — so there was no reason to trust an output enough to act on it, and no reason to switch.',
       slabs: [
-        { media: { kind: 'pending', alt: 'The original ChatGPT plugin that became MAGIC' }, caption: 'The original plugin — answers with no way to verify them.' },
+        { media: { kind: 'image', src: SIGTECH.pluginChat, alt: 'The original chat plugin that became MAGIC' }, caption: 'The original plugin — answers with no way to verify them.' },
       ],
     },
     {
       label: 'Exploration',
       body: 'Three directions, each killed faster than the last. First, multiple GPTs living inside the existing IDE — demo calls were enthusiastic, but nobody was sure they would actually use it, so we stopped. Second, fully chat-based, which ran straight back into the opacity problem. Third, we stopped designing a chat product and started designing for the shape of the work: generic enough to scale, specific enough to trust.',
       slabs: [
-        { media: { kind: 'pending', alt: 'Pivot one — multiple GPTs within the existing IDE' }, caption: 'Pivot one — multiple GPTs inside the IDE.' },
-        { media: { kind: 'pending', alt: 'Pivot two — fully chat based' }, caption: 'Pivot two — fully chat-based, and back to square one on trust.' },
-        { media: { kind: 'pending', alt: 'Pivot three — explorations beyond chat' }, caption: 'Pivot three — beyond chat, toward something scalable.' },
+        { media: { kind: 'image', src: SIGTECH.pivot1, alt: 'Pivot one — multiple GPTs within the existing IDE' }, caption: 'Pivot one — multiple GPTs inside the IDE.' },
+        { media: { kind: 'image', src: SIGTECH.pivot2, alt: 'Pivot two — fully chat based' }, caption: 'Pivot two — fully chat-based, and back to square one on trust.' },
+        { media: { kind: 'image', src: SIGTECH.pivot3Jobs, alt: 'Pivot three — workflows and jobs as an idea' }, caption: 'Pivot three — beyond chat, toward something scalable.' },
       ],
     },
     {
       label: 'Decisions Made',
       body: 'Jobs replaced open-ended conversation as the core unit, giving the work a shape an analyst could hand to someone else. A visible task list turned the model’s reasoning from a black box into something you could watch happen. And every generated claim carried its source, with verify, view-related and copy-with-attribution built into the output rather than bolted beside it.',
       slabs: [
-        { media: { kind: 'pending', alt: 'Day one — chat only' }, caption: 'Day one — chat only, for contrast.' },
-        { media: { kind: 'pending', alt: 'Jobs as a concept' }, caption: 'Jobs — the unit that replaced the conversation.' },
-        { media: { kind: 'pending', alt: 'Verify source, view related, copy with attribution' }, caption: 'Every claim carrying its source.' },
+        { media: { kind: 'image', src: SIGTECH.dayOne, alt: 'Day one — chat only' }, caption: 'Day one — chat only, for contrast.' },
+        { media: { kind: 'image', src: SIGTECH.jobs, alt: 'Jobs as a concept' }, caption: 'Jobs — the unit that replaced the conversation.' },
+        { media: { kind: 'image', src: SIGTECH.verifySource, alt: 'Verify source, view related, copy with attribution' }, caption: 'Every claim carrying its source.' },
       ],
     },
     {
       label: 'Impact',
       body: 'Churn fell by around 24% and time-to-insight improved by roughly 39%, measured against pilot metrics the data team and I instrumented for exactly this. The bigger shift was positional: MAGIC stopped being pitched as an AI chat assistant and became a Financial Intelligence Platform, which is the framing that moved enterprise clients and investors.',
       slabs: [
-        { media: { kind: 'pending', alt: 'Metabase tracking of pilot metrics' }, caption: 'Pilot metrics — instrumented to validate each direction.' },
+        { media: { kind: 'image', src: SIGTECH.metabase, alt: 'Metabase tracking of pilot metrics' }, caption: 'Pilot metrics — instrumented to validate each direction.' },
       ],
     },
   ],
@@ -361,34 +369,34 @@ const deloitte: StudioProject = {
 
   gallery: [
     {
-      media: { kind: 'pending', alt: 'The NLG reporting tool interface' },
+      media: { kind: 'image', src: DELOITTE.nlgWizard, alt: 'The Insight Summariser at step one of five' },
       caption: 'The NLG reporting tool.',
       size: 'large',
       ratio: 1.6,
     },
     {
-      media: { kind: 'pending', alt: 'Track changes UI for AI-generated content' },
+      media: { kind: 'video', src: DELOITTE.nlgFlow, poster: poster('nlg2final'), alt: 'The drafting flow, end to end' },
       caption: 'Track changes — every sentence declaring its origin.',
       ratio: 1.78,
     },
     {
-      media: { kind: 'pending', alt: 'Confidence scoring surfaced as editorial signal' },
+      media: { kind: 'video', src: DELOITTE.nlgEditing, poster: poster('nlg2'), alt: 'Editing a generated report' },
       caption: 'Confidence scores as a soft editorial signal.',
       ratio: 1.5,
     },
     {
-      media: { kind: 'pending', alt: 'Wireframes for the five-step wizard' },
+      media: { kind: 'image', src: DELOITTE.thinkWireframe, alt: 'Wireframing the knowledge base' },
       caption: 'Wireframes — the five-step guided flow.',
       size: 'large',
       ratio: 1.45,
     },
     {
-      media: { kind: 'pending', alt: 'Deloitte project overview' },
+      media: { kind: 'image', src: DELOITTE.bento, alt: 'Selected work from the Innovations team' },
       caption: 'Selected work from the Innovations team.',
       ratio: 1.7,
     },
     {
-      media: { kind: 'pending', alt: 'HR conversational assistant' },
+      media: { kind: 'image', src: DELOITTE.hrAssistant, alt: 'The HR conversational assistant' },
       caption: 'The HR conversational assistant.',
       ratio: 1.4,
     },
@@ -399,7 +407,7 @@ const deloitte: StudioProject = {
       label: 'Context',
       body: 'One of three designers on the Innovations team, splitting time between internal R&D and client engagements. Most of it landed in enterprise contexts where the stakes were high and design maturity was low — organisations ready to adopt new technology without the patterns to do it well.',
       slabs: [
-        { media: { kind: 'pending', alt: 'Early sketches from the innovation sprint' }, caption: 'Early sketches — a Covid-era innovation sprint.' },
+        { media: { kind: 'image', src: DELOITTE.sketches, alt: 'Early sketches' }, caption: 'Early sketches — a Covid-era innovation sprint.' },
       ],
     },
     {
@@ -408,7 +416,7 @@ const deloitte: StudioProject = {
       // The framing about compliance expectations differing between them is mine.
       body: 'Analysts were spending around forty-five minutes hand-drafting each report, across four service lines with different templates and different compliance expectations. The obvious move was to generate the text. The non-obvious problem was that generated text nobody can audit is worth less than text that took forty-five minutes.',
       slabs: [
-        { media: { kind: 'pending', alt: 'The manual reporting process being mapped' }, caption: 'The drafting process, before.' },
+        { media: { kind: 'video', src: DELOITTE.nlgPrototype, poster: poster('nlg'), alt: 'An early prototype of the drafting flow' }, caption: 'The drafting process, before.' },
       ],
     },
     {
@@ -418,24 +426,24 @@ const deloitte: StudioProject = {
       // along the way. Replace with what actually happened.
       body: 'We worked toward a five-step wizard using extractive NLP, testing how much structure analysts would accept before it stopped feeling like their own writing. Most of the exploration went into the editorial surface rather than the generation — the question was never whether the model could draft, it was what a person needed to see to sign their name under the result.',
       slabs: [
-        { media: { kind: 'pending', alt: 'Wireframes for the five-step wizard' }, caption: 'Wireframes — the five-step guided flow.' },
-        { media: { kind: 'pending', alt: 'Editorial interface explorations' }, caption: 'Explorations of the editorial surface.' },
+        { media: { kind: 'image', src: DELOITTE.thinkWireframe, alt: 'Wireframing the knowledge base' }, caption: 'Wireframes — the five-step guided flow.' },
+        { media: { kind: 'image', src: DELOITTE.think, alt: 'Deloitte THiNK — the knowledge base refresh' }, caption: 'Explorations of the editorial surface.' },
       ],
     },
     {
       label: 'Decisions Made',
       body: 'Generated content borrowed the track-changes metaphor from Word, so the origin of every sentence stayed legible — numerical output highlighted specifically, because numbers are what an analyst must verify. And rather than hiding the model’s per-sentence confidence scores, we surfaced them as a soft highlight on low-confidence sentences: enough to direct attention, not enough to cast doubt over the whole document.',
       slabs: [
-        { media: { kind: 'pending', alt: 'Track changes UI for AI-generated content' }, caption: 'Track changes — every sentence declaring where it came from.' },
-        { media: { kind: 'pending', alt: 'Confidence scoring surfaced as editorial signal' }, caption: 'Confidence scores as a soft editorial signal.' },
-        { media: { kind: 'pending', alt: 'The NLG report editing flow in product' }, caption: 'The editing flow, in product.' },
+        { media: { kind: 'video', src: DELOITTE.nlgFlow, poster: poster('nlg2final'), alt: 'The drafting flow, end to end' }, caption: 'Track changes — every sentence declaring where it came from.' },
+        { media: { kind: 'video', src: DELOITTE.nlgEditing, poster: poster('nlg2'), alt: 'Editing a generated report' }, caption: 'Confidence scores as a soft editorial signal.' },
+        { media: { kind: 'video', src: DELOITTE.nlgFlow, poster: poster('nlg2final'), alt: 'The report editing flow, in product' }, caption: 'The editing flow, in product.' },
       ],
     },
     {
       label: 'Impact',
       body: 'Drafting went from roughly forty-five minutes to a guided ten-minute flow, with per-team templates across four service lines and an editorial interface that met compliance requirements rather than working around them. Alongside it I built an HR conversational assistant for a major bank — leave management, policy lookup and a knowledge base in one interface, with accessibility treated as a constraint rather than an afterthought.',
       slabs: [
-        { media: { kind: 'pending', alt: 'The shipped NLG tool' }, caption: 'The shipped tool — forty-five minutes down to ten.' },
+        { media: { kind: 'image', src: DELOITTE.nlgWizard, alt: 'The shipped Insight Summariser' }, caption: 'The shipped tool — forty-five minutes down to ten.' },
       ],
     },
   ],

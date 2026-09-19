@@ -54,6 +54,80 @@ export function poster(id: string): string {
   return `${BASE}/video/upload/so_0,f_auto,q_auto/${id}.jpg`
 }
 
+/**
+ * SigTech MAGIC.
+ *
+ * Note the public IDs: colons and commas in the original filenames are dropped
+ * rather than turned into underscores, which is why `research with
+ * users:stakeholders` delivers at `research_with_users_stakeholders`.
+ */
+export const SIGTECH = {
+  /** The Quant IDE the work started inside. */
+  quantIde: img('original_IDE'),
+  /** The original ChatGPT-style plugin — answers with no way to verify them. */
+  pluginChat: img('Chat_v1'),
+
+  /** Design process. */
+  process: img('process'),
+  processBloomberg: img('process_-_bloomberg'),
+  researchCompetition: img('research_-competition_analysis'),
+  researchUsers: img('research_with_users_stakeholders'),
+
+  /** Pivot 1 — multiple GPTs inside the existing IDE. */
+  pivot1: img('starting_point_or_pivot_1_-_Multiple_GPTs_within_existing_IDE'),
+  /** Pivot 2 — fully chat based. */
+  pivot2: img('pivot_2_fully_chat_based'),
+  pivot2Agents: img('pivot_2.2_-_thikning_about_agent_use_in_real_life'),
+  pivot2InfoArch: img('pivot_2_info_arch'),
+  pivot2Tasks: img('pivot_2_chat_view_tasks_and_actions'),
+  /** Pivot 3 — beyond chat, toward something scalable. */
+  pivot3: img('pivot_3_explorations'),
+  pivot3Jobs: img('pivot_3_workflows_and_jobs_as_an_idea'),
+
+  /** Day one — chat only. */
+  dayOne: img('Day_1_-_chat_only'),
+  /** Jobs — the unit that replaced the open conversation. */
+  jobs: img('Final_outcome_-_Jobs_as_a_concept'),
+  createJob: img('Create_a_Job'),
+  /** The task list, making the model's reasoning visible. */
+  taskList: img('Task_list_as_an_idea_for_transperancy'),
+  /** Verify source, view related, copy with attribution. */
+  verifySource: img('final_draft_-_verify_source_view_related_copy_with_attribition'),
+  /** Pilot metrics, instrumented to validate each direction. */
+  metabase: img('metabase_tracking'),
+  /** The shipped product — chat beside tasks and actions. */
+  shipped: img('what_shipped'),
+  overview: img('overview_1'),
+
+  chatFlow: video('chat-flow'),
+  agentsInAction: video('agents-in-action'),
+  pluginDemo: video('plugin'),
+} as const
+
+/** Deloitte — the NLG reporting tool and the work around it. */
+export const DELOITTE = {
+  /**
+   * The Insight Summariser at step one of five. Taken from the first frame of
+   * the walkthrough, because the tool itself was only ever captured on video.
+   */
+  nlgWizard: poster('nlg2final'),
+
+  /** Selected work from the Innovations team, as one board. */
+  bento: img('final_bento'),
+  bentoAlt: img('deloitte_bento'),
+  /** Deloitte THiNK — the knowledge base UX refresh. */
+  think: img('KMS_1'),
+  thinkWireframe: img('KMS_wierframe'),
+  /** The HR conversational assistant for a major bank. */
+  hrAssistant: img('Deloitte_phone_screens'),
+  sketches: img('Deloitte_sketches'),
+
+  /** The report editing flow, end to end. */
+  nlgFlow: video('nlg2final'),
+  nlgPrototype: video('nlg'),
+  nlgEditing: video('nlg2'),
+} as const
+
 /** The platform as it was before any of this work. */
 export const OLD_PLATFORM = {
   /** Annotated breakdown of the navigation problems. */

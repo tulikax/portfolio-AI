@@ -1,4 +1,4 @@
-import { MID_PLATFORM } from '../../../constants/media'
+import { DELOITTE, MID_PLATFORM, SIGTECH } from '../../../constants/media'
 
 /**
  * Content for the Pocket stack and Bento board layouts, and for the bento
@@ -9,8 +9,9 @@ import { MID_PLATFORM } from '../../../constants/media'
  * headlines, a three-part short version, and a Problem/Solution/Result story.
  *
  * ⚠️ Tulika: Brushh is new here — it is in neither of the other two content
- * files. Deloitte keeps the existing `deloitte-nlg` slug so its link resolves
- * alongside the quiet layout's case study.
+ * files, and it is the only project still without a screenshot. Deloitte keeps
+ * the existing `deloitte-nlg` slug so its link resolves alongside the quiet
+ * layout's case study.
  */
 
 export type CaseStudy = {
@@ -117,7 +118,10 @@ export const PROJECTS: Project[] = [
       'As the only designer on two finance analytics products, I rebuilt the design system and cut design-to-build cycles by 40%.',
     shortTitle: 'Two analytics products, one designer',
     tags: ['Sole designer', 'AI use cases', 'Design system', 'Figma MCP'],
-    // No screenshot: SigTech media has never been migrated to Cloudinary
+    screenshot: {
+      src: SIGTECH.shipped,
+      alt: 'SigTech MAGIC — the shipped view, with chat beside its tasks and actions',
+    },
     short: {
       problem:
         'Two B2B finance analytics products needed product definition and delivery, with a single designer and a Figma system that had to line up with engineering libraries.',
@@ -181,7 +185,10 @@ export const PROJECTS: Project[] = [
       'I helped design a tool that used machine learning to draft the reports analysts had been writing by hand.',
     shortTitle: 'Reports that draft themselves',
     tags: ['Innovation team', 'Language generation', 'Accessibility', 'Enterprise'],
-    // No screenshot: Deloitte media has never been migrated to Cloudinary
+    screenshot: {
+      src: DELOITTE.nlgWizard,
+      alt: 'Deloitte Insight Summariser — step one of the five-step drafting wizard',
+    },
     short: {
       problem:
         'Teams spent many hours writing reports by hand from data that already existed, on enterprise platforms that also had to meet WCAG.',
