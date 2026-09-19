@@ -23,10 +23,14 @@ interface PocketStageProps {
   /** The first stage on the page loads its image eagerly. */
   eager?: boolean
   /**
-   * `static` is the case study hero: the same composition, held permanently
-   * open, with no link, no tab stop, no observer and no cursor pill.
+   * `interactive` is the stack: the stage is itself the link.
+   * `static` is the case study hero: held permanently open, no link, no tab
+   * stop, no observer.
+   * `embedded` is a bento tile: the motion is the same, but the tile around it
+   * is already the link, so this renders a plain element and opens from the
+   * tile's hover and focus instead of its own.
    */
-  variant?: 'interactive' | 'static'
+  variant?: 'interactive' | 'static' | 'embedded'
   /** Widens the stage to the hero aspect ratio. */
   hero?: boolean
 }
@@ -49,10 +53,17 @@ export default function PocketStage({
   variant = 'interactive',
   hero = false,
 }: PocketStageProps) {
-  const ref = useRef<HTMLAnchorElement>(null)
+  // A callback ref, because the root is an <a> in one variant and a <div> in
+  // the others and a typed useRef cannot be handed to both
+  const ref = useRef<HTMLElement | null>(null)
+  const setRef = (el: HTMLElement | null) => {
+    ref.current = el
+  }
+
   const finePointer = useFinePointer()
   const layoutSearch = useLayoutSearch()
   const isStatic = variant === 'static'
+  const isEmbedded = variant === 'embedded'
 
   // Touch devices have no hover, so the stage opens when it is mostly on screen
   useEffect(() => {
@@ -70,7 +81,9 @@ export default function PocketStage({
   }, [finePointer, isStatic])
 
   const tags = project.tags.slice(0, tagCount)
-  const className = `pocket${isStatic ? ' pocket--static' : ''}${hero ? ' pocket--hero' : ''}`
+  const className =
+    `pocket${isStatic ? ' pocket--static' : ''}${hero ? ' pocket--hero' : ''}` +
+    `${isEmbedded ? ' pocket--embedded' : ''}`
 
   const layers = (
     <>
@@ -137,9 +150,24 @@ export default function PocketStage({
     )
   }
 
+  if (isEmbedded) {
+    // The bento tile around this is already the link and the hover target, so
+    // the stage is a plain element with no name of its own to announce
+    return (
+      <div
+        ref={setRef}
+        className={className}
+        aria-hidden="true"
+        style={{ ['--tint' as string]: `var(--tint-${project.tint})` }}
+      >
+        {layers}
+      </div>
+    )
+  }
+
   return (
     <Link
-      ref={ref}
+      ref={setRef}
       to={href ?? `/studio/${project.slug}${layoutSearch}`}
       className={className}
       aria-label={`View the ${project.company} case study`}

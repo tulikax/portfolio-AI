@@ -1,13 +1,16 @@
 import { Link } from 'react-router-dom'
 import type { Project } from './data'
+import PocketStage from './PocketStage'
 import { useLayoutSearch } from '../useStudioLayout'
 
 /**
  * A project tile on the bento board. The whole tile is the link.
  *
- * At rest the screenshot sits slightly low and the outcome band is hidden; on
- * hover or focus the screenshot rises and the band comes up over it. On touch
- * the band is simply part of the tile — there is no hover to reveal it.
+ * The screenshot sits in a pocket, the same one the Pocket stack uses: at rest
+ * only its top shows above the front panel, and on hover or focus it rises
+ * while the panel drops and the tags fly out. The outcome band still comes up
+ * over the foot of the tile. On touch, where there is no hover, the pocket
+ * opens on scrolling into view and the band is simply part of the tile.
  */
 export default function BentoTile({ project, eager = false }: { project: Project; eager?: boolean }) {
   const layoutSearch = useLayoutSearch()
@@ -35,16 +38,8 @@ export default function BentoTile({ project, eager = false }: { project: Project
         {project.shortTitle}
       </span>
 
-      {project.screenshot && (
-        <span className="bento-shot">
-          <img
-            src={project.screenshot.src}
-            alt={project.screenshot.alt}
-            loading={eager ? 'eager' : 'lazy'}
-            decoding="async"
-          />
-        </span>
-      )}
+      {/* The pocket is the hover reveal here too; the tile is the link around it */}
+      <PocketStage project={project} variant="embedded" eager={eager} />
 
       <span className="bento-band">{project.headline}</span>
     </Link>

@@ -271,38 +271,60 @@ body[data-studio-theme='dark'] .studio-alt {
   }
 }
 
-/* Open — hover only on a real pointer, plus keyboard and the touch observer */
+/**
+ * Open.
+ *
+ * Two triggers, because the stage is the link in the Pocket stack but only a
+ * passenger inside a bento tile — there the tile is the link, so the tile's
+ * hover and focus have to open the pocket it contains.
+ */
 @media (hover: hover) and (pointer: fine) {
-  .pocket:hover .pocket-shot {
+  :is(.pocket:hover, .bento-project:hover .pocket) .pocket-shot {
     transform: translate3d(0, 0, 0) scale(1);
   }
 
-  .pocket:hover .pocket-front {
+  :is(.pocket:hover, .bento-project:hover .pocket) .pocket-front {
     transform: translate3d(0, var(--pocket-front-open-y), 0);
   }
 
-  .pocket:hover .pocket-tag {
+  :is(.pocket:hover, .bento-project:hover .pocket) .pocket-tag {
     transform: translate3d(var(--tag-x), var(--tag-y), 0) rotate(var(--tag-rotate));
     transition-duration: var(--duration-tags);
     transition-delay: var(--tag-delay);
   }
 }
 
-.pocket:focus-visible .pocket-shot,
-.pocket.is-open .pocket-shot {
+:is(.pocket:focus-visible, .bento-project:focus-visible .pocket, .pocket.is-open) .pocket-shot {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
-.pocket:focus-visible .pocket-front,
-.pocket.is-open .pocket-front {
+:is(.pocket:focus-visible, .bento-project:focus-visible .pocket, .pocket.is-open) .pocket-front {
   transform: translate3d(0, var(--pocket-front-open-y), 0);
 }
 
-.pocket:focus-visible .pocket-tag,
-.pocket.is-open .pocket-tag {
+:is(.pocket:focus-visible, .bento-project:focus-visible .pocket, .pocket.is-open) .pocket-tag {
   transform: translate3d(var(--tag-x), var(--tag-y), 0) rotate(var(--tag-rotate));
   transition-duration: var(--duration-tags);
   transition-delay: var(--tag-delay);
+}
+
+/**
+ * Embedded in a bento tile.
+ *
+ * Sits at the foot of the tile at the tile's inner radius rather than the
+ * stage radius, which is drawn for a full-width composition and reads as a
+ * chunky corner at tile scale. The tags keep their own breakpoint — a 1×1 tile
+ * is far too small for four pills flying out.
+ */
+.pocket--embedded {
+  margin-top: auto;
+  border-radius: var(--radius-inner);
+  aspect-ratio: 16 / 10;
+}
+
+.pocket--embedded .pocket-back,
+.pocket--embedded .pocket-front {
+  border-radius: calc(var(--radius-pocket) * 0.55) calc(var(--radius-pocket) * 0.55) 0 0;
 }
 
 /**
@@ -855,28 +877,6 @@ body .pocket--static * {
   text-decoration-color: currentColor;
 }
 
-.bento-shot {
-  margin-top: auto;
-  margin-right: calc(var(--space-tile-pad) * -1);
-  margin-bottom: calc(var(--space-tile-pad) * -1);
-  margin-left: 12%;
-  aspect-ratio: 16 / 10;
-  border-start-start-radius: var(--radius-inner);
-  overflow: hidden;
-  box-shadow: var(--shadow-tile-shot);
-  transform: translate3d(0, 6%, 0);
-  transition: transform var(--duration-hover) var(--ease-out);
-  will-change: transform;
-}
-
-.bento-shot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  display: block;
-}
-
 .bento-band {
   position: absolute;
   left: 14px;
@@ -897,19 +897,11 @@ body .pocket--static * {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .bento-project:hover .bento-shot {
-    transform: translate3d(0, 0, 0);
-  }
-
   .bento-project:hover .bento-band,
   .bento-project:focus-visible .bento-band {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
-}
-
-.bento-project:focus-visible .bento-shot {
-  transform: translate3d(0, 0, 0);
 }
 
 .bento-project:focus-visible .bento-band {
@@ -924,10 +916,6 @@ body .pocket--static * {
     opacity: 1;
     transform: none;
     margin-top: 12px;
-  }
-
-  .bento-shot {
-    transform: none;
   }
 }
 
@@ -988,7 +976,6 @@ body .pocket--static * {
   .studio-alt .pocket-shot,
   .studio-alt .pocket-front,
   .studio-alt .pocket-tag,
-  .studio-alt .bento-shot,
   .studio-alt .bento-band,
   .studio-alt .cursor-pill,
   .studio-alt .studio-alt-press {
