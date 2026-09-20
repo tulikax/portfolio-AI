@@ -21,7 +21,7 @@ export default function AltLayoutPage({ work }: { work: 'stack' | 'bento' }) {
       {/* Ambient tint and parallax, Pocket stack only */}
       {work === 'stack' && <StackBackdrop />}
 
-      <SiteHeader />
+      <SiteHeader nav={work === 'stack'} />
 
       {/* The bento says all this inside its intro tile, so there is no hero
           above the board — the grid opens the page itself */}

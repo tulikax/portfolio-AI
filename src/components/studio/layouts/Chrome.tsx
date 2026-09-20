@@ -13,7 +13,12 @@ const NAV = [
   { label: 'Email', href: `mailto:${EMAIL_ADDRESS}` },
 ]
 
-export function SiteHeader() {
+/**
+ * `nav` is off for the Bento board, where the filter switch sits directly
+ * beneath it offering the same Work and About — two controls, one row apart,
+ * with the same words and different behaviour.
+ */
+export function SiteHeader({ nav = true }: { nav?: boolean }) {
   return (
     <header
       className="studio-alt-container"
@@ -32,18 +37,20 @@ export function SiteHeader() {
         Tulika Singh
       </Link>
 
-      <nav style={{ display: 'flex', gap: 22, fontSize: 15 }}>
-        {NAV.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            className="studio-alt-nav"
-            style={{ color: 'var(--color-muted)', textDecoration: 'none' }}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
+      {nav && (
+        <nav style={{ display: 'flex', gap: 22, fontSize: 15 }}>
+          {NAV.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="studio-alt-nav"
+              style={{ color: 'var(--color-muted)', textDecoration: 'none' }}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      )}
     </header>
   )
 }
