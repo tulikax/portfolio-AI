@@ -988,6 +988,47 @@ body .pocket--static * {
   }
 }
 
+/* Dots sit over the photograph, so they carry their own shadow rather than
+   trusting whatever happens to be behind them */
+.photo-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+.photo-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.55);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    scale var(--duration-base) var(--ease-out);
+}
+
+.photo-dot[aria-current='true'] {
+  background: #fff;
+  scale: 1.3;
+}
+
+body.studio-ground .photo-dot {
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-dot {
+    transition: none;
+  }
+}
+
 .bento-filter {
   display: inline-flex;
   gap: 4px;

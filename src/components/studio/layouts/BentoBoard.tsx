@@ -148,11 +148,12 @@ const PHOTO_INTERVAL = 3500
 function PhotoTile() {
   const reduceMotion = useReducedMotion()
   const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
   const count = PHOTOGRAPHY.length
 
   useEffect(() => {
     // Nothing to cycle through, and reduced motion holds on the first frame
-    if (reduceMotion || count < 2) return
+    if (reduceMotion || count < 2 || paused) return
 
     const id = setInterval(() => {
       // A background tab would otherwise keep pulling photographs nobody sees
@@ -161,7 +162,7 @@ function PhotoTile() {
     }, PHOTO_INTERVAL)
 
     return () => clearInterval(id)
-  }, [reduceMotion, count])
+  }, [reduceMotion, count, paused])
 
   return (
     <div className="bento-tile">
@@ -171,11 +172,22 @@ function PhotoTile() {
         Every photograph is stacked in the frame and only the active one is
         opaque, so the change is a true crossfade rather than one image
         swapping out and the next fading up over the background.
+
+        It advances on its own but is also steerable: the dots jump straight to
+        a frame, and hovering or tabbing in holds the current one. Carousels
+        that move on their own with no way to stop them are the reason
+        auto-advancing content has an accessibility rule of its own.
       */}
-      <span className="photo-stack">
+      <span
+        className="photo-stack"
+        onPointerEnter={() => setPaused(true)}
+        onPointerLeave={() => setPaused(false)}
+        onFocusCapture={() => setPaused(true)}
+        onBlurCapture={() => setPaused(false)}
+      >
         {PHOTOGRAPHY.map((src, i) => (
           <img
-            key={src}
+            key={`${src}-${i}`}
             src={src}
             // Decorative rotation; the caption below carries the meaning
             alt=""
@@ -185,9 +197,22 @@ function PhotoTile() {
             decoding="async"
           />
         ))}
-      </span>
 
-      <span style={meta}>Stairwells, laundromats, car parks</span>
+        {count > 1 && (
+          <span className="photo-dots">
+            {PHOTOGRAPHY.map((src, i) => (
+              <button
+                key={`${src}-${i}`}
+                type="button"
+                className="photo-dot"
+                aria-label={`Show photograph ${i + 1} of ${count}`}
+                aria-current={i === index}
+                onClick={() => setIndex(i)}
+              />
+            ))}
+          </span>
+        )}
+      </span>
     </div>
   )
 }

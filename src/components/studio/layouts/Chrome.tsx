@@ -107,7 +107,15 @@ export function Hero() {
   )
 }
 
-export function WorkHeader({ filter }: { filter?: React.ReactNode }) {
+/**
+ * `heading` is off for the Bento board.
+ *
+ * The board is not only work — it holds a clock, an email tile and
+ * photographs — and since the board carries the page's h1 inside its intro
+ * tile, a heading above it would also put an h2 ahead of the h1 in reading
+ * order. The filter keeps its place on the right either way.
+ */
+export function WorkHeader({ filter, heading = true }: { filter?: React.ReactNode; heading?: boolean }) {
   return (
     <div
       id="work"
@@ -116,21 +124,23 @@ export function WorkHeader({ filter }: { filter?: React.ReactNode }) {
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'flex-end',
-        justifyContent: 'space-between',
+        justifyContent: heading ? 'space-between' : 'flex-end',
         gap: 16,
         paddingBottom: 18,
       }}
     >
-      <h2
-        style={{
-          margin: 0,
-          fontFamily: 'var(--font-display)',
-          fontWeight: 400,
-          fontSize: 'clamp(28px, 3.2vw, 40px)',
-        }}
-      >
-        Selected work
-      </h2>
+      {heading && (
+        <h2
+          style={{
+            margin: 0,
+            fontFamily: 'var(--font-display)',
+            fontWeight: 400,
+            fontSize: 'clamp(28px, 3.2vw, 40px)',
+          }}
+        >
+          Selected work
+        </h2>
+      )}
       {filter}
     </div>
   )
