@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
 import BentoTile from './BentoTile'
 import useFinePointer from './useFinePointer'
-import { PHOTOGRAPHY } from '../../../constants/media'
+import { PHOTOGRAPHY_LANDSCAPE, PHOTOGRAPHY_PORTRAIT } from '../../../constants/media'
 import { EMAIL_ADDRESS, HERO_BODY, HERO_HEADLINE, PROJECTS } from './data'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
@@ -142,56 +142,83 @@ function PlaylistTile() {
   )
 }
 
-/** Seconds each photograph holds before the next one crosses over. */
+/** How long each set of three holds before the next crosses over. */
 const PHOTO_INTERVAL = 3500
+
+/** Every slot moves on the same tick, so the tile changes as one picture. */
+const PHOTO_STEPS = Math.max(PHOTOGRAPHY_LANDSCAPE.length, PHOTOGRAPHY_PORTRAIT.length)
+
+/**
+ * One frame of the stack.
+ *
+ * Its whole pool is stacked inside and only the active one is opaque, so the
+ * change is a true crossfade rather than an image swapping out and the next
+ * fading up over the ground behind it.
+ */
+function PhotoSlot({ pool, step, offset = 0 }: { pool: string[]; step: number; offset?: number }) {
+  const active = (step + offset) % pool.length
+
+  return (
+    <span className="photo-slot">
+      {pool.map((src, i) => (
+        <img
+          key={`${src}-${i}`}
+          src={src}
+          // Decorative; the tile's label carries the meaning
+          alt=""
+          className="photo-frame"
+          data-active={i === active}
+          loading={i === active ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      ))}
+    </span>
+  )
+}
 
 function PhotoTile() {
   const reduceMotion = useReducedMotion()
-  const [index, setIndex] = useState(0)
+  const [step, setStep] = useState(0)
   const [paused, setPaused] = useState(false)
-  const count = PHOTOGRAPHY.length
 
   useEffect(() => {
-    // Nothing to cycle through, and reduced motion holds on the first frame
-    if (reduceMotion || count < 2 || paused) return
+    // Reduced motion holds on the first set
+    if (reduceMotion || paused) return
 
     const id = setInterval(() => {
       // A background tab would otherwise keep pulling photographs nobody sees
       if (document.hidden) return
-      setIndex((current) => (current + 1) % count)
+      setStep((current) => (current + 1) % PHOTO_STEPS)
     }, PHOTO_INTERVAL)
 
     return () => clearInterval(id)
-  }, [reduceMotion, count, paused])
+  }, [reduceMotion, paused])
 
   /**
-   * Fetch the next photograph before it is needed.
+   * Fetch the next three before they are needed.
    *
    * The frames are lazy, and a lazy image stacked at opacity 0 is not fetched
-   * until it is shown — which means the crossfade would start against an image
-   * that has not arrived and reveal an empty frame. Pulling the next one during
-   * the current one's turn means it is always in cache by the time it is due.
+   * until it is shown — so a crossfade would begin against an image that had
+   * not arrived and reveal an empty frame.
    */
   useEffect(() => {
-    if (count < 2) return
-    const next = new Image()
-    next.src = PHOTOGRAPHY[(index + 1) % count]
-  }, [index, count])
+    const next = (step + 1) % PHOTO_STEPS
+    const sources = [
+      PHOTOGRAPHY_LANDSCAPE[next % PHOTOGRAPHY_LANDSCAPE.length],
+      PHOTOGRAPHY_LANDSCAPE[(next + 1) % PHOTOGRAPHY_LANDSCAPE.length],
+      PHOTOGRAPHY_PORTRAIT[next % PHOTOGRAPHY_PORTRAIT.length],
+    ]
+    sources.forEach((src) => {
+      const image = new Image()
+      image.src = src
+    })
+  }, [step])
 
   return (
     <div className="bento-tile">
-      <span style={meta}>Photos of ordinary places</span>
+      <span style={meta}>Ordinary places</span>
 
-      {/*
-        Every photograph is stacked in the frame and only the active one is
-        opaque, so the change is a true crossfade rather than one image
-        swapping out and the next fading up over the background.
-
-        It advances on its own but is also steerable: the dots jump straight to
-        a frame, and hovering or tabbing in holds the current one. Carousels
-        that move on their own with no way to stop them are the reason
-        auto-advancing content has an accessibility rule of its own.
-      */}
+      {/* Landscape, portrait, landscape — the tall one in the middle */}
       <span
         className="photo-stack"
         onPointerEnter={() => setPaused(true)}
@@ -199,33 +226,10 @@ function PhotoTile() {
         onFocusCapture={() => setPaused(true)}
         onBlurCapture={() => setPaused(false)}
       >
-        {PHOTOGRAPHY.map((src, i) => (
-          <img
-            key={`${src}-${i}`}
-            src={src}
-            // Decorative rotation; the caption below carries the meaning
-            alt=""
-            className="photo-frame"
-            data-active={i === index}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            decoding="async"
-          />
-        ))}
-
-        {count > 1 && (
-          <span className="photo-dots">
-            {PHOTOGRAPHY.map((src, i) => (
-              <button
-                key={`${src}-${i}`}
-                type="button"
-                className="photo-dot"
-                aria-label={`Show photograph ${i + 1} of ${count}`}
-                aria-current={i === index}
-                onClick={() => setIndex(i)}
-              />
-            ))}
-          </span>
-        )}
+        <PhotoSlot pool={PHOTOGRAPHY_LANDSCAPE} step={step} />
+        <PhotoSlot pool={PHOTOGRAPHY_PORTRAIT} step={step} />
+        {/* Offset by one so the two landscapes are never the same picture */}
+        <PhotoSlot pool={PHOTOGRAPHY_LANDSCAPE} step={step} offset={1} />
       </span>
     </div>
   )

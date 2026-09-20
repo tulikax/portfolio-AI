@@ -951,11 +951,20 @@ body .pocket--static * {
 
 /* ── Photography slideshow ────────────────────────────────────────────────── */
 
+/**
+ * Three frames in a column: landscape, portrait, landscape.
+ *
+ * The middle row is the tall one, so the portrait gets the room its shape
+ * needs and the two landscapes read as bands either side of it.
+ */
 .photo-stack {
   position: relative;
-  display: block;
+  display: grid;
+  grid-template-rows: 1fr 2fr 1fr;
+  gap: 2px;
+  padding: 2px;
   flex: 1;
-  min-height: 180px;
+  min-height: 260px;
   margin-block: 6px;
   border-radius: var(--radius-inner);
   overflow: hidden;
@@ -963,10 +972,24 @@ body .pocket--static * {
   border: 1px solid var(--color-line);
 }
 
+.photo-slot {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--color-surface);
+}
+
 /**
  * A slow crossfade, far past the 300ms ceiling for UI motion on purpose: this
  * is ambient content, not feedback to an action, and a quick cut between two
  * photographs reads as a glitch rather than a change.
+ */
+/**
+ * `cover` inside the slots, not `contain`.
+ *
+ * Each slot is already shaped for the orientation it holds, so the crop is
+ * shallow — and in a mosaic with 2px seams, letterboxing would open ragged
+ * gaps between the frames and lose the composition entirely.
  */
 .photo-frame {
   position: absolute;
@@ -984,47 +1007,6 @@ body .pocket--static * {
 
 @media (prefers-reduced-motion: reduce) {
   .photo-frame {
-    transition: none;
-  }
-}
-
-/* Dots sit over the photograph, so they carry their own shadow rather than
-   trusting whatever happens to be behind them */
-.photo-dots {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  z-index: 2;
-}
-
-.photo-dot {
-  width: 7px;
-  height: 7px;
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.55);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
-  transition:
-    background-color var(--duration-base) var(--ease-out),
-    scale var(--duration-base) var(--ease-out);
-}
-
-.photo-dot[aria-current='true'] {
-  background: #fff;
-  scale: 1.3;
-}
-
-body.studio-ground .photo-dot {
-  cursor: pointer;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .photo-dot {
     transition: none;
   }
 }
