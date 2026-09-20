@@ -131,25 +131,38 @@ export const DELOITTE = {
 /**
  * Photographs for the bento board's photography tile.
  *
- * ⚠️ Tulika: this is the one list I could not fill in for you. The folder name
- * in the Media Library is only a label — the delivered public ID is flat, taken
- * from the original filename — and the account has Cloudinary's "resource list"
- * delivery disabled (it answers 401), so there is no way to enumerate a folder
- * without the Admin API and its secret.
+ * Read out of the shared collection rather than typed by hand — the folder name
+ * in the Media Library is only a label, the delivered ID is flat, and this
+ * account has Cloudinary's resource-list delivery disabled, so a folder cannot
+ * be enumerated over the delivery URL. The collection link itself expires, so
+ * these are pinned here rather than fetched.
  *
- * Add one entry per photograph, using the same ID rule as everything else
- * above: the original filename with spaces replaced by underscores, the
- * extension dropped, and any colons or commas removed. For example a file named
- * `car park, hackney.jpg` delivers at `car_park_hackney`:
- *
- *   export const PHOTOGRAPHY = [img('car_park_hackney'), img('stairwell_02')]
- *
- * The tile falls back to an empty frame while this is empty, and starts
- * cycling as soon as there are two or more.
+ * The collection holds 21 assets: these 19 images plus 2 videos, which the tile
+ * has no way to show. To add one, upload it and append its public ID — the
+ * original filename with spaces underscored, the extension dropped, and any
+ * colons or commas removed.
  */
 export const PHOTOGRAPHY: string[] = [
+  img('IMG_0312'),
+  img('IMG_0451'),
+  img('IMG_0459'),
+  img('IMG_0514'),
+  img('IMG_1397'),
+  img('IMG_4189'),
+  img('IMG_6173'),
+  img('IMG_6187'),
+  img('IMG_6200_2'),
+  img('IMG_9284'),
+  img('IMG_9811'),
+  img('IMG_9813'),
+  img('IMG_9838'),
+  img('21BD7A29-BCD3-46BD-A687-A1835E0993A0'),
   /** Birds on a streetlamp. */
   img('Screenshot_2025-06-21_at_15.19.54'),
+  img('Screenshot_2025-06-21_at_15.20.09'),
+  img('Screenshot_2025-06-21_at_15.20.24'),
+  img('Screenshot_2025-06-21_at_15.20.35'),
+  img('Screenshot_2025-06-21_at_15.20.48'),
 ]
 
 /** The platform as it was before any of this work. */

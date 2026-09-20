@@ -164,6 +164,20 @@ function PhotoTile() {
     return () => clearInterval(id)
   }, [reduceMotion, count, paused])
 
+  /**
+   * Fetch the next photograph before it is needed.
+   *
+   * The frames are lazy, and a lazy image stacked at opacity 0 is not fetched
+   * until it is shown — which means the crossfade would start against an image
+   * that has not arrived and reveal an empty frame. Pulling the next one during
+   * the current one's turn means it is always in cache by the time it is due.
+   */
+  useEffect(() => {
+    if (count < 2) return
+    const next = new Image()
+    next.src = PHOTOGRAPHY[(index + 1) % count]
+  }, [index, count])
+
   return (
     <div className="bento-tile">
       <span style={meta}>Photos of ordinary places</span>
