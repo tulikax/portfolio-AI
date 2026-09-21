@@ -999,12 +999,8 @@ body .pocket--static * {
  * photographs reads as a glitch rather than a change.
  */
 /**
- * `contain`, so each photograph is shown whole rather than cropped to fill.
- *
- * With a portrait alone in the tall frame, and landscapes paired into wide
- * bands, each slot is now close to the shape of what it holds — so there is
- * very little margin left over, and what remains sits on the slot's own ground
- * as a mat rather than a gap.
+ * A portrait keeps `contain`: the tall frame is 0.71 and the portraits sit
+ * around 0.75, so almost nothing is left over.
  */
 .photo-frame {
   position: absolute;
@@ -1012,6 +1008,18 @@ body .pocket--static * {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/**
+ * The landscapes fill instead.
+ *
+ * They run from 1.16 to 1.85 against a 1.43 slot, so `contain` left each one a
+ * different amount of mat and a pair never lined up — one picture floating in
+ * grey above another that reached the edges. Filling costs a modest crop and
+ * buys two bands of exactly the same size.
+ */
+.photo-page[data-mode='landscape'] .photo-frame {
+  object-fit: cover;
 }
 
 /**
