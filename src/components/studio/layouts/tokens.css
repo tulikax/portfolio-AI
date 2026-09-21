@@ -977,6 +977,8 @@ body .pocket--static * {
   overflow: hidden;
   border-radius: 3px;
   background: var(--color-surface);
+  /* Gives the turning frame somewhere to rotate into */
+  perspective: 1100px;
 }
 
 /**
@@ -985,28 +987,146 @@ body .pocket--static * {
  * photographs reads as a glitch rather than a change.
  */
 /**
- * `cover` inside the slots, not `contain`.
+ * `contain`, so each photograph is shown whole rather than cropped to fill.
  *
- * Each slot is already shaped for the orientation it holds, so the crop is
- * shallow — and in a mosaic with 2px seams, letterboxing would open ragged
- * gaps between the frames and lose the composition entirely.
+ * The slots are much wider than the pictures, so `cover` was cutting deep into
+ * them. The slot paints its own ground behind, which turns the leftover margin
+ * into a mat rather than a gap — the thing that made `contain` wrong before was
+ * having nothing behind it.
  */
 .photo-frame {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   opacity: 0;
-  transition: opacity 1200ms var(--ease-out);
+  backface-visibility: hidden;
+  /* The spine the page turns on */
+  transform-origin: left center;
+  transition: opacity 600ms var(--ease-out);
 }
 
 .photo-frame[data-active='true'] {
   opacity: 1;
+  z-index: 1;
+}
+
+/**
+ * The page turn.
+ *
+ * The outgoing photograph lifts off its left edge and swings away, uncovering
+ * the next one already lying flat underneath. A keyframe rather than a
+ * transition because it runs once per change and has to end somewhere
+ * specific; nothing here is interrupted often enough to need retargeting.
+ */
+.photo-frame[data-turning] {
+  z-index: 2;
+  opacity: 1;
+}
+
+.photo-frame[data-turning='next'] {
+  animation: photo-turn-next 620ms var(--ease-in-out) forwards;
+}
+
+.photo-frame[data-turning='prev'] {
+  transform-origin: right center;
+  animation: photo-turn-prev 620ms var(--ease-in-out) forwards;
+}
+
+@keyframes photo-turn-next {
+  from {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(-115deg);
+    opacity: 0;
+  }
+}
+
+@keyframes photo-turn-prev {
+  from {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(115deg);
+    opacity: 0;
+  }
+}
+
+/* ── Arrows ───────────────────────────────────────────────────────────────── */
+
+.photo-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  transform: translateY(-50%);
+  background: rgb(255 255 255 / 0.82);
+  color: #15171c;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.22);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    scale var(--duration-press) var(--ease-out);
+}
+
+.photo-arrow--prev {
+  left: 8px;
+}
+
+.photo-arrow--next {
+  right: 8px;
+}
+
+.photo-arrow:active {
+  scale: 0.94;
+}
+
+/* Revealed on approach, and always there for a keyboard */
+@media (hover: hover) and (pointer: fine) {
+  .photo-stack:hover .photo-arrow {
+    opacity: 1;
+  }
+}
+
+.photo-arrow:focus-visible {
+  opacity: 1;
+}
+
+@media not all and (hover: hover) {
+  .photo-arrow {
+    opacity: 1;
+  }
+}
+
+body.studio-ground .photo-arrow {
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .photo-frame {
+    transition: none;
+  }
+
+  /* No page turning; the frame simply stops being the visible one */
+  .photo-frame[data-turning] {
+    animation: none;
+    opacity: 0;
+  }
+
+  .photo-arrow {
     transition: none;
   }
 }

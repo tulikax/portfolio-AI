@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import BentoTile from './BentoTile'
 import useFinePointer from './useFinePointer'
 import { PHOTOGRAPHY_LANDSCAPE, PHOTOGRAPHY_PORTRAIT } from '../../../constants/media'
@@ -142,7 +143,7 @@ function PlaylistTile() {
   )
 }
 
-/** How long each set of three holds before the next crosses over. */
+/** How long each set of three holds before the next turns over. */
 const PHOTO_INTERVAL = 3500
 
 /** Every slot moves on the same tick, so the tile changes as one picture. */
@@ -151,12 +152,25 @@ const PHOTO_STEPS = Math.max(PHOTOGRAPHY_LANDSCAPE.length, PHOTOGRAPHY_PORTRAIT.
 /**
  * One frame of the stack.
  *
- * Its whole pool is stacked inside and only the active one is opaque, so the
- * change is a true crossfade rather than an image swapping out and the next
- * fading up over the ground behind it.
+ * The whole pool is stacked inside. The active one lies flat on top; the one
+ * being replaced is marked `data-turning` and lifts away like a page, showing
+ * the next already in place beneath it.
  */
-function PhotoSlot({ pool, step, offset = 0 }: { pool: string[]; step: number; offset?: number }) {
+function PhotoSlot({
+  pool,
+  step,
+  leaving,
+  direction,
+  offset = 0,
+}: {
+  pool: string[]
+  step: number
+  leaving: number | null
+  direction: 'next' | 'prev'
+  offset?: number
+}) {
   const active = (step + offset) % pool.length
+  const turning = leaving === null ? -1 : (leaving + offset) % pool.length
 
   return (
     <span className="photo-slot">
@@ -168,6 +182,8 @@ function PhotoSlot({ pool, step, offset = 0 }: { pool: string[]; step: number; o
           alt=""
           className="photo-frame"
           data-active={i === active}
+          // A pool shorter than the step count can land on itself; no turn then
+          data-turning={i === turning && i !== active ? direction : undefined}
           loading={i === active ? 'eager' : 'lazy'}
           decoding="async"
         />
@@ -179,27 +195,46 @@ function PhotoSlot({ pool, step, offset = 0 }: { pool: string[]; step: number; o
 function PhotoTile() {
   const reduceMotion = useReducedMotion()
   const [step, setStep] = useState(0)
-  const [paused, setPaused] = useState(false)
+  const [leaving, setLeaving] = useState<number | null>(null)
+  const [direction, setDirection] = useState<'next' | 'prev'>('next')
+  /**
+   * Only focus holds the sequence, not hover.
+   *
+   * Pausing on hover meant that resting the pointer on the tile to look at the
+   * photographs stopped them changing, which reads as broken rather than
+   * considerate. Keyboard users still need it to hold while they tab through
+   * the arrows.
+   */
+  const [held, setHeld] = useState(false)
 
+  const go = (delta: 1 | -1) => {
+    setLeaving(step)
+    setDirection(delta === 1 ? 'next' : 'prev')
+    setStep((step + delta + PHOTO_STEPS) % PHOTO_STEPS)
+  }
+
+  // `step` is a dependency on purpose: stepping by hand restarts the wait,
+  // rather than the next tick arriving immediately after a click
   useEffect(() => {
-    // Reduced motion holds on the first set
-    if (reduceMotion || paused) return
+    if (reduceMotion || held) return
 
     const id = setInterval(() => {
       // A background tab would otherwise keep pulling photographs nobody sees
       if (document.hidden) return
-      setStep((current) => (current + 1) % PHOTO_STEPS)
+      setLeaving(step)
+      setDirection('next')
+      setStep((step + 1) % PHOTO_STEPS)
     }, PHOTO_INTERVAL)
 
     return () => clearInterval(id)
-  }, [reduceMotion, paused])
+  }, [reduceMotion, held, step])
 
   /**
    * Fetch the next three before they are needed.
    *
    * The frames are lazy, and a lazy image stacked at opacity 0 is not fetched
-   * until it is shown — so a crossfade would begin against an image that had
-   * not arrived and reveal an empty frame.
+   * until it is shown — so a turn would begin against an image that had not
+   * arrived and reveal an empty frame.
    */
   useEffect(() => {
     const next = (step + 1) % PHOTO_STEPS
@@ -221,15 +256,36 @@ function PhotoTile() {
       {/* Landscape, portrait, landscape — the tall one in the middle */}
       <span
         className="photo-stack"
-        onPointerEnter={() => setPaused(true)}
-        onPointerLeave={() => setPaused(false)}
-        onFocusCapture={() => setPaused(true)}
-        onBlurCapture={() => setPaused(false)}
+        onFocusCapture={() => setHeld(true)}
+        onBlurCapture={() => setHeld(false)}
       >
-        <PhotoSlot pool={PHOTOGRAPHY_LANDSCAPE} step={step} />
-        <PhotoSlot pool={PHOTOGRAPHY_PORTRAIT} step={step} />
+        <PhotoSlot pool={PHOTOGRAPHY_LANDSCAPE} step={step} leaving={leaving} direction={direction} />
+        <PhotoSlot pool={PHOTOGRAPHY_PORTRAIT} step={step} leaving={leaving} direction={direction} />
         {/* Offset by one so the two landscapes are never the same picture */}
-        <PhotoSlot pool={PHOTOGRAPHY_LANDSCAPE} step={step} offset={1} />
+        <PhotoSlot
+          pool={PHOTOGRAPHY_LANDSCAPE}
+          step={step}
+          leaving={leaving}
+          direction={direction}
+          offset={1}
+        />
+
+        <button
+          type="button"
+          className="photo-arrow photo-arrow--prev"
+          aria-label="Previous photographs"
+          onClick={() => go(-1)}
+        >
+          <ChevronLeft size={18} strokeWidth={2} />
+        </button>
+        <button
+          type="button"
+          className="photo-arrow photo-arrow--next"
+          aria-label="Next photographs"
+          onClick={() => go(1)}
+        >
+          <ChevronRight size={18} strokeWidth={2} />
+        </button>
       </span>
     </div>
   )
