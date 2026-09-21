@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useReducer, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import BentoTile from './BentoTile'
@@ -143,60 +143,100 @@ function PlaylistTile() {
   )
 }
 
-/** How long each set of three holds before the next turns over. */
+/** How long each page holds before the next turns over. */
 const PHOTO_INTERVAL = 3500
 
-/** Every slot moves on the same tick, so the tile changes as one picture. */
-const PHOTO_STEPS = Math.max(PHOTOGRAPHY_LANDSCAPE.length, PHOTOGRAPHY_PORTRAIT.length)
+/**
+ * Pages alternate: one portrait on its own, then two landscapes together.
+ *
+ * A portrait alone gets the whole tall frame, which is close to its own shape,
+ * so it is shown nearly whole. Two landscapes halve that frame into two wide
+ * bands, which is close to theirs. Mixing all three in one page gave every
+ * picture a slot shaped for something else.
+ *
+ * Even steps are portrait, odd are a landscape pair, and the pair advances two
+ * at a time — so the count covers every portrait once before repeating.
+ */
+const PHOTO_STEPS =
+  2 * Math.max(PHOTOGRAPHY_PORTRAIT.length, Math.ceil(PHOTOGRAPHY_LANDSCAPE.length / 2))
+
+function pageSources(step: number): string[] {
+  const pair = Math.floor(step / 2)
+
+  if (step % 2 === 0) {
+    return [PHOTOGRAPHY_PORTRAIT[pair % PHOTOGRAPHY_PORTRAIT.length]]
+  }
+
+  const first = (pair * 2) % PHOTOGRAPHY_LANDSCAPE.length
+  return [
+    PHOTOGRAPHY_LANDSCAPE[first],
+    PHOTOGRAPHY_LANDSCAPE[(first + 1) % PHOTOGRAPHY_LANDSCAPE.length],
+  ]
+}
 
 /**
- * One frame of the stack.
+ * One page of the tile.
  *
- * The whole pool is stacked inside. The active one lies flat on top; the one
- * being replaced is marked `data-turning` and lifts away like a page, showing
- * the next already in place beneath it.
+ * The page that is leaving is rendered on top of the one arriving and lifts off
+ * its spine, so the new page is already lying underneath as the old one swings
+ * away — which is what makes it read as a page rather than a crossfade.
  */
-function PhotoSlot({
-  pool,
+function PhotoPage({
   step,
-  leaving,
-  direction,
-  offset = 0,
+  turning,
+  onTurned,
 }: {
-  pool: string[]
   step: number
-  leaving: number | null
-  direction: 'next' | 'prev'
-  offset?: number
+  turning?: 'next' | 'prev'
+  onTurned?: () => void
 }) {
-  const active = (step + offset) % pool.length
-  const turning = leaving === null ? -1 : (leaving + offset) % pool.length
+  const sources = pageSources(step)
 
   return (
-    <span className="photo-slot">
-      {pool.map((src, i) => (
-        <img
-          key={`${src}-${i}`}
-          src={src}
-          // Decorative; the tile's label carries the meaning
-          alt=""
-          className="photo-frame"
-          data-active={i === active}
-          // A pool shorter than the step count can land on itself; no turn then
-          data-turning={i === turning && i !== active ? direction : undefined}
-          loading={i === active ? 'eager' : 'lazy'}
-          decoding="async"
-        />
+    <span
+      className="photo-page"
+      data-mode={step % 2 === 0 ? 'portrait' : 'landscape'}
+      data-turning={turning}
+      onAnimationEnd={onTurned}
+    >
+      {sources.map((src) => (
+        <span className="photo-slot" key={src}>
+          {/* Decorative; the tile's label carries the meaning */}
+          <img src={src} alt="" className="photo-frame" loading="eager" decoding="async" />
+        </span>
       ))}
     </span>
   )
 }
 
+/**
+ * Turning is a reducer, not three pieces of state.
+ *
+ * Which page is leaving is always the one that was showing, so it has to be
+ * derived from the previous state rather than read from a render closure —
+ * clicking the arrow twice quickly was otherwise two clicks that both saw the
+ * same step and between them moved one page.
+ */
+type PageState = { step: number; leaving: number | null; direction: 'next' | 'prev' }
+type PageAction = { type: 'step'; delta: 1 | -1 } | { type: 'settled' }
+
+function turnPage(state: PageState, action: PageAction): PageState {
+  if (action.type === 'settled') return { ...state, leaving: null }
+
+  return {
+    step: (state.step + action.delta + PHOTO_STEPS) % PHOTO_STEPS,
+    leaving: state.step,
+    direction: action.delta === 1 ? 'next' : 'prev',
+  }
+}
+
 function PhotoTile() {
   const reduceMotion = useReducedMotion()
-  const [step, setStep] = useState(0)
-  const [leaving, setLeaving] = useState<number | null>(null)
-  const [direction, setDirection] = useState<'next' | 'prev'>('next')
+  const [{ step, leaving, direction }, dispatch] = useReducer(turnPage, {
+    step: 0,
+    leaving: null,
+    direction: 'next',
+  })
   /**
    * Only focus holds the sequence, not hover.
    *
@@ -207,11 +247,7 @@ function PhotoTile() {
    */
   const [held, setHeld] = useState(false)
 
-  const go = (delta: 1 | -1) => {
-    setLeaving(step)
-    setDirection(delta === 1 ? 'next' : 'prev')
-    setStep((step + delta + PHOTO_STEPS) % PHOTO_STEPS)
-  }
+  const go = (delta: 1 | -1) => dispatch({ type: 'step', delta })
 
   // `step` is a dependency on purpose: stepping by hand restarts the wait,
   // rather than the next tick arriving immediately after a click
@@ -221,29 +257,18 @@ function PhotoTile() {
     const id = setInterval(() => {
       // A background tab would otherwise keep pulling photographs nobody sees
       if (document.hidden) return
-      setLeaving(step)
-      setDirection('next')
-      setStep((step + 1) % PHOTO_STEPS)
+      dispatch({ type: 'step', delta: 1 })
     }, PHOTO_INTERVAL)
 
     return () => clearInterval(id)
   }, [reduceMotion, held, step])
 
   /**
-   * Fetch the next three before they are needed.
-   *
-   * The frames are lazy, and a lazy image stacked at opacity 0 is not fetched
-   * until it is shown — so a turn would begin against an image that had not
-   * arrived and reveal an empty frame.
+   * Fetch the next page before it is needed, or the turn would uncover an
+   * image that has not arrived.
    */
   useEffect(() => {
-    const next = (step + 1) % PHOTO_STEPS
-    const sources = [
-      PHOTOGRAPHY_LANDSCAPE[next % PHOTOGRAPHY_LANDSCAPE.length],
-      PHOTOGRAPHY_LANDSCAPE[(next + 1) % PHOTOGRAPHY_LANDSCAPE.length],
-      PHOTOGRAPHY_PORTRAIT[next % PHOTOGRAPHY_PORTRAIT.length],
-    ]
-    sources.forEach((src) => {
+    pageSources((step + 1) % PHOTO_STEPS).forEach((src) => {
       const image = new Image()
       image.src = src
     })
@@ -253,22 +278,26 @@ function PhotoTile() {
     <div className="bento-tile">
       <span style={meta}>Ordinary places</span>
 
-      {/* Landscape, portrait, landscape — the tall one in the middle */}
       <span
         className="photo-stack"
         onFocusCapture={() => setHeld(true)}
         onBlurCapture={() => setHeld(false)}
       >
-        <PhotoSlot pool={PHOTOGRAPHY_LANDSCAPE} step={step} leaving={leaving} direction={direction} />
-        <PhotoSlot pool={PHOTOGRAPHY_PORTRAIT} step={step} leaving={leaving} direction={direction} />
-        {/* Offset by one so the two landscapes are never the same picture */}
-        <PhotoSlot
-          pool={PHOTOGRAPHY_LANDSCAPE}
-          step={step}
-          leaving={leaving}
-          direction={direction}
-          offset={1}
-        />
+        <PhotoPage key={step} step={step} />
+
+        {/*
+          Kept mounted only until it has finished turning away. Not rendered at
+          all under reduced motion, where there is no animation to end and so
+          nothing would ever tell it to go.
+        */}
+        {!reduceMotion && leaving !== null && leaving !== step && (
+          <PhotoPage
+            key={`leaving-${leaving}`}
+            step={leaving}
+            turning={direction}
+            onTurned={() => dispatch({ type: 'settled' })}
+          />
+        )}
 
         <button
           type="button"
