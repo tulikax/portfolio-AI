@@ -39,9 +39,27 @@ export function img(id: string, width = 2400): string {
   return `${BASE}/image/upload/f_auto,q_auto:best,c_limit,w_${width}/${id}`
 }
 
-/** Video URL — Cloudinary transcodes to MP4/WebM per browser on delivery. */
+/**
+ * Video URL.
+ *
+ * `f_mp4`, not `f_auto`. Cloudinary was not negotiating a browser format here —
+ * it answered `video/quicktime` even to a Chrome user agent sending a video
+ * Accept header, which is the original container rather than anything chosen
+ * for the client, and Chrome's support for it is inconsistent. H.264 in MP4
+ * plays everywhere.
+ */
 export function video(id: string): string {
-  return `${BASE}/video/upload/f_auto,q_auto/${id}`
+  return `${BASE}/video/upload/f_mp4,q_auto/${id}`
+}
+
+/**
+ * The first frame of a video, given the video's own URL.
+ *
+ * Lets a list hold images and videos side by side without carrying a separate
+ * poster for each one.
+ */
+export function posterFor(videoUrl: string): string {
+  return `${videoUrl.replace('/video/upload/', '/video/upload/so_0,')}.jpg`
 }
 
 /**
@@ -165,16 +183,17 @@ export const PHOTOGRAPHY_PORTRAIT: string[] = [
   img('IMG_4189'),
   img('IMG_6173'),
   img('IMG_6200_2'),
-  img('IMG_9284'),
   img('IMG_9811'),
   img('IMG_9813'),
   img('IMG_9838'),
   /** Birds on a streetlamp. */
   img('Screenshot_2025-06-21_at_15.19.54'),
   img('Screenshot_2025-06-21_at_15.20.35'),
+  /** A pan along a wall of framed paintings. Portrait, like its neighbours. */
+  video('IMG_1982'),
 ]
 
-/** All 19, for anything that wants the set rather than one orientation. */
+/** Every photograph and the one clip, for anything wanting the whole set. */
 export const PHOTOGRAPHY: string[] = [...PHOTOGRAPHY_LANDSCAPE, ...PHOTOGRAPHY_PORTRAIT]
 
 /** The platform as it was before any of this work. */

@@ -3,7 +3,7 @@ import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-m
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import BentoTile from './BentoTile'
 import useFinePointer from './useFinePointer'
-import { PHOTOGRAPHY_LANDSCAPE, PHOTOGRAPHY_PORTRAIT } from '../../../constants/media'
+import { PHOTOGRAPHY_LANDSCAPE, PHOTOGRAPHY_PORTRAIT, posterFor } from '../../../constants/media'
 import { EMAIL_ADDRESS, HERO_BODY, HERO_HEADLINE, PROJECTS } from './data'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
@@ -160,6 +160,11 @@ const PHOTO_INTERVAL = 3500
 const PHOTO_STEPS =
   2 * Math.max(PHOTOGRAPHY_PORTRAIT.length, Math.ceil(PHOTOGRAPHY_LANDSCAPE.length / 2))
 
+/** Cloudinary delivery paths say plainly which one a source is. */
+function isClip(src: string): boolean {
+  return src.includes('/video/upload/')
+}
+
 function pageSources(step: number): string[] {
   const pair = Math.floor(step / 2)
 
@@ -199,12 +204,33 @@ function PhotoPage({
       data-turning={turning}
       onAnimationEnd={onTurned}
     >
-      {sources.map((src) => (
-        <span className="photo-slot" key={src}>
-          {/* Decorative; the tile's label carries the meaning */}
-          <img src={src} alt="" className="photo-frame" loading="eager" decoding="async" />
-        </span>
-      ))}
+      {sources.map((src) =>
+        isClip(src) ? (
+          <span className="photo-slot" key={src}>
+            {/*
+              A page only mounts while it is showing, so the clip starts when
+              its page arrives and is torn down when the page turns — no need
+              to watch for visibility the way a scrolling video would.
+            */}
+            <video
+              src={src}
+              poster={posterFor(src)}
+              className="photo-frame"
+              aria-hidden="true"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          </span>
+        ) : (
+          <span className="photo-slot" key={src}>
+            {/* Decorative; the tile's label carries the meaning */}
+            <img src={src} alt="" className="photo-frame" loading="eager" decoding="async" />
+          </span>
+        ),
+      )}
     </span>
   )
 }
@@ -270,7 +296,9 @@ function PhotoTile() {
   useEffect(() => {
     pageSources((step + 1) % PHOTO_STEPS).forEach((src) => {
       const image = new Image()
-      image.src = src
+      // A clip cannot be warmed this way; its first frame can, which is what
+      // the turn uncovers before playback starts
+      image.src = isClip(src) ? posterFor(src) : src
     })
   }, [step])
 
