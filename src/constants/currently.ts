@@ -53,9 +53,9 @@ export const RECENT_READ: RecentRead = {
 export const SUBSTACK_URL = 'https://engineeredbydesign.substack.com'
 
 export const LATEST_POST: SubstackPost = {
-  title: 'PLACEHOLDER — your most recent Substack post',
-  date: 'Mon 2026',
-  href: SUBSTACK_URL,
+  title: 'Designing for delegation',
+  date: 'Sep 2026',
+  href: `${SUBSTACK_URL}/p/designing-for-delegation`,
 }
 
 /** Where she is — drives the live clock tile */
