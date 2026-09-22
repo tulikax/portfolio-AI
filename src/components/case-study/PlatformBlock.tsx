@@ -77,7 +77,6 @@ export default function PlatformBlock({ section, index }: Props) {
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
               fontSize: 'clamp(1.6rem, 3.5vw, 2.5rem)',
               fontWeight: 400,
               letterSpacing: '-0.03em',

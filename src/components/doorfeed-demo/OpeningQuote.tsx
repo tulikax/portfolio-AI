@@ -16,7 +16,6 @@ export default function OpeningQuote() {
         <blockquote
           style={{
             ...DISPLAY,
-            fontStyle: 'italic',
             fontWeight: 300,
             fontSize: 'clamp(1.125rem, 2.3vw, 1.5rem)',
             lineHeight: 1.4,

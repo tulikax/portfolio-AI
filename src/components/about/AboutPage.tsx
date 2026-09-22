@@ -74,7 +74,6 @@ export default function AboutPage() {
               transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
               style={{
                 fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
                 fontSize: 'clamp(2rem, 6vw, 4rem)',
                 letterSpacing: '-0.04em',
                 lineHeight: 0.95,
@@ -120,7 +119,6 @@ export default function AboutPage() {
               <h2
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontStyle: 'italic',
                   fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                   letterSpacing: '-0.04em',
                   lineHeight: 0.92,

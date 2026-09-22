@@ -48,7 +48,6 @@ export default function ChapterHead({ num, eyebrow, title }: Props) {
             style={{
               fontFamily: 'var(--font-display)',
               fontWeight: 400,
-              fontStyle: 'italic',
               fontSize: '1.0625rem',
               letterSpacing: '0.01em',
               color: ink(0.4),

@@ -311,7 +311,8 @@ export default function HeroSection({
         maxWidth: 'none',
         whiteSpace: isMobile ? 'normal' : 'nowrap',
         lineHeight: 1.65,
-        fontStyle: 'italic',
+        // Forum has no italic face; the sans intro keeps its slant
+        fontStyle: splitLayout ? 'normal' : 'italic',
         margin: '24px 0 0',
         minHeight: isMobile ? '1.75rem' : '2rem',
         position: 'relative',
@@ -349,7 +350,6 @@ export default function HeroSection({
             fontSize: sans
               ? (isMobile ? '0.98rem' : '1.05rem')
               : (isMobile ? '1.05rem' : '1.25rem'),
-            fontStyle: sans ? 'normal' : 'italic',
             color: sans ? 'rgb(var(--ink) / 0.55)' : 'rgb(var(--ink) / 0.66)',
             lineHeight: 1.65,
             margin: '0 0 0.9rem',
@@ -425,7 +425,6 @@ export default function HeroSection({
               fontWeight: 300,
               fontSize: isMobile ? '1.35rem' : '1.5rem',
               color: 'rgb(var(--ink) / 0.62)',
-              fontStyle: 'italic',
               lineHeight: 1.6,
               margin: '20px 0 0',
               maxWidth: '900px',

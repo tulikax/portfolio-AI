@@ -137,7 +137,6 @@ export default function StackSection() {
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               letterSpacing: '-0.04em',
               lineHeight: 0.92,

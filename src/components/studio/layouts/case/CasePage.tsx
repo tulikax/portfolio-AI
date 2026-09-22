@@ -65,7 +65,6 @@ function CaseHeader({ project }: { project: ReturnType<typeof getProject> & obje
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontStyle: 'italic',
           fontWeight: 400,
           fontSize: 'clamp(34px, 5vw, 64px)',
           lineHeight: 1.04,

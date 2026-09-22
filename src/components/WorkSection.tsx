@@ -397,7 +397,7 @@ export default function WorkSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: 'var(--font-display)', fontStyle: 'italic',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em',
             lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0', fontWeight: 400,
           }}

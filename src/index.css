@@ -6,7 +6,7 @@ html {
 }
 
 @theme inline {
-  --font-heading: 'Bodoni Moda', serif;
+  --font-heading: 'Forum', serif;
   --font-body: 'Barlow', sans-serif;
   --font-sans: 'Barlow', sans-serif;
 }
@@ -15,7 +15,7 @@ html {
   /* ─── Typography tokens — the only place font families are named.
      (Exception: canvas code in ParticleTitle/ProjectLoadingScreen needs
      literal family names; keep those in sync with --font-display.) ─── */
-  --font-display: 'Bodoni Moda', serif;
+  --font-display: 'Forum', serif;
   --font-body: 'Barlow', sans-serif;
 
   /* ─── Colour channels — flip these two for light mode.

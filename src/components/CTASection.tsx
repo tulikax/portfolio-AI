@@ -34,7 +34,6 @@ export default function CTASection() {
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.9,

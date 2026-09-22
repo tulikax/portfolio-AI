@@ -146,7 +146,7 @@ function DesktopProcess() {
 
         {/* Heading */}
         <div style={{ position: 'relative', textAlign: 'center', zIndex: 3, padding: '0 1.5rem', flexShrink: 0 }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
             How I work.
           </h2>
           <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '32rem', margin: '0 auto' }}>
@@ -264,7 +264,7 @@ function MobileProcess() {
         transition={{ duration: 0.7, ease: EASE_OUT }}
         style={{ textAlign: 'center', marginBottom: '3rem' }}
       >
-        <h2 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(2rem, 8vw, 3rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 8vw, 3rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
           How I work.
         </h2>
         <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto' }}>

@@ -55,7 +55,6 @@ export default function NextProject({ nextProject }: Props) {
                 <h2
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontStyle: 'italic',
                     fontSize: 'clamp(2rem, 5vw, 3.75rem)',
                     fontWeight: 400,
                     letterSpacing: '-0.04em',

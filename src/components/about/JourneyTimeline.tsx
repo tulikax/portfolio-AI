@@ -80,7 +80,7 @@ export default function JourneyTimeline() {
               </p>
 
               <h3 style={{
-                fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 400,
+                fontFamily: 'var(--font-display)', fontWeight: 400,
                 fontSize: '1.35rem', letterSpacing: '-0.02em', lineHeight: 1.15,
                 color: 'var(--ink-solid)', margin: '0 0 0.75rem',
               }}>

@@ -65,7 +65,6 @@ export function Hero() {
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontStyle: 'italic',
           fontWeight: 400,
           // Half the previous clamp, so it wraps the same way at half the size
           fontSize: 'clamp(20px, 3.2vw, 42px)',
