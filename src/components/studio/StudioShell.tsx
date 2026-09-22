@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import LayoutSwitcher from './LayoutSwitcher'
-import useStudioLayout from './useStudioLayout'
+import useStudioLayout, { useEffectiveLayout, useIsCompact } from './useStudioLayout'
 import useStudioTheme from './useStudioTheme'
 import './studio.css'
 
@@ -16,6 +16,8 @@ import './studio.css'
 export default function StudioShell() {
   const location = useLocation()
   const [layout, setLayout] = useStudioLayout()
+  const effectiveLayout = useEffectiveLayout()
+  const compact = useIsCompact()
   const [theme, toggleTheme] = useStudioTheme()
 
   // The body class is what undoes `cursor: none` and the black background set
@@ -25,12 +27,14 @@ export default function StudioShell() {
     return () => document.body.classList.remove('studio-ground')
   }, [])
 
+  // The rendered layout, not the chosen one — the ground colour has to match
+  // what is actually on screen when a narrow viewport forces the board
   useEffect(() => {
-    document.body.dataset.studioLayout = layout
+    document.body.dataset.studioLayout = effectiveLayout
     return () => {
       delete document.body.dataset.studioLayout
     }
-  }, [layout])
+  }, [effectiveLayout])
 
   useEffect(() => {
     // Returning from a case study scrolls to that project instead — see
@@ -46,6 +50,7 @@ export default function StudioShell() {
       <LayoutSwitcher
         value={layout}
         onChange={setLayout}
+        showLayouts={!compact}
         theme={theme}
         onToggleTheme={toggleTheme}
       />

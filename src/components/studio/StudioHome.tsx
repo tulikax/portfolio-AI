@@ -1,15 +1,14 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import AltLayoutPage from './layouts/AltLayoutPage'
-import QuietHome from './QuietHome'
-import useStudioLayout from './useStudioLayout'
+import { useEffectiveLayout } from './useStudioLayout'
 
 /**
- * /studio, showing one of three homepage designs. The switcher and the theme
+ * /studio, showing one of two homepage designs. The switcher and the theme
  * live in StudioShell, which wraps the case study pages too.
  */
 export default function StudioHome() {
-  const [layout] = useStudioLayout()
+  const layout = useEffectiveLayout()
   const location = useLocation()
   const navigate = useNavigate()
   const scrollToProject = location.state?.scrollToProject as string | undefined
@@ -41,6 +40,5 @@ export default function StudioHome() {
     navigate(location.pathname + location.search, { replace: true, state: null })
   }, [scrollToProject, navigate, location.pathname, location.search])
 
-  if (layout === 'quiet') return <QuietHome />
   return <AltLayoutPage work={layout} />
 }

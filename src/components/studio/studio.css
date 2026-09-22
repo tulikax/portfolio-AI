@@ -33,29 +33,21 @@
  * site draws itself. There is no custom cursor here, so the native one has to
  * come back — and body's black background with it, or overscroll shows through.
  */
+/**
+ * Both layouts stand on the same ground, so this is no longer split by
+ * `[data-studio-layout]` — the Quiet layout was the one with a warmer paper.
+ */
 body.studio-ground {
-  background: #f5f5f2;
-}
-
-/* The three layouts stand on different grounds */
-body.studio-ground[data-studio-layout='stack'],
-body.studio-ground[data-studio-layout='bento'] {
   background: #fcfcfd;
 }
 
-/* .studio paints the quiet ground; the alt layouts bring their own */
-body[data-studio-layout='stack'] .studio,
-body[data-studio-layout='bento'] .studio {
+/* The layouts bring their own surfaces — see tokens.css */
+.studio {
   background: transparent;
 }
 
 /* Dark is opt-in via the toggle — see tokens.css */
 body.studio-ground[data-studio-theme='dark'] {
-  background: #14140f;
-}
-
-body.studio-ground[data-studio-theme='dark'][data-studio-layout='stack'],
-body.studio-ground[data-studio-theme='dark'][data-studio-layout='bento'] {
   background: #0d0f12;
 }
 
