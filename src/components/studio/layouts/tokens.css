@@ -27,6 +27,9 @@
   --color-pill-ink: #ffffff;
   --color-overlay: rgb(10 12 16 / 0.45);
   --color-focus: #15171c;
+  /* Tile watermarks — only ever drawn at low opacity, so these run saturated */
+  --color-pin: #e2622c;
+  --color-phone: #2f6fe0;
 
   /* Project tints */
   --tint-doorfeed: #cfdce9;
@@ -126,6 +129,9 @@ body[data-studio-theme='dark'] .studio-alt {
   --color-pill: #eceef1;
   --color-pill-ink: #0d0f12;
   --color-focus: #eceef1;
+  /* Lifted from the light values: a mid hue at 15% disappears on #16191e */
+  --color-pin: #ff8449;
+  --color-phone: #6aa4ff;
   --tint-doorfeed: #223140;
   --tint-sigtech: #2a2640;
   --tint-deloitte: #1e3027;
@@ -524,7 +530,6 @@ body .pocket--static * {
 .case-figure {
   display: block;
   font-family: var(--font-display);
-  font-style: italic;
   font-weight: 400;
   font-size: clamp(44px, 5vw, 64px);
   line-height: 1;
@@ -777,7 +782,6 @@ body .pocket--static * {
 .stack-headline {
   margin: clamp(12px, 2vw, 24px) 0 0;
   font-family: var(--font-display);
-  font-style: italic;
   font-weight: 400;
   font-size: clamp(28px, 3.6vw, 50px);
   line-height: 1.08;
@@ -868,19 +872,31 @@ body .pocket--static * {
  */
 @media (min-width: 560px) {
   .bento-w2,
-  .bento-w2h2,
-  .bento-w4 {
+  .bento-w2h2 {
     grid-column: span 2;
   }
 
   .bento-w2h2 {
     grid-row: span 2;
   }
-}
 
-@media (min-width: 900px) {
-  .bento-w4 {
-    grid-column: span 4;
+  /**
+   * A single-column tile held square.
+   *
+   * The square is a floor, not a lock. `aspect-ratio` here would win over the
+   * grid's stretch and leave the tile short of the row's bottom edge whenever
+   * something beside it is taller — which Intro is between 900px and ~1050px,
+   * where its copy needs more height than one column is wide. Sizing the inner
+   * tile against the cell's own inline size instead gives the same square at
+   * rest, but lets it grow with the row so the three bottom edges always line
+   * up. (Hence `container-type` on the cell: `cqw` resolves to its width.)
+   */
+  .bento-sq {
+    container-type: inline-size;
+  }
+
+  .bento-sq > .bento-tile {
+    min-height: 100cqw;
   }
 }
 
@@ -895,7 +911,106 @@ body .pocket--static * {
   border-color: transparent;
 }
 
-.bento-email-big {
+/* ── Tile watermarks ──────────────────────────────────────────────────────── */
+
+/**
+ * An icon used as ground rather than as a label.
+ *
+ * Centred on the tile's vertical axis and hung past the left edge so the tile's
+ * `overflow: hidden` crops it — a shape the background happens to contain, not
+ * an icon sitting beside the text. Shared by the location and contact tiles so
+ * the two read as one device in two colours; only the hue differs.
+ *
+ * At 15% it sits under the copy without competing, which is why the text above
+ * it needs nothing more than its own stacking context.
+ */
+.bento-mark {
+  position: absolute;
+  /* Left offset scales with the width, so the fraction hanging off the edge holds */
+  top: 50%;
+  left: -20%;
+  transform: translateY(-50%);
+  width: 78%;
+  height: auto;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+.bento-location {
+  position: relative;
+}
+
+.bento-location-pin {
+  color: var(--color-pin);
+}
+
+.bento-contact-phone {
+  color: var(--color-phone);
+}
+
+/* ── Contact card ─────────────────────────────────────────────────────────── */
+
+/**
+ * The card is a flip, so the two faces are stacked and the tile's own padding
+ * is the frame both sit inside.
+ *
+ * The inherited `overflow: hidden` stays: a face rotating about Y only ever
+ * projects narrower than its box, so there is nothing to clip — and the
+ * watermark behind them needs the crop.
+ */
+.bento-contact {
+  position: relative;
+  perspective: 900px;
+}
+
+.bento-flip {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  transform-style: preserve-3d;
+  transition: transform var(--duration-reveal) var(--ease-out);
+}
+
+.bento-flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  backface-visibility: hidden;
+}
+
+.bento-flip-back {
+  transform: rotateY(180deg);
+}
+
+/**
+ * Hover flips; focus flips too, so the back's links are visible to whoever
+ * tabs into them rather than being read out from a face turned away.
+ *
+ * Without hover there is nothing to trigger the turn, so the card simply rests
+ * on its back and the front face is the one hidden.
+ */
+@media (hover: hover) {
+  .bento-contact:hover .bento-flip,
+  .bento-contact:focus-within .bento-flip {
+    transform: rotateY(180deg);
+  }
+}
+
+@media (hover: none) {
+  .bento-flip {
+    transform: rotateY(180deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-flip {
+    transition: none;
+  }
+}
+
+.bento-contact-big {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 5px;
@@ -903,8 +1018,42 @@ body .pocket--static * {
   transition: text-decoration-color var(--duration-base) var(--ease-out);
 }
 
-.bento-email:hover .bento-email-big {
+.bento-contact:hover .bento-contact-big {
   text-decoration-color: currentColor;
+}
+
+.bento-contact-links {
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bento-contact-links a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-top: 1px solid var(--color-line);
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.bento-contact-links a:hover {
+  opacity: 0.6;
+}
+
+.bento-contact-value {
+  color: var(--color-muted);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bento-band {
@@ -999,26 +1148,24 @@ body .pocket--static * {
  * photographs reads as a glitch rather than a change.
  */
 /**
- * A portrait keeps `contain`: the tall frame is 0.71 and the portraits sit
- * around 0.75, so almost nothing is left over.
+ * Every photograph fills its slot.
+ *
+ * The landscapes needed this first: they run from 1.16 to 1.85 against a 1.43
+ * slot, so `contain` left each one a different amount of mat and a pair never
+ * lined up — one picture floating in grey above another that reached the edges.
+ *
+ * The portraits now match, and the cost is uneven: they run from 0.56 to 0.75
+ * against a frame near 0.58 at desktop widths. The 3:2-ish majority lose a few
+ * percent off the height, but the two 4:3 pictures (IMG_0312, IMG_1397) give up
+ * roughly a fifth of their width. Worth it for a tile with no mat in it, but if
+ * either of those two ever looks wrongly cut, this is why — the fix would be a
+ * focal point per image, not a return to `contain`.
  */
 .photo-frame {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-}
-
-/**
- * The landscapes fill instead.
- *
- * They run from 1.16 to 1.85 against a 1.43 slot, so `contain` left each one a
- * different amount of mat and a pair never lined up — one picture floating in
- * grey above another that reached the edges. Filling costs a modest crop and
- * buys two bands of exactly the same size.
- */
-.photo-page[data-mode='landscape'] .photo-frame {
   object-fit: cover;
 }
 

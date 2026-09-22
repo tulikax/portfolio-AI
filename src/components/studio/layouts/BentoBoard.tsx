@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MapPin, Phone } from 'lucide-react'
 import BentoTile from './BentoTile'
 import useFinePointer from './useFinePointer'
 import { PHOTOGRAPHY_LANDSCAPE, PHOTOGRAPHY_PORTRAIT, posterFor } from '../../../constants/media'
-import { EMAIL_ADDRESS, HERO_BODY, HERO_HEADLINE, PROJECTS } from './data'
+import { CONTACT_LINKS, HERO_BODY, HERO_HEADLINE, PROJECTS } from './data'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 /** Kept in sync with --duration-layout and --duration-base. */
@@ -38,7 +38,6 @@ function IntroTile() {
         style={{
           margin: '4px 0 0',
           fontFamily: 'var(--font-display)',
-          fontStyle: 'italic',
           fontWeight: 400,
           fontSize: 'clamp(22px, 2.2vw, 30px)',
           lineHeight: 1.1,
@@ -50,8 +49,7 @@ function IntroTile() {
 
       <p
         style={{
-          margin: 'auto 0 0',
-          paddingTop: 14,
+          margin: '10px 0 0',
           color: 'var(--color-muted)',
           maxWidth: '52ch',
           fontSize: 15,
@@ -64,7 +62,14 @@ function IntroTile() {
   )
 }
 
-function ClockTile() {
+/**
+ * Where I am, with the clock as the supporting detail.
+ *
+ * The tile used to lead with the time, which is a fact about a timezone rather
+ * than about me. London is the answer someone is actually looking for; the
+ * local time underneath is what makes it mean "and this is when I'm around".
+ */
+function LocationTile() {
   const [time, setTime] = useState(() => londonTime())
 
   useEffect(() => {
@@ -73,22 +78,33 @@ function ClockTile() {
   }, [])
 
   return (
-    <div className="bento-tile">
-      <span style={meta}>Time in London</span>
-      <span
-        style={{
-          marginTop: 'auto',
-          fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(44px, 4.6vw, 64px)',
-          fontVariantNumeric: 'tabular-nums',
-          lineHeight: 1,
-        }}
-      >
-        {time}
-      </span>
+    <div className="bento-tile bento-location">
+      {/* Decorative: the place is already named in the text below */}
+      <MapPin className="bento-mark bento-location-pin" aria-hidden="true" strokeWidth={1} />
+
+      <span style={meta}>Currently in</span>
+
+      <div style={{ position: 'relative', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <span style={{ fontFamily: 'var(--font-display)', fontSize: PLACE_SIZE, lineHeight: 1 }}>London</span>
+
+        <span
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: `calc(${PLACE_SIZE} / 2)`,
+            fontVariantNumeric: 'tabular-nums',
+            lineHeight: 1.2,
+            color: 'var(--color-muted)',
+          }}
+        >
+          {time} local
+        </span>
+      </div>
     </div>
   )
 }
+
+/** The place name's size; the clock under it is derived as half of this. */
+const PLACE_SIZE = 'clamp(44px, 4.6vw, 64px)'
 
 function londonTime() {
   return new Intl.DateTimeFormat('en-GB', {
@@ -98,15 +114,51 @@ function londonTime() {
   }).format(new Date())
 }
 
-function EmailTile() {
+/**
+ * Three ways to reach me, behind a flip.
+ *
+ * The front is the invitation and the back is the list, so the tile reads as
+ * one clear offer at rest instead of a stack of three links competing with the
+ * board around it.
+ *
+ * The flip is hover-or-focus, and `@media (hover: hover)` gates it: on touch
+ * there is no hover to give, so the back face is simply what the tile shows.
+ * Both faces stay in the DOM either way — the links have to be reachable by
+ * keyboard and screen reader whether or not the card has turned.
+ */
+function ContactTile() {
   return (
-    <a href={`mailto:${EMAIL_ADDRESS}`} className="bento-tile bento-email">
-      <span style={meta}>Say hello</span>
-      <span style={{ ...big, marginTop: 'auto' }} className="bento-email-big">
-        Email me
-      </span>
-      <span style={meta}>{EMAIL_ADDRESS}</span>
-    </a>
+    <div className="bento-tile bento-contact">
+      {/* Sits outside .bento-flip so it stays put while the faces turn */}
+      <Phone className="bento-mark bento-contact-phone" aria-hidden="true" strokeWidth={1} />
+
+      <div className="bento-flip">
+        <div className="bento-flip-face">
+          <span style={meta}>Say hello</span>
+          <span style={{ ...big, marginTop: 'auto' }} className="bento-contact-big">
+            Get in touch
+          </span>
+        </div>
+
+        <div className="bento-flip-face bento-flip-back">
+          <span style={meta}>Say hello</span>
+          <ul className="bento-contact-links">
+            {CONTACT_LINKS.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+                  rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}
+                >
+                  <span>{link.label}</span>
+                  <span className="bento-contact-value">{link.value}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -149,10 +201,11 @@ const PHOTO_INTERVAL = 3500
 /**
  * Pages alternate: one portrait on its own, then two landscapes together.
  *
- * A portrait alone gets the whole tall frame, which is close to its own shape,
- * so it is shown nearly whole. Two landscapes halve that frame into two wide
- * bands, which is close to theirs. Mixing all three in one page gave every
- * picture a slot shaped for something else.
+ * A portrait alone gets the whole tall frame, which is close to its own shape.
+ * Two landscapes halve that frame into two wide bands, which is close to
+ * theirs. Mixing all three in one page gave every picture a slot shaped for
+ * something else. Every slot is filled rather than fitted (see `.photo-frame`),
+ * so matching the shapes is what keeps the crop small.
  *
  * Even steps are portrait, odd are a landscape pair, and the pair advances two
  * at a time — so the count covers every portrait once before repeating.
@@ -385,46 +438,55 @@ interface Cell {
   node: ReactNode
 }
 
-const W1 = ''
 const W2 = 'bento-w2'
-const W4 = 'bento-w4'
 const W2H2 = 'bento-w2h2'
+/** One column, held square by aspect-ratio. */
+const SQ = 'bento-sq'
 
 /**
  * Tile order and spans at the 4-column breakpoint.
  *
- * All:                        Work:              About:
- *   Intro(2×2)   Clock(2)       DoorFeed(2×2)      Intro(2×2)  Clock(2)
- *   ↑            Email(2)       SigTech(2×2)       ↑           Email(2)
- *   DoorFeed(2×2) SigTech(2×2)  Deloitte(2×2)      Photo(2×2)  Playlist(2)
- *   Photo(2×2)    Deloitte(2)   Brushh(2×2)        ↑           Off-screen(2)
- *   ↑         Playlist Brushh
- *   Off-screen(4)
+ * All:                            Work:              About:
+ *   Intro(2)   Clock(□) Email(□)   DoorFeed(2×2)      Intro(2) Clock(□) Email(□)
+ *   DoorFeed(2×2)  SigTech(2×2)    SigTech(2×2)       Photo(2×2)  Playlist(2)
+ *   Photo(2×2)     Deloitte(2)     Deloitte(2×2)      ↑           Off-screen(2)
+ *   ↑              Brushh(2)       Brushh(2×2)
+ *   Playlist(2)    Off-screen(2)
  *
- * Intro holds the headline and subline, so it needs two rows; Clock and Email
- * widen to two columns alongside it, which is what keeps every view packing
- * without holes (checked against a dense-packing simulation).
+ * Intro, Clock and Email share the opening row: Intro takes two columns, the
+ * other two take one each and are held square (see `.bento-sq`). That fills
+ * four columns exactly, so the row packs without holes in both the All and
+ * About views — Work doesn't include them.
+ *
+ * The square is only honoured while Intro's copy fits inside one column's
+ * width, since the row grows to its tallest item. That's why Intro lost the
+ * second row it used to span, and why its subline now sits under the headline
+ * instead of being pushed to the tile's floor.
  *
  * Photo takes two columns because the photographs are landscape and were being
- * squeezed into a portrait slot. Playlist drops to a single cell and sits in
- * the same row as Brushh, so the two match — a row is only as tall as the
- * tallest tile in it, which is why the playlist looked oversized while it
- * shared a row with a 2×2 project tile.
+ * squeezed into a portrait slot.
+ *
+ * Below that every remaining tile is two columns wide, which is what puts
+ * Playlist and Off-screen together on the closing row. Brushh sits ahead of
+ * Playlist in the order for that reason alone: it fills the gap beside Photo's
+ * second row, and without it Playlist would take that slot and leave Off-screen
+ * stranded on a row of its own. Off-screen used to span all four columns; at
+ * two it has a partner instead of a band across the foot of the board.
  */
 function useCells(): Cell[] {
   const [doorfeed, sigtech, deloitte, brushh] = PROJECTS
 
   return [
-    { id: 'intro', category: 'about', span: W2H2, spanFiltered: W2H2, node: <IntroTile /> },
-    { id: 'clock', category: 'about', span: W2, spanFiltered: W2, node: <ClockTile /> },
-    { id: 'email', category: 'about', span: W2, spanFiltered: W2, node: <EmailTile /> },
+    { id: 'intro', category: 'about', span: W2, spanFiltered: W2, node: <IntroTile /> },
+    { id: 'clock', category: 'about', span: SQ, spanFiltered: SQ, node: <LocationTile /> },
+    { id: 'email', category: 'about', span: SQ, spanFiltered: SQ, node: <ContactTile /> },
     { id: 'doorfeed', category: 'work', span: W2H2, spanFiltered: W2H2, node: <BentoTile project={doorfeed} eager /> },
     { id: 'sigtech', category: 'work', span: W2H2, spanFiltered: W2H2, node: <BentoTile project={sigtech} /> },
     { id: 'photo', category: 'about', span: W2H2, spanFiltered: W2H2, node: <PhotoTile /> },
     { id: 'deloitte', category: 'work', span: W2, spanFiltered: W2H2, node: <BentoTile project={deloitte} /> },
-    { id: 'playlist', category: 'about', span: W1, spanFiltered: W2, node: <PlaylistTile /> },
-    { id: 'brushh', category: 'work', span: W1, spanFiltered: W2H2, node: <BentoTile project={brushh} /> },
-    { id: 'offscreen', category: 'about', span: W4, spanFiltered: W2, node: <OffScreenTile /> },
+    { id: 'brushh', category: 'work', span: W2, spanFiltered: W2H2, node: <BentoTile project={brushh} /> },
+    { id: 'playlist', category: 'about', span: W2, spanFiltered: W2, node: <PlaylistTile /> },
+    { id: 'offscreen', category: 'about', span: W2, spanFiltered: W2, node: <OffScreenTile /> },
   ]
 }
 
