@@ -49,8 +49,8 @@ export const RECENT_READ: RecentRead = {
   iconUrl: 'https://substack-post-media.s3.amazonaws.com/public/images/5d5a7648-aa0b-4ce6-932c-e766428d1589/apple-touch-icon-120x120.png',
 }
 
-// ⚠️ PLACEHOLDER — your own Substack, not the one above
-export const SUBSTACK_URL = 'https://substack.com'
+/** Tulika's own publication — distinct from RECENT_READ above, which is someone else's. */
+export const SUBSTACK_URL = 'https://engineeredbydesign.substack.com'
 
 export const LATEST_POST: SubstackPost = {
   title: 'PLACEHOLDER — your most recent Substack post',

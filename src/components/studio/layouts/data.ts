@@ -311,13 +311,10 @@ export const EMAIL_ADDRESS = `${'tulikaxu'}@${'gmail.com'}`
  * `value` is what the row shows on the right — the address for email, the
  * handle for the other two, so the card reads as three destinations rather
  * than three identical arrows.
- *
- * ⚠️ Tulika: SUBSTACK_URL is still the placeholder from `constants/currently.ts`
- * (substack.com, not your publication). Point it at the real one.
  */
 export const CONTACT_LINKS = [
   { label: 'Email', value: EMAIL_ADDRESS, href: `mailto:${EMAIL_ADDRESS}` },
-  { label: 'Substack', value: 'Verified Insider', href: SUBSTACK_URL },
+  { label: 'Substack', value: 'Engineered by Design', href: SUBSTACK_URL },
   { label: 'LinkedIn', value: '/in/tulika-', href: 'https://linkedin.com/in/tulika-' },
 ]
 
