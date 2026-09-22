@@ -147,7 +147,7 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
   // Video fills viewport width at natural aspect ratio; text stacks below.
   if (isMobile) {
     return (
-      <section ref={ref} style={{ background: 'black', paddingTop: '3.5rem' }}>
+      <section ref={ref} style={{ background: 'rgb(var(--surface))', paddingTop: '3.5rem' }}>
         {/* Full-width media at natural proportions */}
         <div style={{ width: '100%', overflow: 'hidden', lineHeight: 0, position: 'relative' }}>
           {isVideo ? (
@@ -167,11 +167,11 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
             />
           )}
           {/* subtle bottom fade into the text section */}
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, transparent, black)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, transparent, rgb(var(--surface)))', pointerEvents: 'none' }} />
         </div>
 
         {/* Text content — in document flow below the video */}
-        <div style={{ padding: '1.5rem 1.25rem 2.5rem', background: 'black' }}>
+        <div style={{ padding: '1.5rem 1.25rem 2.5rem', background: 'rgb(var(--surface))' }}>
           <TextContent data={data} animate={false} />
         </div>
       </section>
@@ -187,7 +187,7 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
         height: '100vh',
         minHeight: '600px',
         overflow: 'hidden',
-        background: 'black',
+        background: 'rgb(var(--surface))',
       }}
     >
       <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.35 }}>

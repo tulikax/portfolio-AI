@@ -22,7 +22,7 @@ export default function RoundMediaView({ media }: { media: RoundMedia }) {
           overflow: 'hidden',
           border: `1px solid ${HAIRLINE_STRONG}`,
           background: 'rgb(var(--surface))',
-          boxShadow: '0 18px 50px rgba(0, 0, 0, 0.5)',
+          boxShadow: '0 18px 50px rgb(var(--shadow-ink) / 0.5)',
         }}
       >
         {media.kind === 'video' ? (

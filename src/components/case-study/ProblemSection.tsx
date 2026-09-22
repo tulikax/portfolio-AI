@@ -89,7 +89,7 @@ export default function ProblemSection({ data }: Props) {
                 borderRadius: '1.25rem',
                 overflow: 'hidden',
                 border: 'none',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                boxShadow: 'var(--shadow-card)',
                 lineHeight: 0,
               }}
             >

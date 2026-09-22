@@ -18,13 +18,6 @@ html {
   --font-display: 'Bodoni Moda', serif;
   --font-body: 'Barlow', sans-serif;
 
-  /* ─── Colour channels — flip these two for light mode.
-     --ink is the text/foreground RGB channel, used as rgb(var(--ink) / <alpha>).
-     Canvas particle colours are literal and need their own theme hook. ─── */
-  --ink: 255 255 255;
-  --ink-solid: rgb(var(--ink));
-  --surface: 0 0 0;
-
   --background: 0 0% 0%;
   --foreground: 0 0% 100%;
   --muted-foreground: 0 0% 100%;
@@ -50,6 +43,47 @@ html {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* The dark palette. Two selectors, not one: `:root` covers the document, and the
+   bare attribute selector lets <ThemeScope theme="dark"> pin a subtree to dark
+   inside a light page — which is the case-study lock this phase defers. `:root`
+   alone would never match a descendant div, leaving ThemeScope inert. */
+:root,
+[data-theme='dark'] {
+  --ink: 242 240 236;
+  --ink-solid: rgb(var(--ink));
+  --surface: 10 10 10;
+
+  /* Shadow ink is its own channel: on paper a shadow is not the foreground
+     colour at low alpha, and the two need to diverge in light mode. */
+  --shadow-ink: 0 0 0;
+
+  /* Composite because inline styles can only consume a finished value.
+     Compose them at call sites: `var(--shadow-hairline), var(--shadow-float)`.
+     Geometry is per-theme — see the light block below for why. */
+  --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.08) inset;
+  --shadow-card: 0 8px 32px rgb(var(--shadow-ink) / 0.5);
+  --shadow-float: 0 20px 60px rgb(var(--shadow-ink) / 0.5);
+}
+
+/* Warm paper and warm ink — both poles pulled off the extremes. Bodoni Moda is
+   a didone and renders far better dark-on-light, where its hairlines stay crisp
+   instead of blooming. */
+:root[data-theme='light'],
+[data-theme='light'] {
+  --ink: 26 24 22;
+  --ink-solid: rgb(var(--ink));
+  --surface: 250 249 246;
+
+  --shadow-ink: 26 24 22;
+
+  /* Not the dark values at lower opacity: the blur roughly halves and the offset
+     tightens. A shadow on paper comes from a near light source and stays close
+     to its object; the same geometry at low alpha reads as a grey smudge. */
+  --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.06) inset;
+  --shadow-card: 0 2px 8px rgb(var(--shadow-ink) / 0.08);
+  --shadow-float: 0 6px 20px rgb(var(--shadow-ink) / 0.10);
 }
 
 @layer base {
@@ -122,7 +156,7 @@ a, button, [role="button"], input, select, textarea, label {
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow:
     inset 0 1px 0 rgb(var(--ink) / 0.14),
-    0 8px 32px rgba(0, 0, 0, 0.35);
+    0 8px 32px rgb(var(--shadow-ink) / 0.35);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -199,7 +233,7 @@ a, button, [role="button"], input, select, textarea, label {
   );
   backdrop-filter: blur(50px) saturate(150%);
   -webkit-backdrop-filter: blur(50px) saturate(150%);
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgb(var(--ink) / 0.15);
+  box-shadow: 4px 4px 4px rgb(var(--shadow-ink) / 0.05), inset 0 1px 1px rgb(var(--ink) / 0.15);
   pointer-events: none;
 }
 
@@ -556,7 +590,7 @@ a, button, [role="button"], input, select, textarea, label {
   border: 1px solid rgb(var(--ink) / 0.20);
   box-shadow:
     inset 0 1px 0 rgb(var(--ink) / 0.18),
-    0 8px 28px rgba(0, 0, 0, 0.45);
+    0 8px 28px rgb(var(--shadow-ink) / 0.45);
   transition:
     background 200ms var(--ease-out),
     border-color 200ms var(--ease-out);

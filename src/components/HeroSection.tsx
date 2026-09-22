@@ -373,7 +373,7 @@ export default function HeroSection({
         onTouchEnd={onTouchEnd}
         style={{
           minHeight: '100vh',
-          background: 'black',
+          background: 'rgb(var(--surface))',
           overflow: 'hidden',
           position: 'relative',
           cursor: 'crosshair',
@@ -530,7 +530,7 @@ export default function HeroSection({
       style={{
         height: '100vh',
         minHeight: '700px',
-        background: 'black',
+        background: 'rgb(var(--surface))',
         overflow: 'hidden',
         position: 'relative',
         cursor: 'crosshair',
@@ -558,7 +558,7 @@ export default function HeroSection({
           zIndex: 5,
           bottom: 0, left: 0, right: 0,
           height: '160px',
-          background: 'linear-gradient(to bottom, transparent 0%, black 100%)',
+          background: 'linear-gradient(to bottom, transparent 0%, rgb(var(--surface)) 100%)',
           pointerEvents: 'none',
         }}
       />

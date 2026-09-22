@@ -105,7 +105,7 @@ export default function CaseStudyPage() {
 
   return (
     <LightboxProvider>
-    <div style={{ background: 'black', minHeight: '100vh' }}>
+    <div style={{ background: 'rgb(var(--surface))', minHeight: '100vh' }}>
       {/* Sticky left side nav — only for case studies with project tabs */}
       {hasProjectTabs && !loaderVisible && <CaseSideNav sections={sideNavSections} />}
 

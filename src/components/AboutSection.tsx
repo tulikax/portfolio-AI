@@ -95,7 +95,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
     <section
       id="about"
       style={{
-        background: 'black',
+        background: 'rgb(var(--surface))',
         paddingTop: '7rem',
         paddingBottom: '9rem',
         paddingLeft: '1.5rem',
