@@ -52,7 +52,7 @@ export default function OverviewStrip({ data }: Props) {
                 fontWeight: 500,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: 'rgb(var(--ink) / 0.40)',
+                color: 'var(--text-3)',
                 fontFamily: 'var(--font-body)',
               }}
             >
@@ -65,7 +65,7 @@ export default function OverviewStrip({ data }: Props) {
                 fontSize: '0.95rem',
                 fontWeight: 300,
                 lineHeight: 1.65,
-                color: 'rgb(var(--ink) / 0.80)',
+                color: 'var(--text-1)',
                 fontFamily: 'var(--font-body)',
                 margin: 0,
               }}

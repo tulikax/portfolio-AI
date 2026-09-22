@@ -88,7 +88,7 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
           position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)',
           width: '2.25rem', height: '2.25rem', borderRadius: '50%',
           background: 'rgba(0,0,0,0.45)', border: '1px solid rgb(var(--ink) / 0.18)',
-          color: 'rgb(var(--ink) / 0.80)', cursor: 'pointer', display: 'flex',
+          color: 'var(--text-1)', cursor: 'pointer', display: 'flex',
           alignItems: 'center', justifyContent: 'center', fontSize: '1rem',
           backdropFilter: 'blur(6px)', transition: 'background 0.15s',
           opacity: offset === 0 ? 0.3 : 1,
@@ -103,7 +103,7 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
           position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)',
           width: '2.25rem', height: '2.25rem', borderRadius: '50%',
           background: 'rgba(0,0,0,0.45)', border: '1px solid rgb(var(--ink) / 0.18)',
-          color: 'rgb(var(--ink) / 0.80)', cursor: 'pointer', display: 'flex',
+          color: 'var(--text-1)', cursor: 'pointer', display: 'flex',
           alignItems: 'center', justifyContent: 'center', fontSize: '1rem',
           backdropFilter: 'blur(6px)', transition: 'background 0.15s',
         }}
@@ -275,8 +275,8 @@ function DecisionsBlock({
 
                   {/* Right: caption text */}
                   <div style={{ paddingTop: '0.25rem' }}>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.65)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500, color: 'var(--text-2)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 300, color: 'var(--text-3)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
                   </div>
 
                 </div>
@@ -290,8 +290,8 @@ function DecisionsBlock({
           {decisions.map((d, i) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: d.image ? '260px 1fr' : '1fr', gap: '1rem', alignItems: 'start' }}>
               <div style={{ borderRadius: '1rem', padding: '1rem 1.25rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
               </div>
               {d.image && (
                 <motion.div
@@ -316,8 +316,8 @@ function DecisionsBlock({
           {decisions.map((d, i) => (
             <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div style={{ borderRadius: '1rem', padding: '1.25rem 1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
               </div>
               {d.image && (
                 <div style={{ borderRadius: '1rem', overflow: 'hidden', border: 'none', lineHeight: 0 }}>
@@ -361,7 +361,7 @@ function OutcomeBlock({
           fontFamily: 'var(--font-body)',
           fontSize: 'clamp(1.25rem, 2.5vw, 1.6rem)',
           fontWeight: 600,
-          color: 'rgb(var(--ink) / 0.92)',
+          color: 'var(--text-1)',
           margin: '0 0 1.25rem 0',
           lineHeight: 1.25,
           letterSpacing: '-0.01em',
@@ -430,7 +430,7 @@ function OutcomeBlock({
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.82rem',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.50)',
+                color: 'var(--text-2)',
                 lineHeight: 1.5,
               }}
             >
@@ -475,7 +475,7 @@ function OutcomeBlock({
               fontFamily: 'var(--font-body)',
               fontSize: '0.88rem',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.42)',
+              color: 'var(--text-3)',
               lineHeight: 1.7,
               margin: 0,
               borderLeft: '2px solid rgb(var(--ink) / 0.12)',
@@ -513,7 +513,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
             )}
           </div>
           {m.caption && (
-            <p style={{ fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', fontFamily: 'var(--font-body)', marginTop: '0.75rem' }}>{m.caption}</p>
+            <p style={{ fontSize: '0.78rem', fontWeight: 300, color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginTop: '0.75rem' }}>{m.caption}</p>
           )}
         </div>
       )
@@ -539,7 +539,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                 fontWeight: 500,
                 letterSpacing: '0.10em',
                 textTransform: 'uppercase',
-                color: 'rgb(var(--ink) / 0.38)',
+                color: 'var(--text-3)',
                 margin: '0 0 1.25rem 0',
               }}
             >
@@ -555,7 +555,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                   fontSize: '1rem',
                   fontWeight: 300,
                   lineHeight: 1.8,
-                  color: 'rgb(var(--ink) / 0.72)',
+                  color: 'var(--text-2)',
                   margin: '0 0 1rem 0',
                 }}
               >
@@ -631,7 +631,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                     fontSize: '1rem',
                     fontWeight: 300,
                     lineHeight: 1.8,
-                    color: 'rgb(var(--ink) / 0.65)',
+                    color: 'var(--text-2)',
                     margin: i === 0 ? '0 0 1rem 0' : '0',
                   }}
                 >
@@ -729,8 +729,8 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               transition={{ duration: 0.55, ease: EASE_OUT }}
               style={{ marginBottom: '2rem' }}
             >
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 300, lineHeight: 1.8, color: 'rgb(var(--ink) / 0.65)', margin: 0 }}>{problemStatement}</p>
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 300, lineHeight: 1.8, color: 'var(--text-2)', margin: 0 }}>{problemStatement}</p>
             </motion.div>
           )}
           {tab.problemImage && (
@@ -750,20 +750,20 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
           {problemStatement && (
             <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.65)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
             </div>
           )}
           <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Project Goal</span>
-            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
+            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Project Goal</span>
+            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
           </div>
           {tab.process && (
             <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Process</span>
-              <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
+              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Process</span>
+              <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
             </div>
           )}
         </div>
@@ -801,7 +801,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
                 <img src={tab.goalMedia.src} alt={tab.goalMedia.alt} onClick={() => openLightbox(tab.goalMedia!.src, tab.goalMedia!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
               {tab.goalMedia.caption && (
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'var(--text-3)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
               )}
             </motion.div>
           )}
@@ -827,7 +827,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
                 <img src={tab.processMedia.src} alt={tab.processMedia.alt} onClick={() => openLightbox(tab.processMedia!.src, tab.processMedia!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
               {tab.processMedia.caption && (
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.processMedia.caption}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'var(--text-3)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.processMedia.caption}</p>
               )}
             </motion.div>
           )}
@@ -870,7 +870,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
                   fontFamily: 'var(--font-display)',
                   fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.90)',
+                  color: 'var(--text-1)',
                   margin: '0 0 3rem 0',
                   lineHeight: 1.0,
                   letterSpacing: '-0.03em',
@@ -951,7 +951,7 @@ export default function ProjectTabs({ data }: Props) {
                 fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.90)',
+                color: 'var(--text-1)',
                 margin: '0 0 3rem 0',
                 lineHeight: 1.0,
                 letterSpacing: '-0.03em',
@@ -984,7 +984,7 @@ export default function ProjectTabs({ data }: Props) {
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.90)',
+              color: 'var(--text-1)',
               margin: '0 0 3rem 0',
               lineHeight: 1.0,
               letterSpacing: '-0.03em',

@@ -45,7 +45,7 @@ export default function JourneyTimeline() {
               fontFamily: 'var(--font-body)',
               fontWeight: 400,
               fontSize: '0.7rem',
-              color: 'rgb(var(--ink) / 0.45)',
+              color: 'var(--text-3)',
               position: 'relative',
               zIndex: 1,
             }}>
@@ -74,7 +74,7 @@ export default function JourneyTimeline() {
               <p style={{
                 fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
                 letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: 'rgb(var(--ink) / 0.35)', margin: '0 0 0.6rem',
+                color: 'var(--text-3)', margin: '0 0 0.6rem',
               }}>
                 {entry.period}
               </p>
@@ -84,12 +84,12 @@ export default function JourneyTimeline() {
                 fontSize: '1.35rem', letterSpacing: '-0.02em', lineHeight: 1.15,
                 color: 'var(--ink-solid)', margin: '0 0 0.75rem',
               }}>
-                {entry.role} <span style={{ color: 'rgb(var(--ink) / 0.45)' }}>· {entry.place}</span>
+                {entry.role} <span style={{ color: 'var(--text-3)' }}>· {entry.place}</span>
               </h3>
 
               <p style={{
                 fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.95rem',
-                color: 'rgb(var(--ink) / 0.66)', lineHeight: 1.65, margin: 0,
+                color: 'var(--text-2)', lineHeight: 1.65, margin: 0,
               }}>
                 {entry.body}
               </p>
@@ -97,7 +97,7 @@ export default function JourneyTimeline() {
               {entry.takeaway && (
                 <p style={{
                   fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.875rem',
-                  color: 'rgb(var(--ink) / 0.45)', lineHeight: 1.6,
+                  color: 'var(--text-3)', lineHeight: 1.6,
                   margin: '0.9rem 0 0', paddingTop: '0.9rem',
                   borderTop: '1px solid rgb(var(--ink) / 0.08)',
                 }}>

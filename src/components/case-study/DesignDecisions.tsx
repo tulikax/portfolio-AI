@@ -28,7 +28,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
           fontWeight: 500,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: 'rgb(var(--ink) / 0.28)',
+          color: 'var(--text-3)',
           fontFamily: 'var(--font-body)',
         }}
       >
@@ -41,7 +41,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
           fontFamily: 'var(--font-body)',
           fontSize: '1rem',
           fontWeight: 500,
-          color: 'rgb(var(--ink) / 0.90)',
+          color: 'var(--text-1)',
           margin: 0,
           lineHeight: 1.4,
         }}
@@ -55,7 +55,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
           fontSize: '0.92rem',
           fontWeight: 300,
           lineHeight: 1.7,
-          color: 'rgb(var(--ink) / 0.60)',
+          color: 'var(--text-2)',
           fontFamily: 'var(--font-body)',
           margin: 0,
         }}
@@ -92,7 +92,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
           <span
             style={{
               fontSize: '1rem',
-              color: 'rgb(var(--ink) / 0.28)',
+              color: 'var(--text-3)',
               fontFamily: 'var(--font-body)',
             }}
           >

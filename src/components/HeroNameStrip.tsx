@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { RotateCcw } from 'lucide-react'
 import { HERO_PHRASES, shufflePhrases, type HeroPhrase } from '../constants/heroPhrases'
+import { useTheme } from '../theme/useTheme'
 import tulikaAvatar from '../assets/tulika-avatar.png'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
@@ -16,12 +17,28 @@ const CLUSTER_SHIFT = 34 // pulls the cluster left so right-hand tags clear the 
 /**
  * Petal tints lifted from the illustration — rose, lavender, sage, blush.
  * Kept low-alpha with no coloured bloom so the tags read as paper notes, not lit chips.
+ *
+ * These cannot go through the ink ramp: the hue IS the point, and a token that
+ * only varies opacity cannot turn a near-white tint into a readable one on paper.
+ * So there are two palettes rather than one, picked by the resolved theme.
  */
-const PETALS = [
+const PETALS_DARK = [
   { border: 'rgba(244,158,180,0.26)', from: 'rgba(244,158,180,0.09)', to: 'rgba(244,158,180,0.03)', text: 'rgba(255,226,234,0.85)' },
   { border: 'rgba(186,170,232,0.26)', from: 'rgba(186,170,232,0.09)', to: 'rgba(186,170,232,0.03)', text: 'rgba(233,226,255,0.85)' },
   { border: 'rgba(158,198,164,0.24)', from: 'rgba(158,198,164,0.08)', to: 'rgba(158,198,164,0.03)', text: 'rgba(226,244,230,0.85)' },
   { border: 'rgba(242,190,158,0.26)', from: 'rgba(242,190,158,0.09)', to: 'rgba(242,190,158,0.03)', text: 'rgba(255,236,222,0.85)' },
+]
+
+/**
+ * Same four hues, inverted in role: on paper the tint becomes the fill and the
+ * text drops to a deep version of the hue. Fills sit higher than dark's because a
+ * 0.09 tint that reads as a lit chip on black is invisible on paper.
+ */
+const PETALS_LIGHT = [
+  { border: 'rgba(214,122,152,0.55)', from: 'rgba(244,158,180,0.26)', to: 'rgba(244,158,180,0.12)', text: 'rgba(138,28,64,0.95)' },
+  { border: 'rgba(150,132,206,0.55)', from: 'rgba(186,170,232,0.26)', to: 'rgba(186,170,232,0.12)', text: 'rgba(70,48,130,0.95)' },
+  { border: 'rgba(122,168,130,0.55)', from: 'rgba(158,198,164,0.28)', to: 'rgba(158,198,164,0.12)', text: 'rgba(38,84,48,0.95)' },
+  { border: 'rgba(212,152,110,0.55)', from: 'rgba(242,190,158,0.28)', to: 'rgba(242,190,158,0.12)', text: 'rgba(128,62,18,0.95)' },
 ]
 
 /**
@@ -85,6 +102,8 @@ export function HeroNameStrip({ compact = false, start = true }: {
   /** Hold the entrance until the line above has finished typing */
   start?: boolean
 }) {
+  const { resolved } = useTheme()
+  const PETALS = resolved === 'light' ? PETALS_LIGHT : PETALS_DARK
   const [picked, setPicked] = useState(() => roll(TAG_COUNT))
   // Tags scale away, get swapped, then scale back in — same spring both directions
   const [tagsIn, setTagsIn] = useState(true)

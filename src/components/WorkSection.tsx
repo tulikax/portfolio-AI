@@ -207,7 +207,7 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
           <span style={{
             position: 'absolute', top: '1.5rem', right: '1.75rem',
             fontFamily: 'var(--font-body)', fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.20)', fontSize: '0.75rem', letterSpacing: '0.05em',
+            color: 'var(--text-3)', fontSize: '0.75rem', letterSpacing: '0.05em',
           }}>{role.number}</span>
 
           <div style={{ marginBottom: '0.25rem' }}>
@@ -215,14 +215,14 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
               {role.title}
             </span>
             {' '}
-            <span className="role-card-title" style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', fontSize: '1rem' }}>
+            <span className="role-card-title" style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-2)', fontSize: '1rem' }}>
               @ {role.company}
             </span>
           </div>
 
           <p className="role-card-duration" style={{
             fontFamily: 'var(--font-body)', fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.35)', fontSize: '0.7rem',
+            color: 'var(--text-3)', fontSize: '0.7rem',
             letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1.25rem',
           }}>{role.duration}</p>
 
@@ -234,12 +234,12 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
             }}>
               <p style={{
                 fontFamily: 'var(--font-body)', fontWeight: 500,
-                color: 'rgb(var(--ink) / 0.40)', fontSize: '0.65rem',
+                color: 'var(--text-3)', fontSize: '0.65rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.25rem',
               }}>{sub.label}</p>
               <p className="role-card-body" style={{
                 fontFamily: 'var(--font-body)', fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.65)', fontSize: '0.8rem', lineHeight: 1.6,
+                color: 'var(--text-2)', fontSize: '0.8rem', lineHeight: 1.6,
               }}>{sub.content}</p>
             </div>
           ))}
@@ -257,7 +257,7 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
           }}>
             <p style={{
               fontFamily: 'var(--font-body)', fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.30)', fontSize: '0.7rem',
+              color: 'var(--text-3)', fontSize: '0.7rem',
               letterSpacing: '0.12em', textTransform: 'uppercase',
             }}>{role.skills.join(' · ')}</p>
 

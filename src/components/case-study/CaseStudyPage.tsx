@@ -150,7 +150,7 @@ export default function CaseStudyPage() {
                 fontFamily: 'var(--font-body)',
                 fontSize: '1rem',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.72)',
+                color: 'var(--text-2)',
                 lineHeight: 1.8,
                 margin: '0 0 1rem 0',
               }}
@@ -245,7 +245,7 @@ export default function CaseStudyPage() {
                   fontFamily: 'var(--font-body)',
                   fontSize: '1rem',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.72)',
+                  color: 'var(--text-2)',
                   lineHeight: 1.8,
                   margin: 0,
                 }}
@@ -279,7 +279,7 @@ export default function CaseStudyPage() {
                 fontFamily: 'var(--font-body)',
                 fontSize: '1rem',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.72)',
+                color: 'var(--text-2)',
                 lineHeight: 1.8,
                 margin: 0,
               }}

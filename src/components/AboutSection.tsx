@@ -202,7 +202,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
             fontSize: '1.05rem',
-            color: 'rgb(var(--ink) / 0.70)',
+            color: 'var(--text-2)',
             lineHeight: 1.7,
             maxWidth: '640px',
           }}
@@ -221,7 +221,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
               fontFamily: 'var(--font-body)',
               fontWeight: 300,
               fontSize: '1.05rem',
-              color: 'rgb(var(--ink) / 0.70)',
+              color: 'var(--text-2)',
               lineHeight: 1.7,
               maxWidth: '640px',
             }}
@@ -241,7 +241,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
             style={{
               borderRadius: '9999px',
               padding: '0.7rem 1.35rem',
-              color: 'rgb(var(--ink) / 0.65)',
+              color: 'var(--text-2)',
               fontSize: '0.9rem',
               fontFamily: 'var(--font-body)',
               fontWeight: 400,
@@ -267,7 +267,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
             style={{
               fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
               letterSpacing: '0.14em', textTransform: 'uppercase',
-              color: 'rgb(var(--ink) / 0.35)', margin: 0,
+              color: 'var(--text-3)', margin: 0,
             }}
           >
             Currently

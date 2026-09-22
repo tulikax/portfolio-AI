@@ -407,7 +407,7 @@ function ProgressBar({ progress, exiting }: { progress: number; exiting: boolean
               fontSize: '0.62rem',
               fontWeight: 400,
               letterSpacing: '0.08em',
-              color: 'rgb(var(--ink) / 0.3)',
+              color: 'var(--text-3)',
             }}
           >
             {Math.round(progress)}%
@@ -480,7 +480,7 @@ export default function ProjectLoadingScreen({
               fontWeight: 500,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
-              color: 'rgb(var(--ink) / 0.38)',
+              color: 'var(--text-3)',
               whiteSpace: 'nowrap',
               pointerEvents: 'none',
             }}

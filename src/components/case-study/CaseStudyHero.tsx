@@ -42,7 +42,7 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
             fontWeight: 500,
             letterSpacing: '0.11em',
             textTransform: 'uppercase',
-            color: 'rgb(var(--ink) / 0.55)',
+            color: 'var(--text-2)',
             marginBottom: '0.75rem',
             fontFamily: 'var(--font-body)',
           }}
@@ -72,7 +72,7 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
         style={{
           fontSize: 'clamp(0.875rem, 1.6vw, 1.2rem)',
           fontWeight: 300,
-          color: 'rgb(var(--ink) / 0.65)',
+          color: 'var(--text-2)',
           fontFamily: 'var(--font-body)',
           margin: '0 0 1.4rem 0',
           maxWidth: '34rem',
@@ -93,10 +93,10 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
           { label: 'Duration', value: data.duration },
         ]).map((meta) => (
           <div key={`${meta.label}-${meta.value}`} style={{ display: 'flex', gap: '0.35rem', alignItems: 'baseline' }}>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 400, color: 'rgb(var(--ink) / 0.45)' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 400, color: 'var(--text-3)' }}>
               {meta.label}
             </span>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-1)' }}>
               {meta.value}
             </span>
           </div>
@@ -111,7 +111,7 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
             <div style={{ width: 28, height: 28, borderRadius: '6px', background: 'rgb(var(--ink) / 0.07)', border: '1px solid rgb(var(--ink) / 0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <img src={`/logos/${tool.slug}.${tool.ext ?? 'svg'}`} alt={tool.name} style={{ width: 16, height: 16, objectFit: 'contain', opacity: 0.75 }} />
             </div>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.6rem', fontWeight: 400, letterSpacing: '0.04em', color: 'rgb(var(--ink) / 0.38)', whiteSpace: 'nowrap' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.6rem', fontWeight: 400, letterSpacing: '0.04em', color: 'var(--text-3)', whiteSpace: 'nowrap' }}>
               {tool.name}
             </span>
           </div>

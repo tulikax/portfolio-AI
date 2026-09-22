@@ -79,7 +79,7 @@ export default function HeroCopyDemo() {
         style={{
           position: 'fixed', top: '1.25rem', left: '50%', transform: 'translateX(-50%)',
           zIndex: 99999, fontFamily: 'var(--font-body)', fontSize: '0.62rem',
-          letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.22)',
+          letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-3)',
           pointerEvents: 'none', whiteSpace: 'nowrap',
         }}
       >
@@ -115,7 +115,7 @@ export default function HeroCopyDemo() {
             padding: '0.4rem 1.1rem', borderRadius: '9999px',
             border: '1px solid rgb(var(--ink) / 0.22)',
             background: 'rgb(var(--ink) / 0.07)',
-            color: 'rgb(var(--ink) / 0.85)',
+            color: 'var(--text-1)',
             fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
           }}
         >

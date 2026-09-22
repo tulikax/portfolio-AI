@@ -166,21 +166,55 @@ own file.
 a compressed ramp for fills and an expanded one for text. Until this lands, light
 mode is permanently *slightly wrong* rather than designed.
 
-**The scale.** 341 `rgb(var(--ink) / X)` call sites, which cluster into four roles:
+## The text ramp — DONE
+
+All 133 `color:` sites now resolve through three tokens rather than raw alphas.
+The tiers were chosen to clear WCAG AA (4.5:1) on their own ground:
+
+| Token | Dark | Light | Replaces |
+|---|---|---|---|
+| `--text-1` | 0.92 → 14.7:1 | 0.92 → 13.6:1 | 25 sites at 0.80–0.95 |
+| `--text-2` | 0.68 → 8.2:1 | 0.76 → 7.9:1 | 46 sites at 0.50–0.75 |
+| `--text-3` | 0.50 → 4.8:1 | 0.62 → 4.8:1 | 62 sites at 0.20–0.45 |
+
+**This raised dark as well as light, deliberately.** The common 0.35 eyebrow
+measured **2.91:1 on dark** and 2.20:1 on light — both below AA. Light mode did not
+introduce that; it made an existing failure visible. Fixing only light would have
+left a known-failing dark ramp with no explanation. This is FONT_AUDIT finding F3,
+now closed.
+
+The sweep matched `color:` properties only. Borders and fills share the `--ink`
+token but sit in a separate 0.02–0.10 band and were untouched — a sweep matching
+the token alone would have flattened them.
+
+Two `onMouseLeave` handlers in `Navbar.tsx` assign colour in JavaScript rather
+than as a `color:` property and needed doing by hand. Worth remembering for the
+fill and border sweeps: a property-scoped regex misses anything set imperatively.
+
+## The hero tags — DONE
+
+`HeroNameStrip`'s `PETALS` hardcode four pastel hues with near-white text, tuned
+for a dark ground and invisible on paper. These cannot go through the ink ramp —
+the hue is the point, and a token that varies only opacity cannot turn a near-white
+tint into a readable one. So there are now two palettes, picked by the resolved
+theme, with the roles inverted on paper: the tint becomes the fill and the text
+drops to a deep version of the same hue. Measured 6.0–7.4:1 against their own pill.
+
+## Still outstanding in Phase 2
 
 | Role | Alpha range | Count | Proposed token |
 |---|---|---|---|
-| Surface fills | ≤ 0.12 | 120 | `--fill-subtle`, `--fill-raised` |
-| Borders and hairlines | 0.13–0.20 | 47 | `--border-hairline` |
-| Secondary text | 0.21–0.45 | 80 | `--text-2`, `--text-3` |
-| Primary-ish text | > 0.45 | 94 | `--text-1` |
+| Surface fills | ≤ 0.12 | ~120 | `--fill-subtle`, `--fill-raised` |
+| Borders and hairlines | 0.13–0.20 | ~47 | `--border-hairline` |
 
 Plus `--weight-body`: light text on dark blooms and reads optically bolder, so body
 copy should sit at 400 on paper where dark uses 300. There are **101
 `fontWeight: 300` occurrences across 36 files** — a token is the only sane route.
 
-**This debt compounds.** Every component written before Phase 2 lands adds new raw
-alpha call sites to the eventual migration, so the cost grows with the delay.
+Fills are the harder half and the reason the original spec flagged this phase:
+`rgb(255 255 255 / 0.08)` on black is a barely-there raised tint, while
+`rgb(26 24 22 / 0.08)` on paper is a distinctly visible grey box. The ramp has to
+compress on paper, not merely invert.
 
 ---
 

@@ -34,7 +34,7 @@ export function NavbarMobileMenu({ open, links, onClose }: NavbarMobileMenuProps
               fontFamily: 'var(--font-body)',
               fontWeight: 400,
               fontSize: '1rem',
-              color: 'rgb(var(--ink) / 0.80)',
+              color: 'var(--text-1)',
               textDecoration: 'none',
               padding: '0.75rem 1rem',
               borderRadius: '1rem',

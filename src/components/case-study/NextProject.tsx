@@ -44,7 +44,7 @@ export default function NextProject({ nextProject }: Props) {
                   fontWeight: 500,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
-                  color: 'rgb(var(--ink) / 0.35)',
+                  color: 'var(--text-3)',
                   fontFamily: 'var(--font-body)',
                   marginBottom: '1rem',
                 }}
@@ -70,7 +70,7 @@ export default function NextProject({ nextProject }: Props) {
                   style={{
                     width: 'clamp(1.25rem, 2.5vw, 2rem)',
                     height: 'clamp(1.25rem, 2.5vw, 2rem)',
-                    color: 'rgb(var(--ink) / 0.45)',
+                    color: 'var(--text-3)',
                     flexShrink: 0,
                   }}
                 />
@@ -134,7 +134,7 @@ export default function NextProject({ nextProject }: Props) {
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.875rem',
                 fontWeight: 400,
-                color: 'rgb(var(--ink) / 0.55)',
+                color: 'var(--text-2)',
                 letterSpacing: '0.04em',
               }}
             >

@@ -76,7 +76,7 @@ export const H2: CSSProperties = {
   letterSpacing: '-0.02em',
   fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
   lineHeight: 1.15,
-  color: 'rgb(var(--ink) / 0.95)',
+  color: 'var(--text-1)',
 }
 
 export const H3: CSSProperties = {
@@ -85,7 +85,7 @@ export const H3: CSSProperties = {
   letterSpacing: '-0.015em',
   fontSize: 'clamp(1.125rem, 2.1vw, 1.375rem)',
   lineHeight: 1.25,
-  color: 'rgb(var(--ink) / 0.95)',
+  color: 'var(--text-1)',
 }
 
 export const H4: CSSProperties = {
@@ -94,7 +94,7 @@ export const H4: CSSProperties = {
   letterSpacing: '-0.01em',
   fontSize: '1.0625rem',
   lineHeight: 1.3,
-  color: 'rgb(var(--ink) / 0.95)',
+  color: 'var(--text-1)',
 }
 
 export const CHAPTER_TITLE: CSSProperties = {

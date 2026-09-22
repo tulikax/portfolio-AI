@@ -44,7 +44,7 @@ function ProcessScrollEyebrow() {
         fontSize: '0.65rem',
         letterSpacing: '0.14em',
         textTransform: 'uppercase',
-        color: 'rgb(var(--ink) / 0.35)',
+        color: 'var(--text-3)',
         textAlign: 'center',
         margin: 0,
         flexShrink: 0,
@@ -149,7 +149,7 @@ function DesktopProcess() {
           <h2 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
             How I work.
           </h2>
-          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '32rem', margin: '0 auto' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '32rem', margin: '0 auto' }}>
             My process is simple: stay close to the problem, move fast without losing rigour, and use AI to clear the path for the thinking that actually matters.
           </p>
         </div>
@@ -180,18 +180,18 @@ function DesktopProcess() {
                   boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / 0.60)',
                 }}>
                   <div style={{ position: 'absolute', top: 0, left: '1.25rem', right: '1.25rem', height: '1px', background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.18), transparent)' }} />
-                  <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.20)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
+                  <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
                     {step.number}
                   </span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.875rem' }}>
                     <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', background: 'rgb(var(--ink) / 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <Icon style={{ width: '0.9rem', height: '0.9rem', color: 'rgb(var(--ink) / 0.7)' }} />
+                      <Icon style={{ width: '0.9rem', height: '0.9rem', color: 'var(--text-2)' }} />
                     </div>
                     <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: 'var(--ink-solid)', fontSize: '1rem', margin: 0 }}>
                       {step.title}
                     </h3>
                   </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.65)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-2)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
                     {step.description}
                   </p>
                 </div>
@@ -240,7 +240,7 @@ function DesktopProcess() {
               <motion.span key={i} style={{
                 fontFamily: 'var(--font-body)', fontWeight: 300,
                 fontSize: '0.65rem', letterSpacing: '0.12em',
-                color: 'rgb(var(--ink) / 0.4)', opacity: nodeOpacities[i],
+                color: 'var(--text-3)', opacity: nodeOpacities[i],
                 width: '25%', textAlign: i === 0 ? 'left' : i === 3 ? 'right' : 'center',
               }}>
                 {step.number}
@@ -267,7 +267,7 @@ function MobileProcess() {
         <h2 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(2rem, 8vw, 3rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
           How I work.
         </h2>
-        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto' }}>
+        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto' }}>
           My process is simple: stay close to the problem, move fast without losing rigour, and use AI to clear the path for the thinking that actually matters.
         </p>
       </motion.div>
@@ -312,7 +312,7 @@ function MobileProcess() {
                   zIndex: 1,
                   boxShadow: '0 0 10px rgb(var(--ink) / 0.08)',
                 }}>
-                  <Icon style={{ width: '0.85rem', height: '0.85rem', color: 'rgb(var(--ink) / 0.75)' }} />
+                  <Icon style={{ width: '0.85rem', height: '0.85rem', color: 'var(--text-2)' }} />
                 </div>
 
                 {/* Card */}
@@ -333,12 +333,12 @@ function MobileProcess() {
                     <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: 'var(--ink-solid)', fontSize: '0.95rem', margin: 0 }}>
                       {step.title}
                     </h3>
-                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.22)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
                       {step.number}
                     </span>
                   </div>
 
-                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-2)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
                     {step.description}
                   </p>
                 </div>

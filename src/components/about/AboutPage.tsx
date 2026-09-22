@@ -18,7 +18,7 @@ const BODY: React.CSSProperties = {
   fontFamily: 'var(--font-body)',
   fontWeight: 300,
   fontSize: '1.05rem',
-  color: 'rgb(var(--ink) / 0.70)',
+  color: 'var(--text-2)',
   lineHeight: 1.7,
   maxWidth: '40rem',
   margin: '0 auto',
@@ -63,7 +63,7 @@ export default function AboutPage() {
               style={{
                 fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
                 letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: 'rgb(var(--ink) / 0.35)', margin: 0,
+                color: 'var(--text-3)', margin: 0,
               }}
             >
               About
@@ -134,7 +134,7 @@ export default function AboutPage() {
               <p
                 style={{
                   fontFamily: 'var(--font-body)', fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem',
+                  color: 'var(--text-3)', fontSize: '0.875rem',
                   lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto',
                 }}
               >
@@ -186,7 +186,7 @@ export default function AboutPage() {
               style={{
                 borderRadius: '9999px',
                 padding: '0.75rem 1.25rem',
-                color: 'rgb(var(--ink) / 0.6)',
+                color: 'var(--text-2)',
                 fontSize: '0.9rem',
                 fontFamily: 'var(--font-body)',
                 fontWeight: 300,

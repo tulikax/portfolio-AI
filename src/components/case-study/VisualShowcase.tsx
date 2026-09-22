@@ -63,7 +63,7 @@ function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: num
           style={{
             fontSize: '0.78rem',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.38)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginTop: '0.75rem',
             lineHeight: 1.5,
@@ -100,7 +100,7 @@ function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
         <p style={{
           fontSize: '0.78rem',
           fontWeight: 300,
-          color: 'rgb(var(--ink) / 0.38)',
+          color: 'var(--text-3)',
           fontFamily: 'var(--font-body)',
           marginTop: '0.75rem',
           lineHeight: 1.5,
@@ -153,7 +153,7 @@ function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
           style={{
             fontSize: '0.78rem',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.38)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginTop: '0.75rem',
             lineHeight: 1.5,
@@ -189,7 +189,7 @@ export default function VisualShowcase({ block }: Props) {
             fontWeight: 500,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: 'rgb(var(--ink) / 0.35)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginBottom: '1.25rem',
           }}

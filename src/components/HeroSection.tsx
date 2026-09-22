@@ -84,7 +84,7 @@ function IntroLine({ text, visible, revealed, revealId, handlers, placement, int
         style={{
           position: 'relative',
           cursor: 'pointer',
-          color: 'rgb(var(--ink) / 0.92)',
+          color: 'var(--text-1)',
           // Underlined so the name reads as hoverable
           textDecoration: 'underline',
           textDecorationThickness: '1px',
@@ -306,7 +306,7 @@ export default function HeroSection({
         fontSize: splitLayout
           ? (isMobile ? '1.35rem' : '1.5rem')
           : (isMobile ? '1.2rem' : '1.45rem'),
-        color: 'rgb(var(--ink) / 0.72)',
+        color: 'var(--text-2)',
         width: '100%',
         maxWidth: 'none',
         whiteSpace: isMobile ? 'normal' : 'nowrap',
@@ -424,7 +424,7 @@ export default function HeroSection({
               fontFamily: 'var(--font-display)',
               fontWeight: 300,
               fontSize: isMobile ? '1.35rem' : '1.5rem',
-              color: 'rgb(var(--ink) / 0.62)',
+              color: 'var(--text-2)',
               fontStyle: 'italic',
               lineHeight: 1.6,
               margin: '20px 0 0',
@@ -604,7 +604,7 @@ export default function HeroSection({
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
             fontSize: isMobile ? '0.95rem' : '1.2rem',
-            color: 'rgb(var(--ink) / 0.65)',
+            color: 'var(--text-2)',
             width: '100%',
             maxWidth: 'none',
             whiteSpace: isMobile ? 'normal' : 'nowrap',
@@ -681,7 +681,7 @@ export default function HeroSection({
               fontFamily: 'var(--font-body)',
               fontWeight: 300,
               fontSize: isMobile ? '0.95rem' : '1.2rem',
-              color: 'rgb(var(--ink) / 0.65)',
+              color: 'var(--text-2)',
               maxWidth: '100%',
               lineHeight: 1.65,
               fontStyle: 'italic',
@@ -724,7 +724,7 @@ export default function HeroSection({
               style={{
                 borderRadius: '9999px',
                 padding: '0.75rem 1.25rem',
-                color: 'rgb(var(--ink) / 0.6)',
+                color: 'var(--text-2)',
                 fontSize: '0.9rem',
                 fontFamily: 'var(--font-body)',
                 fontWeight: 300,
@@ -771,7 +771,7 @@ export default function HeroSection({
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
             fontSize: '0.65rem',
-            color: 'rgb(var(--ink) / 0.28)',
+            color: 'var(--text-3)',
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
           }}
@@ -782,7 +782,7 @@ export default function HeroSection({
           animate={{ y: [0, 5, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <ChevronsDown style={{ width: '1rem', height: '1rem', color: 'rgb(var(--ink) / 0.22)' }} />
+          <ChevronsDown style={{ width: '1rem', height: '1rem', color: 'var(--text-3)' }} />
         </motion.div>
       </motion.div>
     </section>

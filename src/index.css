@@ -65,6 +65,23 @@ html {
   --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.08) inset;
   --shadow-card: 0 8px 32px rgb(var(--shadow-ink) / 0.5);
   --shadow-float: 0 20px 60px rgb(var(--shadow-ink) / 0.5);
+
+  /* ─── Text ramp. Three tiers, because the same alpha does not read the same on
+     both grounds: light text on a dark ground blooms and gains apparent weight,
+     dark text on paper does not. Light therefore needs a higher alpha to reach
+     the same contrast — see the light block.
+
+     These alphas are chosen to clear WCAG AA (4.5:1) on their own ground, which
+     the previous raw values did not: the common 0.35 eyebrow measured 2.91:1 on
+     dark and 2.20:1 on light. That is FONT_AUDIT finding F3, and it was never a
+     light-mode bug — light mode only made it visible.
+
+       --text-1  primary body and headings   14.7:1 dark · 13.6:1 light
+       --text-2  secondary copy               8.2:1 dark ·  7.9:1 light
+       --text-3  eyebrows, meta, captions     4.8:1 dark ·  4.8:1 light ─── */
+  --text-1: rgb(var(--ink) / 0.92);
+  --text-2: rgb(var(--ink) / 0.68);
+  --text-3: rgb(var(--ink) / 0.50);
 }
 
 /* Warm paper and warm ink — both poles pulled off the extremes. Bodoni Moda is
@@ -84,6 +101,13 @@ html {
   --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.06) inset;
   --shadow-card: 0 2px 8px rgb(var(--shadow-ink) / 0.08);
   --shadow-float: 0 6px 20px rgb(var(--shadow-ink) / 0.10);
+
+  /* Higher alphas than dark at every tier. Dark ink on paper does not bloom the
+     way light ink on a dark ground does, so it needs more opacity to read as the
+     same weight — 0.62 here matches what 0.50 achieves on dark. */
+  --text-1: rgb(var(--ink) / 0.92);
+  --text-2: rgb(var(--ink) / 0.76);
+  --text-3: rgb(var(--ink) / 0.62);
 }
 
 @layer base {
@@ -150,7 +174,7 @@ a, button, [role="button"], input, select, textarea, label {
 
 /* Navbar pill — real fill on the element (no ::before ring / ::after blur layer) */
 .nav-glass-pill {
-  background-color: rgb(var(--ink) / 0.22);
+  background-color: var(--text-3);
   border: 1px solid rgb(var(--ink) / 0.2);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
@@ -161,7 +185,7 @@ a, button, [role="button"], input, select, textarea, label {
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .nav-glass-pill {
-    background-color: rgb(var(--ink) / 0.28);
+    background-color: var(--text-3);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -598,7 +622,7 @@ a, button, [role="button"], input, select, textarea, label {
 
 .btn-glass:hover {
   background: linear-gradient(145deg, rgb(var(--ink) / 0.22), rgb(var(--ink) / 0.10));
-  border-color: rgb(var(--ink) / 0.30);
+  border-color: var(--text-3);
 }
 
 @media (prefers-reduced-motion: reduce) {

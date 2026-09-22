@@ -56,7 +56,7 @@ export default function CTASection() {
           style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.70)',
+            color: 'var(--text-2)',
             fontSize: '1.05rem',
             maxWidth: '28rem',
             lineHeight: 1.65,
@@ -100,7 +100,7 @@ export default function CTASection() {
             style={{
               borderRadius: '9999px',
               padding: '0.875rem 2rem',
-              color: 'rgb(var(--ink) / 0.80)',
+              color: 'var(--text-1)',
               fontSize: '0.9rem',
               fontFamily: 'var(--font-body)',
               fontWeight: 300,

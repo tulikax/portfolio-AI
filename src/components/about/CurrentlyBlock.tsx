@@ -48,7 +48,7 @@ const OVERLAY: React.CSSProperties = {
 const EYEBROW: React.CSSProperties = {
   fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.6rem',
   letterSpacing: '0.12em', textTransform: 'uppercase',
-  color: 'rgb(var(--ink) / 0.35)', margin: '0 0 0.35rem',
+  color: 'var(--text-3)', margin: '0 0 0.35rem',
 }
 
 const TITLE: React.CSSProperties = {
@@ -58,7 +58,7 @@ const TITLE: React.CSSProperties = {
 
 const META: React.CSSProperties = {
   fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.7rem',
-  color: 'rgb(var(--ink) / 0.45)', margin: 0,
+  color: 'var(--text-3)', margin: 0,
 }
 
 function useLocalTime(timeZone: string) {
@@ -178,7 +178,7 @@ function ListeningTile() {
               borderRadius: '9999px', cursor: 'pointer',
               background: 'rgba(10,10,12,0.72)',
               border: '1px solid rgb(var(--ink) / 0.18)',
-              color: 'rgb(var(--ink) / 0.85)',
+              color: 'var(--text-1)',
               backdropFilter: 'blur(6px)',
               WebkitBackdropFilter: 'blur(6px)',
             }}
@@ -262,13 +262,13 @@ function ReadingTile() {
           <p style={{ ...META, lineHeight: 1.4 }}>{RECENT_READ.source}</p>
         </div>
         {RECENT_READ.href && (
-          <ArrowUpRight style={{ width: 14, height: 14, color: 'rgb(var(--ink) / 0.35)', flexShrink: 0 }} />
+          <ArrowUpRight style={{ width: 14, height: 14, color: 'var(--text-3)', flexShrink: 0 }} />
         )}
       </div>
       <ThoughtOverlay label="💭 my take">
         <p style={{
           fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.75rem',
-          color: 'rgb(var(--ink) / 0.75)', margin: 0, lineHeight: 1.55,
+          color: 'var(--text-2)', margin: 0, lineHeight: 1.55,
         }}>
           {RECENT_READ.take}
         </p>
@@ -307,7 +307,7 @@ export default function CurrentlyBlock() {
         <div style={{ ...TILE, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div style={SHIMMER} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-            <MapPin style={{ width: 12, height: 12, color: 'rgb(var(--ink) / 0.35)', flexShrink: 0 }} />
+            <MapPin style={{ width: 12, height: 12, color: 'var(--text-3)', flexShrink: 0 }} />
             <p style={{ ...META, letterSpacing: '0.04em' }}>{HOME_CITY.label}</p>
           </div>
           <p style={{
@@ -340,7 +340,7 @@ export default function CurrentlyBlock() {
           <p style={TITLE}>{LATEST_POST.title}</p>
           <p style={META}>{LATEST_POST.date} · Substack</p>
         </div>
-        <ArrowUpRight style={{ width: 16, height: 16, color: 'rgb(var(--ink) / 0.4)', flexShrink: 0 }} />
+        <ArrowUpRight style={{ width: 16, height: 16, color: 'var(--text-3)', flexShrink: 0 }} />
       </a>
     </div>
   )

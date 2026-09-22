@@ -49,7 +49,7 @@ export default function ProblemSection({ data }: Props) {
                 fontSize: 'clamp(1.5rem, 3.75vw, 2.625rem)',
                 fontWeight: 400,
                 letterSpacing: '-0.02em',
-                color: 'rgb(var(--ink) / 0.92)',
+                color: 'var(--text-1)',
                 margin: '0 0 1.5rem 0',
                 lineHeight: 1.1,
               }}
@@ -67,7 +67,7 @@ export default function ProblemSection({ data }: Props) {
               fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
               fontWeight: 300,
               lineHeight: 1.8,
-              color: 'rgb(var(--ink) / 0.65)',
+              color: 'var(--text-2)',
               fontFamily: 'var(--font-body)',
               margin: 0,
             }}
@@ -104,7 +104,7 @@ export default function ProblemSection({ data }: Props) {
                 style={{
                   fontSize: '0.78rem',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.40)',
+                  color: 'var(--text-3)',
                   fontFamily: 'var(--font-body)',
                   marginTop: '0.75rem',
                   lineHeight: 1.5,

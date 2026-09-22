@@ -92,7 +92,7 @@ export default function PrototypeEmbed({ embed }: Props) {
           style={{
             fontSize: '0.78rem',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.38)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginTop: '0.875rem',
             lineHeight: 1.5,

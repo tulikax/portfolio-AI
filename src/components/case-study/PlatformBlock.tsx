@@ -58,7 +58,7 @@ export default function PlatformBlock({ section, index }: Props) {
               textTransform: 'uppercase',
               background: 'rgb(var(--ink) / 0.07)',
               border: '1px solid rgb(var(--ink) / 0.12)',
-              color: 'rgb(var(--ink) / 0.60)',
+              color: 'var(--text-2)',
               fontFamily: 'var(--font-body)',
               whiteSpace: 'nowrap',
             }}
@@ -93,7 +93,7 @@ export default function PlatformBlock({ section, index }: Props) {
               fontSize: '1rem',
               fontWeight: 300,
               lineHeight: 1.75,
-              color: 'rgb(var(--ink) / 0.65)',
+              color: 'var(--text-2)',
               fontFamily: 'var(--font-body)',
               margin: 0,
               maxWidth: '44rem',

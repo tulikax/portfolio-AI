@@ -70,7 +70,7 @@ export default function Navbar() {
                 to="/#work"
                 style={{
                   fontSize: '0.875rem',
-                  color: 'rgb(var(--ink) / 0.65)',
+                  color: 'var(--text-2)',
                   textDecoration: 'none',
                   fontWeight: 400,
                   fontFamily: 'var(--font-body)',
@@ -83,7 +83,7 @@ export default function Navbar() {
                   ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink-solid)'
                 }}
                 onMouseLeave={(e) => {
-                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.65)'
+                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-2)'
                 }}
               >
                 ← Back to Work
@@ -92,7 +92,7 @@ export default function Navbar() {
               sectionLinks.map((link) => {
                 const linkStyle = {
                   fontSize: '0.875rem',
-                  color: 'rgb(var(--ink) / 0.75)',
+                  color: 'var(--text-2)',
                   textDecoration: 'none',
                   fontWeight: 400,
                   transition: 'color 200ms ease',
@@ -102,7 +102,7 @@ export default function Navbar() {
                     e.currentTarget.style.color = 'var(--ink-solid)'
                   },
                   onMouseLeave: (e: MouseEvent<HTMLAnchorElement>) => {
-                    e.currentTarget.style.color = 'rgb(var(--ink) / 0.75)'
+                    e.currentTarget.style.color = 'var(--text-2)'
                   },
                 }
                 return isHome ? (
@@ -130,7 +130,7 @@ export default function Navbar() {
                 background: 'none',
                 border: 'none',
                 padding: '0.375rem',
-                color: 'rgb(var(--ink) / 0.85)',
+                color: 'var(--text-1)',
                 borderRadius: '0.5rem',
                 transition: 'color 150ms ease',
               }}

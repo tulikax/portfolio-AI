@@ -101,7 +101,7 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
           fontFamily: 'var(--font-body)',
           fontWeight: 400,
           fontSize: '0.7rem',
-          color: 'rgb(var(--ink) / 0.60)',
+          color: 'var(--text-2)',
           letterSpacing: '0.01em',
           textAlign: 'center',
           lineHeight: 1.3,
@@ -152,7 +152,7 @@ export default function StackSection() {
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.55)',
+              color: 'var(--text-2)',
               fontSize: '1rem',
               maxWidth: '34rem',
               margin: '0 auto',

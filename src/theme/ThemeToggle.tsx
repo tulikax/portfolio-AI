@@ -34,7 +34,7 @@ export default function ThemeToggle() {
         background: 'rgb(var(--ink) / 0.08)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        color: 'rgb(var(--ink) / 0.85)',
+        color: 'var(--text-1)',
         fontFamily: 'var(--font-body)',
         fontSize: '0.7rem',
         fontWeight: 400,
