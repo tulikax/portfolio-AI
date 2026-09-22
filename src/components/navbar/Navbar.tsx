@@ -80,7 +80,7 @@ export default function Navbar() {
                   transition: 'color 200ms ease',
                 }}
                 onMouseEnter={(e) => {
-                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
+                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink-solid)'
                 }}
                 onMouseLeave={(e) => {
                   ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.65)'
@@ -99,7 +99,7 @@ export default function Navbar() {
                 } as const
                 const hover = {
                   onMouseEnter: (e: MouseEvent<HTMLAnchorElement>) => {
-                    e.currentTarget.style.color = 'white'
+                    e.currentTarget.style.color = 'var(--ink-solid)'
                   },
                   onMouseLeave: (e: MouseEvent<HTMLAnchorElement>) => {
                     e.currentTarget.style.color = 'rgb(var(--ink) / 0.75)'

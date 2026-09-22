@@ -159,8 +159,8 @@ export function HeroNameStrip({ compact = false, start = true }: {
           marginLeft: -photo / 2,
           objectFit: 'cover',
           borderRadius: '4px',
-          border: '1px solid rgba(255,255,255,0.16)',
-          boxShadow: '0 14px 34px rgba(0,0,0,0.55)',
+          border: '1px solid rgb(var(--ink) / 0.16)',
+          boxShadow: '0 14px 34px rgb(var(--shadow-ink) / 0.55)',
         }}
       />
 
@@ -210,7 +210,7 @@ export function HeroNameStrip({ compact = false, start = true }: {
               background: `linear-gradient(145deg, ${petal.from}, ${petal.to})`,
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
-              boxShadow: '0 3px 12px rgba(0,0,0,0.30)',
+              boxShadow: '0 3px 12px rgb(var(--shadow-ink) / 0.30)',
               color: petal.text,
               whiteSpace: 'nowrap',
             }}

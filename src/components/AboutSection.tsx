@@ -62,7 +62,7 @@ function FloatingCard({ card }: {
         width: card.w,
         borderRadius: '10px',
         border: '1px solid rgb(var(--ink) / 0.10)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgb(var(--ink) / 0.08) inset',
+        boxShadow: '0 8px 32px rgb(var(--shadow-ink) / 0.45), 0 1px 0 rgb(var(--ink) / 0.08) inset',
         overflow: 'hidden',
         zIndex: 1,
         pointerEvents: 'none',
@@ -80,11 +80,13 @@ function FloatingCard({ card }: {
           transformOrigin: 'center center',
         }}
       />
-      {/* Subtle overlay to blend with dark bg */}
+      {/* Blends the card into the page ground — tinted with --surface rather than
+          black, so it darkens on the dark theme and lightens toward paper on light.
+          The same alphas work either way because that is what --surface means. */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(145deg, rgba(0,0,0,0.08), rgba(0,0,0,0.22))',
+        background: 'linear-gradient(145deg, rgb(var(--surface) / 0.08), rgb(var(--surface) / 0.22))',
       }} />
     </motion.div>
   )
@@ -283,7 +285,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
           right: 0,
           zIndex: 3,
           height: '300px',
-          background: 'linear-gradient(to bottom, transparent, black)',
+          background: 'linear-gradient(to bottom, transparent, rgb(var(--surface)))',
           pointerEvents: 'none',
         }}
       />

@@ -21,7 +21,7 @@ const TILE: React.CSSProperties = {
   backdropFilter: 'blur(20px)',
   WebkitBackdropFilter: 'blur(20px)',
   border: '1px solid rgb(var(--ink) / 0.09)',
-  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 32px rgba(0,0,0,0.3)',
+  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 32px rgb(var(--shadow-ink) / 0.3)',
   padding: '1.25rem',
   position: 'relative',
   overflow: 'hidden',

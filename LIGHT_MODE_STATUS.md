@@ -102,30 +102,54 @@ the plan itself.
 | Gradient fades converted, media scrims left dark | A hardcoded black inside a gradient is either a page-ground fade (its black *is* the page) or a media treatment (darkening video so overlaid text stays readable). Only the former should follow the theme. The split is structural, not aesthetic: the converted fade sits in `CaseStudyHero`'s mobile branch terminating against a painted sibling panel; the scrims sit in the desktop branch over full-bleed video. | Three gradients stay dark in light mode. Easily reverted. |
 | Shadow sweep covers `box-shadow` values only | Seven `rgba(0,0,0,…)` occurrences are background overlays — a modal backdrop, a media overlay, two control pills, three video scrims. Routing a modal backdrop through `--shadow-ink` would make it theme-dependent, which is a Phase 3 design decision about overlay treatment, not a mechanical sweep. | Overlays stay pure black in light mode. |
 | Theme selectors generalised beyond `:root` | `:root[data-theme='light']` matches only `<html>`; it never matches a descendant. `ThemeScope` puts `data-theme` on a `<div>`, so the component was inert — the React half worked, the CSS half never fired. The dark values had the same problem, which matters more, because the case-study lock pins dark *inside* a light page. | A scoped subtree resolves the wrong palette. |
-| Three files excluded from the sweeps | `HeroNameStrip.tsx`, `AboutSection.tsx` and `about/CurrentlyBlock.tsx` had substantial uncommitted work at the time. | Five sites still need converting — see below. |
+| Three files excluded from the sweeps | `HeroNameStrip.tsx`, `AboutSection.tsx` and `about/CurrentlyBlock.tsx` had substantial uncommitted work at the time. | Since cleared — see below. |
 
-## Outstanding from Phase 1
+## Cleared after the first light-mode review
 
-**Four shadows, in the excluded files.** Each keeps its geometry and swaps only the
-colour function, `rgba(0,0,0,X)` → `rgb(var(--shadow-ink) / X)`:
+The three excluded files were swept once their uncommitted work was stashed. Six
+sites: four shadows (`HeroNameStrip` ×2, `AboutSection`, `CurrentlyBlock`), the
+page-ground fade at `AboutSection` that had been painting a dark band across the
+bottom of the About section, and the card overlay.
 
-| File | Value |
+The card overlay is worth recording, because the obvious fix was wrong. It reads
+`linear-gradient(145deg, rgba(0,0,0,0.08), rgba(0,0,0,0.22))` and its own comment
+says *"Subtle overlay to blend with dark bg"* — it blends a floating image card
+into the page ground. So the right token is **`--surface`, not `--shadow-ink`**:
+
+```js
+linear-gradient(145deg, rgb(var(--surface) / 0.08), rgb(var(--surface) / 0.22))
+```
+
+The same alphas work in both themes, because "blend toward the page ground" is
+exactly what `--surface` means — it darkens on dark and lightens toward paper on
+light. Routing it through `--shadow-ink` would have put a grey slab on paper, and
+it needs no Phase 2 fill token after all.
+
+### A category every sweep missed: hardcoded white
+
+Every sweep in Phase 1 searched for **black**. None searched for white, and there
+are 24 hardcoded white values. Most are harmless; three were not:
+
+| Site | Problem |
 |---|---|
-| `HeroNameStrip.tsx` | `0 14px 34px rgba(0,0,0,0.55)` |
-| `HeroNameStrip.tsx` | `0 3px 12px rgba(0,0,0,0.30)` |
-| `AboutSection.tsx` | `0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgb(var(--ink) / 0.08) inset` |
-| `about/CurrentlyBlock.tsx` | `0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 32px rgba(0,0,0,0.3)` |
+| `navbar/Navbar.tsx` ×2 | Nav links hover to a hardcoded `'white'` while their resting colour is themed. Invisible on paper, on every route. Now `var(--ink-solid)`. |
+| `HeroNameStrip.tsx` | `border: '1px solid rgba(255,255,255,0.16)'` on the portrait — invisible on paper. Now `rgb(var(--ink) / 0.16)`. |
 
-None qualifies for a composite token even though two look like they should:
-`--shadow-card` is `0 8px 32px` at alpha **0.5**, while these are at 0.45 and 0.3.
-Same geometry, different alpha — adopting the token would silently change dark
-mode. Match by content, not line number; the `HeroNameStrip` rewrite moves them.
+Correctly left alone:
 
-**One panel fill, which is not a shadow.** `AboutSection.tsx`, currently
-`linear-gradient(145deg, rgba(0,0,0,0.08), rgba(0,0,0,0.22))`. This tints a card
-darker than its surroundings — a surface, not a cast shadow, so `--shadow-ink` is
-the wrong token. It needs Phase 2's fill tokens. Converting it mechanically would
-produce a grey slab on paper.
+- `ParticleTitle.tsx` and `ProjectLoadingScreen.tsx` set `offCtx.fillStyle = 'white'`
+  on an **offscreen alpha-sampling mask**. Both carry a comment saying the colour is
+  never displayed. Like the `-webkit-mask` white, it is a channel, not a colour.
+- `ProjectLoadingScreenDemo.tsx` (12 sites) — dev-only route behind `import.meta.env.DEV`.
+- `src/data/caseStudies.ts` (6 sites) — per-case-study content config, paired with six
+  `#000000` values. Correct under a case-study dark lock; needs revisiting only if
+  case studies follow the theme.
+- `about/CurrentlyBlock.tsx` — a white play glyph on a dark scrim over album art.
+  A media overlay, same category as the video scrims below.
+
+**The lesson for Phase 2 and 3: search for both poles.** A sweep that greps only
+for the current theme's background colour will silently miss every foreground
+hardcoded against it.
 
 **One pre-existing lint error**, unrelated to this work:
 `src/components/case-study/LightboxContext.tsx:11` exports a non-component
