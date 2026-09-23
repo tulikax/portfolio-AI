@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { RotateCcw } from 'lucide-react'
-import { HERO_PHRASES, shufflePhrases, type HeroPhrase } from '../constants/heroPhrases'
+import { HERO_PHRASES, pickVariant, shufflePhrases, type PickedPhrase } from '../constants/heroPhrases'
 import { useTheme } from '../theme/useTheme'
 import tulikaAvatar from '../assets/tulika-avatar.png'
 
@@ -74,17 +74,20 @@ const PLACES_BY_ROOM = [
   PLACES[3], // right
 ] as const
 
-// Remembered across rolls (and remounts) so a phrase never appears twice in a row
+// Remembered across rolls (and remounts) so an idea never appears twice in a row.
+// Keyed by phrase id, not rendered text — otherwise the same idea could come
+// straight back in a different wording and read as a bug.
 let lastShown: string[] = []
 
 function roll(count: number) {
-  const unseen = HERO_PHRASES.filter(p => !lastShown.includes(p.text))
+  const unseen = HERO_PHRASES.filter(p => !lastShown.includes(p.variants[0]))
   const source = unseen.length >= count ? unseen : HERO_PHRASES
-  const picked = shufflePhrases(source).slice(0, count)
-  lastShown = picked.map(p => p.text)
+  // Pick the ideas, then pick a wording for each
+  const picked = shufflePhrases(source).slice(0, count).map(pickVariant)
+  lastShown = picked.map(p => p.id)
   // Longest first, then drop them into the roomiest slots in turn
   const byLength = [...picked].sort((a, b) => b.text.length - a.text.length)
-  return byLength.map((phrase: HeroPhrase, i) => ({
+  return byLength.map((phrase: PickedPhrase, i) => ({
     phrase,
     place: PLACES_BY_ROOM[i],
     dy: jitter(9),

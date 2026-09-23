@@ -9,6 +9,12 @@ interface Tool {
   ext?: 'svg' | 'png' | 'jpg' | 'avif' | 'webp'  // defaults to 'svg'
   /** Single-colour black SVG — inverted on the dark theme so it stays visible */
   monoSvg?: boolean
+  /**
+   * Multiplier on the rendered glyph. Some logos ship with generous padding baked
+   * into the file, so at a shared box size they read smaller than the rest —
+   * this scales the mark rather than the box, keeping the grid even.
+   */
+  scale?: number
   category: 'ai' | 'design' | 'productivity' | 'dev'
 }
 
@@ -23,15 +29,16 @@ const TOOLS: Tool[] = [
   { name: 'Framer',       slug: 'framer',       monoSvg: true, category: 'design' },
   { name: 'Figma',        slug: 'figma',        category: 'design' },
   { name: 'Cursor',       slug: 'cursor',       ext: 'png', category: 'dev' },
-  { name: 'Rive',         slug: 'rive',         ext: 'avif', category: 'design' },
-  { name: 'Adobe',        slug: 'adobe',        ext: 'webp', category: 'design' },
   { name: 'Notion',       slug: 'notion',       ext: 'png', category: 'productivity' },
   { name: 'Linear',       slug: 'linear',       ext: 'png', category: 'productivity' },
   { name: 'Loom',         slug: 'loom',         ext: 'png', category: 'productivity' },
   { name: 'Perplexity',   slug: 'perplexity',   ext: 'png', category: 'ai' },
   { name: 'GitHub',       slug: 'github',       category: 'dev' },
-  { name: 'React',        slug: 'react',        ext: 'png', category: 'dev' },
+  { name: 'React',        slug: 'react',        ext: 'png', scale: 1.25, category: 'dev' },
   { name: 'PostHog',      slug: 'posthog',      ext: 'png', category: 'dev' },
+  // Tail end — the craft tools close the grid
+  { name: 'Rive',         slug: 'rive',         ext: 'avif', category: 'design' },
+  { name: 'Adobe Creative Suite', slug: 'adobe', ext: 'webp', scale: 1.25, category: 'design' },
 ]
 
 function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
@@ -96,6 +103,8 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
             imageRendering: 'auto',
             // Black glyphs read on paper and vanish on the dark page
             filter: tool.monoSvg && !isLight ? 'invert(1)' : undefined,
+            // Evens out marks that ship with padding baked in
+            transform: tool.scale ? `scale(${tool.scale})` : undefined,
           }}
           onError={(e) => {
             // Hide broken img icon if file not yet added

@@ -1,24 +1,107 @@
+/**
+ * Personality tags shown around the portrait in the hero.
+ *
+ * Each entry is one idea with three wordings. A roll picks a phrase, then picks
+ * a wording — so the same tag reads differently on a second visit without the
+ * list getting longer or the voice drifting.
+ */
 export interface HeroPhrase {
-  text: string
+  /** Three ways of saying the same thing */
+  variants: readonly [string, string, string]
   emoji: string
 }
 
-/** Personality tags shown around the portrait in the hero */
+/** A phrase with its wording chosen — what the hero actually renders */
+export interface PickedPhrase {
+  text: string
+  emoji: string
+  /**
+   * Stable across variants. Dedupe keys off this rather than the rendered text,
+   * so a reroll cannot bring the same idea straight back in other words.
+   */
+  id: string
+}
+
 export const HERO_PHRASES: HeroPhrase[] = [
-  { text: 'oat latte', emoji: '☕' },
-  { text: 'painting', emoji: '🎨' },
-  { text: 'cityscape appreciation', emoji: '🌆' },
-  { text: 'still mad about that one dropdown', emoji: '😤' },
-  { text: 'good defaults beat clever ones', emoji: '⚙️' },
-  { text: 'keeps every version, just in case', emoji: '🗂️' },
-  { text: 'thinks better with a pen', emoji: '✏️' },
-  { text: "automation isn't a personality", emoji: '🤖' },
-  { text: 'might argue over 2px if it matters', emoji: '📐' },
-  { text: 'no is a design deliverable', emoji: '✋' },
-  { text: 'handwritten notes > typed', emoji: '📝' },
-  { text: 'scope is a design decision too', emoji: '🧭' },
-  { text: 'do we really need to add that AI feature?', emoji: '🤔' },
+  {
+    emoji: '🧩',
+    variants: [
+      'half PM, half design engineer',
+      'PM on Mondays, design engineer the rest of the week',
+      'somewhere between PM and design engineer',
+    ],
+  },
+  {
+    emoji: '🎧',
+    variants: [
+      'makes playlists nobody asked for',
+      'curates playlists, mostly an audience of one',
+      'playlist perfectionist, private audience',
+    ],
+  },
+  {
+    emoji: '🎥',
+    variants: [
+      "films things that don't need filming",
+      'has 4000 videos, no idea why',
+      'documents everything, edits nothing',
+    ],
+  },
+  {
+    emoji: '✋',
+    variants: [
+      'sometimes the answer is just... no redesign',
+      'redesign is not a default setting',
+      'resists the urge to redesign everything',
+    ],
+  },
+  {
+    emoji: '✏️',
+    variants: [
+      'pen in hand, thoughts in order',
+      "ideas don't count until they're handwritten",
+      'thinks slower, thinks better, with a pen',
+    ],
+  },
+  {
+    emoji: '📝',
+    variants: [
+      'paper beats keyboard, every time',
+      'still takes notes the analog way',
+      'typing is for later, paper is for thinking',
+    ],
+  },
+  {
+    emoji: '🚶',
+    variants: [
+      "walks like she's late, isn't",
+      'outpaces everyone, unintentionally',
+      'speed-walks through calm moments',
+    ],
+  },
+  {
+    emoji: '🐕',
+    variants: [
+      'will stop for any dog, no exceptions',
+      'dog person, unapologetically',
+      "known to talk to strangers' dogs",
+    ],
+  },
+  {
+    emoji: '🗂️',
+    variants: [
+      'never deletes a file, just archives it',
+      'version history hoarder',
+      'saves everything, deletes nothing',
+    ],
+  },
 ]
+
+/** Chooses one of a phrase's three wordings. */
+export function pickVariant(phrase: HeroPhrase): PickedPhrase {
+  const text = phrase.variants[Math.floor(Math.random() * phrase.variants.length)]
+  return { text, emoji: phrase.emoji, id: phrase.variants[0] }
+}
 
 export function shufflePhrases<T>(input: readonly T[]): T[] {
   const a = [...input]
