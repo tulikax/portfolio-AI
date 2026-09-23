@@ -215,14 +215,31 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
         )}
       </motion.div>
 
-      {/* Vignette — darkens the edges so the copy holds over a busy clip */}
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(120% 90% at 50% 35%, transparent 30%, rgba(0,0,0,0.45) 72%, rgba(0,0,0,0.82) 100%)', zIndex: 2, pointerEvents: 'none' }} />
+      {/*
+       * The three scrims are tinted with --surface, not black.
+       *
+       * Their job is to hold the hero copy over a busy clip, and the copy is
+       * already theme-aware (--ink-solid). A black scrim under dark ink on paper
+       * is what made these heroes read as a slab with invisible text. Tinting
+       * with the page ground means the same alphas work both ways: they sink the
+       * clip toward near-black on dark and toward paper on light, and the copy
+       * lands on its own ground either way.
+       */}
 
-      {/* Gradient fade to black at bottom, where the headline sits */}
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.85) 78%, black 100%)', zIndex: 2, pointerEvents: 'none' }} />
+      {/*
+       * Each scrim starts late and lands hard. The copy sits at bottom: 3.5rem,
+       * so only the lower third needs covering — veiling the whole clip to
+       * protect one corner of it hides the thing the hero is there to show.
+       */}
+
+      {/* Vignette — settles the outer edges only */}
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(120% 90% at 50% 35%, transparent 58%, rgb(var(--surface) / 0.28) 82%, rgb(var(--surface) / 0.68) 100%)', zIndex: 2, pointerEvents: 'none' }} />
+
+      {/* Fade into the page at the bottom, where the headline sits */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, transparent 44%, rgb(var(--surface) / 0.34) 66%, rgb(var(--surface) / 0.86) 86%, rgb(var(--surface)) 100%)', zIndex: 2, pointerEvents: 'none' }} />
 
       {/* Top fade for navbar blending */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '120px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)', zIndex: 3 }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '120px', background: 'linear-gradient(to bottom, rgb(var(--surface) / 0.22), transparent)', zIndex: 3 }} />
 
       {/* Content overlay */}
       <div
