@@ -51,8 +51,8 @@ export default function AboutPage() {
             background: 'rgb(var(--surface))',
             paddingTop: '10rem',
             /* Tight into "How I work" — the process section carries its own
-               generous top spacing, so this only needs to clear the copy. */
-            paddingBottom: '1.5rem',
+               generous top spacing, so this needs none of its own. */
+            paddingBottom: 0,
             paddingLeft: '1.5rem',
             paddingRight: '1.5rem',
             textAlign: 'center',
@@ -60,39 +60,14 @@ export default function AboutPage() {
           }}
         >
           <div style={{ maxWidth: '48rem', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.7, ease: EASE_OUT }}
-              style={{
-                fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
-                letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: 'var(--text-3)', margin: 0,
-              }}
-            >
-              About
-            </motion.p>
-
-            <motion.h1
-              {...fadeUp}
-              transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2rem, 6vw, 4rem)',
-                letterSpacing: '-0.04em',
-                lineHeight: 0.95,
-                color: 'var(--ink-solid)',
-                margin: 0,
-                fontWeight: 400,
-              }}
-            >
-              The longer version.
-            </motion.h1>
-
+            {/* No eyebrow, no title — the copy opens the page on its own. The
+                navbar already says where you are, and "How I work" below carries
+                the only heading this page needs. */}
             {PARAGRAPHS.map((para, i) => (
               <motion.p
                 key={i}
                 {...fadeUp}
-                transition={{ duration: 0.7, delay: 0.16 + i * 0.08, ease: EASE_OUT }}
+                transition={{ duration: 0.7, delay: i * 0.08, ease: EASE_OUT }}
                 className="about-body-text"
                 style={BODY}
               >
