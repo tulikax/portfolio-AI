@@ -133,6 +133,25 @@ html {
   --fill-raised: rgb(var(--ink) / 0.02);
 }
 
+/*
+ * Case-study prototype row: the clip and the decision cards beside it.
+ * The clip takes the larger share — it is the artefact, and the cards are
+ * annotations on it. Stacks below 900px, where two columns would leave the
+ * video too small to read the UI inside it.
+ */
+.case-proto-grid {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .case-proto-grid {
+    grid-template-columns: 1.7fr 1fr;
+  }
+}
+
 /* Glows are cast shadows drawn in --ink rather than --shadow-ink, so
    --shadow-strength never reaches them. On a dark ground they read as light
    spilling off the element; on paper the same thing is a grey smudge. The ring

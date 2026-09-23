@@ -12,13 +12,21 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, delay: index * 0.08, ease: EASE_OUT }}
-      className="liquid-glass"
       style={{
+        // Matches the homepage role cards: token fill, hairline border and the
+        // composite shadows — rather than liquid-glass, whose blur and edge ring
+        // are a different surface language from the rest of the site.
         borderRadius: '1.25rem',
-        padding: '1.75rem',
+        background: 'var(--fill-card)',
+        border: '1px solid rgb(var(--ink) / 0.09)',
+        boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
+        backdropFilter: 'blur(40px)',
+        WebkitBackdropFilter: 'blur(40px)',
+        // Tighter than the homepage card — these carry one idea each, not a role
+        padding: '1.35rem',
         display: 'flex',
         flexDirection: 'column',
-        gap: '1rem',
+        gap: '0.75rem',
       }}
     >
       {/* Decision number */}
@@ -39,7 +47,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       <h3
         style={{
           fontFamily: 'var(--font-body)',
-          fontSize: '1rem',
+          fontSize: '0.92rem',
           fontWeight: 500,
           color: 'var(--text-1)',
           margin: 0,
@@ -52,9 +60,9 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       {/* Rationale */}
       <p
         style={{
-          fontSize: '0.92rem',
+          fontSize: '0.85rem',
           fontWeight: 300,
-          lineHeight: 1.7,
+          lineHeight: 1.65,
           color: 'var(--text-2)',
           fontFamily: 'var(--font-body)',
           margin: 0,
@@ -138,7 +146,7 @@ export default function DesignDecisions({ decisions, inline }: Props) {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: inline ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))',
+          gridTemplateColumns: inline ? '1fr' : 'repeat(auto-fill, minmax(260px, 1fr))',
           gap: '1rem',
         }}
       >
