@@ -456,11 +456,9 @@ a, button, [role="button"], input, select, textarea, label {
 /* ─── Button active states (Emil Kowalski) ───────────────────── */
 
 .btn-press {
-  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.btn-press:active {
-  transform: scale(0.97);
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    filter 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* ─── Hover only on pointer devices (Emil Kowalski) ─────────── */
@@ -469,6 +467,48 @@ a, button, [role="button"], input, select, textarea, label {
   .card-hover:hover {
     transform: translateY(-4px);
     transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /*
+   * Buttons lift and grow slightly on hover.
+   *
+   * Glass panels are excluded from the transform: their blur lives on ::after,
+   * and transforming the element makes the browser drop backdrop-filter — the
+   * same reason Framer Motion transforms are banned on .liquid-glass. They
+   * still get the colour shift below.
+   */
+  .btn-press:not(.liquid-glass):not(.liquid-glass-strong):hover {
+    transform: translateY(-2px) scale(1.03);
+  }
+
+  /*
+   * The colour shift goes through `filter` rather than `background`, because
+   * most of these buttons set their background inline and a class rule cannot
+   * win against that. Direction flips per theme: lifting toward the light on a
+   * dark ground, deepening into the page on paper. Brightening on paper would
+   * wash the button out rather than making it feel raised.
+   */
+  [data-theme='dark'] .btn-press:hover,
+  :root:not([data-theme='light']) .btn-press:hover {
+    filter: brightness(1.18);
+  }
+
+  [data-theme='light'] .btn-press:hover {
+    filter: brightness(0.93);
+  }
+}
+
+/* After :hover so a press still wins while the pointer is down */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-press,
+  .btn-press:hover,
+  .btn-press:active {
+    transform: none;
+    transition: filter 160ms ease;
   }
 }
 
