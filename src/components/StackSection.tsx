@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useTheme } from '../theme/useTheme'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -6,30 +7,36 @@ interface Tool {
   name: string
   slug: string
   ext?: 'svg' | 'png' | 'jpg' | 'avif' | 'webp'  // defaults to 'svg'
+  /** Single-colour black SVG — inverted on the dark theme so it stays visible */
+  monoSvg?: boolean
   category: 'ai' | 'design' | 'productivity' | 'dev'
 }
 
+/**
+ * Rendered in array order — the grid is a flat map, so this list IS the layout.
+ * `category` is metadata for grouping later, not something the grid reads.
+ */
 const TOOLS: Tool[] = [
-  // AI
   { name: 'Claude',       slug: 'claude',       category: 'ai' },
-  { name: 'Perplexity',   slug: 'perplexity',   ext: 'png', category: 'ai' },
-  // Design
+  // The SVG is a solid-black glyph, which is right on paper and invisible on the
+  // dark page — so it gets inverted there rather than swapping in the PNG.
+  { name: 'Framer',       slug: 'framer',       monoSvg: true, category: 'design' },
   { name: 'Figma',        slug: 'figma',        category: 'design' },
-  { name: 'Framer',       slug: 'framer',       ext: 'png', category: 'design' },
+  { name: 'Cursor',       slug: 'cursor',       ext: 'png', category: 'dev' },
   { name: 'Rive',         slug: 'rive',         ext: 'avif', category: 'design' },
   { name: 'Adobe',        slug: 'adobe',        ext: 'webp', category: 'design' },
-  // Productivity
   { name: 'Notion',       slug: 'notion',       ext: 'png', category: 'productivity' },
   { name: 'Linear',       slug: 'linear',       ext: 'png', category: 'productivity' },
   { name: 'Loom',         slug: 'loom',         ext: 'png', category: 'productivity' },
-  // Dev
-  { name: 'Cursor',       slug: 'cursor',       ext: 'png', category: 'dev' },
+  { name: 'Perplexity',   slug: 'perplexity',   ext: 'png', category: 'ai' },
   { name: 'GitHub',       slug: 'github',       category: 'dev' },
   { name: 'React',        slug: 'react',        ext: 'png', category: 'dev' },
   { name: 'PostHog',      slug: 'posthog',      ext: 'png', category: 'dev' },
 ]
 
 function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
+  const { resolved } = useTheme()
+  const isLight = resolved === 'light'
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.88, y: 12 }}
@@ -87,6 +94,8 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
             objectFit: 'contain',
             // If the logo file doesn't exist yet, this becomes invisible — placeholder is the card bg
             imageRendering: 'auto',
+            // Black glyphs read on paper and vanish on the dark page
+            filter: tool.monoSvg && !isLight ? 'invert(1)' : undefined,
           }}
           onError={(e) => {
             // Hide broken img icon if file not yet added

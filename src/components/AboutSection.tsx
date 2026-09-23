@@ -42,6 +42,8 @@ const MOBILE_CARDS = [
 function FloatingCard({ card }: {
   card: typeof FLOATING_CARDS[number] & { zoom?: number }
 }) {
+  const { resolved } = useTheme()
+  const isLight = resolved === 'light'
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.85 }}
@@ -78,19 +80,24 @@ function FloatingCard({ card }: {
           width: '100%',
           height: 'auto',
           display: 'block',
-          opacity: card.opacity ?? 0.82,
+          // Knocked back on dark so they sit behind the copy rather than
+          // competing with it. On paper they are already quiet — holding them at
+          // 0.82 under a lightening overlay just washed them out.
+          opacity: isLight ? 1 : (card.opacity ?? 0.82),
           transform: card.zoom ? `scale(${card.zoom})` : undefined,
           transformOrigin: 'center center',
         }}
       />
-      {/* Blends the card into the page ground — tinted with --surface rather than
-          black, so it darkens on the dark theme and lightens toward paper on light.
-          The same alphas work either way because that is what --surface means. */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'linear-gradient(145deg, rgb(var(--surface) / 0.08), rgb(var(--surface) / 0.22))',
-      }} />
+      {/* Blends the card into the page ground — tinted with --surface, so it
+          darkens on dark. Dropped entirely on paper: there it lightens, and a
+          22% white veil over an already-pale photo is what made these vanish. */}
+      {!isLight && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(145deg, rgb(var(--surface) / 0.08), rgb(var(--surface) / 0.22))',
+        }} />
+      )}
     </motion.div>
   )
 }
