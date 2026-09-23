@@ -275,8 +275,8 @@ function DecisionsBlock({
 
                   {/* Right: caption text */}
                   <div style={{ paddingTop: '0.25rem' }}>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500, color: 'var(--text-2)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 300, color: 'var(--text-3)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
                   </div>
 
                 </div>
@@ -316,8 +316,8 @@ function DecisionsBlock({
           {decisions.map((d, i) => (
             <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div style={{ borderRadius: '1rem', padding: '1.25rem 1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
               </div>
               {d.image && (
                 <div style={{ borderRadius: '1rem', overflow: 'hidden', border: 'none', lineHeight: 0 }}>
@@ -751,19 +751,19 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
           {problemStatement && (
             <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
               <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
             </div>
           )}
           <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
             <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Project Goal</span>
             <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
           </div>
           {tab.process && (
             <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
               <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Process</span>
               <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
             </div>
           )}
         </div>
@@ -777,7 +777,20 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, ease: EASE_OUT }}
-              style={{ maxWidth: tab.captionText ? '100%' : '82%', margin: '0 auto 2.5rem', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))', lineHeight: 0 }}
+              style={{
+                // Half width: this is a process diagram, not a screenshot — at
+                // full bleed it dominated the section it was meant to introduce
+                maxWidth: tab.captionText ? '50%' : '82%',
+                margin: '0 auto 2.5rem',
+                borderRadius: '1rem',
+                overflow: 'hidden',
+                // A slightly deeper ground than the page, so a diagram on a white
+                // canvas has an edge to sit against rather than bleeding out
+                background: 'rgb(var(--ink) / 0.05)',
+                padding: '0.75rem',
+                boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))',
+                lineHeight: 0,
+              }}
             >
               {isVid(tab.introMedia.src) ? (
                 <video src={tab.introMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />

@@ -238,7 +238,7 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: 'Show reasoning, not just results.',
             rationale: 'Stakeholders wanted to surface all reasoning. Engineering favoured raw JSON logs. Both would overwhelm users and bury the signal in noise. I chose a collapsible side panel: scannable summary by default, full JSON and cited sources on demand. Progressive disclosure as a trust mechanism — not just a UI pattern. Pilot data showed 65% of users actively used the reasoning panels.',
-            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', scale: 0.7, cropBottom: 150 },
+            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', scale: 0.4, cropBottom: 150 },
           },
           {
             title: 'Chat for exploration. Jobs for delegation.',
@@ -276,7 +276,6 @@ export const CASE_STUDIES: CaseStudy[] = [
             { label: 'Churn', value: '↓24%', description: 'After repositioning around transparency and structured workflows. The shift from "AI chat" to "Financial Intelligence Platform" changed how enterprise buyers evaluated the product.' },
             { label: 'Time-to-insight', value: '↓39%', description: 'Measured across the pilot cohort. The Jobs system and structured reasoning panels meant analysts spent less time wrestling with the tool and more time on judgement.' },
             { label: 'Reasoning panel', value: '65%', description: 'Pilot users actively opened the reasoning panel — validating the bet on transparency over simplicity. Trust was the right problem to solve.' },
-            { label: 'Interface versions', value: '3', description: 'Each killed before significant sunk cost. Rapid prototyping with select users to validate or discard directions fast was the process discipline that made the final version possible.' },
           ],
           footnote: 'The third pivot — from chat to jobs — drove renewed enterprise interest and changed how leadership framed the product to investors.',
         },
@@ -287,7 +286,7 @@ export const CASE_STUDIES: CaseStudy[] = [
         postGoalVisuals: [
           {
             layout: 'carousel' as const,
-            height: '440px',
+            height: '528px',
             images: [
               { src: stDay1,         alt: 'Day 1 — chat only interface',                                caption: 'Day 1 — chat only' },
               { src: stAgentsInAction, alt: 'Agents in action — reasoning visibility demo',              caption: 'Agents in action' },
