@@ -183,7 +183,6 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontSize: 'clamp(1.75rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.92,

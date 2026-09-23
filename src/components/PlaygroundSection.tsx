@@ -284,7 +284,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               <h3
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontStyle: 'italic',
                   fontSize: '1.5rem',
                   color: 'var(--ink-solid)',
                   margin: '0 0 0.75rem',
@@ -333,7 +332,6 @@ export default function PlaygroundSection() {
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontSize: 'clamp(2rem, 5vw, 3.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.92,

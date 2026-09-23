@@ -106,7 +106,15 @@ export const CHAPTER_TITLE: CSSProperties = {
   margin: 0,
 }
 
-/** The source used a coloured italic for emphasis; here italic Bodoni alone carries it. */
+/**
+ * The source used a coloured italic for emphasis; the slant alone carries it here,
+ * since `color` matches CHAPTER_TITLE's.
+ *
+ * This is the one italic left on the display face. Forum ships no italic, so the
+ * browser skews the roman — but the emphasised fragment is a word or two inside a
+ * chapter title, not a heading voice, and without the slant seven chapter titles
+ * lose their emphasis entirely. Needs a non-italic carrier before this can go.
+ */
 export const EMPHASIS: CSSProperties = {
   fontStyle: 'italic',
   color: ink(0.95),

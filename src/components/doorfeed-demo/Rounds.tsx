@@ -174,7 +174,6 @@ function RoundItem({ round, mediaLeads, first }: { round: Round; mediaLeads: boo
                       key={j}
                       style={{
                         fontFamily: 'var(--font-display)',
-                        fontStyle: 'italic',
                         fontSize: '1.0625rem',
                         fontWeight: 300,
                         lineHeight: 1.5,

@@ -6,7 +6,7 @@ html {
 }
 
 @theme inline {
-  --font-heading: 'Bodoni Moda', serif;
+  --font-heading: 'Forum', serif;
   --font-body: 'Barlow', sans-serif;
   --font-sans: 'Barlow', sans-serif;
 }
@@ -15,7 +15,7 @@ html {
   /* ─── Typography tokens — the only place font families are named.
      (Exception: canvas code in ParticleTitle/ProjectLoadingScreen needs
      literal family names; keep those in sync with --font-display.) ─── */
-  --font-display: 'Bodoni Moda', serif;
+  --font-display: 'Forum', serif;
   --font-body: 'Barlow', sans-serif;
 
   --background: 0 0% 0%;
@@ -96,9 +96,9 @@ html {
   --fill-raised: linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04));
 }
 
-/* Warm paper and warm ink — both poles pulled off the extremes. Bodoni Moda is
-   a didone and renders far better dark-on-light, where its hairlines stay crisp
-   instead of blooming. */
+/* Warm paper and warm ink — both poles pulled off the extremes. Forum is a
+   humanist serif with modest stroke contrast, so it holds up on either ground,
+   but it still reads cleaner dark-on-light where nothing blooms. */
 :root[data-theme='light'],
 [data-theme='light'] {
   --ink: 26 24 22;

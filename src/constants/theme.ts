@@ -7,7 +7,7 @@
  * light theme flips `--ink`.
  */
 
-const FALLBACK_DISPLAY = "'Bodoni Moda', serif"
+const FALLBACK_DISPLAY = "'Forum', serif"
 const FALLBACK_INK = '255 255 255'
 
 /**
@@ -43,13 +43,13 @@ export function refreshTheme(): void {
   cachesByRoot = new WeakMap()
 }
 
-/** Display family, e.g. `'Bodoni Moda', serif` — for building `ctx.font` strings. */
+/** Display family, e.g. `'Forum', serif` — for building `ctx.font` strings. */
 export function displayFontFamily(root?: Element): string {
   return readToken('--font-display', FALLBACK_DISPLAY, root)
 }
 
 /** A `ctx.font` string in the display family at the given size. */
-export function displayFont(sizePx: number, style = 'italic', root?: Element): string {
+export function displayFont(sizePx: number, style = 'normal', root?: Element): string {
   return `${style} ${sizePx}px ${displayFontFamily(root)}`
 }
 
