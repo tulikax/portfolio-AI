@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import Footer from '../Footer'
+import ProcessSection from '../ProcessSection'
 import JourneyTimeline from './JourneyTimeline'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
@@ -30,9 +31,9 @@ const SHOW_JOURNEY: boolean = false
 // ──────────────────────────────────────────────────────────────
 
 const PARAGRAPHS = [
-  "My day to day gets spent on B2B finance and complex tools. Regulated spaces where trust and speed both have to hold.",
-  "Outside of that, however, I've never liked sticking to one lane. Brand design, illustration. Product design for solo founders finding their first users. I've conceptualised and built platforms for galleries, art collectors, patients, social workers, people who'd never touched software like it.",
-  "Never one lane, never one client, never one industry. New challenges are the thing I love most. My curiosity and adaptability are at the core of what I do — as long as there's something to learn and something complex to figure out, I'm here for it.",
+  "My day to day gets spent on B2B finance and complex tools — regulated spaces where trust and speed both have to hold. Lately that means working out what it takes to build AI into them: what to optimise for, and where to draw the line.",
+  "Outside of that, I've never liked sticking to one lane. Brand design, illustration, product design for solo founders finding their first users. I've conceptualised and built platforms for galleries, art collectors, patients, social workers — people who'd never touched software built for them before.",
+  "Consulting taught me to work at scale, startups taught me to ship. But the real education has been obsessing over each new world until I can think like the person standing inside it. As long as there's something to learn and something complex to figure out, I'm here for it.",
 ]
 
 export default function AboutPage() {
@@ -49,7 +50,9 @@ export default function AboutPage() {
           style={{
             background: 'rgb(var(--surface))',
             paddingTop: '10rem',
-            paddingBottom: '5rem',
+            /* Tight into "How I work" — the process section carries its own
+               generous top spacing, so this only needs to clear the copy. */
+            paddingBottom: '1.5rem',
             paddingLeft: '1.5rem',
             paddingRight: '1.5rem',
             textAlign: 'center',
@@ -82,9 +85,7 @@ export default function AboutPage() {
                 fontWeight: 400,
               }}
             >
-              The longer
-              <br />
-              version.
+              The longer version.
             </motion.h1>
 
             {PARAGRAPHS.map((para, i) => (
@@ -100,6 +101,10 @@ export default function AboutPage() {
             ))}
           </div>
         </section>
+
+        {/* How I work — moved here from the homepage. It is the long answer to
+            "how", and it belongs next to the long answer to "who". */}
+        <ProcessSection />
 
         {/* Journey */}
         {SHOW_JOURNEY && (

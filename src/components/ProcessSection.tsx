@@ -134,7 +134,7 @@ function DesktopProcess() {
         padding: '2rem 0',
       }}>
         {/* Scroll-driven blobs. Dark only — lit washes turn to muddy smears on paper. */}
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0, display: resolved === 'light' ? 'none' : undefined }}>
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0, opacity: 0.3, display: resolved === 'light' ? 'none' : undefined }}>
           <motion.div style={{ position: 'absolute', top: '-5%', left: '-10%', width: '55vw', height: '55vw', maxWidth: 700, maxHeight: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(180,160,230,0.42) 0%, transparent 70%)', filter: 'blur(72px)', x: b1x, y: b1y }} />
           <motion.div style={{ position: 'absolute', top: '0%', right: '-8%', width: '45vw', height: '45vw', maxWidth: 580, maxHeight: 580, borderRadius: '50%', background: 'radial-gradient(circle, rgba(240,180,190,0.36) 0%, transparent 70%)', filter: 'blur(80px)', x: b2x, y: b2y }} />
           <motion.div style={{ position: 'absolute', top: '30%', left: '30%', width: '40vw', height: '40vw', maxWidth: 520, maxHeight: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(160,210,185,0.32) 0%, transparent 68%)', filter: 'blur(90px)', x: b3x, y: b3y }} />

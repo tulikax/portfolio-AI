@@ -15,6 +15,7 @@ export default function Navbar() {
   const scrolled = useNavbarScroll()
   const location = useLocation()
   const isCaseStudy = location.pathname.startsWith('/work/')
+  const isAbout = location.pathname === '/about'
   // Section anchors only resolve on the homepage; anywhere else they have to route there first
   const isHome = location.pathname === '/'
 
@@ -24,9 +25,18 @@ export default function Navbar() {
     ? NAV_LINKS
     : NAV_LINKS.map((link) => ({ ...link, href: `/${link.href}` }))
 
-  const mobileLinks = isCaseStudy
-    ? [{ label: '← Back to Work', href: '/#work' }]
-    : sectionLinks
+  /**
+   * Pages you arrive at from somewhere get a way back rather than the section
+   * list — the anchors would only bounce you to the homepage anyway, and the
+   * single exit is clearer than four that all leave.
+   */
+  const backLink = isCaseStudy
+    ? { label: '← Back to Work', href: '/#work' }
+    : isAbout
+      ? { label: '← Back to Home', href: '/' }
+      : null
+
+  const mobileLinks = backLink ? [backLink] : sectionLinks
 
   const pillShadow = scrolled
     ? 'inset 0 1px 1px rgb(var(--ink) / 0.10), 0 8px 32px rgb(var(--shadow-ink) / calc(0.6 * var(--shadow-strength)))'
@@ -65,9 +75,9 @@ export default function Navbar() {
           </div>
 
           <nav style={{ alignItems: 'center', gap: '1.5rem' }} className="hidden md:flex">
-            {isCaseStudy ? (
+            {backLink ? (
               <Link
-                to="/#work"
+                to={backLink.href}
                 style={{
                   fontSize: '0.875rem',
                   color: 'var(--text-2)',
@@ -86,7 +96,7 @@ export default function Navbar() {
                   ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-2)'
                 }}
               >
-                ← Back to Work
+                {backLink.label}
               </Link>
             ) : (
               sectionLinks.map((link) => {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { MapPin, PenLine, ArrowUpRight, Play, X } from 'lucide-react'
+import { useTheme } from '../../theme/useTheme'
 import {
   HOME_CITY,
   LATEST_POST,
@@ -291,7 +292,28 @@ function ReadingTile() {
   )
 }
 
+/**
+ * The Substack tile's accent. A pale peach glows on a dark ground and is the
+ * right warmth there; on paper the same peach is barely a tint — the eyebrow
+ * measured under 2:1. Light mode drops to a true brown instead, which keeps the
+ * warmth and earns its contrast.
+ */
+const SUBSTACK_ACCENT = {
+  dark: {
+    eyebrow: 'rgba(255,180,130,0.7)',
+    glyph: 'rgba(255,180,130,0.9)',
+    tint: ['rgba(255,138,60,0.22)', 'rgba(255,138,60,0.06)', 'rgba(255,138,60,0.22)'] as [string, string, string],
+  },
+  light: {
+    eyebrow: 'rgba(122,58,16,0.95)',
+    glyph: 'rgba(122,58,16,0.95)',
+    tint: ['rgba(148,84,34,0.20)', 'rgba(148,84,34,0.07)', 'rgba(122,58,16,0.30)'] as [string, string, string],
+  },
+}
+
 export default function CurrentlyBlock() {
+  const { resolved } = useTheme()
+  const substack = resolved === 'light' ? SUBSTACK_ACCENT.light : SUBSTACK_ACCENT.dark
   const time = useLocalTime(HOME_CITY.timeZone)
 
   return (
@@ -331,12 +353,12 @@ export default function CurrentlyBlock() {
         <Thumb
           src={LATEST_POST.iconUrl}
           alt=""
-          tint={['rgba(255,138,60,0.22)', 'rgba(255,138,60,0.06)', 'rgba(255,138,60,0.22)']}
+          tint={substack.tint}
         >
-          <PenLine style={{ width: 16, height: 16, color: 'rgba(255,180,130,0.9)' }} />
+          <PenLine style={{ width: 16, height: 16, color: substack.glyph }} />
         </Thumb>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ ...EYEBROW, color: 'rgba(255,180,130,0.7)' }}>Last thing I wrote</p>
+          <p style={{ ...EYEBROW, color: substack.eyebrow }}>Last thing I wrote</p>
           <p style={TITLE}>{LATEST_POST.title}</p>
           <p style={META}>{LATEST_POST.date} · Substack</p>
         </div>

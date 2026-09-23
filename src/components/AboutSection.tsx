@@ -18,8 +18,10 @@ const fadeUp = {
   transition: { duration: 0.7, ease: EASE_OUT },
 }
 
-/** The overarching version — the detail lives on /about */
-const INTRO = "My focus has always been finance and complex systems. Dense workflows, high-stakes platforms, legacy systems — spaces where trust and speed both have to hold. I'm currently navigating what it means to build AI into these highly regulated spaces, learning what to optimise and where to draw the line. Outside of that, I've always tried to step outside my comfort zone: graphic design, illustration, platforms for audiences and contexts that didn't use software before. Consulting taught me to work at scale, startups taught me to ship. But the real education has been obsessing over each new world until I can think like the person standing inside it."
+/**
+ * The homepage carries the heading, the link through, and Currently — no prose.
+ * The long version lives on /about, where AboutPage owns the copy.
+ */
 
 // Floating cards — 6 unique images, no repeats
 const FLOATING_CARDS = [
@@ -93,7 +95,7 @@ function FloatingCard({ card }: {
   )
 }
 
-export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs?: string[] } = {}) {
+export default function AboutSection() {
   const { resolved } = useTheme()
   return (
     <section
@@ -114,6 +116,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
         style={{
           position: 'absolute',
           display: resolved === 'light' ? 'none' : undefined,
+          opacity: 0.3,
           top: '50%',
           left: '50%',
           width: '70%',
@@ -196,46 +199,30 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
           curious by nature.
         </motion.h2>
 
-        <motion.p
-          {...fadeUp}
-          transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
-          className="about-body-text"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontWeight: 300,
-            fontSize: '1.05rem',
-            color: 'var(--text-2)',
-            lineHeight: 1.7,
-            maxWidth: '640px',
-          }}
-        >
-          {INTRO}
-        </motion.p>
-
-        {/* Appended copy (e.g. the intro paragraphs moved down from the hero) */}
-        {extraParagraphs.map((para, i) => (
-          <motion.p
-            key={i}
-            {...fadeUp}
-            transition={{ duration: 0.7, delay: 0.24 + i * 0.08, ease: EASE_OUT }}
-            className="about-body-text"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 300,
-              fontSize: '1.05rem',
-              color: 'var(--text-2)',
-              lineHeight: 1.7,
-              maxWidth: '640px',
-            }}
-          >
-            {para}
-          </motion.p>
-        ))}
-
+        {/* What she's into right now — content lives in src/constants/currently.ts */}
         <motion.div
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.24, ease: EASE_OUT }}
-          style={{ marginTop: '0.5rem' }}
+          style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
+              letterSpacing: '0.14em', textTransform: 'uppercase',
+              color: 'var(--text-3)', margin: 0,
+            }}
+          >
+            Currently
+          </p>
+          <CurrentlyBlock />
+        </motion.div>
+
+        {/* The way through to the long version — last, so Currently is what the
+            section leaves you on rather than an interruption before it. */}
+        <motion.div
+          {...fadeUp}
+          transition={{ duration: 0.7, delay: 0.32, ease: EASE_OUT }}
+          style={{ marginTop: '2.5rem' }}
         >
           <Link
             to="/about"
@@ -257,24 +244,6 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
             More about me
             <ArrowRight style={{ width: '0.95rem', height: '0.95rem', strokeWidth: 1.75, flexShrink: 0 }} />
           </Link>
-        </motion.div>
-
-        {/* What she's into right now — content lives in src/constants/currently.ts */}
-        <motion.div
-          {...fadeUp}
-          transition={{ duration: 0.7, delay: 0.32, ease: EASE_OUT }}
-          style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
-              letterSpacing: '0.14em', textTransform: 'uppercase',
-              color: 'var(--text-3)', margin: 0,
-            }}
-          >
-            Currently
-          </p>
-          <CurrentlyBlock />
         </motion.div>
       </div>
 

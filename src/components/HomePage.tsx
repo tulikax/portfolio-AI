@@ -3,16 +3,12 @@ import { useLocation } from 'react-router-dom'
 import HeroSection from './HeroSection'
 import AboutSection from './AboutSection'
 import WorkSection from './WorkSection'
-import ProcessSection from './ProcessSection'
 // import PlaygroundSection from './PlaygroundSection'
-import CTASection from './CTASection'
 import StackSection from './StackSection'
 import Footer from './Footer'
 
-export default function HomePage({ hero, aboutExtra }: {
+export default function HomePage({ hero }: {
   hero?: ReactNode
-  /** Extra paragraphs appended to the About section (used by the hero demo) */
-  aboutExtra?: string[]
 }) {
   const { hash } = useLocation()
 
@@ -29,11 +25,11 @@ export default function HomePage({ hero, aboutExtra }: {
       <main>
         {hero ?? <HeroSection />}
         <WorkSection />
-        <AboutSection extraParagraphs={aboutExtra} />
-        {/* <PlaygroundSection /> */}
-        <ProcessSection />
         <StackSection />
-        <CTASection />
+        <AboutSection />
+        {/* <PlaygroundSection /> */}
+        {/* Process ("How I work") now lives on /about, alongside the long copy.
+            CTASection is retired — the page ends on Currently, then the footer. */}
       </main>
       <Footer />
     </div>

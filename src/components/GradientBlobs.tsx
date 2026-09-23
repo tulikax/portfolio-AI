@@ -36,6 +36,9 @@ export default function GradientBlobs({
         overflow: 'hidden',
         pointerEvents: 'none',
         zIndex: 0,
+        // The wash sits well behind the content — at full strength it competes
+        // with the type rather than backing it.
+        opacity: 0.3,
       }}
     >
       {/* Lavender — top left */}

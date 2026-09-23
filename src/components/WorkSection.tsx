@@ -402,6 +402,23 @@ export default function WorkSection() {
             lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0', fontWeight: 400,
           }}
         >Things I've done.</motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 300,
+            fontSize: '0.875rem',
+            letterSpacing: '0.01em',
+            color: 'var(--text-3)',
+            margin: '0.75rem 0 0',
+          }}
+        >
+          Hover for a sneak peek, click to open the case study
+        </motion.p>
       </div>
 
       <div style={{
