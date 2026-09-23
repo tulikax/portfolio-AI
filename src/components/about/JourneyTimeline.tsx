@@ -60,7 +60,7 @@ export default function JourneyTimeline() {
               overflow: 'hidden',
               borderRadius: '1.125rem',
               padding: '1.25rem 1.375rem',
-              background: 'linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04))',
+              background: 'var(--fill-raised)',
               backdropFilter: 'blur(40px)',
               WebkitBackdropFilter: 'blur(40px)',
               border: '1px solid rgb(var(--ink) / 0.13)',

@@ -176,7 +176,7 @@ function DesktopProcess() {
                 <div style={{
                   maxWidth: '30rem', width: '100%',
                   borderRadius: '1.25rem', padding: '1.5rem', position: 'relative',
-                  background: 'linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04))',
+                  background: 'var(--fill-raised)',
                   backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.13)',
                   boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / calc(0.60 * var(--shadow-strength)))',
@@ -232,7 +232,7 @@ function DesktopProcess() {
                 transform: 'translate(-50%, -50%)',
                 width: 10, height: 10, borderRadius: '50%',
                 background: 'var(--ink-solid)', opacity: nodeOpacities[i],
-                boxShadow: '0 0 8px rgb(var(--ink) / 0.6)',
+                boxShadow: resolved === 'light' ? 'none' : '0 0 8px rgb(var(--ink) / 0.6)',
               }} />
             ))}
           </div>
@@ -323,7 +323,7 @@ function MobileProcess() {
                   borderRadius: '1.125rem',
                   padding: '1.25rem',
                   position: 'relative',
-                  background: 'linear-gradient(145deg, rgb(var(--ink) / 0.08), rgb(var(--ink) / 0.03))',
+                  background: 'var(--fill-card)',
                   backdropFilter: 'blur(40px)',
                   WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.11)',

@@ -17,7 +17,7 @@ const ART_SIZE = 56
 
 const TILE: React.CSSProperties = {
   borderRadius: '1.25rem',
-  background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
+  background: 'var(--fill-card)',
   backdropFilter: 'blur(20px)',
   WebkitBackdropFilter: 'blur(20px)',
   border: '1px solid rgb(var(--ink) / 0.09)',

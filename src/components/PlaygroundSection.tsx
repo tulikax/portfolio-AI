@@ -59,7 +59,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           padding: '1.75rem',
           position: 'relative',
           overflow: 'hidden',
-          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
+          background: 'var(--fill-card)',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgb(var(--ink) / 0.09)',

@@ -52,7 +52,7 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
           width: '64px',
           height: '64px',
           borderRadius: '12px',
-          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02))',
+          background: 'var(--fill-card)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           border: '1px solid rgb(var(--ink) / 0.10)',

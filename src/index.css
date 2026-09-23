@@ -88,6 +88,12 @@ html {
   --text-1: rgb(var(--ink) / 0.92);
   --text-2: rgb(var(--ink) / 0.68);
   --text-3: rgb(var(--ink) / 0.50);
+
+  /* Card surfaces. A raking gradient gives a dark card its sense of a lit edge;
+     on paper there is no light to rake, so the light theme collapses these to a
+     flat tint — see the light block. */
+  --fill-card: linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02));
+  --fill-raised: linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04));
 }
 
 /* Warm paper and warm ink — both poles pulled off the extremes. Bodoni Moda is
@@ -101,16 +107,17 @@ html {
 
   --shadow-ink: 26 24 22;
 
-  /* Half strength on paper. Shadows there come from a near, diffuse light and
-     read as a faint lift, not a cast. */
-  --shadow-strength: 0.5;
+  /* No shadows on paper. The multiplier zeroes the alpha of every bespoke shadow
+     in the codebase, so they are all present in the markup but invisible — one
+     value brings them back if that turns out to be too flat. */
+  --shadow-strength: 0;
 
-  /* Not the dark values at lower opacity: the blur roughly halves and the offset
-     tightens. A shadow on paper comes from a near light source and stays close
-     to its object; the same geometry at low alpha reads as a grey smudge. */
-  --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.06) inset;
-  --shadow-card: 0 2px 8px rgb(var(--shadow-ink) / 0.08);
-  --shadow-float: 0 6px 20px rgb(var(--shadow-ink) / 0.10);
+  /* A zero-size transparent shadow rather than `none`, because call sites compose
+     these — `var(--shadow-hairline), var(--shadow-float)` resolving to
+     `none, none` is invalid and would drop the whole declaration. */
+  --shadow-hairline: 0 0 0 transparent;
+  --shadow-card: 0 0 0 transparent;
+  --shadow-float: 0 0 0 transparent;
 
   /* Higher alphas than dark at every tier. Dark ink on paper does not bloom the
      way light ink on a dark ground does, so it needs more opacity to read as the
@@ -118,6 +125,43 @@ html {
   --text-1: rgb(var(--ink) / 0.92);
   --text-2: rgb(var(--ink) / 0.76);
   --text-3: rgb(var(--ink) / 0.62);
+
+  /* Flat, not graded. Printed stock has no raking light, and a gradient on paper
+     reads as a smudge rather than a surface. Kept very faint — the card is read
+     by its hairline border and its shadow, not by a fill fighting the page. */
+  --fill-card: rgb(var(--ink) / 0.012);
+  --fill-raised: rgb(var(--ink) / 0.02);
+}
+
+/* Glows are cast shadows drawn in --ink rather than --shadow-ink, so
+   --shadow-strength never reaches them. On a dark ground they read as light
+   spilling off the element; on paper the same thing is a grey smudge. The ring
+   survives — it is a border, not a shadow. */
+:root[data-theme='light'] .cta-glow,
+[data-theme='light'] .cta-glow {
+  box-shadow: 0 0 0 1px rgb(var(--ink) / 0.10);
+}
+
+:root[data-theme='light'] .cta-glow:hover,
+[data-theme='light'] .cta-glow:hover {
+  box-shadow: 0 0 0 1px rgb(var(--ink) / 0.20);
+}
+
+/* The two glass fills are gradients in dark for the raking-light effect. On paper
+   they flatten with everything else. */
+:root[data-theme='light'] .liquid-glass::after,
+[data-theme='light'] .liquid-glass::after {
+  background: rgb(var(--ink) / 0.03);
+}
+
+:root[data-theme='light'] .btn-glass,
+[data-theme='light'] .btn-glass {
+  background: rgb(var(--ink) / 0.02);
+}
+
+:root[data-theme='light'] .btn-glass:hover,
+[data-theme='light'] .btn-glass:hover {
+  background: rgb(var(--ink) / 0.04);
 }
 
 @layer base {
