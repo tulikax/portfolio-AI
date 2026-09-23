@@ -29,7 +29,7 @@ export default function Navbar() {
     : sectionLinks
 
   const pillShadow = scrolled
-    ? 'inset 0 1px 1px rgb(var(--ink) / 0.10), 0 8px 32px rgb(var(--shadow-ink) / 0.6)'
+    ? 'inset 0 1px 1px rgb(var(--ink) / 0.10), 0 8px 32px rgb(var(--shadow-ink) / calc(0.6 * var(--shadow-strength)))'
     : 'inset 0 1px 1px rgb(var(--ink) / 0.10)'
 
   const nav = (

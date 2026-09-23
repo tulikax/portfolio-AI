@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import CurrentlyBlock from './about/CurrentlyBlock'
+import { useTheme } from '../theme/useTheme'
 import photo1 from '../assets/section 2/maybe/PHOTO-2024-10-07-20-19-47.jpg'
 import photo2 from '../assets/section 2/maybe/PHOTO-2024-10-16-22-50-46.jpg'
 import deloittePhone from '../assets/section 2/maybe/Deloitte phone.png'
@@ -62,7 +63,7 @@ function FloatingCard({ card }: {
         width: card.w,
         borderRadius: '10px',
         border: '1px solid rgb(var(--ink) / 0.10)',
-        boxShadow: '0 8px 32px rgb(var(--shadow-ink) / 0.45), 0 1px 0 rgb(var(--ink) / 0.08) inset',
+        boxShadow: '0 8px 32px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength))), 0 1px 0 rgb(var(--ink) / 0.08) inset',
         overflow: 'hidden',
         zIndex: 1,
         pointerEvents: 'none',
@@ -93,6 +94,7 @@ function FloatingCard({ card }: {
 }
 
 export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs?: string[] } = {}) {
+  const { resolved } = useTheme()
   return (
     <section
       id="about"
@@ -107,10 +109,11 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
         position: 'relative',
       }}
     >
-      {/* Animated 3D gradient blob */}
+      {/* Animated 3D gradient blob. Dark only — a lit wash reads as a stain on paper. */}
       <div
         style={{
           position: 'absolute',
+          display: resolved === 'light' ? 'none' : undefined,
           top: '50%',
           left: '50%',
           width: '70%',

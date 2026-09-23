@@ -66,7 +66,7 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
         style={{
           borderRadius: '1.25rem',
           overflow: 'hidden',
-          boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.55)',
+          boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength)))',
           lineHeight: 0,
           height: 'clamp(300px, 42vw, 640px)',
         }}
@@ -441,7 +441,7 @@ function OutcomeBlock({
       </div>
       )}
       {outcomeMedia && (
-        <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: footnote ? '1.5rem' : 0, boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.45)' }}>
+        <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: footnote ? '1.5rem' : 0, boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}>
           {/\.(mp4|webm|mov)$/i.test(outcomeMedia.src) ? (
             <video src={outcomeMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
           ) : (
@@ -505,7 +505,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
       const w = m.scale ? `${m.scale}%` : '100%'
       return (
         <div key={j} style={{ margin: '1.5rem 0', display: 'flex', justifyContent: 'center' }}>
-          <div style={{ width: w, borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.45)' }}>
+          <div style={{ width: w, borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}>
             {isVid ? (
               <video src={m.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
             ) : (
@@ -648,7 +648,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, ease: EASE_OUT }}
                 style={{ borderRadius: '1.25rem', overflow: 'hidden', lineHeight: 0,
-                  boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.55)', maxWidth: '60%', marginLeft: 'auto' }}
+                  boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength)))', maxWidth: '60%', marginLeft: 'auto' }}
               >
                 {isVideoSrc(data.problemMedia.src) ? (
                   <video src={data.problemMedia.src} autoPlay loop muted playsInline
@@ -734,7 +734,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
             </motion.div>
           )}
           {tab.problemImage && (
-            <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '3rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.45)' }}>
+            <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '3rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}>
               {isVid(tab.problemImage.src) ? (
                 <video src={tab.problemImage.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
@@ -777,7 +777,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, ease: EASE_OUT }}
-              style={{ maxWidth: tab.captionText ? '100%' : '82%', margin: '0 auto 2.5rem', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.45)', lineHeight: 0 }}
+              style={{ maxWidth: tab.captionText ? '100%' : '82%', margin: '0 auto 2.5rem', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))', lineHeight: 0 }}
             >
               {isVid(tab.introMedia.src) ? (
                 <video src={tab.introMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -793,7 +793,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, delay: 0, ease: EASE_OUT }}
-              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.45)' }}
+              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}
             >
               {isVid(tab.goalMedia.src) ? (
                 <video src={tab.goalMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -819,7 +819,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, delay: 0.06, ease: EASE_OUT }}
-              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / 0.45)' }}
+              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}
             >
               {isVid(tab.processMedia.src) ? (
                 <video src={tab.processMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />

@@ -59,6 +59,12 @@ html {
      colour at low alpha, and the two need to diverge in light mode. */
   --shadow-ink: 0 0 0;
 
+  /* Every shadow alpha is multiplied by this. Bespoke shadows keep their own
+     geometry and alpha — which is right for dark, but a 0.55 near-black shadow
+     on paper is a smear. One multiplier moves all 32 of them together rather
+     than re-tuning each by hand. */
+  --shadow-strength: 1;
+
   /* Composite because inline styles can only consume a finished value.
      Compose them at call sites: `var(--shadow-hairline), var(--shadow-float)`.
      Geometry is per-theme — see the light block below for why. */
@@ -94,6 +100,10 @@ html {
   --surface: 250 249 246;
 
   --shadow-ink: 26 24 22;
+
+  /* Half strength on paper. Shadows there come from a near, diffuse light and
+     read as a faint lift, not a cast. */
+  --shadow-strength: 0.5;
 
   /* Not the dark values at lower opacity: the blur roughly halves and the offset
      tightens. A shadow on paper comes from a near light source and stays close
@@ -174,18 +184,18 @@ a, button, [role="button"], input, select, textarea, label {
 
 /* Navbar pill — real fill on the element (no ::before ring / ::after blur layer) */
 .nav-glass-pill {
-  background-color: var(--text-3);
+  background-color: rgb(var(--ink) / 0.22);
   border: 1px solid rgb(var(--ink) / 0.2);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow:
     inset 0 1px 0 rgb(var(--ink) / 0.14),
-    0 8px 32px rgb(var(--shadow-ink) / 0.35);
+    0 8px 32px rgb(var(--shadow-ink) / calc(0.35 * var(--shadow-strength)));
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .nav-glass-pill {
-    background-color: var(--text-3);
+    background-color: rgb(var(--ink) / 0.28);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -257,7 +267,7 @@ a, button, [role="button"], input, select, textarea, label {
   );
   backdrop-filter: blur(50px) saturate(150%);
   -webkit-backdrop-filter: blur(50px) saturate(150%);
-  box-shadow: 4px 4px 4px rgb(var(--shadow-ink) / 0.05), inset 0 1px 1px rgb(var(--ink) / 0.15);
+  box-shadow: 4px 4px 4px rgb(var(--shadow-ink) / calc(0.05 * var(--shadow-strength))), inset 0 1px 1px rgb(var(--ink) / 0.15);
   pointer-events: none;
 }
 
@@ -614,7 +624,7 @@ a, button, [role="button"], input, select, textarea, label {
   border: 1px solid rgb(var(--ink) / 0.20);
   box-shadow:
     inset 0 1px 0 rgb(var(--ink) / 0.18),
-    0 8px 28px rgb(var(--shadow-ink) / 0.45);
+    0 8px 28px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)));
   transition:
     background 200ms var(--ease-out),
     border-color 200ms var(--ease-out);
@@ -622,7 +632,7 @@ a, button, [role="button"], input, select, textarea, label {
 
 .btn-glass:hover {
   background: linear-gradient(145deg, rgb(var(--ink) / 0.22), rgb(var(--ink) / 0.10));
-  border-color: var(--text-3);
+  border-color: rgb(var(--ink) / 0.30);
 }
 
 @media (prefers-reduced-motion: reduce) {

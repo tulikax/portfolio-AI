@@ -196,7 +196,7 @@ export function HeroNameReveal({ visible, placement = 'below' }: {
               objectFit: 'cover',
               borderRadius: '9999px',
               border: `1px solid ${ACCENT}`,
-              boxShadow: '0 8px 28px rgb(var(--shadow-ink) / 0.5)',
+              boxShadow: '0 8px 28px rgb(var(--shadow-ink) / calc(0.5 * var(--shadow-strength)))',
             }}
           />
 

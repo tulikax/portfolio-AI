@@ -64,7 +64,7 @@ export default function JourneyTimeline() {
               backdropFilter: 'blur(40px)',
               WebkitBackdropFilter: 'blur(40px)',
               border: '1px solid rgb(var(--ink) / 0.13)',
-              boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / 0.60)',
+              boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / calc(0.60 * var(--shadow-strength)))',
             }}>
               <div style={{
                 position: 'absolute', top: 0, left: '1.25rem', right: '1.25rem', height: '1px',

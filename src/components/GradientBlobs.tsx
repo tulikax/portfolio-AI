@@ -1,7 +1,12 @@
+import { useTheme } from '../theme/useTheme'
+
 /**
  * Animated pastel gradient blobs — replaces video backgrounds.
  * All blobs are absolutely positioned, pointer-events none.
  * `fast` prop makes the process section blobs move with dramatic cubic easing.
+ *
+ * Dark only. These are lit washes — they glow against a dark ground and turn to
+ * muddy smears on paper, where the page is meant to read as printed stock.
  */
 export default function GradientBlobs({
   variant = 'default',
@@ -10,6 +15,9 @@ export default function GradientBlobs({
   variant?: 'default' | 'process'
   fast?: boolean
 }) {
+  const { resolved } = useTheme()
+  if (resolved === 'light') return null
+
   // Slow dreamy movement vs fast cubic snapping
   const d1 = fast ? '3.2s' : '20s'
   const d2 = fast ? '2.8s' : '24s'

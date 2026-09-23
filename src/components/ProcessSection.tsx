@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Search, Compass, Layers, CheckSquare } from 'lucide-react'
+import { useTheme } from '../theme/useTheme'
 
 const STEPS = [
   {
@@ -73,6 +74,7 @@ function useIsMobile() {
 const E = 0.06
 
 function DesktopProcess() {
+  const { resolved } = useTheme()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
@@ -131,8 +133,8 @@ function DesktopProcess() {
         gap: '32px',
         padding: '2rem 0',
       }}>
-        {/* Scroll-driven blobs */}
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+        {/* Scroll-driven blobs. Dark only — lit washes turn to muddy smears on paper. */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0, display: resolved === 'light' ? 'none' : undefined }}>
           <motion.div style={{ position: 'absolute', top: '-5%', left: '-10%', width: '55vw', height: '55vw', maxWidth: 700, maxHeight: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(180,160,230,0.42) 0%, transparent 70%)', filter: 'blur(72px)', x: b1x, y: b1y }} />
           <motion.div style={{ position: 'absolute', top: '0%', right: '-8%', width: '45vw', height: '45vw', maxWidth: 580, maxHeight: 580, borderRadius: '50%', background: 'radial-gradient(circle, rgba(240,180,190,0.36) 0%, transparent 70%)', filter: 'blur(80px)', x: b2x, y: b2y }} />
           <motion.div style={{ position: 'absolute', top: '30%', left: '30%', width: '40vw', height: '40vw', maxWidth: 520, maxHeight: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(160,210,185,0.32) 0%, transparent 68%)', filter: 'blur(90px)', x: b3x, y: b3y }} />
@@ -177,7 +179,7 @@ function DesktopProcess() {
                   background: 'linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04))',
                   backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.13)',
-                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / 0.60)',
+                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / calc(0.60 * var(--shadow-strength)))',
                 }}>
                   <div style={{ position: 'absolute', top: 0, left: '1.25rem', right: '1.25rem', height: '1px', background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.18), transparent)' }} />
                   <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
@@ -325,7 +327,7 @@ function MobileProcess() {
                   backdropFilter: 'blur(40px)',
                   WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.11)',
-                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 12px 32px rgb(var(--shadow-ink) / 0.50)',
+                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 12px 32px rgb(var(--shadow-ink) / calc(0.50 * var(--shadow-strength)))',
                 }}>
                   <div style={{ position: 'absolute', top: 0, left: '1rem', right: '1rem', height: '1px', background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.16), transparent)' }} />
 

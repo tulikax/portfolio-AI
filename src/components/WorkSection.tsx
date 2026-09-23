@@ -187,7 +187,7 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
           onMouseEnter={e => {
             if (!role.caseStudySlug) return
             const el = e.currentTarget as HTMLDivElement
-            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 60px rgb(var(--shadow-ink) / 0.6), 0 0 0 1px rgb(var(--ink) / 0.12)'
+            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 60px rgb(var(--shadow-ink) / calc(0.6 * var(--shadow-strength))), 0 0 0 1px rgb(var(--ink) / 0.12)'
             el.style.borderColor = 'rgb(var(--ink) / 0.16)'
           }}
           onMouseLeave={e => {
