@@ -463,6 +463,13 @@ export const EXPLORATION = {
   ] satisfies Round[],
 }
 
+/**
+ * Storybook captures do not exist yet. Until they do, the component tabs and the
+ * artefacts panel render striped "to come" placeholders — which read as a broken
+ * page rather than work in progress. Set to true once the images land.
+ */
+const SHOW_STORYBOOK = false
+
 export const ARTIFACTS = {
   num: '03',
   eyebrow: 'Final artifacts',
@@ -494,15 +501,23 @@ export const ARTIFACTS = {
       kind: 'point',
       text: 'There were still custom components that had to be rendered in the chat.',
       pill: 'More coming soon — last updated July 2026',
-      withComponents: true,
+      // Held back until the captures exist. The component tabs and the Storybook
+      // block below them render striped "to come" panels, which read as an
+      // unfinished page rather than a promise — the pill above already says the
+      // work is ongoing. Flip SHOW_STORYBOOK to bring both back.
+      withComponents: SHOW_STORYBOOK,
     },
-    {
-      kind: 'placeholder',
-      num: '04',
-      label: 'Storybook artefacts',
-      hint: 'A few Storybook artefacts to come.',
-      pill: 'Coming soon — last updated July 2026',
-    },
+    ...(SHOW_STORYBOOK
+      ? [
+          {
+            kind: 'placeholder' as const,
+            num: '04',
+            label: 'Storybook artefacts',
+            hint: 'A few Storybook artefacts to come.',
+            pill: 'Coming soon — last updated July 2026',
+          },
+        ]
+      : []),
   ] satisfies ShippedItem[],
   components: [
     {
