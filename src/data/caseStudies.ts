@@ -21,7 +21,6 @@ import stResearchUsers       from '../assets/SigTech/Case Study/Approach/researc
 import stResearchCompetition from '../assets/SigTech/Case Study/Approach/research -competition analysis.png'
 // SigTech — Finding Direction
 import stPivot1            from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/starting point or pivot 1 - Multiple GPTs within existing IDE.png'
-import stPivot2ChatBased   from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2 fully chat based.png'
 import stPivot2Agent       from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2.2 - thikning about agent use in real life.png'
 import stPivot3Exploration from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 3 explorations - beyond chats exploration - making the use case generic but scalable or adaptable.png'
 // SigTech — What finally shipped
@@ -221,11 +220,9 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: '02 · Focus on transparency and error detection',
             rationale: 'We started to build an enriched chat architecture with an added transparency layer — users could see tasks assigned to each agent, queries sent, and responses returned. For mid-2024, before any mainstream LLM surfaced this kind of reasoning visibility, it was new. But the core experience still felt like a better ChatGPT. Seeing the work behind the answer wasn\'t enough of a reason to switch.',
-            imagesLayout: 'side-column' as const,
-            images: [
-              { src: stPivot2ChatBased, alt: 'Pivot 2 — fully chat based' },
-              { src: stPivot2Agent,     alt: 'Pivot 2 — thinking about agent use in real life' },
-            ],
+            // The 'fully chat based' wireframe is held back — two wireframe
+            // sets for one pivot read as a contact sheet rather than a point.
+            image: { src: stPivot2Agent, alt: 'Pivot 2 — thinking about agent use in real life', scale: 0.85 },
           },
           {
             title: '03 — From "talk to AI" to "delegate to AI."',
@@ -238,17 +235,17 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: 'Show reasoning, not just results.',
             rationale: 'Stakeholders wanted to surface all reasoning. Engineering favoured raw JSON logs. Both would overwhelm users and bury the signal in noise. I chose a collapsible side panel: scannable summary by default, full JSON and cited sources on demand. Progressive disclosure as a trust mechanism — not just a UI pattern. Pilot data showed 65% of users actively used the reasoning panels.',
-            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', scale: 0.4, cropBottom: 150 },
+            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', scale: 0.22, cropBottom: 150 },
           },
           {
             title: 'Chat for exploration. Jobs for delegation.',
             rationale: 'Chat was flexible but indistinguishable from general LLMs. Pilot logs showed the same complex prompts repeated session after session — friction disguised as flexibility. I introduced a Jobs system: pre-configured, schedulable, executable workflows alongside chat. Two modes, one platform. The shift that repositioned MAGIC as a Financial Intelligence Platform.',
-            image: { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept' },
+            image: { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept', scale: 0.3 },
           },
           {
             title: 'Familiarity over novelty in interaction patterns.',
             rationale: 'A differentiated product invites differentiated UI. But novel patterns that delighted power users confused analysts new to LLMs — and confusion erodes the trust we were trying to build. I used established conventions (copy, feedback, sidebar) as the foundation, with progressive disclosure for advanced features.',
-            image: { src: stChatFlow, alt: 'Chat flow — familiar interaction pattern in action' },
+            image: { src: stChatFlow, alt: 'Chat flow — familiar interaction pattern in action', scale: 0.4 },
           },
           {
             title: 'Inline source verification at the point of doubt.',
