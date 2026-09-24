@@ -71,6 +71,13 @@ export interface CaseStudyImage {
   src: string
   alt: string
   caption?: string
+  /**
+   * Set when the asset has light type baked into a transparent or near-white
+   * background. Such an image is only legible on a dark ground, so it carries
+   * its own rather than inheriting the page's — otherwise it disappears
+   * entirely on the light theme.
+   */
+  darkGround?: boolean
 }
 
 export interface DesignDecision {

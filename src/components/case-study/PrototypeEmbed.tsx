@@ -94,7 +94,7 @@ export default function PrototypeEmbed({ embed }: Props) {
       {embed.caption && (
         <p
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'var(--cs-body-sm)',
             fontWeight: 300,
             color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',

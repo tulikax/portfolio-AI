@@ -148,7 +148,7 @@ export default function CaseStudyPage() {
               transition={{ duration: 0.7, delay: i * 0.15, ease: EASE_OUT }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '1rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 300,
                 color: 'var(--text-2)',
                 lineHeight: 1.8,
@@ -255,7 +255,7 @@ export default function CaseStudyPage() {
                 transition={{ duration: 0.7, ease: EASE_OUT }}
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: '1rem',
+                  fontSize: 'var(--cs-body)',
                   fontWeight: 300,
                   color: 'var(--text-2)',
                   lineHeight: 1.8,
@@ -289,7 +289,7 @@ export default function CaseStudyPage() {
               transition={{ duration: 0.7, ease: EASE_OUT }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '1rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 300,
                 color: 'var(--text-2)',
                 lineHeight: 1.8,

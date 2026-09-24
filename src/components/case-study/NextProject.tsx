@@ -40,7 +40,7 @@ export default function NextProject({ nextProject }: Props) {
               <span
                 style={{
                   display: 'block',
-                  fontSize: '0.68rem',
+                  fontSize: 'var(--cs-eyebrow)',
                   fontWeight: 500,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
@@ -55,7 +55,7 @@ export default function NextProject({ nextProject }: Props) {
                 <h2
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(2rem, 5vw, 3.75rem)',
+                    fontSize: 'var(--cs-h2)',
                     fontWeight: 400,
                     letterSpacing: '-0.04em',
                     color: 'var(--ink-solid)',
@@ -131,7 +131,7 @@ export default function NextProject({ nextProject }: Props) {
                 alignItems: 'center',
                 gap: '0.5rem',
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.875rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 400,
                 color: 'var(--text-2)',
                 letterSpacing: '0.04em',

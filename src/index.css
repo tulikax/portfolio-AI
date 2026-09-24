@@ -134,6 +134,28 @@ html {
 }
 
 /*
+ * ─── Case-study type scale ────────────────────────────────────────────────
+ *
+ * The three case studies render through two different architectures — DoorFeed
+ * and MAGIC via project tabs, NLG via stacked body paragraphs — and each grew
+ * its own sizes. An audit found four heading clamps, seven eyebrow sizes and
+ * seven body sizes doing three jobs between them.
+ *
+ * These are those jobs, named once. Sizes live here rather than at call sites so
+ * the next page added to either architecture inherits the scale instead of
+ * inventing a neighbouring value.
+ */
+:root {
+  --cs-display: clamp(2.45rem, 4.9vw, 3.85rem); /* chapter openers */
+  --cs-h2: clamp(1.6rem, 3.5vw, 2.5rem); /* section headings */
+  --cs-h3: clamp(1.25rem, 2.5vw, 1.6rem); /* sub-headings */
+  --cs-lead: clamp(0.95rem, 1.6vw, 1.15rem); /* standfirsts under a heading */
+  --cs-body: 0.95rem; /* main copy */
+  --cs-body-sm: 0.85rem; /* captions, meta, annotations */
+  --cs-eyebrow: 0.68rem; /* small-caps labels */
+}
+
+/*
  * Case-study prototype row: the clip and the decision cards beside it.
  * The clip takes the larger share — it is the artefact, and the cards are
  * annotations on it. Stacks below 900px, where two columns would leave the

@@ -38,7 +38,7 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
         <Wrap
           {...(animate ? { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6, delay: 0.1, ease: EASE_OUT } } : {})}
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'var(--cs-eyebrow)',
             fontWeight: 500,
             letterSpacing: '0.11em',
             textTransform: 'uppercase',
@@ -70,7 +70,7 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
       <Wrap
         {...(animate ? { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, delay: 0.28, ease: EASE_OUT } } : {})}
         style={{
-          fontSize: 'clamp(0.875rem, 1.6vw, 1.2rem)',
+          fontSize: 'var(--cs-lead)',
           fontWeight: 300,
           color: 'var(--text-2)',
           fontFamily: 'var(--font-body)',
@@ -93,10 +93,10 @@ function TextContent({ data, animate = true }: { data: CaseStudy; animate?: bool
           { label: 'Duration', value: data.duration },
         ]).map((meta) => (
           <div key={`${meta.label}-${meta.value}`} style={{ display: 'flex', gap: '0.35rem', alignItems: 'baseline' }}>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 400, color: 'var(--text-3)' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body-sm)', fontWeight: 400, color: 'var(--text-3)' }}>
               {meta.label}
             </span>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-1)' }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body-sm)', fontWeight: 500, color: 'var(--text-1)' }}>
               {meta.value}
             </span>
           </div>

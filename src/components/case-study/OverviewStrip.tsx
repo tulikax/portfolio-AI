@@ -48,7 +48,7 @@ export default function OverviewStrip({ data }: Props) {
             {/* Label */}
             <span
               style={{
-                fontSize: '0.68rem',
+                fontSize: 'var(--cs-eyebrow)',
                 fontWeight: 500,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
@@ -62,7 +62,7 @@ export default function OverviewStrip({ data }: Props) {
             {/* Content */}
             <p
               style={{
-                fontSize: '0.95rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 300,
                 lineHeight: 1.65,
                 color: 'var(--text-1)',

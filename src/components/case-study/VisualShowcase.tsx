@@ -61,7 +61,7 @@ function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: num
       {img.caption && (
         <p
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'var(--cs-body-sm)',
             fontWeight: 300,
             color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
@@ -98,7 +98,7 @@ function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
       <MediaInner img={img} fixedHeight style={{ height: '100%', objectFit: 'contain', transform: 'scale(0.95)', transformOrigin: 'center center' }} onImageClick={isVideo(img.src) ? undefined : () => openLightbox(img.src, img.alt)} />
       {img.caption && (
         <p style={{
-          fontSize: '0.78rem',
+          fontSize: 'var(--cs-body-sm)',
           fontWeight: 300,
           color: 'var(--text-3)',
           fontFamily: 'var(--font-body)',
@@ -151,7 +151,7 @@ function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
       {img.caption && (
         <p
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'var(--cs-body-sm)',
             fontWeight: 300,
             color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
@@ -185,7 +185,7 @@ export default function VisualShowcase({ block }: Props) {
           transition={{ duration: 0.6, ease: EASE_OUT }}
           style={{
             display: 'block',
-            fontSize: '0.68rem',
+            fontSize: 'var(--cs-eyebrow)',
             fontWeight: 500,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',

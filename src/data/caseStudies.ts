@@ -176,7 +176,9 @@ export const CASE_STUDIES: CaseStudy[] = [
       {
         label: 'Approach',
         captionText: true,
-        introMedia: { src: stProcess, alt: 'Design process overview' },
+        // White labels are baked into this diagram — it needs a dark ground of
+        // its own or the stage names vanish on paper.
+        introMedia: { src: stProcess, alt: 'Design process overview', darkGround: true },
         goal: {
           heading: 'Four tensions. Four choices.',
           body: 'The design challenges on MAGIC weren\'t about aesthetics — they were about trust. Every decision had a north star: surfacing reasoning without overwhelming users, without making it unfamiliar. Building a system that felt simple even as it did something novel.\n\nThe persona spectrum — from basic user to power user — drove every layering decision. In B2B, clarity earns trust faster than cleverness.',

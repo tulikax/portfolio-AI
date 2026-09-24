@@ -32,7 +32,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       {/* Decision number */}
       <span
         style={{
-          fontSize: '0.65rem',
+          fontSize: 'var(--cs-eyebrow)',
           fontWeight: 500,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
@@ -47,7 +47,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       <h3
         style={{
           fontFamily: 'var(--font-body)',
-          fontSize: '0.92rem',
+          fontSize: 'var(--cs-body)',
           fontWeight: 500,
           color: 'var(--text-1)',
           margin: 0,
@@ -60,7 +60,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       {/* Rationale */}
       <p
         style={{
-          fontSize: '0.85rem',
+          fontSize: 'var(--cs-body-sm)',
           fontWeight: 300,
           lineHeight: 1.65,
           color: 'var(--text-2)',
@@ -99,7 +99,7 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
 
           <span
             style={{
-              fontSize: '1rem',
+              fontSize: 'var(--cs-body)',
               color: 'var(--text-3)',
               fontFamily: 'var(--font-body)',
             }}

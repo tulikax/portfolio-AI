@@ -52,7 +52,7 @@ export default function PlatformBlock({ section, index }: Props) {
               display: 'inline-block',
               padding: '0.3rem 0.875rem',
               borderRadius: '9999px',
-              fontSize: '0.72rem',
+              fontSize: 'var(--cs-eyebrow)',
               fontWeight: 500,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
@@ -77,7 +77,7 @@ export default function PlatformBlock({ section, index }: Props) {
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.6rem, 3.5vw, 2.5rem)',
+              fontSize: 'var(--cs-h2)',
               fontWeight: 400,
               letterSpacing: '-0.03em',
               color: 'var(--ink-solid)',
@@ -89,7 +89,7 @@ export default function PlatformBlock({ section, index }: Props) {
           </h2>
           <p
             style={{
-              fontSize: '1rem',
+              fontSize: 'var(--cs-body)',
               fontWeight: 300,
               lineHeight: 1.75,
               color: 'var(--text-2)',
