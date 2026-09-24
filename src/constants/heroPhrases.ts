@@ -48,14 +48,6 @@ export const HERO_PHRASES: HeroPhrase[] = [
     ],
   },
   {
-    emoji: '✋',
-    variants: [
-      'sometimes the answer is just... no redesign',
-      'redesign is not a default setting',
-      'resists the urge to redesign everything',
-    ],
-  },
-  {
     emoji: '✏️',
     variants: [
       'pen in hand, thoughts in order',
