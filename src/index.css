@@ -174,6 +174,55 @@ html {
   }
 }
 
+/*
+ * Key-decision row — the same alternating shape as DoorFeed's Rounds: the
+ * screenshot sits beside the reasoning instead of behind a click, and sides
+ * swap decision to decision so the eye resets between them. Stacks to a
+ * single column (copy, then image) below 900px.
+ */
+.decision-round-grid {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+
+.decision-round-grid > .decision-round-copy {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.decision-round-grid > .decision-round-media {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+@media (min-width: 900px) {
+  .decision-round-grid {
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+
+  /* Copy-leads is the default shape: copy in column 1, media in column 2. */
+  .decision-round-grid > .decision-round-copy {
+    grid-column: 1;
+  }
+
+  .decision-round-grid > .decision-round-media {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* Media-leads swaps them. */
+  .decision-round-grid[data-media-leads='true'] > .decision-round-copy {
+    grid-column: 2;
+  }
+
+  .decision-round-grid[data-media-leads='true'] > .decision-round-media {
+    grid-column: 1;
+  }
+}
+
 /* Glows are cast shadows drawn in --ink rather than --shadow-ink, so
    --shadow-strength never reaches them. On a dark ground they read as light
    spilling off the element; on paper the same thing is a grey smudge. The ring

@@ -124,6 +124,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     heroHeadline: 'MAGIC',
     heroMedia: { src: stChatFlow, alt: 'MAGIC AI platform — chat flow demo' },
+    heroLayout: 'contained',
 
     heroTools: [
       { name: 'Figma',   slug: 'figma' },
@@ -218,18 +219,21 @@ export const CASE_STUDIES: CaseStudy[] = [
             title: '01 — Build a copilot inside the SigTech ecosystem.',
             rationale: 'The initial direction was to embed an AI coding assistant directly into SigTech\'s existing platform — a Copilot for quants. Rapid prototyping with select users killed this quickly. The value proposition immediately ran into Cursor and GitHub Copilot on one side, and SigTech\'s own developer tooling on the other. We were building into a crowded lane we couldn\'t win. Abandoned early, before significant design investment.',
             image: { src: stPivot1, alt: 'Pivot 1 — Multiple GPTs within existing IDE', cropTop: 40, cropBottom: 60 },
+            tag: { label: 'Abandoned early', tone: 'no' },
           },
           {
             title: '02 · Focus on transparency and error detection',
             rationale: 'We started to build an enriched chat architecture with an added transparency layer — users could see tasks assigned to each agent, queries sent, and responses returned. For mid-2024, before any mainstream LLM surfaced this kind of reasoning visibility, it was new. But the core experience still felt like a better ChatGPT. Seeing the work behind the answer wasn\'t enough of a reason to switch.',
             // The 'fully chat based' wireframe is held back — two wireframe
             // sets for one pivot read as a contact sheet rather than a point.
-            image: { src: stPivot2Agent, alt: 'Pivot 2 — thinking about agent use in real life', scale: 0.85 },
+            image: { src: stPivot2Agent, alt: 'Pivot 2 — thinking about agent use in real life' },
+            tag: { label: 'Not enough to switch', tone: 'partial' },
           },
           {
             title: '03 — From "talk to AI" to "delegate to AI."',
             rationale: 'Pilot data showed analysts repeating the same complex prompts session after session. Chat was flexible, but flexibility was the wrong value for structured, recurring workflows. The insight: the product didn\'t need to be a better chat interface — it needed to let users create jobs, not conversations. Pre-configured, schedulable, executable workflows. Chat for exploration; Jobs for execution. This reframe separated MAGIC from every general-purpose LLM on the market. Exploration in Figma Make + Cursor gave me the freedom to rapidly prototype ideas to very high fidelity, while some were half baked and dropped early at the wireframing stage.',
             image: { src: stPivot3Exploration, alt: 'Pivot 3 — beyond chat explorations' },
+            tag: { label: 'Where it landed', tone: 'yes' },
           },
         ],
         keyDecisionsHeading: 'Key decisions',
@@ -237,17 +241,17 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: 'Show reasoning, not just results.',
             rationale: 'Stakeholders wanted to surface all reasoning. Engineering favoured raw JSON logs. Both would overwhelm users and bury the signal in noise. I chose a collapsible side panel: scannable summary by default, full JSON and cited sources on demand. Progressive disclosure as a trust mechanism — not just a UI pattern. Pilot data showed 65% of users actively used the reasoning panels.',
-            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', scale: 0.22, cropBottom: 150 },
+            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', cropBottom: 150 },
           },
           {
             title: 'Chat for exploration. Jobs for delegation.',
             rationale: 'Chat was flexible but indistinguishable from general LLMs. Pilot logs showed the same complex prompts repeated session after session — friction disguised as flexibility. I introduced a Jobs system: pre-configured, schedulable, executable workflows alongside chat. Two modes, one platform. The shift that repositioned MAGIC as a Financial Intelligence Platform.',
-            image: { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept', scale: 0.3 },
+            image: { src: stFinalOutcome, alt: 'Final outcome — Jobs as a concept' },
           },
           {
             title: 'Familiarity over novelty in interaction patterns.',
             rationale: 'A differentiated product invites differentiated UI. But novel patterns that delighted power users confused analysts new to LLMs — and confusion erodes the trust we were trying to build. I used established conventions (copy, feedback, sidebar) as the foundation, with progressive disclosure for advanced features.',
-            image: { src: stChatFlow, alt: 'Chat flow — familiar interaction pattern in action', scale: 0.4 },
+            image: { src: stChatFlow, alt: 'Chat flow — familiar interaction pattern in action' },
           },
           {
             title: 'Inline source verification at the point of doubt.',

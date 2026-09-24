@@ -143,6 +143,50 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
     }
   }
 
+  // ── Contained layout ─────────────────────────────────────────────────────────
+  // A framed, padded clip in normal flow with the copy below it — no vignette,
+  // no overlay, because nothing needs to read on top of the clip.
+  if (data.heroLayout === 'contained') {
+    return (
+      <section style={{ background: 'rgb(var(--surface))', paddingTop: '7rem' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '0 2rem 3.5rem' }}>
+          <div
+            style={{
+              borderRadius: '1rem',
+              overflow: 'hidden',
+              lineHeight: 0,
+              aspectRatio: '16 / 9',
+              border: '1px solid rgb(var(--ink) / 0.12)',
+              background: 'rgb(var(--surface))',
+              boxShadow: '0 24px 60px rgb(var(--shadow-ink) / calc(0.42 * var(--shadow-strength)))',
+            }}
+          >
+            {isVideo ? (
+              <video
+                src={data.heroMedia.src}
+                autoPlay loop muted playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                onCanPlay={onVideoReady}
+                onProgress={handleProgress}
+              />
+            ) : (
+              <img
+                src={data.heroMedia.src}
+                alt={data.heroMedia.alt}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                onLoad={onVideoReady}
+              />
+            )}
+          </div>
+
+          <div style={{ marginTop: '2.5rem' }}>
+            <TextContent data={data} animate={!isMobile} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   // ── Mobile layout ────────────────────────────────────────────────────────────
   // Video fills viewport width at natural aspect ratio; text stacks below.
   if (isMobile) {

@@ -42,6 +42,8 @@ export interface ProjectTab {
     images?: Array<CaseStudyImage & { scale?: number }>
     /** Layout for the images array: 'grid' (default) or 'column' (stacked vertically, respects scale per image) */
     imagesLayout?: 'grid' | 'column' | 'side-all' | 'side-column'
+    /** Verdict pill, 'caption' layout only — e.g. a pivot's dead-end/compromise/landed reading */
+    tag?: { label: string; tone: 'no' | 'partial' | 'yes' }
   }>
   /** Image shown at the very top of the tab section, before the goal block (default layout only) */
   introMedia?: CaseStudyImage
@@ -126,6 +128,13 @@ export interface CaseStudy {
   heroHeadlineScale?: number
   /** How the hero clip fills its frame. `contain` shows the whole thing; defaults to `cover`. */
   heroMediaFit?: 'cover' | 'contain'
+  /**
+   * `contained` renders the hero as a padded, framed block in normal page
+   * flow (copy below the clip) instead of a full-bleed 100vh cinematic
+   * section with the copy overlaid — skips the vignette/fade scrims
+   * entirely, since nothing needs to sit legibly on top of the clip.
+   */
+  heroLayout?: 'full-bleed' | 'contained'
   heroSubheadline?: string
   heroMeta?: Array<{ label: string; value: string }>
   heroTools?: Array<{ name: string; slug: string; ext?: string }>

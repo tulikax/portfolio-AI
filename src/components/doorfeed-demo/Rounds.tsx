@@ -234,12 +234,13 @@ function RoundItem({ round, mediaLeads, first }: { round: Round; mediaLeads: boo
 export default function Rounds() {
   return (
     /*
-     * Wider than the 72rem text column, and the media column takes 1.4fr to the
-     * copy's 1fr — together that lands the screens ~38% larger than an even
-     * split inside 72rem, which was too small to read a dense product UI in.
-     * maxWidth alone caps it, so narrow viewports just shrink rather than clip.
+     * 72rem — the same column every case-study section uses (WRAP here,
+     * ProjectTabs/CaseStudyHero/etc. elsewhere). This used to break out to
+     * 84rem for a larger media column, but that put Rounds at a different
+     * left edge than the rest of the page — and the rest of the site —
+     * whenever the viewport ran wider than 72rem. Consistency wins here.
      */
-    <div style={{ maxWidth: '84rem', margin: '0 auto', padding: '0 2rem' }}>
+    <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '0 2rem' }}>
       {EXPLORATION.rounds.map((round, i) => (
         <RoundItem
           key={round.num}

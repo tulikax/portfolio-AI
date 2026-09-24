@@ -4,6 +4,8 @@ import type { CaseStudy, ProjectTab } from '../../types/caseStudy'
 import VisualShowcase from './VisualShowcase'
 import HighlightPhrase from './HighlightPhrase'
 import DoorFeedContext from './DoorFeedContext'
+import DecisionsAccordion from './DecisionsAccordion'
+import DecisionRounds from './DecisionRounds'
 import { useLightbox } from './LightboxContext'
 
 // ─── Highlight helper ──────────────────────────────────────────
@@ -176,114 +178,7 @@ function DecisionsBlock({
       style={{ marginBottom: '3rem' }}
     >
       {decisionsLayout === 'caption' ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
-          {decisions.map((d, i) => {
-            const sideAll    = d.images && d.images.length > 0 && d.imagesLayout === 'side-all'
-            const sideColumn = d.images && d.images.length > 0 && d.imagesLayout === 'side-column'
-            const multiFirst = d.images && d.images.length > 0 && !sideAll && !sideColumn
-            return (
-              <div key={i}>
-                {/* Image hero (left 3fr) | caption text (right 1fr) */}
-                <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '2rem', alignItems: 'start' }}>
-
-                  {/* Left: images — the hero */}
-                  <div>
-                    {sideAll ? (
-                      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${d.images!.length}, 1fr)`, gap: '0.5rem' }}>
-                        {d.images!.map((img, j) => (
-                          <motion.div key={j}
-                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: '-40px' }}
-                            transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                          >
-                            <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
-                          </motion.div>
-                        ))}
-                      </div>
-                    ) : sideColumn ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        {d.images!.map((img, j) => (
-                          <motion.div key={j}
-                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: '-40px' }}
-                            transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                          >
-                            <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{
-                              width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in',
-                              ...(j === 0 ? { clipPath: 'inset(150px 0 130px 0)', marginTop: '-150px', marginBottom: '-130px' } : {}),
-                            }} />
-                          </motion.div>
-                        ))}
-                      </div>
-                    ) : multiFirst ? (
-                      <div>
-                        <motion.div
-                          initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                          viewport={{ once: true, margin: '-40px' }}
-                          transition={{ duration: 0.45, ease: EASE_OUT }}
-                          style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                        >
-                          <img src={d.images![0].src} alt={d.images![0].alt} onClick={() => openLightbox(d.images![0].src, d.images![0].alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in', marginTop: '-70px', marginBottom: '-70px' }} />
-                        </motion.div>
-                        {d.images!.length > 1 && (
-                          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${d.images!.length - 1}, 1fr)`, gap: '0.5rem', marginTop: '0.5rem' }}>
-                            {d.images!.slice(1).map((img, j) => (
-                              <motion.div key={j}
-                                initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                                viewport={{ once: true, margin: '-40px' }}
-                                transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                                style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                              >
-                                <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
-                              </motion.div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : d.image ? (
-                      (() => {
-                        const vid = isVideoSrc(d.image!.src)
-                        const ct = d.image!.cropTop ?? 0
-                        const cb = d.image!.cropBottom ?? 0
-                        const cropStyle = (ct || cb)
-                          ? { clipPath: `inset(${ct}px 0 ${cb}px 0)`, marginTop: `-${ct}px`, marginBottom: `-${cb}px` }
-                          : {}
-                        return (
-                          <motion.div
-                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: '-40px' }}
-                            transition={{ duration: 0.45, ease: EASE_OUT }}
-                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                          >
-                            {vid ? (
-                              <video src={d.image!.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
-                            ) : (
-                              <img src={d.image!.src} alt={d.image!.alt} onClick={() => openLightbox(d.image!.src, d.image!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in', ...cropStyle }} />
-                            )}
-                          </motion.div>
-                        )
-                      })()
-                    ) : null}
-                  </div>
-
-                  {/* Right: caption text */}
-                  <div style={{ paddingTop: '0.25rem' }}>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body)', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body-sm)', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
-                  </div>
-
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        <DecisionRounds items={decisions} />
       ) : decisionsLayout === 'side-by-side' ? (
         /* Narrower text card (260px) so image area dominates */
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -893,12 +788,10 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               >
                 {tab.keyDecisionsHeading ?? 'Key decisions'}
               </motion.h2>
-              <DecisionsBlock
-                heading={tab.keyDecisionsHeading ?? 'Key decisions'}
-                decisions={tab.keyDecisions}
-                decisionsLayout="caption"
-                delay={0.18}
-              />
+              {/* Alternating rows, same shape as DoorFeed's Rounds — the
+                  screenshot sits beside the reasoning, sides swap each
+                  decision, and nothing here is hidden behind a click. */}
+              <DecisionsAccordion decisions={tab.keyDecisions} />
             </section>
           )}
           {/* Visuals between Decisions and Outcome */}
