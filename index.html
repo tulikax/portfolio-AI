@@ -4,11 +4,32 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <script>
+      // Runs before the stylesheet so the first paint is already correct.
+      // Without it, a light-mode reload flashes dark.
+      // KEEP IN SYNC with SYSTEM_FOLLOWS_OS in src/theme/ThemeContext.ts.
+      ;(function () {
+        var SYSTEM_FOLLOWS_OS = false
+        var resolved = 'dark'
+        try {
+          var mode = localStorage.getItem('portfolio:theme-mode') || 'system'
+          if (mode === 'light' || mode === 'dark') {
+            resolved = mode
+          } else if (SYSTEM_FOLLOWS_OS && matchMedia('(prefers-color-scheme: light)').matches) {
+            resolved = 'light'
+          }
+        } catch (e) {
+          // Storage blocked — dark is the safe default.
+        }
+        document.documentElement.dataset.theme = resolved
+      })()
+    </script>
     <title>Tulika's portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Barlow:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Forum&family=Barlow:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
   </head>

@@ -9,7 +9,7 @@ export default function CTASection() {
     <section
       id="contact"
       style={{
-        background: 'black',
+        background: 'rgb(var(--surface))',
         paddingTop: '7rem',
         paddingBottom: '10rem',
         paddingLeft: '1.5rem',
@@ -34,7 +34,6 @@ export default function CTASection() {
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.9,
@@ -56,7 +55,7 @@ export default function CTASection() {
           style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.70)',
+            color: 'var(--text-2)',
             fontSize: '1.05rem',
             maxWidth: '28rem',
             lineHeight: 1.65,
@@ -100,7 +99,7 @@ export default function CTASection() {
             style={{
               borderRadius: '9999px',
               padding: '0.875rem 2rem',
-              color: 'rgb(var(--ink) / 0.80)',
+              color: 'var(--text-1)',
               fontSize: '0.9rem',
               fontFamily: 'var(--font-body)',
               fontWeight: 300,

@@ -21,7 +21,6 @@ import stResearchUsers       from '../assets/SigTech/Case Study/Approach/researc
 import stResearchCompetition from '../assets/SigTech/Case Study/Approach/research -competition analysis.png'
 // SigTech — Finding Direction
 import stPivot1            from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/starting point or pivot 1 - Multiple GPTs within existing IDE.png'
-import stPivot2ChatBased   from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2 fully chat based.png'
 import stPivot2Agent       from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 2.2 - thikning about agent use in real life.png'
 import stPivot3Exploration from '../assets/SigTech/Case Study/Finding Direction - 3 pivots/pivot 3 explorations - beyond chats exploration - making the use case generic but scalable or adaptable.png'
 // SigTech — What finally shipped
@@ -67,6 +66,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     // Shown whole rather than cropped — the clip is a full product screen
     heroMediaFit: 'contain',
     heroMedia: { src: NEW_PLATFORM.compsOutput, alt: 'DoorFeed comparables output' },
+    heroLayout: 'contained',
 
     goal: 'Design a property data platform that surfaces granular, comparable market data in a way that feels as refined as it is accurate — turning dense datasets into clear, trustworthy decision surfaces.',
     yourRole: 'Solo product designer working end-to-end: research, strategy, interaction design, and direct collaboration with engineering through 20+ pull requests.',
@@ -125,6 +125,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 
     heroHeadline: 'MAGIC',
     heroMedia: { src: stChatFlow, alt: 'MAGIC AI platform — chat flow demo' },
+    heroLayout: 'contained',
 
     heroTools: [
       { name: 'Figma',   slug: 'figma' },
@@ -177,7 +178,9 @@ export const CASE_STUDIES: CaseStudy[] = [
       {
         label: 'Approach',
         captionText: true,
-        introMedia: { src: stProcess, alt: 'Design process overview' },
+        // White labels are baked into this diagram — it needs a dark ground of
+        // its own or the stage names vanish on paper.
+        introMedia: { src: stProcess, alt: 'Design process overview', darkGround: true },
         goal: {
           heading: 'Four tensions. Four choices.',
           body: 'The design challenges on MAGIC weren\'t about aesthetics — they were about trust. Every decision had a north star: surfacing reasoning without overwhelming users, without making it unfamiliar. Building a system that felt simple even as it did something novel.\n\nThe persona spectrum — from basic user to power user — drove every layering decision. In B2B, clarity earns trust faster than cleverness.',
@@ -217,20 +220,21 @@ export const CASE_STUDIES: CaseStudy[] = [
             title: '01 — Build a copilot inside the SigTech ecosystem.',
             rationale: 'The initial direction was to embed an AI coding assistant directly into SigTech\'s existing platform — a Copilot for quants. Rapid prototyping with select users killed this quickly. The value proposition immediately ran into Cursor and GitHub Copilot on one side, and SigTech\'s own developer tooling on the other. We were building into a crowded lane we couldn\'t win. Abandoned early, before significant design investment.',
             image: { src: stPivot1, alt: 'Pivot 1 — Multiple GPTs within existing IDE', cropTop: 40, cropBottom: 60 },
+            tag: { label: 'Abandoned early', tone: 'no' },
           },
           {
             title: '02 · Focus on transparency and error detection',
             rationale: 'We started to build an enriched chat architecture with an added transparency layer — users could see tasks assigned to each agent, queries sent, and responses returned. For mid-2024, before any mainstream LLM surfaced this kind of reasoning visibility, it was new. But the core experience still felt like a better ChatGPT. Seeing the work behind the answer wasn\'t enough of a reason to switch.',
-            imagesLayout: 'side-column' as const,
-            images: [
-              { src: stPivot2ChatBased, alt: 'Pivot 2 — fully chat based' },
-              { src: stPivot2Agent,     alt: 'Pivot 2 — thinking about agent use in real life' },
-            ],
+            // The 'fully chat based' wireframe is held back — two wireframe
+            // sets for one pivot read as a contact sheet rather than a point.
+            image: { src: stPivot2Agent, alt: 'Pivot 2 — thinking about agent use in real life' },
+            tag: { label: 'Not enough to switch', tone: 'partial' },
           },
           {
             title: '03 — From "talk to AI" to "delegate to AI."',
             rationale: 'Pilot data showed analysts repeating the same complex prompts session after session. Chat was flexible, but flexibility was the wrong value for structured, recurring workflows. The insight: the product didn\'t need to be a better chat interface — it needed to let users create jobs, not conversations. Pre-configured, schedulable, executable workflows. Chat for exploration; Jobs for execution. This reframe separated MAGIC from every general-purpose LLM on the market. Exploration in Figma Make + Cursor gave me the freedom to rapidly prototype ideas to very high fidelity, while some were half baked and dropped early at the wireframing stage.',
             image: { src: stPivot3Exploration, alt: 'Pivot 3 — beyond chat explorations' },
+            tag: { label: 'Where it landed', tone: 'yes' },
           },
         ],
         keyDecisionsHeading: 'Key decisions',
@@ -238,7 +242,7 @@ export const CASE_STUDIES: CaseStudy[] = [
           {
             title: 'Show reasoning, not just results.',
             rationale: 'Stakeholders wanted to surface all reasoning. Engineering favoured raw JSON logs. Both would overwhelm users and bury the signal in noise. I chose a collapsible side panel: scannable summary by default, full JSON and cited sources on demand. Progressive disclosure as a trust mechanism — not just a UI pattern. Pilot data showed 65% of users actively used the reasoning panels.',
-            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', scale: 0.7, cropBottom: 150 },
+            image: { src: stTaskTransp, alt: 'Task list as an idea for transparency', cropBottom: 150 },
           },
           {
             title: 'Chat for exploration. Jobs for delegation.',
@@ -276,7 +280,6 @@ export const CASE_STUDIES: CaseStudy[] = [
             { label: 'Churn', value: '↓24%', description: 'After repositioning around transparency and structured workflows. The shift from "AI chat" to "Financial Intelligence Platform" changed how enterprise buyers evaluated the product.' },
             { label: 'Time-to-insight', value: '↓39%', description: 'Measured across the pilot cohort. The Jobs system and structured reasoning panels meant analysts spent less time wrestling with the tool and more time on judgement.' },
             { label: 'Reasoning panel', value: '65%', description: 'Pilot users actively opened the reasoning panel — validating the bet on transparency over simplicity. Trust was the right problem to solve.' },
-            { label: 'Interface versions', value: '3', description: 'Each killed before significant sunk cost. Rapid prototyping with select users to validate or discard directions fast was the process discipline that made the final version possible.' },
           ],
           footnote: 'The third pivot — from chat to jobs — drove renewed enterprise interest and changed how leadership framed the product to investors.',
         },
@@ -287,7 +290,7 @@ export const CASE_STUDIES: CaseStudy[] = [
         postGoalVisuals: [
           {
             layout: 'carousel' as const,
-            height: '440px',
+            height: '528px',
             images: [
               { src: stDay1,         alt: 'Day 1 — chat only interface',                                caption: 'Day 1 — chat only' },
               { src: stAgentsInAction, alt: 'Agents in action — reasoning visibility demo',              caption: 'Agents in action' },
@@ -318,6 +321,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     company: 'Deloitte',
 
     heroMedia: { src: dlHeroVideo, alt: 'NLG tool interface overview' },
+    heroLayout: 'contained',
 
     heroTools: [
       { name: 'Figma',  slug: 'figma' },

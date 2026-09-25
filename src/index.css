@@ -6,7 +6,7 @@ html {
 }
 
 @theme inline {
-  --font-heading: 'Bodoni Moda', serif;
+  --font-heading: 'Forum', serif;
   --font-body: 'Barlow', sans-serif;
   --font-sans: 'Barlow', sans-serif;
 }
@@ -15,15 +15,8 @@ html {
   /* ─── Typography tokens — the only place font families are named.
      (Exception: canvas code in ParticleTitle/ProjectLoadingScreen needs
      literal family names; keep those in sync with --font-display.) ─── */
-  --font-display: 'Bodoni Moda', serif;
+  --font-display: 'Forum', serif;
   --font-body: 'Barlow', sans-serif;
-
-  /* ─── Colour channels — flip these two for light mode.
-     --ink is the text/foreground RGB channel, used as rgb(var(--ink) / <alpha>).
-     Canvas particle colours are literal and need their own theme hook. ─── */
-  --ink: 255 255 255;
-  --ink-solid: rgb(var(--ink));
-  --surface: 0 0 0;
 
   --background: 0 0% 0%;
   --foreground: 0 0% 100%;
@@ -50,6 +43,215 @@ html {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* The dark palette. Two selectors, not one: `:root` covers the document, and the
+   bare attribute selector lets <ThemeScope theme="dark"> pin a subtree to dark
+   inside a light page — which is the case-study lock this phase defers. `:root`
+   alone would never match a descendant div, leaving ThemeScope inert. */
+:root,
+[data-theme='dark'] {
+  --ink: 242 240 236;
+  --ink-solid: rgb(var(--ink));
+  --surface: 10 10 10;
+
+  /* Shadow ink is its own channel: on paper a shadow is not the foreground
+     colour at low alpha, and the two need to diverge in light mode. */
+  --shadow-ink: 0 0 0;
+
+  /* Every shadow alpha is multiplied by this. Bespoke shadows keep their own
+     geometry and alpha — which is right for dark, but a 0.55 near-black shadow
+     on paper is a smear. One multiplier moves all 32 of them together rather
+     than re-tuning each by hand. */
+  --shadow-strength: 1;
+
+  /* Composite because inline styles can only consume a finished value.
+     Compose them at call sites: `var(--shadow-hairline), var(--shadow-float)`.
+     Geometry is per-theme — see the light block below for why. */
+  --shadow-hairline: 0 1px 0 rgb(var(--ink) / 0.08) inset;
+  --shadow-card: 0 8px 32px rgb(var(--shadow-ink) / 0.5);
+  --shadow-float: 0 20px 60px rgb(var(--shadow-ink) / 0.5);
+
+  /* ─── Text ramp. Three tiers, because the same alpha does not read the same on
+     both grounds: light text on a dark ground blooms and gains apparent weight,
+     dark text on paper does not. Light therefore needs a higher alpha to reach
+     the same contrast — see the light block.
+
+     These alphas are chosen to clear WCAG AA (4.5:1) on their own ground, which
+     the previous raw values did not: the common 0.35 eyebrow measured 2.91:1 on
+     dark and 2.20:1 on light. That is FONT_AUDIT finding F3, and it was never a
+     light-mode bug — light mode only made it visible.
+
+       --text-1  primary body and headings   14.7:1 dark · 13.6:1 light
+       --text-2  secondary copy               8.2:1 dark ·  7.9:1 light
+       --text-3  eyebrows, meta, captions     4.8:1 dark ·  4.8:1 light ─── */
+  --text-1: rgb(var(--ink) / 0.92);
+  --text-2: rgb(var(--ink) / 0.68);
+  --text-3: rgb(var(--ink) / 0.50);
+
+  /* Card surfaces. A raking gradient gives a dark card its sense of a lit edge;
+     on paper there is no light to rake, so the light theme collapses these to a
+     flat tint — see the light block. */
+  --fill-card: linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02));
+  --fill-raised: linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04));
+}
+
+/* Warm paper and warm ink — both poles pulled off the extremes. Forum is a
+   humanist serif with modest stroke contrast, so it holds up on either ground,
+   but it still reads cleaner dark-on-light where nothing blooms. */
+:root[data-theme='light'],
+[data-theme='light'] {
+  --ink: 26 24 22;
+  --ink-solid: rgb(var(--ink));
+  --surface: 250 249 246;
+
+  --shadow-ink: 26 24 22;
+
+  /* No shadows on paper. The multiplier zeroes the alpha of every bespoke shadow
+     in the codebase, so they are all present in the markup but invisible — one
+     value brings them back if that turns out to be too flat. */
+  --shadow-strength: 0;
+
+  /* A zero-size transparent shadow rather than `none`, because call sites compose
+     these — `var(--shadow-hairline), var(--shadow-float)` resolving to
+     `none, none` is invalid and would drop the whole declaration. */
+  --shadow-hairline: 0 0 0 transparent;
+  --shadow-card: 0 0 0 transparent;
+  --shadow-float: 0 0 0 transparent;
+
+  /* Higher alphas than dark at every tier. Dark ink on paper does not bloom the
+     way light ink on a dark ground does, so it needs more opacity to read as the
+     same weight — 0.62 here matches what 0.50 achieves on dark. */
+  --text-1: rgb(var(--ink) / 0.92);
+  --text-2: rgb(var(--ink) / 0.76);
+  --text-3: rgb(var(--ink) / 0.62);
+
+  /* Flat, not graded. Printed stock has no raking light, and a gradient on paper
+     reads as a smudge rather than a surface. Kept very faint — the card is read
+     by its hairline border and its shadow, not by a fill fighting the page. */
+  --fill-card: rgb(var(--ink) / 0.012);
+  --fill-raised: rgb(var(--ink) / 0.02);
+}
+
+/*
+ * ─── Case-study type scale ────────────────────────────────────────────────
+ *
+ * The three case studies render through two different architectures — DoorFeed
+ * and MAGIC via project tabs, NLG via stacked body paragraphs — and each grew
+ * its own sizes. An audit found four heading clamps, seven eyebrow sizes and
+ * seven body sizes doing three jobs between them.
+ *
+ * These are those jobs, named once. Sizes live here rather than at call sites so
+ * the next page added to either architecture inherits the scale instead of
+ * inventing a neighbouring value.
+ */
+:root {
+  --cs-display: clamp(2.45rem, 4.9vw, 3.85rem); /* chapter openers */
+  --cs-h2: clamp(1.6rem, 3.5vw, 2.5rem); /* section headings */
+  --cs-h3: clamp(1.25rem, 2.5vw, 1.6rem); /* sub-headings */
+  --cs-lead: clamp(0.95rem, 1.6vw, 1.15rem); /* standfirsts under a heading */
+  --cs-body: 0.95rem; /* main copy */
+  --cs-body-sm: 0.85rem; /* captions, meta, annotations */
+  --cs-eyebrow: 0.68rem; /* small-caps labels */
+}
+
+/*
+ * Case-study prototype row: the clip and the decision cards beside it.
+ * The clip takes the larger share — it is the artefact, and the cards are
+ * annotations on it. Stacks below 900px, where two columns would leave the
+ * video too small to read the UI inside it.
+ */
+.case-proto-grid {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .case-proto-grid {
+    grid-template-columns: 1.7fr 1fr;
+  }
+}
+
+/*
+ * Key-decision row — the same alternating shape as DoorFeed's Rounds: the
+ * screenshot sits beside the reasoning instead of behind a click, and sides
+ * swap decision to decision so the eye resets between them. Stacks to a
+ * single column (copy, then image) below 900px.
+ */
+.decision-round-grid {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+
+.decision-round-grid > .decision-round-copy {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.decision-round-grid > .decision-round-media {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+@media (min-width: 900px) {
+  .decision-round-grid {
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+
+  /* Copy-leads is the default shape: copy in column 1, media in column 2. */
+  .decision-round-grid > .decision-round-copy {
+    grid-column: 1;
+  }
+
+  .decision-round-grid > .decision-round-media {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* Media-leads swaps them. */
+  .decision-round-grid[data-media-leads='true'] > .decision-round-copy {
+    grid-column: 2;
+  }
+
+  .decision-round-grid[data-media-leads='true'] > .decision-round-media {
+    grid-column: 1;
+  }
+}
+
+/* Glows are cast shadows drawn in --ink rather than --shadow-ink, so
+   --shadow-strength never reaches them. On a dark ground they read as light
+   spilling off the element; on paper the same thing is a grey smudge. The ring
+   survives — it is a border, not a shadow. */
+:root[data-theme='light'] .cta-glow,
+[data-theme='light'] .cta-glow {
+  box-shadow: 0 0 0 1px rgb(var(--ink) / 0.10);
+}
+
+:root[data-theme='light'] .cta-glow:hover,
+[data-theme='light'] .cta-glow:hover {
+  box-shadow: 0 0 0 1px rgb(var(--ink) / 0.20);
+}
+
+/* The two glass fills are gradients in dark for the raking-light effect. On paper
+   they flatten with everything else. */
+:root[data-theme='light'] .liquid-glass::after,
+[data-theme='light'] .liquid-glass::after {
+  background: rgb(var(--ink) / 0.03);
+}
+
+:root[data-theme='light'] .btn-glass,
+[data-theme='light'] .btn-glass {
+  background: rgb(var(--ink) / 0.02);
+}
+
+:root[data-theme='light'] .btn-glass:hover,
+[data-theme='light'] .btn-glass:hover {
+  background: rgb(var(--ink) / 0.04);
 }
 
 @layer base {
@@ -122,7 +324,7 @@ a, button, [role="button"], input, select, textarea, label {
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow:
     inset 0 1px 0 rgb(var(--ink) / 0.14),
-    0 8px 32px rgba(0, 0, 0, 0.35);
+    0 8px 32px rgb(var(--shadow-ink) / calc(0.35 * var(--shadow-strength)));
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -199,7 +401,7 @@ a, button, [role="button"], input, select, textarea, label {
   );
   backdrop-filter: blur(50px) saturate(150%);
   -webkit-backdrop-filter: blur(50px) saturate(150%);
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgb(var(--ink) / 0.15);
+  box-shadow: 4px 4px 4px rgb(var(--shadow-ink) / calc(0.05 * var(--shadow-strength))), inset 0 1px 1px rgb(var(--ink) / 0.15);
   pointer-events: none;
 }
 
@@ -344,11 +546,9 @@ a, button, [role="button"], input, select, textarea, label {
 /* ─── Button active states (Emil Kowalski) ───────────────────── */
 
 .btn-press {
-  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.btn-press:active {
-  transform: scale(0.97);
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    filter 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* ─── Hover only on pointer devices (Emil Kowalski) ─────────── */
@@ -357,6 +557,48 @@ a, button, [role="button"], input, select, textarea, label {
   .card-hover:hover {
     transform: translateY(-4px);
     transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /*
+   * Buttons lift and grow slightly on hover.
+   *
+   * Glass panels are excluded from the transform: their blur lives on ::after,
+   * and transforming the element makes the browser drop backdrop-filter — the
+   * same reason Framer Motion transforms are banned on .liquid-glass. They
+   * still get the colour shift below.
+   */
+  .btn-press:not(.liquid-glass):not(.liquid-glass-strong):hover {
+    transform: translateY(-2px) scale(1.03);
+  }
+
+  /*
+   * The colour shift goes through `filter` rather than `background`, because
+   * most of these buttons set their background inline and a class rule cannot
+   * win against that. Direction flips per theme: lifting toward the light on a
+   * dark ground, deepening into the page on paper. Brightening on paper would
+   * wash the button out rather than making it feel raised.
+   */
+  [data-theme='dark'] .btn-press:hover,
+  :root:not([data-theme='light']) .btn-press:hover {
+    filter: brightness(1.18);
+  }
+
+  [data-theme='light'] .btn-press:hover {
+    filter: brightness(0.93);
+  }
+}
+
+/* After :hover so a press still wins while the pointer is down */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-press,
+  .btn-press:hover,
+  .btn-press:active {
+    transform: none;
+    transition: filter 160ms ease;
   }
 }
 
@@ -556,7 +798,7 @@ a, button, [role="button"], input, select, textarea, label {
   border: 1px solid rgb(var(--ink) / 0.20);
   box-shadow:
     inset 0 1px 0 rgb(var(--ink) / 0.18),
-    0 8px 28px rgba(0, 0, 0, 0.45);
+    0 8px 28px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)));
   transition:
     background 200ms var(--ease-out),
     border-color 200ms var(--ease-out);

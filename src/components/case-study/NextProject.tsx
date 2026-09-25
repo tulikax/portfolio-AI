@@ -40,11 +40,11 @@ export default function NextProject({ nextProject }: Props) {
               <span
                 style={{
                   display: 'block',
-                  fontSize: '0.68rem',
+                  fontSize: 'var(--cs-eyebrow)',
                   fontWeight: 500,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
-                  color: 'rgb(var(--ink) / 0.35)',
+                  color: 'var(--text-3)',
                   fontFamily: 'var(--font-body)',
                   marginBottom: '1rem',
                 }}
@@ -55,8 +55,7 @@ export default function NextProject({ nextProject }: Props) {
                 <h2
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontStyle: 'italic',
-                    fontSize: 'clamp(2rem, 5vw, 3.75rem)',
+                    fontSize: 'var(--cs-h2)',
                     fontWeight: 400,
                     letterSpacing: '-0.04em',
                     color: 'var(--ink-solid)',
@@ -70,7 +69,7 @@ export default function NextProject({ nextProject }: Props) {
                   style={{
                     width: 'clamp(1.25rem, 2.5vw, 2rem)',
                     height: 'clamp(1.25rem, 2.5vw, 2rem)',
-                    color: 'rgb(var(--ink) / 0.45)',
+                    color: 'var(--text-3)',
                     flexShrink: 0,
                   }}
                 />
@@ -85,7 +84,7 @@ export default function NextProject({ nextProject }: Props) {
                 borderRadius: '1rem',
                 overflow: 'hidden',
                 border: 'none',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                boxShadow: 'var(--shadow-card)',
                 flexShrink: 0,
               }}
             >
@@ -132,9 +131,9 @@ export default function NextProject({ nextProject }: Props) {
                 alignItems: 'center',
                 gap: '0.5rem',
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.875rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 400,
-                color: 'rgb(var(--ink) / 0.55)',
+                color: 'var(--text-2)',
                 letterSpacing: '0.04em',
               }}
             >

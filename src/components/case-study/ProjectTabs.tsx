@@ -4,6 +4,8 @@ import type { CaseStudy, ProjectTab } from '../../types/caseStudy'
 import VisualShowcase from './VisualShowcase'
 import HighlightPhrase from './HighlightPhrase'
 import DoorFeedContext from './DoorFeedContext'
+import DecisionsAccordion from './DecisionsAccordion'
+import DecisionRounds from './DecisionRounds'
 import { useLightbox } from './LightboxContext'
 
 // ─── Highlight helper ──────────────────────────────────────────
@@ -66,7 +68,7 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
         style={{
           borderRadius: '1.25rem',
           overflow: 'hidden',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.55)',
+          boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength)))',
           lineHeight: 0,
           height: 'clamp(300px, 42vw, 640px)',
         }}
@@ -88,8 +90,8 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
           position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)',
           width: '2.25rem', height: '2.25rem', borderRadius: '50%',
           background: 'rgba(0,0,0,0.45)', border: '1px solid rgb(var(--ink) / 0.18)',
-          color: 'rgb(var(--ink) / 0.80)', cursor: 'pointer', display: 'flex',
-          alignItems: 'center', justifyContent: 'center', fontSize: '1rem',
+          color: 'var(--text-1)', cursor: 'pointer', display: 'flex',
+          alignItems: 'center', justifyContent: 'center', fontSize: 'var(--cs-body)',
           backdropFilter: 'blur(6px)', transition: 'background 0.15s',
           opacity: offset === 0 ? 0.3 : 1,
         }}
@@ -103,8 +105,8 @@ function ScrollPanImage({ src, alt }: { src: string; alt: string }) {
           position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)',
           width: '2.25rem', height: '2.25rem', borderRadius: '50%',
           background: 'rgba(0,0,0,0.45)', border: '1px solid rgb(var(--ink) / 0.18)',
-          color: 'rgb(var(--ink) / 0.80)', cursor: 'pointer', display: 'flex',
-          alignItems: 'center', justifyContent: 'center', fontSize: '1rem',
+          color: 'var(--text-1)', cursor: 'pointer', display: 'flex',
+          alignItems: 'center', justifyContent: 'center', fontSize: 'var(--cs-body)',
           backdropFilter: 'blur(6px)', transition: 'background 0.15s',
         }}
       >›</button>
@@ -139,7 +141,7 @@ function SectionBlock({
         <p
           key={i}
           style={{
-            fontSize: isCaption ? '0.82rem' : '1rem',
+            fontSize: isCaption ? 'var(--cs-body-sm)' : 'var(--cs-body)',
             fontWeight: 300,
             lineHeight: isCaption ? 1.65 : 1.8,
             color: isCaption ? 'rgb(var(--ink) / 0.46)' : 'rgb(var(--ink) / 0.68)',
@@ -176,122 +178,15 @@ function DecisionsBlock({
       style={{ marginBottom: '3rem' }}
     >
       {decisionsLayout === 'caption' ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
-          {decisions.map((d, i) => {
-            const sideAll    = d.images && d.images.length > 0 && d.imagesLayout === 'side-all'
-            const sideColumn = d.images && d.images.length > 0 && d.imagesLayout === 'side-column'
-            const multiFirst = d.images && d.images.length > 0 && !sideAll && !sideColumn
-            return (
-              <div key={i}>
-                {/* Image hero (left 3fr) | caption text (right 1fr) */}
-                <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '2rem', alignItems: 'start' }}>
-
-                  {/* Left: images — the hero */}
-                  <div>
-                    {sideAll ? (
-                      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${d.images!.length}, 1fr)`, gap: '0.5rem' }}>
-                        {d.images!.map((img, j) => (
-                          <motion.div key={j}
-                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: '-40px' }}
-                            transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                          >
-                            <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
-                          </motion.div>
-                        ))}
-                      </div>
-                    ) : sideColumn ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        {d.images!.map((img, j) => (
-                          <motion.div key={j}
-                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: '-40px' }}
-                            transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                          >
-                            <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{
-                              width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in',
-                              ...(j === 0 ? { clipPath: 'inset(150px 0 130px 0)', marginTop: '-150px', marginBottom: '-130px' } : {}),
-                            }} />
-                          </motion.div>
-                        ))}
-                      </div>
-                    ) : multiFirst ? (
-                      <div>
-                        <motion.div
-                          initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                          viewport={{ once: true, margin: '-40px' }}
-                          transition={{ duration: 0.45, ease: EASE_OUT }}
-                          style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                        >
-                          <img src={d.images![0].src} alt={d.images![0].alt} onClick={() => openLightbox(d.images![0].src, d.images![0].alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in', marginTop: '-70px', marginBottom: '-70px' }} />
-                        </motion.div>
-                        {d.images!.length > 1 && (
-                          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${d.images!.length - 1}, 1fr)`, gap: '0.5rem', marginTop: '0.5rem' }}>
-                            {d.images!.slice(1).map((img, j) => (
-                              <motion.div key={j}
-                                initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                                viewport={{ once: true, margin: '-40px' }}
-                                transition={{ duration: 0.45, delay: j * 0.06, ease: EASE_OUT }}
-                                style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                              >
-                                <img src={img.src} alt={img.alt} onClick={() => openLightbox(img.src, img.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
-                              </motion.div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : d.image ? (
-                      (() => {
-                        const vid = isVideoSrc(d.image!.src)
-                        const ct = d.image!.cropTop ?? 0
-                        const cb = d.image!.cropBottom ?? 0
-                        const cropStyle = (ct || cb)
-                          ? { clipPath: `inset(${ct}px 0 ${cb}px 0)`, marginTop: `-${ct}px`, marginBottom: `-${cb}px` }
-                          : {}
-                        return (
-                          <motion.div
-                            initial={{ opacity: 0, y: 16, scale: 0.97 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: '-40px' }}
-                            transition={{ duration: 0.45, ease: EASE_OUT }}
-                            style={{ borderRadius: '0.75rem', overflow: 'hidden', lineHeight: 0 }}
-                          >
-                            {vid ? (
-                              <video src={d.image!.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
-                            ) : (
-                              <img src={d.image!.src} alt={d.image!.alt} onClick={() => openLightbox(d.image!.src, d.image!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in', ...cropStyle }} />
-                            )}
-                          </motion.div>
-                        )
-                      })()
-                    ) : null}
-                  </div>
-
-                  {/* Right: caption text */}
-                  <div style={{ paddingTop: '0.25rem' }}>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.65)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
-                  </div>
-
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        <DecisionRounds items={decisions} />
       ) : decisionsLayout === 'side-by-side' ? (
         /* Narrower text card (260px) so image area dominates */
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {decisions.map((d, i) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: d.image ? '260px 1fr' : '1fr', gap: '1rem', alignItems: 'start' }}>
               <div style={{ borderRadius: '1rem', padding: '1rem 1.25rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.82rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body)', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body-sm)', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
               </div>
               {d.image && (
                 <motion.div
@@ -316,8 +211,8 @@ function DecisionsBlock({
           {decisions.map((d, i) => (
             <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div style={{ borderRadius: '1rem', padding: '1.25rem 1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', fontWeight: 500, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body)', fontWeight: 500, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.4 }}>{d.title}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body-sm)', fontWeight: 300, color: 'var(--text-2)', margin: 0, lineHeight: 1.7 }}>{d.rationale}</p>
               </div>
               {d.image && (
                 <div style={{ borderRadius: '1rem', overflow: 'hidden', border: 'none', lineHeight: 0 }}>
@@ -359,9 +254,9 @@ function OutcomeBlock({
       <h3
         style={{
           fontFamily: 'var(--font-body)',
-          fontSize: 'clamp(1.25rem, 2.5vw, 1.6rem)',
+          fontSize: 'var(--cs-h3)',
           fontWeight: 600,
-          color: 'rgb(var(--ink) / 0.92)',
+          color: 'var(--text-1)',
           margin: '0 0 1.25rem 0',
           lineHeight: 1.25,
           letterSpacing: '-0.01em',
@@ -399,7 +294,7 @@ function OutcomeBlock({
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.72rem',
+                fontSize: 'var(--cs-eyebrow)',
                 fontWeight: 500,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
@@ -414,7 +309,7 @@ function OutcomeBlock({
                 style={{
                   display: 'block',
                   fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(2rem, 4vw, 3rem)',
+                  fontSize: 'var(--cs-h2)',
                   fontWeight: 400,
                   color: 'var(--ink-solid)',
                   lineHeight: 1,
@@ -428,9 +323,9 @@ function OutcomeBlock({
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.82rem',
+                fontSize: 'var(--cs-body-sm)',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.50)',
+                color: 'var(--text-2)',
                 lineHeight: 1.5,
               }}
             >
@@ -441,7 +336,7 @@ function OutcomeBlock({
       </div>
       )}
       {outcomeMedia && (
-        <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: footnote ? '1.5rem' : 0, boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+        <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: footnote ? '1.5rem' : 0, boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}>
           {/\.(mp4|webm|mov)$/i.test(outcomeMedia.src) ? (
             <video src={outcomeMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
           ) : (
@@ -460,7 +355,7 @@ function OutcomeBlock({
           }}>
             <p style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
+              fontSize: 'var(--cs-body)',
               fontWeight: 300,
               color: 'rgba(245, 200, 66, 0.80)',
               lineHeight: 1.7,
@@ -473,9 +368,9 @@ function OutcomeBlock({
           <p
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: '0.88rem',
+              fontSize: 'var(--cs-body)',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.42)',
+              color: 'var(--text-3)',
               lineHeight: 1.7,
               margin: 0,
               borderLeft: '2px solid rgb(var(--ink) / 0.12)',
@@ -505,7 +400,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
       const w = m.scale ? `${m.scale}%` : '100%'
       return (
         <div key={j} style={{ margin: '1.5rem 0', display: 'flex', justifyContent: 'center' }}>
-          <div style={{ width: w, borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+          <div style={{ width: w, borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}>
             {isVid ? (
               <video src={m.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
             ) : (
@@ -513,7 +408,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
             )}
           </div>
           {m.caption && (
-            <p style={{ fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', fontFamily: 'var(--font-body)', marginTop: '0.75rem' }}>{m.caption}</p>
+            <p style={{ fontSize: 'var(--cs-body-sm)', fontWeight: 300, color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginTop: '0.75rem' }}>{m.caption}</p>
           )}
         </div>
       )
@@ -535,11 +430,11 @@ function OverviewContent({ data }: { data: CaseStudy }) {
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.78rem',
+                fontSize: 'var(--cs-eyebrow)',
                 fontWeight: 500,
                 letterSpacing: '0.10em',
                 textTransform: 'uppercase',
-                color: 'rgb(var(--ink) / 0.38)',
+                color: 'var(--text-3)',
                 margin: '0 0 1.25rem 0',
               }}
             >
@@ -552,10 +447,10 @@ function OverviewContent({ data }: { data: CaseStudy }) {
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: '1rem',
+                  fontSize: 'var(--cs-body)',
                   fontWeight: 300,
                   lineHeight: 1.8,
-                  color: 'rgb(var(--ink) / 0.72)',
+                  color: 'var(--text-2)',
                   margin: '0 0 1rem 0',
                 }}
               >
@@ -628,10 +523,10 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                   key={i}
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '1rem',
+                    fontSize: 'var(--cs-body)',
                     fontWeight: 300,
                     lineHeight: 1.8,
-                    color: 'rgb(var(--ink) / 0.65)',
+                    color: 'var(--text-2)',
                     margin: i === 0 ? '0 0 1rem 0' : '0',
                   }}
                 >
@@ -648,7 +543,7 @@ function OverviewContent({ data }: { data: CaseStudy }) {
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.45, ease: EASE_OUT }}
                 style={{ borderRadius: '1.25rem', overflow: 'hidden', lineHeight: 0,
-                  boxShadow: '0 8px 40px rgba(0,0,0,0.55)', maxWidth: '60%', marginLeft: 'auto' }}
+                  boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength)))', maxWidth: '60%', marginLeft: 'auto' }}
               >
                 {isVideoSrc(data.problemMedia.src) ? (
                   <video src={data.problemMedia.src} autoPlay loop muted playsInline
@@ -692,7 +587,7 @@ function WIPBox({ message }: { message: string }) {
       marginBottom: '2rem',
     }}>
       <span style={{
-        fontSize: '0.75rem',
+        fontSize: 'var(--cs-eyebrow)',
         fontWeight: 500,
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
@@ -729,12 +624,12 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               transition={{ duration: 0.55, ease: EASE_OUT }}
               style={{ marginBottom: '2rem' }}
             >
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 300, lineHeight: 1.8, color: 'rgb(var(--ink) / 0.65)', margin: 0 }}>{problemStatement}</p>
+              <span style={{ display: 'block', fontSize: 'var(--cs-eyebrow)', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-eyebrow)', fontWeight: 300, lineHeight: 1.8, color: 'var(--text-2)', margin: 0 }}>{problemStatement}</p>
             </motion.div>
           )}
           {tab.problemImage && (
-            <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '3rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}>
+            <div style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '3rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}>
               {isVid(tab.problemImage.src) ? (
                 <video src={tab.problemImage.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
               ) : (
@@ -750,20 +645,20 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
           {problemStatement && (
             <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.65)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
+              <span style={{ display: 'block', fontSize: 'var(--cs-eyebrow)', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>The Problem</span>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-eyebrow)', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{problemStatement}</p>
             </div>
           )}
           <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-            <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Project Goal</span>
-            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
+            <span style={{ display: 'block', fontSize: 'var(--cs-eyebrow)', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Project Goal</span>
+            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-eyebrow)', fontWeight: 600, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.goal.heading}</h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-eyebrow)', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.goal.body}</p>
           </div>
           {tab.process && (
             <div style={{ borderRadius: '1rem', padding: '1.5rem', background: 'rgb(var(--ink) / 0.03)', border: '1px solid rgb(var(--ink) / 0.07)' }}>
-              <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.35)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Process</span>
-              <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '1rem', fontWeight: 600, color: 'rgb(var(--ink) / 0.88)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
+              <span style={{ display: 'block', fontSize: 'var(--cs-eyebrow)', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-3)', fontFamily: 'var(--font-body)', marginBottom: '0.75rem' }}>Process</span>
+              <h3 style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-eyebrow)', fontWeight: 600, color: 'var(--text-1)', margin: '0 0 0.5rem 0', lineHeight: 1.3 }}>{tab.process.heading}</h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-eyebrow)', fontWeight: 300, color: 'var(--text-2)', lineHeight: 1.7, margin: 0 }}>{tab.process.body}</p>
             </div>
           )}
         </div>
@@ -777,7 +672,22 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, ease: EASE_OUT }}
-              style={{ maxWidth: tab.captionText ? '100%' : '82%', margin: '0 auto 2.5rem', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.45)', lineHeight: 0 }}
+              style={{
+                // Half width: this is a process diagram, not a screenshot — at
+                // full bleed it dominated the section it was meant to introduce
+                maxWidth: tab.captionText ? '50%' : '82%',
+                margin: '0 auto 2.5rem',
+                borderRadius: '1rem',
+                overflow: 'hidden',
+                // Assets with light type baked in carry their own dark ground —
+                // anything else just needs an edge to sit against on paper
+                background: tab.introMedia.darkGround
+                  ? 'rgb(18 17 16)'
+                  : 'rgb(var(--ink) / 0.05)',
+                padding: tab.introMedia.darkGround ? '1.5rem' : '0.75rem',
+                boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))',
+                lineHeight: 0,
+              }}
             >
               {isVid(tab.introMedia.src) ? (
                 <video src={tab.introMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -793,7 +703,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, delay: 0, ease: EASE_OUT }}
-              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}
+              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}
             >
               {isVid(tab.goalMedia.src) ? (
                 <video src={tab.goalMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -801,7 +711,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
                 <img src={tab.goalMedia.src} alt={tab.goalMedia.alt} onClick={() => openLightbox(tab.goalMedia!.src, tab.goalMedia!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
               {tab.goalMedia.caption && (
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body-sm)', fontWeight: 300, color: 'var(--text-3)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.goalMedia.caption}</p>
               )}
             </motion.div>
           )}
@@ -819,7 +729,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.45, delay: 0.06, ease: EASE_OUT }}
-              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgba(0,0,0,0.45)' }}
+              style={{ borderRadius: '1rem', overflow: 'hidden', marginBottom: '2rem', boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength)))' }}
             >
               {isVid(tab.processMedia.src) ? (
                 <video src={tab.processMedia.src} autoPlay loop muted playsInline style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -827,7 +737,7 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
                 <img src={tab.processMedia.src} alt={tab.processMedia.alt} onClick={() => openLightbox(tab.processMedia!.src, tab.processMedia!.alt)} style={{ width: '100%', height: 'auto', display: 'block', cursor: 'zoom-in' }} />
               )}
               {tab.processMedia.caption && (
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.78rem', fontWeight: 300, color: 'rgb(var(--ink) / 0.38)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.processMedia.caption}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--cs-body-sm)', fontWeight: 300, color: 'var(--text-3)', marginTop: '0.75rem', lineHeight: 1.5 }}>{tab.processMedia.caption}</p>
               )}
             </motion.div>
           )}
@@ -868,9 +778,9 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
                 transition={{ duration: 0.75, ease: EASE_OUT }}
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
+                  fontSize: 'var(--cs-display)',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.90)',
+                  color: 'var(--text-1)',
                   margin: '0 0 3rem 0',
                   lineHeight: 1.0,
                   letterSpacing: '-0.03em',
@@ -878,12 +788,10 @@ function ProjectContent({ tab, problemStatement }: { tab: ProjectTab; problemSta
               >
                 {tab.keyDecisionsHeading ?? 'Key decisions'}
               </motion.h2>
-              <DecisionsBlock
-                heading={tab.keyDecisionsHeading ?? 'Key decisions'}
-                decisions={tab.keyDecisions}
-                decisionsLayout="caption"
-                delay={0.18}
-              />
+              {/* Alternating rows, same shape as DoorFeed's Rounds — the
+                  screenshot sits beside the reasoning, sides swap each
+                  decision, and nothing here is hidden behind a click. */}
+              <DecisionsAccordion decisions={tab.keyDecisions} />
             </section>
           )}
           {/* Visuals between Decisions and Outcome */}
@@ -949,9 +857,9 @@ export default function ProjectTabs({ data }: Props) {
               transition={{ duration: 0.75, ease: EASE_OUT }}
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
+                fontSize: 'var(--cs-display)',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.90)',
+                color: 'var(--text-1)',
                 margin: '0 0 3rem 0',
                 lineHeight: 1.0,
                 letterSpacing: '-0.03em',
@@ -982,9 +890,9 @@ export default function ProjectTabs({ data }: Props) {
             transition={{ duration: 0.75, ease: EASE_OUT }}
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.45rem, 4.9vw, 3.85rem)',
+              fontSize: 'var(--cs-display)',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.90)',
+              color: 'var(--text-1)',
               margin: '0 0 3rem 0',
               lineHeight: 1.0,
               letterSpacing: '-0.03em',

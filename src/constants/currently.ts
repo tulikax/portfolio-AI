@@ -40,22 +40,24 @@ export const NOW_PLAYING: NowPlaying = {
 }
 
 export const RECENT_READ: RecentRead = {
-  title: 'Operating as an AI-native product designer in 2026',
-  source: 'Verified Insider · Tom Scott & Vitor Amaral',
+  title: 'Imagine an Organism',
+  source: 'Inference · David Lobina',
   // ⚠️ PLACEHOLDER — your take, not mine
   take: 'PLACEHOLDER — one or two sentences on what stuck with you.',
-  href: 'https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product',
-  // The publication's own apple-touch-icon
-  iconUrl: 'https://substack-post-media.s3.amazonaws.com/public/images/5d5a7648-aa0b-4ce6-932c-e766428d1589/apple-touch-icon-120x120.png',
+  href: 'https://inference-review.com/article/imagine-an-organism',
+  // Inference publishes no favicon or apple-touch-icon (both 404); this is its
+  // masthead logo, the only icon asset the site serves. If it ever moves, the
+  // tile falls back to the tinted glyph on its own.
+  iconUrl: 'https://inference-review.com/webpack/dist/inference_logo_2026.svg',
 }
 
-// ⚠️ PLACEHOLDER — your own Substack, not the one above
-export const SUBSTACK_URL = 'https://substack.com'
+/** Tulika's own publication — distinct from RECENT_READ above, which is someone else's. */
+export const SUBSTACK_URL = 'https://engineeredbydesign.substack.com'
 
 export const LATEST_POST: SubstackPost = {
-  title: 'PLACEHOLDER — your most recent Substack post',
-  date: 'Mon 2026',
-  href: SUBSTACK_URL,
+  title: 'Designing for delegation',
+  date: 'Sep 2026',
+  href: `${SUBSTACK_URL}/p/designing-for-delegation`,
 }
 
 /** Where she is — drives the live clock tile */

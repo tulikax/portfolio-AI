@@ -59,11 +59,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           padding: '1.75rem',
           position: 'relative',
           overflow: 'hidden',
-          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
+          background: 'var(--fill-card)',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgb(var(--ink) / 0.09)',
-          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+          boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
           cursor: 'default',
           transition: 'transform 200ms cubic-bezier(0.23,1,0.32,1)',
         }}
@@ -99,7 +99,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               style={{
                 width: '1.5rem',
                 height: '1.5rem',
-                color: 'rgb(var(--ink) / 0.20)',
+                color: 'var(--text-3)',
                 margin: '0 auto 0.5rem',
                 display: 'block',
               }}
@@ -108,7 +108,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.20)',
+                color: 'var(--text-3)',
                 fontSize: '0.75rem',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
@@ -137,7 +137,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.60)',
+            color: 'var(--text-2)',
             fontSize: '0.875rem',
             lineHeight: 1.6,
             margin: '0 0 1rem',
@@ -163,7 +163,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.30)',
+                  color: 'var(--text-3)',
                   fontSize: '0.7rem',
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
@@ -182,7 +182,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               cursor: 'pointer',
               fontFamily: 'var(--font-body)',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.35)',
+              color: 'var(--text-3)',
               fontSize: '0.75rem',
               padding: 0,
               transition: 'color 200ms ease',
@@ -261,7 +261,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     style={{
                       width: '2rem',
                       height: '2rem',
-                      color: 'rgb(var(--ink) / 0.20)',
+                      color: 'var(--text-3)',
                       margin: '0 auto 0.75rem',
                       display: 'block',
                     }}
@@ -270,7 +270,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontWeight: 300,
-                      color: 'rgb(var(--ink) / 0.25)',
+                      color: 'var(--text-3)',
                       fontSize: '0.8rem',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
@@ -284,7 +284,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               <h3
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontStyle: 'italic',
                   fontSize: '1.5rem',
                   color: 'var(--ink-solid)',
                   margin: '0 0 0.75rem',
@@ -297,7 +296,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.70)',
+                  color: 'var(--text-2)',
                   fontSize: '1rem',
                   lineHeight: 1.75,
                 }}
@@ -317,7 +316,7 @@ export default function PlaygroundSection() {
     <section
       id="playground"
       style={{
-        background: 'black',
+        background: 'rgb(var(--surface))',
         paddingTop: '7rem',
         paddingBottom: '10rem',
         paddingLeft: '1.5rem',
@@ -333,7 +332,6 @@ export default function PlaygroundSection() {
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontSize: 'clamp(2rem, 5vw, 3.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.92,
@@ -354,7 +352,7 @@ export default function PlaygroundSection() {
           style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.60)',
+            color: 'var(--text-2)',
             fontSize: '1rem',
             maxWidth: '36rem',
             margin: '0 auto',
@@ -371,7 +369,7 @@ export default function PlaygroundSection() {
           style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.38)',
+            color: 'var(--text-3)',
             fontSize: '0.9rem',
             maxWidth: '36rem',
             margin: '0.75rem auto 0',

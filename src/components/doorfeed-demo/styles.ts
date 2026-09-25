@@ -76,7 +76,7 @@ export const H2: CSSProperties = {
   letterSpacing: '-0.02em',
   fontSize: 'clamp(1.3125rem, 2.7vw, 1.75rem)',
   lineHeight: 1.15,
-  color: 'rgb(var(--ink) / 0.95)',
+  color: 'var(--text-1)',
 }
 
 export const H3: CSSProperties = {
@@ -85,7 +85,7 @@ export const H3: CSSProperties = {
   letterSpacing: '-0.015em',
   fontSize: 'clamp(1.125rem, 2.1vw, 1.375rem)',
   lineHeight: 1.25,
-  color: 'rgb(var(--ink) / 0.95)',
+  color: 'var(--text-1)',
 }
 
 export const H4: CSSProperties = {
@@ -94,7 +94,7 @@ export const H4: CSSProperties = {
   letterSpacing: '-0.01em',
   fontSize: '1.0625rem',
   lineHeight: 1.3,
-  color: 'rgb(var(--ink) / 0.95)',
+  color: 'var(--text-1)',
 }
 
 export const CHAPTER_TITLE: CSSProperties = {
@@ -106,7 +106,15 @@ export const CHAPTER_TITLE: CSSProperties = {
   margin: 0,
 }
 
-/** The source used a coloured italic for emphasis; here italic Bodoni alone carries it. */
+/**
+ * The source used a coloured italic for emphasis; the slant alone carries it here,
+ * since `color` matches CHAPTER_TITLE's.
+ *
+ * This is the one italic left on the display face. Forum ships no italic, so the
+ * browser skews the roman — but the emphasised fragment is a word or two inside a
+ * chapter title, not a heading voice, and without the slant seven chapter titles
+ * lose their emphasis entirely. Needs a non-italic carrier before this can go.
+ */
 export const EMPHASIS: CSSProperties = {
   fontStyle: 'italic',
   color: ink(0.95),

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import CurrentlyBlock from './about/CurrentlyBlock'
+import { useTheme } from '../theme/useTheme'
 import photo1 from '../assets/section 2/maybe/PHOTO-2024-10-07-20-19-47.jpg'
 import photo2 from '../assets/section 2/maybe/PHOTO-2024-10-16-22-50-46.jpg'
 import deloittePhone from '../assets/section 2/maybe/Deloitte phone.png'
@@ -17,8 +18,10 @@ const fadeUp = {
   transition: { duration: 0.7, ease: EASE_OUT },
 }
 
-/** The overarching version — the detail lives on /about */
-const INTRO = "My focus has always been finance and complex systems. Dense workflows, high-stakes platforms, legacy systems — spaces where trust and speed both have to hold. I'm currently navigating what it means to build AI into these highly regulated spaces, learning what to optimise and where to draw the line. Outside of that, I've always tried to step outside my comfort zone: graphic design, illustration, platforms for audiences and contexts that didn't use software before. Consulting taught me to work at scale, startups taught me to ship. But the real education has been obsessing over each new world until I can think like the person standing inside it."
+/**
+ * The homepage carries the heading, the link through, and Currently — no prose.
+ * The long version lives on /about, where AboutPage owns the copy.
+ */
 
 // Floating cards — 6 unique images, no repeats
 const FLOATING_CARDS = [
@@ -39,6 +42,8 @@ const MOBILE_CARDS = [
 function FloatingCard({ card }: {
   card: typeof FLOATING_CARDS[number] & { zoom?: number }
 }) {
+  const { resolved } = useTheme()
+  const isLight = resolved === 'light'
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.85 }}
@@ -62,7 +67,7 @@ function FloatingCard({ card }: {
         width: card.w,
         borderRadius: '10px',
         border: '1px solid rgb(var(--ink) / 0.10)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgb(var(--ink) / 0.08) inset',
+        boxShadow: '0 8px 32px rgb(var(--shadow-ink) / calc(0.45 * var(--shadow-strength))), 0 1px 0 rgb(var(--ink) / 0.08) inset',
         overflow: 'hidden',
         zIndex: 1,
         pointerEvents: 'none',
@@ -75,27 +80,35 @@ function FloatingCard({ card }: {
           width: '100%',
           height: 'auto',
           display: 'block',
-          opacity: card.opacity ?? 0.82,
+          // Knocked back on dark so they sit behind the copy rather than
+          // competing with it. On paper they are already quiet — holding them at
+          // 0.82 under a lightening overlay just washed them out.
+          opacity: isLight ? 1 : (card.opacity ?? 0.82),
           transform: card.zoom ? `scale(${card.zoom})` : undefined,
           transformOrigin: 'center center',
         }}
       />
-      {/* Subtle overlay to blend with dark bg */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'linear-gradient(145deg, rgba(0,0,0,0.08), rgba(0,0,0,0.22))',
-      }} />
+      {/* Blends the card into the page ground — tinted with --surface, so it
+          darkens on dark. Dropped entirely on paper: there it lightens, and a
+          22% white veil over an already-pale photo is what made these vanish. */}
+      {!isLight && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(145deg, rgb(var(--surface) / 0.08), rgb(var(--surface) / 0.22))',
+        }} />
+      )}
     </motion.div>
   )
 }
 
-export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs?: string[] } = {}) {
+export default function AboutSection() {
+  const { resolved } = useTheme()
   return (
     <section
       id="about"
       style={{
-        background: 'black',
+        background: 'rgb(var(--surface))',
         paddingTop: '7rem',
         paddingBottom: '9rem',
         paddingLeft: '1.5rem',
@@ -105,10 +118,12 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
         position: 'relative',
       }}
     >
-      {/* Animated 3D gradient blob */}
+      {/* Animated 3D gradient blob. Dark only — a lit wash reads as a stain on paper. */}
       <div
         style={{
           position: 'absolute',
+          display: resolved === 'light' ? 'none' : undefined,
+          opacity: 0.3,
           top: '50%',
           left: '50%',
           width: '70%',
@@ -178,7 +193,6 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
             fontSize: 'clamp(1.75rem, 6vw, 4.5rem)',
             letterSpacing: '-0.04em',
             lineHeight: 0.92,
@@ -192,46 +206,30 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
           curious by nature.
         </motion.h2>
 
-        <motion.p
-          {...fadeUp}
-          transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
-          className="about-body-text"
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontWeight: 300,
-            fontSize: '1.05rem',
-            color: 'rgb(var(--ink) / 0.70)',
-            lineHeight: 1.7,
-            maxWidth: '640px',
-          }}
-        >
-          {INTRO}
-        </motion.p>
-
-        {/* Appended copy (e.g. the intro paragraphs moved down from the hero) */}
-        {extraParagraphs.map((para, i) => (
-          <motion.p
-            key={i}
-            {...fadeUp}
-            transition={{ duration: 0.7, delay: 0.24 + i * 0.08, ease: EASE_OUT }}
-            className="about-body-text"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 300,
-              fontSize: '1.05rem',
-              color: 'rgb(var(--ink) / 0.70)',
-              lineHeight: 1.7,
-              maxWidth: '640px',
-            }}
-          >
-            {para}
-          </motion.p>
-        ))}
-
+        {/* What she's into right now — content lives in src/constants/currently.ts */}
         <motion.div
           {...fadeUp}
           transition={{ duration: 0.7, delay: 0.24, ease: EASE_OUT }}
-          style={{ marginTop: '0.5rem' }}
+          style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
+              letterSpacing: '0.14em', textTransform: 'uppercase',
+              color: 'var(--text-3)', margin: 0,
+            }}
+          >
+            Currently
+          </p>
+          <CurrentlyBlock />
+        </motion.div>
+
+        {/* The way through to the long version — last, so Currently is what the
+            section leaves you on rather than an interruption before it. */}
+        <motion.div
+          {...fadeUp}
+          transition={{ duration: 0.7, delay: 0.32, ease: EASE_OUT }}
+          style={{ marginTop: '2.5rem' }}
         >
           <Link
             to="/about"
@@ -239,7 +237,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
             style={{
               borderRadius: '9999px',
               padding: '0.7rem 1.35rem',
-              color: 'rgb(var(--ink) / 0.65)',
+              color: 'var(--text-2)',
               fontSize: '0.9rem',
               fontFamily: 'var(--font-body)',
               fontWeight: 400,
@@ -254,24 +252,6 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
             <ArrowRight style={{ width: '0.95rem', height: '0.95rem', strokeWidth: 1.75, flexShrink: 0 }} />
           </Link>
         </motion.div>
-
-        {/* What she's into right now — content lives in src/constants/currently.ts */}
-        <motion.div
-          {...fadeUp}
-          transition={{ duration: 0.7, delay: 0.32, ease: EASE_OUT }}
-          style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginTop: '2rem' }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: '0.65rem',
-              letterSpacing: '0.14em', textTransform: 'uppercase',
-              color: 'rgb(var(--ink) / 0.35)', margin: 0,
-            }}
-          >
-            Currently
-          </p>
-          <CurrentlyBlock />
-        </motion.div>
       </div>
 
       {/* Bottom fade */}
@@ -283,7 +263,7 @@ export default function AboutSection({ extraParagraphs = [] }: { extraParagraphs
           right: 0,
           zIndex: 3,
           height: '300px',
-          background: 'linear-gradient(to bottom, transparent, black)',
+          background: 'linear-gradient(to bottom, transparent, rgb(var(--surface)))',
           pointerEvents: 'none',
         }}
       />

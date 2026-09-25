@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useTheme } from '../theme/useTheme'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
 
@@ -6,30 +7,43 @@ interface Tool {
   name: string
   slug: string
   ext?: 'svg' | 'png' | 'jpg' | 'avif' | 'webp'  // defaults to 'svg'
+  /** Single-colour black SVG — inverted on the dark theme so it stays visible */
+  monoSvg?: boolean
+  /**
+   * Multiplier on the rendered glyph. Some logos ship with generous padding baked
+   * into the file, so at a shared box size they read smaller than the rest —
+   * this scales the mark rather than the box, keeping the grid even.
+   */
+  scale?: number
   category: 'ai' | 'design' | 'productivity' | 'dev'
 }
 
+/**
+ * Rendered in array order — the grid is a flat map, so this list IS the layout.
+ * `category` is metadata for grouping later, not something the grid reads.
+ */
 const TOOLS: Tool[] = [
-  // AI
   { name: 'Claude',       slug: 'claude',       category: 'ai' },
-  { name: 'Perplexity',   slug: 'perplexity',   ext: 'png', category: 'ai' },
-  // Design
+  // The SVG is a solid-black glyph, which is right on paper and invisible on the
+  // dark page — so it gets inverted there rather than swapping in the PNG.
+  { name: 'Framer',       slug: 'framer',       monoSvg: true, category: 'design' },
   { name: 'Figma',        slug: 'figma',        category: 'design' },
-  { name: 'Framer',       slug: 'framer',       ext: 'png', category: 'design' },
-  { name: 'Rive',         slug: 'rive',         ext: 'avif', category: 'design' },
-  { name: 'Adobe',        slug: 'adobe',        ext: 'webp', category: 'design' },
-  // Productivity
+  { name: 'Cursor',       slug: 'cursor',       ext: 'png', category: 'dev' },
   { name: 'Notion',       slug: 'notion',       ext: 'png', category: 'productivity' },
   { name: 'Linear',       slug: 'linear',       ext: 'png', category: 'productivity' },
   { name: 'Loom',         slug: 'loom',         ext: 'png', category: 'productivity' },
-  // Dev
-  { name: 'Cursor',       slug: 'cursor',       ext: 'png', category: 'dev' },
+  { name: 'Perplexity',   slug: 'perplexity',   ext: 'png', category: 'ai' },
   { name: 'GitHub',       slug: 'github',       category: 'dev' },
-  { name: 'React',        slug: 'react',        ext: 'png', category: 'dev' },
+  { name: 'React',        slug: 'react',        ext: 'png', scale: 1.25, category: 'dev' },
   { name: 'PostHog',      slug: 'posthog',      ext: 'png', category: 'dev' },
+  // Tail end — the craft tools close the grid
+  { name: 'Rive',         slug: 'rive',         ext: 'avif', category: 'design' },
+  { name: 'Adobe Creative Suite', slug: 'adobe', ext: 'webp', scale: 1.25, category: 'design' },
 ]
 
 function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
+  const { resolved } = useTheme()
+  const isLight = resolved === 'light'
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.88, y: 12 }}
@@ -52,11 +66,11 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
           width: '64px',
           height: '64px',
           borderRadius: '12px',
-          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02))',
+          background: 'var(--fill-card)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           border: '1px solid rgb(var(--ink) / 0.10)',
-          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 24px rgba(0,0,0,0.4)',
+          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 24px rgb(var(--shadow-ink) / calc(0.4 * var(--shadow-strength)))',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -87,6 +101,10 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
             objectFit: 'contain',
             // If the logo file doesn't exist yet, this becomes invisible — placeholder is the card bg
             imageRendering: 'auto',
+            // Black glyphs read on paper and vanish on the dark page
+            filter: tool.monoSvg && !isLight ? 'invert(1)' : undefined,
+            // Evens out marks that ship with padding baked in
+            transform: tool.scale ? `scale(${tool.scale})` : undefined,
           }}
           onError={(e) => {
             // Hide broken img icon if file not yet added
@@ -101,7 +119,7 @@ function ToolCard({ tool, delay }: { tool: Tool; delay: number }) {
           fontFamily: 'var(--font-body)',
           fontWeight: 400,
           fontSize: '0.7rem',
-          color: 'rgb(var(--ink) / 0.60)',
+          color: 'var(--text-2)',
           letterSpacing: '0.01em',
           textAlign: 'center',
           lineHeight: 1.3,
@@ -118,7 +136,7 @@ export default function StackSection() {
     <section
       id="stack"
       style={{
-        background: 'black',
+        background: 'rgb(var(--surface))',
         paddingTop: '7rem',
         paddingBottom: '9rem',
         paddingLeft: '1.5rem',
@@ -137,7 +155,6 @@ export default function StackSection() {
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontStyle: 'italic',
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               letterSpacing: '-0.04em',
               lineHeight: 0.92,
@@ -152,7 +169,7 @@ export default function StackSection() {
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.55)',
+              color: 'var(--text-2)',
               fontSize: '1rem',
               maxWidth: '34rem',
               margin: '0 auto',

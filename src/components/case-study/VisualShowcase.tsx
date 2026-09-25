@@ -50,7 +50,7 @@ function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: num
           borderRadius: '1.25rem',
           overflow: 'hidden',
           border: 'none',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgb(var(--ink) / 0.06) inset',
+          boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength))), 0 1px 0 rgb(var(--ink) / 0.06) inset',
           background: 'rgb(var(--ink) / 0.03)',
           lineHeight: 0,
           height: cardHeight,
@@ -61,9 +61,9 @@ function ImageCard({ img, delay, cardHeight }: { img: CaseStudyImage; delay: num
       {img.caption && (
         <p
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'var(--cs-body-sm)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.38)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginTop: '0.75rem',
             lineHeight: 1.5,
@@ -92,15 +92,15 @@ function CarouselCard({ img, i }: { img: CaseStudyImage; i: number }) {
         borderRadius: '1.25rem',
         overflow: 'hidden',
         height: '100%',
-        boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgb(var(--ink) / 0.06) inset',
+        boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength))), 0 1px 0 rgb(var(--ink) / 0.06) inset',
       }}
     >
       <MediaInner img={img} fixedHeight style={{ height: '100%', objectFit: 'contain', transform: 'scale(0.95)', transformOrigin: 'center center' }} onImageClick={isVideo(img.src) ? undefined : () => openLightbox(img.src, img.alt)} />
       {img.caption && (
         <p style={{
-          fontSize: '0.78rem',
+          fontSize: 'var(--cs-body-sm)',
           fontWeight: 300,
-          color: 'rgb(var(--ink) / 0.38)',
+          color: 'var(--text-3)',
           fontFamily: 'var(--font-body)',
           marginTop: '0.75rem',
           lineHeight: 1.5,
@@ -137,7 +137,7 @@ function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
           borderRadius: '1.25rem',
           overflow: 'hidden',
           border: 'none',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.55), 0 1px 0 rgb(var(--ink) / 0.06) inset',
+          boxShadow: '0 8px 40px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength))), 0 1px 0 rgb(var(--ink) / 0.06) inset',
           background: 'rgb(var(--ink) / 0.03)',
           lineHeight: 0,
           // Fixed viewport height so overflow crops cleanly
@@ -151,9 +151,9 @@ function HorizontalScrollCard({ img }: { img: CaseStudyImage }) {
       {img.caption && (
         <p
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'var(--cs-body-sm)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.38)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginTop: '0.75rem',
             lineHeight: 1.5,
@@ -185,11 +185,11 @@ export default function VisualShowcase({ block }: Props) {
           transition={{ duration: 0.6, ease: EASE_OUT }}
           style={{
             display: 'block',
-            fontSize: '0.68rem',
+            fontSize: 'var(--cs-eyebrow)',
             fontWeight: 500,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: 'rgb(var(--ink) / 0.35)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginBottom: '1.25rem',
           }}

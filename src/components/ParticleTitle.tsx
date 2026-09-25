@@ -1,5 +1,5 @@
 import { useEffect, useRef, type MutableRefObject } from 'react'
-import { displayFont, inkChannel } from '../constants/theme'
+import { useThemedCanvas } from '../theme/useThemedCanvas'
 
 const REPEL_RADIUS = 110
 const REPEL_STRENGTH = 8
@@ -59,12 +59,13 @@ export default function ParticleTitle({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const internalCursorRef = useRef({ x: -9999, y: -9999 })
   const activeCursorRef = externalCursorRef ?? internalCursorRef
+  const theme = useThemedCanvas()
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    const INK = inkChannel()
+    const INK = theme.inkChannel()
     if (!ctx) return
 
     let particles: TitleParticle[] = []
@@ -96,7 +97,7 @@ export default function ParticleTitle({
 
       // Never let a font CDN failure blank the headline — fall back to the
       // generic serif and carry on rendering particles.
-      await document.fonts.load(displayFont(80)).catch(() => {})
+      await document.fonts.load(theme.displayFont(80)).catch(() => {})
       if (cancelled) return
 
       const W = canvas.offsetWidth
@@ -113,7 +114,7 @@ export default function ParticleTitle({
       // Choose font size so the widest line fits with padding
       const testCtx = document.createElement('canvas').getContext('2d')!
       let fontSize = Math.min(W * 0.12, 110)
-      testCtx.font = displayFont(fontSize)
+      testCtx.font = theme.displayFont(fontSize)
       const maxLineWidth = Math.max(...lines.map(l => testCtx.measureText(l).width))
       if (maxLineWidth > W * 0.9) {
         fontSize *= (W * 0.9) / maxLineWidth
@@ -123,7 +124,7 @@ export default function ParticleTitle({
       if (fontBoostPx) {
         // Grow by the requested amount, then pull back if the widest line would overrun
         fontSize += fontBoostPx
-        testCtx.font = displayFont(fontSize)
+        testCtx.font = theme.displayFont(fontSize)
         const boosted = Math.max(...lines.map(l => testCtx.measureText(l).width))
         if (boosted > W * 0.98) fontSize *= (W * 0.98) / boosted
       }
@@ -142,7 +143,7 @@ export default function ParticleTitle({
       canvas.style.height = H + 'px'
       ctx.scale(dpr, dpr)
 
-      drawFont = displayFont(fontSize)
+      drawFont = theme.displayFont(fontSize)
 
       // Render all lines to offscreen canvas
       const off = document.createElement('canvas')
@@ -407,7 +408,7 @@ export default function ParticleTitle({
     // linesDesktop/linesMobile/blueprintLens intentionally omitted: the async init isn't re-entrant,
     // so text changes must remount the component (key) instead of re-running the effect
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCursorRef])
+  }, [activeCursorRef, theme])
 
   return (
     <canvas

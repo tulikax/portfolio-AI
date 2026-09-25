@@ -36,7 +36,7 @@ export default function MediaCollage({ spec }: { spec: CollageSpec }) {
                   overflow: 'hidden',
                   border: `1px solid ${HAIRLINE_STRONG}`,
                   background: 'rgb(var(--surface))',
-                  boxShadow: `0 ${8 + i * 6}px ${30 + i * 14}px rgba(0, 0, 0, ${0.35 + i * 0.1})`,
+                  boxShadow: `0 ${8 + i * 6}px ${30 + i * 14}px rgb(var(--shadow-ink) / ${0.35 + i * 0.1})`,
                 }}
               >
                 <CroppedImage src={item.src} alt={item.alt} crop={item.crop} />

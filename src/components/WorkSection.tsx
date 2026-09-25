@@ -105,9 +105,9 @@ function MediaCard({ src, fluid }: { src: string; fluid?: boolean }) {
     <div style={{
       borderRadius: '1rem',
       overflow: 'hidden',
-      background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
+      background: 'var(--fill-card)',
       border: '1px solid rgb(var(--ink) / 0.10)',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 1px 0 rgb(var(--ink) / 0.08) inset',
+      boxShadow: 'var(--shadow-card), var(--shadow-hairline)',
       lineHeight: 0,
       flexShrink: 0,
     }}>
@@ -176,24 +176,24 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
           WebkitBackfaceVisibility: 'hidden',
           borderRadius: '1.5rem',
           padding: '1.75rem',
-          background: 'linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02))',
+          background: 'var(--fill-card)',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgb(var(--ink) / 0.09)',
-          boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+          boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
           cursor: role.caseStudySlug ? 'pointer' : 'default',
           transition: 'box-shadow 250ms ease, border-color 250ms ease',
         }}
           onMouseEnter={e => {
             if (!role.caseStudySlug) return
             const el = e.currentTarget as HTMLDivElement
-            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgb(var(--ink) / 0.12)'
+            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 60px rgb(var(--shadow-ink) / calc(0.6 * var(--shadow-strength))), 0 0 0 1px rgb(var(--ink) / 0.12)'
             el.style.borderColor = 'rgb(var(--ink) / 0.16)'
           }}
           onMouseLeave={e => {
             if (!role.caseStudySlug) return
             const el = e.currentTarget as HTMLDivElement
-            el.style.boxShadow = '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)'
+            el.style.boxShadow = 'var(--shadow-hairline), var(--shadow-float)'
             el.style.borderColor = 'rgb(var(--ink) / 0.09)'
           }}
         >
@@ -207,7 +207,7 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
           <span style={{
             position: 'absolute', top: '1.5rem', right: '1.75rem',
             fontFamily: 'var(--font-body)', fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.20)', fontSize: '0.75rem', letterSpacing: '0.05em',
+            color: 'var(--text-3)', fontSize: '0.75rem', letterSpacing: '0.05em',
           }}>{role.number}</span>
 
           <div style={{ marginBottom: '0.25rem' }}>
@@ -215,14 +215,14 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
               {role.title}
             </span>
             {' '}
-            <span className="role-card-title" style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.55)', fontSize: '1rem' }}>
+            <span className="role-card-title" style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-2)', fontSize: '1rem' }}>
               @ {role.company}
             </span>
           </div>
 
           <p className="role-card-duration" style={{
             fontFamily: 'var(--font-body)', fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.35)', fontSize: '0.7rem',
+            color: 'var(--text-3)', fontSize: '0.7rem',
             letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1.25rem',
           }}>{role.duration}</p>
 
@@ -234,12 +234,12 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
             }}>
               <p style={{
                 fontFamily: 'var(--font-body)', fontWeight: 500,
-                color: 'rgb(var(--ink) / 0.40)', fontSize: '0.65rem',
+                color: 'var(--text-3)', fontSize: '0.65rem',
                 letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.25rem',
               }}>{sub.label}</p>
               <p className="role-card-body" style={{
                 fontFamily: 'var(--font-body)', fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.65)', fontSize: '0.8rem', lineHeight: 1.6,
+                color: 'var(--text-2)', fontSize: '0.8rem', lineHeight: 1.6,
               }}>{sub.content}</p>
             </div>
           ))}
@@ -257,7 +257,7 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
           }}>
             <p style={{
               fontFamily: 'var(--font-body)', fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.30)', fontSize: '0.7rem',
+              color: 'var(--text-3)', fontSize: '0.7rem',
               letterSpacing: '0.12em', textTransform: 'uppercase',
             }}>{role.skills.join(' · ')}</p>
 
@@ -360,11 +360,11 @@ function RoleCard({ role, index, isHovered, isDimmed, onHoverChange }: {
               WebkitBackfaceVisibility: 'hidden',
               borderRadius: '1.5rem',
               padding: '1.75rem',
-              background: 'linear-gradient(145deg, rgb(var(--ink) / 0.07), rgb(var(--ink) / 0.02))',
+              background: 'var(--fill-card)',
               backdropFilter: 'blur(40px)',
               WebkitBackdropFilter: 'blur(40px)',
               border: '1px solid rgb(var(--ink) / 0.09)',
-              boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 20px 60px rgba(0,0,0,0.5)',
+              boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
               display: 'flex',
               alignItems: 'center',
               gap: '1rem',
@@ -389,7 +389,7 @@ export default function WorkSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   return (
-    <section id="work" style={{ background: 'black', paddingTop: '5rem', paddingBottom: '10rem' }}>
+    <section id="work" style={{ background: 'rgb(var(--surface))', paddingTop: '5rem', paddingBottom: '10rem' }}>
       <div style={{ textAlign: 'center', marginBottom: '4rem', padding: '0 1.5rem' }}>
         <motion.h2
           initial={{ opacity: 0, y: 28 }}
@@ -397,11 +397,28 @@ export default function WorkSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, delay: 0.08, ease: EASE_OUT }}
           style={{
-            fontFamily: 'var(--font-display)', fontStyle: 'italic',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em',
             lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0', fontWeight: 400,
           }}
         >Things I've done.</motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, delay: 0.16, ease: EASE_OUT }}
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 300,
+            fontSize: '0.875rem',
+            letterSpacing: '0.01em',
+            color: 'var(--text-3)',
+            margin: '0.75rem 0 0',
+          }}
+        >
+          Hover for a sneak peek, click to open the case study
+        </motion.p>
       </div>
 
       <div style={{

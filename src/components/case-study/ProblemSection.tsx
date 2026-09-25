@@ -46,10 +46,10 @@ export default function ProblemSection({ data }: Props) {
             <p
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(1.5rem, 3.75vw, 2.625rem)',
+                fontSize: 'var(--cs-h2)',
                 fontWeight: 400,
                 letterSpacing: '-0.02em',
-                color: 'rgb(var(--ink) / 0.92)',
+                color: 'var(--text-1)',
                 margin: '0 0 1.5rem 0',
                 lineHeight: 1.1,
               }}
@@ -64,10 +64,10 @@ export default function ProblemSection({ data }: Props) {
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.7, delay: 0.15, ease: EASE_OUT }}
             style={{
-              fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
+              fontSize: 'var(--cs-lead)',
               fontWeight: 300,
               lineHeight: 1.8,
-              color: 'rgb(var(--ink) / 0.65)',
+              color: 'var(--text-2)',
               fontFamily: 'var(--font-body)',
               margin: 0,
             }}
@@ -89,7 +89,7 @@ export default function ProblemSection({ data }: Props) {
                 borderRadius: '1.25rem',
                 overflow: 'hidden',
                 border: 'none',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                boxShadow: 'var(--shadow-card)',
                 lineHeight: 0,
               }}
             >
@@ -102,9 +102,9 @@ export default function ProblemSection({ data }: Props) {
             {data.problemImage.caption && (
               <p
                 style={{
-                  fontSize: '0.78rem',
+                  fontSize: 'var(--cs-body-sm)',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.40)',
+                  color: 'var(--text-3)',
                   fontFamily: 'var(--font-body)',
                   marginTop: '0.75rem',
                   lineHeight: 1.5,

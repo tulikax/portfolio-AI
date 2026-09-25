@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Search, Compass, Layers, CheckSquare } from 'lucide-react'
+import { useTheme } from '../theme/useTheme'
 
 const STEPS = [
   {
@@ -44,7 +45,7 @@ function ProcessScrollEyebrow() {
         fontSize: '0.65rem',
         letterSpacing: '0.14em',
         textTransform: 'uppercase',
-        color: 'rgb(var(--ink) / 0.35)',
+        color: 'var(--text-3)',
         textAlign: 'center',
         margin: 0,
         flexShrink: 0,
@@ -73,6 +74,7 @@ function useIsMobile() {
 const E = 0.06
 
 function DesktopProcess() {
+  const { resolved } = useTheme()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
@@ -131,8 +133,8 @@ function DesktopProcess() {
         gap: '32px',
         padding: '2rem 0',
       }}>
-        {/* Scroll-driven blobs */}
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+        {/* Scroll-driven blobs. Dark only — lit washes turn to muddy smears on paper. */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0, opacity: 0.3, display: resolved === 'light' ? 'none' : undefined }}>
           <motion.div style={{ position: 'absolute', top: '-5%', left: '-10%', width: '55vw', height: '55vw', maxWidth: 700, maxHeight: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(180,160,230,0.42) 0%, transparent 70%)', filter: 'blur(72px)', x: b1x, y: b1y }} />
           <motion.div style={{ position: 'absolute', top: '0%', right: '-8%', width: '45vw', height: '45vw', maxWidth: 580, maxHeight: 580, borderRadius: '50%', background: 'radial-gradient(circle, rgba(240,180,190,0.36) 0%, transparent 70%)', filter: 'blur(80px)', x: b2x, y: b2y }} />
           <motion.div style={{ position: 'absolute', top: '30%', left: '30%', width: '40vw', height: '40vw', maxWidth: 520, maxHeight: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(160,210,185,0.32) 0%, transparent 68%)', filter: 'blur(90px)', x: b3x, y: b3y }} />
@@ -142,14 +144,14 @@ function DesktopProcess() {
         </div>
 
         {/* Edge fades */}
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, black 0%, transparent 20%, transparent 80%, black 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgb(var(--surface)) 0%, transparent 20%, transparent 80%, rgb(var(--surface)) 100%)' }} />
 
         {/* Heading */}
         <div style={{ position: 'relative', textAlign: 'center', zIndex: 3, padding: '0 1.5rem', flexShrink: 0 }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
             How I work.
           </h2>
-          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '32rem', margin: '0 auto' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '32rem', margin: '0 auto' }}>
             My process is simple: stay close to the problem, move fast without losing rigour, and use AI to clear the path for the thinking that actually matters.
           </p>
         </div>
@@ -174,24 +176,24 @@ function DesktopProcess() {
                 <div style={{
                   maxWidth: '30rem', width: '100%',
                   borderRadius: '1.25rem', padding: '1.5rem', position: 'relative',
-                  background: 'linear-gradient(145deg, rgb(var(--ink) / 0.10), rgb(var(--ink) / 0.04))',
+                  background: 'var(--fill-raised)',
                   backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.13)',
-                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgba(0,0,0,0.60)',
+                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.10) inset, 0 20px 50px rgb(var(--shadow-ink) / calc(0.60 * var(--shadow-strength)))',
                 }}>
                   <div style={{ position: 'absolute', top: 0, left: '1.25rem', right: '1.25rem', height: '1px', background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.18), transparent)' }} />
-                  <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.20)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
+                  <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
                     {step.number}
                   </span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.875rem' }}>
                     <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', background: 'rgb(var(--ink) / 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <Icon style={{ width: '0.9rem', height: '0.9rem', color: 'rgb(var(--ink) / 0.7)' }} />
+                      <Icon style={{ width: '0.9rem', height: '0.9rem', color: 'var(--text-2)' }} />
                     </div>
                     <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: 'var(--ink-solid)', fontSize: '1rem', margin: 0 }}>
                       {step.title}
                     </h3>
                   </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.65)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-2)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
                     {step.description}
                   </p>
                 </div>
@@ -230,7 +232,7 @@ function DesktopProcess() {
                 transform: 'translate(-50%, -50%)',
                 width: 10, height: 10, borderRadius: '50%',
                 background: 'var(--ink-solid)', opacity: nodeOpacities[i],
-                boxShadow: '0 0 8px rgb(var(--ink) / 0.6)',
+                boxShadow: resolved === 'light' ? 'none' : '0 0 8px rgb(var(--ink) / 0.6)',
               }} />
             ))}
           </div>
@@ -240,7 +242,7 @@ function DesktopProcess() {
               <motion.span key={i} style={{
                 fontFamily: 'var(--font-body)', fontWeight: 300,
                 fontSize: '0.65rem', letterSpacing: '0.12em',
-                color: 'rgb(var(--ink) / 0.4)', opacity: nodeOpacities[i],
+                color: 'var(--text-3)', opacity: nodeOpacities[i],
                 width: '25%', textAlign: i === 0 ? 'left' : i === 3 ? 'right' : 'center',
               }}>
                 {step.number}
@@ -264,10 +266,10 @@ function MobileProcess() {
         transition={{ duration: 0.7, ease: EASE_OUT }}
         style={{ textAlign: 'center', marginBottom: '3rem' }}
       >
-        <h2 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 'clamp(2rem, 8vw, 3rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 8vw, 3rem)', letterSpacing: '-0.04em', lineHeight: 0.92, color: 'var(--ink-solid)', margin: '0 0 0.75rem', fontWeight: 400 }}>
           How I work.
         </h2>
-        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.40)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto' }}>
+        <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.875rem', lineHeight: 1.6, maxWidth: '28rem', margin: '0 auto' }}>
           My process is simple: stay close to the problem, move fast without losing rigour, and use AI to clear the path for the thinking that actually matters.
         </p>
       </motion.div>
@@ -312,7 +314,7 @@ function MobileProcess() {
                   zIndex: 1,
                   boxShadow: '0 0 10px rgb(var(--ink) / 0.08)',
                 }}>
-                  <Icon style={{ width: '0.85rem', height: '0.85rem', color: 'rgb(var(--ink) / 0.75)' }} />
+                  <Icon style={{ width: '0.85rem', height: '0.85rem', color: 'var(--text-2)' }} />
                 </div>
 
                 {/* Card */}
@@ -321,11 +323,11 @@ function MobileProcess() {
                   borderRadius: '1.125rem',
                   padding: '1.25rem',
                   position: 'relative',
-                  background: 'linear-gradient(145deg, rgb(var(--ink) / 0.08), rgb(var(--ink) / 0.03))',
+                  background: 'var(--fill-card)',
                   backdropFilter: 'blur(40px)',
                   WebkitBackdropFilter: 'blur(40px)',
                   border: '1px solid rgb(var(--ink) / 0.11)',
-                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 12px 32px rgba(0,0,0,0.50)',
+                  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 12px 32px rgb(var(--shadow-ink) / calc(0.50 * var(--shadow-strength)))',
                 }}>
                   <div style={{ position: 'absolute', top: 0, left: '1rem', right: '1rem', height: '1px', background: 'linear-gradient(to right, transparent, rgb(var(--ink) / 0.16), transparent)' }} />
 
@@ -333,12 +335,12 @@ function MobileProcess() {
                     <h3 style={{ fontFamily: 'var(--font-body)', fontWeight: 500, color: 'var(--ink-solid)', fontSize: '0.95rem', margin: 0 }}>
                       {step.title}
                     </h3>
-                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.22)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-3)', fontSize: '0.65rem', letterSpacing: '0.1em' }}>
                       {step.number}
                     </span>
                   </div>
 
-                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'rgb(var(--ink) / 0.60)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontWeight: 300, color: 'var(--text-2)', fontSize: '0.85rem', lineHeight: 1.65, margin: 0 }}>
                     {step.description}
                   </p>
                 </div>
@@ -359,7 +361,7 @@ export default function ProcessSection() {
   const isMobile = useIsMobile()
 
   return (
-    <section id="process" style={{ background: 'black', position: 'relative' }}>
+    <section id="process" style={{ background: 'rgb(var(--surface))', position: 'relative' }}>
       {isMobile ? <MobileProcess /> : <DesktopProcess />}
     </section>
   )

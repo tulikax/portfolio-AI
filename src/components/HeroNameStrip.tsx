@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { RotateCcw } from 'lucide-react'
-import { HERO_PHRASES, shufflePhrases, type HeroPhrase } from '../constants/heroPhrases'
+import { HERO_PHRASES, pickVariant, shufflePhrases, type PickedPhrase } from '../constants/heroPhrases'
+import { useTheme } from '../theme/useTheme'
 import tulikaAvatar from '../assets/tulika-avatar.png'
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const
@@ -16,12 +17,28 @@ const CLUSTER_SHIFT = 34 // pulls the cluster left so right-hand tags clear the 
 /**
  * Petal tints lifted from the illustration — rose, lavender, sage, blush.
  * Kept low-alpha with no coloured bloom so the tags read as paper notes, not lit chips.
+ *
+ * These cannot go through the ink ramp: the hue IS the point, and a token that
+ * only varies opacity cannot turn a near-white tint into a readable one on paper.
+ * So there are two palettes rather than one, picked by the resolved theme.
  */
-const PETALS = [
+const PETALS_DARK = [
   { border: 'rgba(244,158,180,0.26)', from: 'rgba(244,158,180,0.09)', to: 'rgba(244,158,180,0.03)', text: 'rgba(255,226,234,0.85)' },
   { border: 'rgba(186,170,232,0.26)', from: 'rgba(186,170,232,0.09)', to: 'rgba(186,170,232,0.03)', text: 'rgba(233,226,255,0.85)' },
   { border: 'rgba(158,198,164,0.24)', from: 'rgba(158,198,164,0.08)', to: 'rgba(158,198,164,0.03)', text: 'rgba(226,244,230,0.85)' },
   { border: 'rgba(242,190,158,0.26)', from: 'rgba(242,190,158,0.09)', to: 'rgba(242,190,158,0.03)', text: 'rgba(255,236,222,0.85)' },
+]
+
+/**
+ * Same four hues, inverted in role: on paper the tint becomes the fill and the
+ * text drops to a deep version of the hue. Fills sit higher than dark's because a
+ * 0.09 tint that reads as a lit chip on black is invisible on paper.
+ */
+const PETALS_LIGHT = [
+  { border: 'rgba(214,122,152,0.55)', from: 'rgba(244,158,180,0.26)', to: 'rgba(244,158,180,0.12)', text: 'rgba(138,28,64,0.95)' },
+  { border: 'rgba(150,132,206,0.55)', from: 'rgba(186,170,232,0.26)', to: 'rgba(186,170,232,0.12)', text: 'rgba(70,48,130,0.95)' },
+  { border: 'rgba(122,168,130,0.55)', from: 'rgba(158,198,164,0.28)', to: 'rgba(158,198,164,0.12)', text: 'rgba(38,84,48,0.95)' },
+  { border: 'rgba(212,152,110,0.55)', from: 'rgba(242,190,158,0.28)', to: 'rgba(242,190,158,0.12)', text: 'rgba(128,62,18,0.95)' },
 ]
 
 /**
@@ -57,17 +74,20 @@ const PLACES_BY_ROOM = [
   PLACES[3], // right
 ] as const
 
-// Remembered across rolls (and remounts) so a phrase never appears twice in a row
+// Remembered across rolls (and remounts) so an idea never appears twice in a row.
+// Keyed by phrase id, not rendered text — otherwise the same idea could come
+// straight back in a different wording and read as a bug.
 let lastShown: string[] = []
 
 function roll(count: number) {
-  const unseen = HERO_PHRASES.filter(p => !lastShown.includes(p.text))
+  const unseen = HERO_PHRASES.filter(p => !lastShown.includes(p.variants[0]))
   const source = unseen.length >= count ? unseen : HERO_PHRASES
-  const picked = shufflePhrases(source).slice(0, count)
-  lastShown = picked.map(p => p.text)
+  // Pick the ideas, then pick a wording for each
+  const picked = shufflePhrases(source).slice(0, count).map(pickVariant)
+  lastShown = picked.map(p => p.id)
   // Longest first, then drop them into the roomiest slots in turn
   const byLength = [...picked].sort((a, b) => b.text.length - a.text.length)
-  return byLength.map((phrase: HeroPhrase, i) => ({
+  return byLength.map((phrase: PickedPhrase, i) => ({
     phrase,
     place: PLACES_BY_ROOM[i],
     dy: jitter(9),
@@ -85,6 +105,8 @@ export function HeroNameStrip({ compact = false, start = true }: {
   /** Hold the entrance until the line above has finished typing */
   start?: boolean
 }) {
+  const { resolved } = useTheme()
+  const PETALS = resolved === 'light' ? PETALS_LIGHT : PETALS_DARK
   const [picked, setPicked] = useState(() => roll(TAG_COUNT))
   // Tags scale away, get swapped, then scale back in — same spring both directions
   const [tagsIn, setTagsIn] = useState(true)
@@ -159,8 +181,8 @@ export function HeroNameStrip({ compact = false, start = true }: {
           marginLeft: -photo / 2,
           objectFit: 'cover',
           borderRadius: '4px',
-          border: '1px solid rgba(255,255,255,0.16)',
-          boxShadow: '0 14px 34px rgba(0,0,0,0.55)',
+          border: '1px solid rgb(var(--ink) / 0.16)',
+          boxShadow: '0 14px 34px rgb(var(--shadow-ink) / calc(0.55 * var(--shadow-strength)))',
         }}
       />
 
@@ -210,7 +232,7 @@ export function HeroNameStrip({ compact = false, start = true }: {
               background: `linear-gradient(145deg, ${petal.from}, ${petal.to})`,
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
-              boxShadow: '0 3px 12px rgba(0,0,0,0.30)',
+              boxShadow: '0 3px 12px rgb(var(--shadow-ink) / calc(0.30 * var(--shadow-strength)))',
               color: petal.text,
               whiteSpace: 'nowrap',
             }}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { MapPin, PenLine, ArrowUpRight, Play, X } from 'lucide-react'
+import { useTheme } from '../../theme/useTheme'
 import {
   HOME_CITY,
   LATEST_POST,
@@ -17,11 +18,11 @@ const ART_SIZE = 56
 
 const TILE: React.CSSProperties = {
   borderRadius: '1.25rem',
-  background: 'linear-gradient(145deg, rgb(var(--ink) / 0.06), rgb(var(--ink) / 0.02))',
+  background: 'var(--fill-card)',
   backdropFilter: 'blur(20px)',
   WebkitBackdropFilter: 'blur(20px)',
   border: '1px solid rgb(var(--ink) / 0.09)',
-  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 32px rgba(0,0,0,0.3)',
+  boxShadow: '0 1px 0 rgb(var(--ink) / 0.08) inset, 0 8px 32px rgb(var(--shadow-ink) / calc(0.3 * var(--shadow-strength)))',
   padding: '1.25rem',
   position: 'relative',
   overflow: 'hidden',
@@ -48,7 +49,7 @@ const OVERLAY: React.CSSProperties = {
 const EYEBROW: React.CSSProperties = {
   fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.6rem',
   letterSpacing: '0.12em', textTransform: 'uppercase',
-  color: 'rgb(var(--ink) / 0.35)', margin: '0 0 0.35rem',
+  color: 'var(--text-3)', margin: '0 0 0.35rem',
 }
 
 const TITLE: React.CSSProperties = {
@@ -58,7 +59,7 @@ const TITLE: React.CSSProperties = {
 
 const META: React.CSSProperties = {
   fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.7rem',
-  color: 'rgb(var(--ink) / 0.45)', margin: 0,
+  color: 'var(--text-3)', margin: 0,
 }
 
 function useLocalTime(timeZone: string) {
@@ -178,7 +179,7 @@ function ListeningTile() {
               borderRadius: '9999px', cursor: 'pointer',
               background: 'rgba(10,10,12,0.72)',
               border: '1px solid rgb(var(--ink) / 0.18)',
-              color: 'rgb(var(--ink) / 0.85)',
+              color: 'var(--text-1)',
               backdropFilter: 'blur(6px)',
               WebkitBackdropFilter: 'blur(6px)',
             }}
@@ -262,13 +263,13 @@ function ReadingTile() {
           <p style={{ ...META, lineHeight: 1.4 }}>{RECENT_READ.source}</p>
         </div>
         {RECENT_READ.href && (
-          <ArrowUpRight style={{ width: 14, height: 14, color: 'rgb(var(--ink) / 0.35)', flexShrink: 0 }} />
+          <ArrowUpRight style={{ width: 14, height: 14, color: 'var(--text-3)', flexShrink: 0 }} />
         )}
       </div>
       <ThoughtOverlay label="💭 my take">
         <p style={{
           fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: '0.75rem',
-          color: 'rgb(var(--ink) / 0.75)', margin: 0, lineHeight: 1.55,
+          color: 'var(--text-2)', margin: 0, lineHeight: 1.55,
         }}>
           {RECENT_READ.take}
         </p>
@@ -291,7 +292,28 @@ function ReadingTile() {
   )
 }
 
+/**
+ * The Substack tile's accent. A pale peach glows on a dark ground and is the
+ * right warmth there; on paper the same peach is barely a tint — the eyebrow
+ * measured under 2:1. Light mode drops to a true brown instead, which keeps the
+ * warmth and earns its contrast.
+ */
+const SUBSTACK_ACCENT = {
+  dark: {
+    eyebrow: 'rgba(255,180,130,0.7)',
+    glyph: 'rgba(255,180,130,0.9)',
+    tint: ['rgba(255,138,60,0.22)', 'rgba(255,138,60,0.06)', 'rgba(255,138,60,0.22)'] as [string, string, string],
+  },
+  light: {
+    eyebrow: 'rgba(122,58,16,0.95)',
+    glyph: 'rgba(122,58,16,0.95)',
+    tint: ['rgba(148,84,34,0.20)', 'rgba(148,84,34,0.07)', 'rgba(122,58,16,0.30)'] as [string, string, string],
+  },
+}
+
 export default function CurrentlyBlock() {
+  const { resolved } = useTheme()
+  const substack = resolved === 'light' ? SUBSTACK_ACCENT.light : SUBSTACK_ACCENT.dark
   const time = useLocalTime(HOME_CITY.timeZone)
 
   return (
@@ -307,7 +329,7 @@ export default function CurrentlyBlock() {
         <div style={{ ...TILE, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div style={SHIMMER} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-            <MapPin style={{ width: 12, height: 12, color: 'rgb(var(--ink) / 0.35)', flexShrink: 0 }} />
+            <MapPin style={{ width: 12, height: 12, color: 'var(--text-3)', flexShrink: 0 }} />
             <p style={{ ...META, letterSpacing: '0.04em' }}>{HOME_CITY.label}</p>
           </div>
           <p style={{
@@ -331,16 +353,16 @@ export default function CurrentlyBlock() {
         <Thumb
           src={LATEST_POST.iconUrl}
           alt=""
-          tint={['rgba(255,138,60,0.22)', 'rgba(255,138,60,0.06)', 'rgba(255,138,60,0.22)']}
+          tint={substack.tint}
         >
-          <PenLine style={{ width: 16, height: 16, color: 'rgba(255,180,130,0.9)' }} />
+          <PenLine style={{ width: 16, height: 16, color: substack.glyph }} />
         </Thumb>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ ...EYEBROW, color: 'rgba(255,180,130,0.7)' }}>Last thing I wrote</p>
+          <p style={{ ...EYEBROW, color: substack.eyebrow }}>Last thing I wrote</p>
           <p style={TITLE}>{LATEST_POST.title}</p>
           <p style={META}>{LATEST_POST.date} · Substack</p>
         </div>
-        <ArrowUpRight style={{ width: 16, height: 16, color: 'rgb(var(--ink) / 0.4)', flexShrink: 0 }} />
+        <ArrowUpRight style={{ width: 16, height: 16, color: 'var(--text-3)', flexShrink: 0 }} />
       </a>
     </div>
   )

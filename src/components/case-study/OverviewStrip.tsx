@@ -48,11 +48,11 @@ export default function OverviewStrip({ data }: Props) {
             {/* Label */}
             <span
               style={{
-                fontSize: '0.68rem',
+                fontSize: 'var(--cs-eyebrow)',
                 fontWeight: 500,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: 'rgb(var(--ink) / 0.40)',
+                color: 'var(--text-3)',
                 fontFamily: 'var(--font-body)',
               }}
             >
@@ -62,10 +62,10 @@ export default function OverviewStrip({ data }: Props) {
             {/* Content */}
             <p
               style={{
-                fontSize: '0.95rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 300,
                 lineHeight: 1.65,
-                color: 'rgb(var(--ink) / 0.80)',
+                color: 'var(--text-1)',
                 fontFamily: 'var(--font-body)',
                 margin: 0,
               }}

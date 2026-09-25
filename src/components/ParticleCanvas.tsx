@@ -1,5 +1,5 @@
 import { useEffect, useRef, type MutableRefObject } from 'react'
-import { inkChannel } from '../constants/theme'
+import { useThemedCanvas } from '../theme/useThemedCanvas'
 
 interface Particle {
   x: number
@@ -27,12 +27,13 @@ const BG_FRICTION = 0.88
 
 export default function ParticleCanvas({ cursorRef }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const theme = useThemedCanvas()
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    const INK = inkChannel()
+    const INK = theme.inkChannel()
     if (!ctx) return
 
     const COUNT = 110
@@ -141,7 +142,7 @@ export default function ParticleCanvas({ cursorRef }: Props) {
       cancelAnimationFrame(animId)
       ro.disconnect()
     }
-  }, [cursorRef])
+  }, [cursorRef, theme])
 
   return (
     <canvas

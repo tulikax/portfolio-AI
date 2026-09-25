@@ -51,7 +51,9 @@ export default function PrototypeEmbed({ embed }: Props) {
           overflow: 'hidden',
           aspectRatio,
           position: 'relative',
-          width: '70%',
+          // Full width of the column — at 70% the clip was small enough that UI
+          // detail in it stopped being readable, which is the point of showing it
+          width: '100%',
         }}
       >
         {embed.type === 'video' ? (
@@ -66,7 +68,9 @@ export default function PrototypeEmbed({ embed }: Props) {
               inset: 0,
               width: '100%',
               height: '100%',
-              objectFit: 'cover',
+              // contain, not cover: this is product UI, and cropping it to fill
+              // a 16/9 box cut off the edges of the interface being demonstrated
+              objectFit: 'contain',
               display: 'block',
             }}
           />
@@ -90,9 +94,9 @@ export default function PrototypeEmbed({ embed }: Props) {
       {embed.caption && (
         <p
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'var(--cs-body-sm)',
             fontWeight: 300,
-            color: 'rgb(var(--ink) / 0.38)',
+            color: 'var(--text-3)',
             fontFamily: 'var(--font-body)',
             marginTop: '0.875rem',
             lineHeight: 1.5,

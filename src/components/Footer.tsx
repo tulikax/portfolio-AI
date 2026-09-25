@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: 'black',
+        background: 'rgb(var(--surface))',
         paddingLeft: '1.5rem',
         paddingRight: '1.5rem',
         paddingBottom: '2.5rem',
@@ -40,7 +40,7 @@ export default function Footer() {
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 300,
-              color: 'rgb(var(--ink) / 0.38)',
+              color: 'var(--text-3)',
               fontSize: '0.75rem',
               margin: 0,
             }}
@@ -58,7 +58,7 @@ export default function Footer() {
                   fontFamily: 'var(--font-body)',
                   fontWeight: 300,
                   fontSize: '0.75rem',
-                  color: 'rgb(var(--ink) / 0.38)',
+                  color: 'var(--text-3)',
                   textDecoration: 'none',
                   transition: 'color 200ms ease',
                 }}

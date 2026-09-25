@@ -105,7 +105,7 @@ export default function CaseStudyPage() {
 
   return (
     <LightboxProvider>
-    <div style={{ background: 'black', minHeight: '100vh' }}>
+    <div style={{ background: 'rgb(var(--surface))', minHeight: '100vh' }}>
       {/* Sticky left side nav — only for case studies with project tabs */}
       {hasProjectTabs && !loaderVisible && <CaseSideNav sections={sideNavSections} />}
 
@@ -148,9 +148,9 @@ export default function CaseStudyPage() {
               transition={{ duration: 0.7, delay: i * 0.15, ease: EASE_OUT }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '1rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.72)',
+                color: 'var(--text-2)',
                 lineHeight: 1.8,
                 margin: '0 0 1rem 0',
               }}
@@ -174,7 +174,13 @@ export default function CaseStudyPage() {
       {/* 3b — Video + decisions side-by-side (when bodyParagraphs present) */}
       {!hasProjectTabs && hasBodyParagraphs && (data.prototypeEmbed || (data.designDecisions && data.designDecisions.length > 0)) && (
         <section style={{ padding: '0 2rem 4rem', maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', alignItems: 'stretch' }}>
+          {/*
+           * The video column is given the larger share — it is the artefact, and
+           * the cards beside it are annotations on it. `alignItems: start` stops
+           * the clip being stretched to whatever height the card stack happens to
+           * be; it now sizes to its own aspect.
+           */}
+          <div className="case-proto-grid">
             {/* Left — video */}
             {data.prototypeEmbed && (
               <motion.div
@@ -183,12 +189,18 @@ export default function CaseStudyPage() {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.8, ease: EASE_OUT }}
                 className="liquid-glass"
-                style={{ borderRadius: '1.5rem', overflow: 'hidden', position: 'relative', minHeight: 0 }}
+                style={{ borderRadius: '1.5rem', overflow: 'hidden', position: 'relative' }}
               >
                 <video
                   src={data.prototypeEmbed.url}
                   autoPlay loop muted playsInline
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  /*
+                   * In normal flow at its own aspect rather than absolutely
+                   * positioned and cropped to fill. The source is 4:3 product UI;
+                   * cover was cutting the top and bottom off the interface the
+                   * clip exists to show.
+                   */
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
               </motion.div>
             )}
@@ -243,9 +255,9 @@ export default function CaseStudyPage() {
                 transition={{ duration: 0.7, ease: EASE_OUT }}
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: '1rem',
+                  fontSize: 'var(--cs-body)',
                   fontWeight: 300,
-                  color: 'rgb(var(--ink) / 0.72)',
+                  color: 'var(--text-2)',
                   lineHeight: 1.8,
                   margin: 0,
                 }}
@@ -277,9 +289,9 @@ export default function CaseStudyPage() {
               transition={{ duration: 0.7, ease: EASE_OUT }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '1rem',
+                fontSize: 'var(--cs-body)',
                 fontWeight: 300,
-                color: 'rgb(var(--ink) / 0.72)',
+                color: 'var(--text-2)',
                 lineHeight: 1.8,
                 margin: 0,
               }}

@@ -11,17 +11,10 @@ interface HeroVariant {
   intro?: string
   bodyBefore?: HeroBodyBlock[]
   bodyAfter?: HeroBodyBlock[]
-  aboutExtra?: string[]
   subtitle: string
 }
 
 // Sans copy moved out of the hero and appended to the About section
-const OPTION_2_ABOUT_EXTRA = [
-  "My focus is enterprise platforms and data-heavy tools; systems where structure and speed both have to hold. Increasingly, I've been designing for what AI is starting to reshape.",
-  "I've spent 5 years chasing after the friction that is easily missed: the repetitive steps, the small decisions, the quiet moments where a system either earns someone's trust or loses it. Whenever things get complicated, I lean in.",
-  'Outside of work: music, illustration, film, fashion, and a running list of side projects I keep finding excuses to start.',
-]
-
 const VARIANTS: HeroVariant[] = [
   {
     name: 'Option 1',
@@ -38,7 +31,6 @@ const VARIANTS: HeroVariant[] = [
     intro: "Hi, I'm Tulika",
     bodyBefore: [],
     bodyAfter: [],
-    aboutExtra: OPTION_2_ABOUT_EXTRA,
     // Typed as the second serif line, in the same animation as the intro
     subtitle: "Product designer with a habit of pulling systems apart to see how they work and what's really worth building.",
   },
@@ -58,7 +50,6 @@ export default function HeroCopyDemo() {
   return (
     <div style={{ position: 'relative' }}>
       <HomePage
-        aboutExtra={variant.aboutExtra}
         hero={
           <HeroSection
             key={`${idx}-${replayCount}`}
@@ -79,7 +70,7 @@ export default function HeroCopyDemo() {
         style={{
           position: 'fixed', top: '1.25rem', left: '50%', transform: 'translateX(-50%)',
           zIndex: 99999, fontFamily: 'var(--font-body)', fontSize: '0.62rem',
-          letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgb(var(--ink) / 0.22)',
+          letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-3)',
           pointerEvents: 'none', whiteSpace: 'nowrap',
         }}
       >
@@ -115,7 +106,7 @@ export default function HeroCopyDemo() {
             padding: '0.4rem 1.1rem', borderRadius: '9999px',
             border: '1px solid rgb(var(--ink) / 0.22)',
             background: 'rgb(var(--ink) / 0.07)',
-            color: 'rgb(var(--ink) / 0.85)',
+            color: 'var(--text-1)',
             fontFamily: 'var(--font-body)', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
           }}
         >

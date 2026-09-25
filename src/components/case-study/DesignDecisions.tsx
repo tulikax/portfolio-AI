@@ -12,23 +12,31 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, delay: index * 0.08, ease: EASE_OUT }}
-      className="liquid-glass"
       style={{
+        // Matches the homepage role cards: token fill, hairline border and the
+        // composite shadows — rather than liquid-glass, whose blur and edge ring
+        // are a different surface language from the rest of the site.
         borderRadius: '1.25rem',
-        padding: '1.75rem',
+        background: 'var(--fill-card)',
+        border: '1px solid rgb(var(--ink) / 0.09)',
+        boxShadow: 'var(--shadow-hairline), var(--shadow-float)',
+        backdropFilter: 'blur(40px)',
+        WebkitBackdropFilter: 'blur(40px)',
+        // Tighter than the homepage card — these carry one idea each, not a role
+        padding: '1.35rem',
         display: 'flex',
         flexDirection: 'column',
-        gap: '1rem',
+        gap: '0.75rem',
       }}
     >
       {/* Decision number */}
       <span
         style={{
-          fontSize: '0.65rem',
+          fontSize: 'var(--cs-eyebrow)',
           fontWeight: 500,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: 'rgb(var(--ink) / 0.28)',
+          color: 'var(--text-3)',
           fontFamily: 'var(--font-body)',
         }}
       >
@@ -39,9 +47,9 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       <h3
         style={{
           fontFamily: 'var(--font-body)',
-          fontSize: '1rem',
+          fontSize: 'var(--cs-body)',
           fontWeight: 500,
-          color: 'rgb(var(--ink) / 0.90)',
+          color: 'var(--text-1)',
           margin: 0,
           lineHeight: 1.4,
         }}
@@ -52,10 +60,10 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
       {/* Rationale */}
       <p
         style={{
-          fontSize: '0.92rem',
+          fontSize: 'var(--cs-body-sm)',
           fontWeight: 300,
-          lineHeight: 1.7,
-          color: 'rgb(var(--ink) / 0.60)',
+          lineHeight: 1.65,
+          color: 'var(--text-2)',
           fontFamily: 'var(--font-body)',
           margin: 0,
         }}
@@ -91,8 +99,8 @@ function DecisionCard({ decision, index }: { decision: DesignDecision; index: nu
 
           <span
             style={{
-              fontSize: '1rem',
-              color: 'rgb(var(--ink) / 0.28)',
+              fontSize: 'var(--cs-body)',
+              color: 'var(--text-3)',
               fontFamily: 'var(--font-body)',
             }}
           >
@@ -138,7 +146,7 @@ export default function DesignDecisions({ decisions, inline }: Props) {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: inline ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))',
+          gridTemplateColumns: inline ? '1fr' : 'repeat(auto-fill, minmax(260px, 1fr))',
           gap: '1rem',
         }}
       >

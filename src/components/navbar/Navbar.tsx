@@ -15,6 +15,7 @@ export default function Navbar() {
   const scrolled = useNavbarScroll()
   const location = useLocation()
   const isCaseStudy = location.pathname.startsWith('/work/')
+  const isAbout = location.pathname === '/about'
   // Section anchors only resolve on the homepage; anywhere else they have to route there first
   const isHome = location.pathname === '/'
 
@@ -24,12 +25,21 @@ export default function Navbar() {
     ? NAV_LINKS
     : NAV_LINKS.map((link) => ({ ...link, href: `/${link.href}` }))
 
-  const mobileLinks = isCaseStudy
-    ? [{ label: '← Back to Work', href: '/#work' }]
-    : sectionLinks
+  /**
+   * Pages you arrive at from somewhere get a way back rather than the section
+   * list — the anchors would only bounce you to the homepage anyway, and the
+   * single exit is clearer than four that all leave.
+   */
+  const backLink = isCaseStudy
+    ? { label: '← Back to Work', href: '/#work' }
+    : isAbout
+      ? { label: '← Back to Home', href: '/' }
+      : null
+
+  const mobileLinks = backLink ? [backLink] : sectionLinks
 
   const pillShadow = scrolled
-    ? 'inset 0 1px 1px rgb(var(--ink) / 0.10), 0 8px 32px rgba(0,0,0,0.6)'
+    ? 'inset 0 1px 1px rgb(var(--ink) / 0.10), 0 8px 32px rgb(var(--shadow-ink) / calc(0.6 * var(--shadow-strength)))'
     : 'inset 0 1px 1px rgb(var(--ink) / 0.10)'
 
   const nav = (
@@ -65,12 +75,12 @@ export default function Navbar() {
           </div>
 
           <nav style={{ alignItems: 'center', gap: '1.5rem' }} className="hidden md:flex">
-            {isCaseStudy ? (
+            {backLink ? (
               <Link
-                to="/#work"
+                to={backLink.href}
                 style={{
                   fontSize: '0.875rem',
-                  color: 'rgb(var(--ink) / 0.65)',
+                  color: 'var(--text-2)',
                   textDecoration: 'none',
                   fontWeight: 400,
                   fontFamily: 'var(--font-body)',
@@ -80,29 +90,29 @@ export default function Navbar() {
                   transition: 'color 200ms ease',
                 }}
                 onMouseEnter={(e) => {
-                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'white'
+                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink-solid)'
                 }}
                 onMouseLeave={(e) => {
-                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'rgb(var(--ink) / 0.65)'
+                  ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-2)'
                 }}
               >
-                ← Back to Work
+                {backLink.label}
               </Link>
             ) : (
               sectionLinks.map((link) => {
                 const linkStyle = {
                   fontSize: '0.875rem',
-                  color: 'rgb(var(--ink) / 0.75)',
+                  color: 'var(--text-2)',
                   textDecoration: 'none',
                   fontWeight: 400,
                   transition: 'color 200ms ease',
                 } as const
                 const hover = {
                   onMouseEnter: (e: MouseEvent<HTMLAnchorElement>) => {
-                    e.currentTarget.style.color = 'white'
+                    e.currentTarget.style.color = 'var(--ink-solid)'
                   },
                   onMouseLeave: (e: MouseEvent<HTMLAnchorElement>) => {
-                    e.currentTarget.style.color = 'rgb(var(--ink) / 0.75)'
+                    e.currentTarget.style.color = 'var(--text-2)'
                   },
                 }
                 return isHome ? (
@@ -130,7 +140,7 @@ export default function Navbar() {
                 background: 'none',
                 border: 'none',
                 padding: '0.375rem',
-                color: 'rgb(var(--ink) / 0.85)',
+                color: 'var(--text-1)',
                 borderRadius: '0.5rem',
                 transition: 'color 150ms ease',
               }}

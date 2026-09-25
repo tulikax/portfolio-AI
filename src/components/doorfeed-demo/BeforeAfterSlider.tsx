@@ -7,7 +7,7 @@ import {
   useTransform,
   type AnimationPlaybackControls,
 } from 'framer-motion'
-import { inkChannel } from '../../constants/theme'
+import { useThemedCanvas } from '../../theme/useThemedCanvas'
 import { MONO, ink } from './styles'
 
 interface Props {
@@ -98,6 +98,7 @@ export default function BeforeAfterSlider({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const draggingRef = useRef(false)
   const demoRef = useRef<AnimationPlaybackControls | null>(null)
+  const theme = useThemedCanvas()
 
   const position = useMotionValue(50)
   const [hinting, setHinting] = useState(true)
@@ -186,7 +187,7 @@ export default function BeforeAfterSlider({
     observer.observe(container)
 
     const particles: Particle[] = []
-    const colour = `rgb(${inkChannel()})`
+    const colour = `rgb(${theme.inkChannel()})`
     let previous = position.get()
     let frame = 0
     let last = 0
@@ -254,7 +255,7 @@ export default function BeforeAfterSlider({
       observer.disconnect()
       if (frame) cancelAnimationFrame(frame)
     }
-  }, [position])
+  }, [position, theme])
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
     takeOver()
