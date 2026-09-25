@@ -165,7 +165,7 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
               <video
                 src={data.heroMedia.src}
                 autoPlay loop muted playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: mediaFit, display: 'block' }}
                 onCanPlay={onVideoReady}
                 onProgress={handleProgress}
               />
@@ -173,7 +173,7 @@ export default function CaseStudyHero({ data, onVideoReady, onVideoProgress }: P
               <img
                 src={data.heroMedia.src}
                 alt={data.heroMedia.alt}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: mediaFit, display: 'block' }}
                 onLoad={onVideoReady}
               />
             )}

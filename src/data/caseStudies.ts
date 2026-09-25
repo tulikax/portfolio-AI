@@ -66,6 +66,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     // Shown whole rather than cropped — the clip is a full product screen
     heroMediaFit: 'contain',
     heroMedia: { src: NEW_PLATFORM.compsOutput, alt: 'DoorFeed comparables output' },
+    heroLayout: 'contained',
 
     goal: 'Design a property data platform that surfaces granular, comparable market data in a way that feels as refined as it is accurate — turning dense datasets into clear, trustworthy decision surfaces.',
     yourRole: 'Solo product designer working end-to-end: research, strategy, interaction design, and direct collaboration with engineering through 20+ pull requests.',
@@ -320,6 +321,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     company: 'Deloitte',
 
     heroMedia: { src: dlHeroVideo, alt: 'NLG tool interface overview' },
+    heroLayout: 'contained',
 
     heroTools: [
       { name: 'Figma',  slug: 'figma' },
